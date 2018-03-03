@@ -48,7 +48,7 @@ As mentioned above, this is work in progress right now, so you might want to wai
 
 ## Usage and features
 
-###General overview
+### General overview
 
 Yamo might be right tool for you when you aim for:
 
@@ -163,7 +163,7 @@ using (var db = CreateContext())
 
 It is important to note that Yamo doesn't implicitly open transaction inside the context/when executing the query nor does it commit transaction when disposing the context. If you want to use transactions, you need to call beginn/commit explicitly.
 
-###Creating a model
+### Creating a model
 
 Model in Yamo is set of POCO classes - entities - that are mapped to your database tables. Model is built with fluent API, which is very similar to API Entity Framework Core. In contrast to EF Core, this is the only way how to define the model. There is no support for using attributes in your entity classes (at least not at this moment).
 
@@ -250,7 +250,7 @@ Collection navigation property could be of any type which implements `IList<T>` 
 
 Unlike in EF Core, there is currently no support for inverse navigation properties.
 
-######TODO:
+###### TODO:
 
 - Support for schema.
 - Make model freezable. Changes in model might currently lead to runtime exception.
@@ -1117,7 +1117,7 @@ Frequency=2987308 Hz, Resolution=334.7495 ns, Timer=TSC
 - Further optimizations (reduce allocations, ...).
 - More performance tests.
 
-###Global TODOs:
+### Global TODOs:
 
 Besides topic-specific TODOs mentioned above, here are remaining "core" features that are currently missing:
 
