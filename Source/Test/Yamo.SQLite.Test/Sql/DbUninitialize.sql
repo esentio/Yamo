@@ -1,0 +1,14 @@
+﻿DROP TABLE IF EXISTS Article;
+DROP TABLE IF EXISTS ArticleCategory;
+DROP TABLE IF EXISTS ArticlePart;
+DROP TABLE IF EXISTS ArticleSubstitution;
+DROP TABLE IF EXISTS Category;
+DROP TABLE IF EXISTS ItemWithAllSupportedValues;
+DROP TABLE IF EXISTS ItemWithAuditFields;
+DROP TABLE IF EXISTS ItemWithDefaultValueId;
+DROP TABLE IF EXISTS ItemWithIdentityId;
+DROP TABLE IF EXISTS ItemWithIdentityIdAndDefaultValues;
+DROP TABLE IF EXISTS ItemWithPropertyModifiedTracking;
+DROP TABLE IF EXISTS Label;
+DROP TABLE IF EXISTS LinkedItem;
+DROP TABLE IF EXISTS LinkedItemChild;

@@ -1,0 +1,33 @@
+﻿Namespace Model
+
+  Public Class Article
+
+    Public Property Id As Int32
+
+    Public Property Price As Decimal
+
+    Public Property Label As Label
+
+    Public Property Parts As List(Of ArticlePart)
+
+    Public Property Categories As List(Of Category)
+
+    Public Overrides Function Equals(obj As Object) As Boolean
+      If obj Is Nothing OrElse TypeOf obj IsNot Article Then
+        Return False
+      Else
+        Dim o = DirectCast(obj, Article)
+
+        If Not Object.Equals(Me.Id, o.Id) Then Return False
+        If Not Object.Equals(Me.Price, o.Price) Then Return False
+
+        Return True
+      End If
+    End Function
+
+    Public Overrides Function GetHashCode() As Int32
+      Return Helpers.Compare.GetHashCode(Me.Id, Me.Price)
+    End Function
+
+  End Class
+End Namespace
