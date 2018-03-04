@@ -30,7 +30,7 @@ All examples below are in C# though. I understand it is more convenient for gene
 
 **Why another (micro) ORM? There is plenty of them already.**
 
-I know, but each of them lacks certain feature(s) that I would like them to have. On the contary, Yamo might not be the right tool for you either. Just check the features and see. There are similarities with tools like EF Core or OrmLite, but Yamo has (will have) its own unique features.
+I know, but each of them lacks certain feature(s) that I would like them to have. On the contrary, Yamo might not be the right tool for you either. Just check the features and see. There are similarities with tools like EF Core or OrmLite, but Yamo has (will have) its own unique features.
 
 **What SQLite provider could I use?**
 
@@ -59,7 +59,7 @@ Yamo might be right tool for you when you aim for:
 - Cross platform.
 - You didn't leave immediately after you found out about VB.NET.
 
-On the contary, you might want to look elsewhere when you need:
+On the contrary, you might want to look elsewhere when you need:
 
 - Heavy ORM with object state tracking, lazy loading, migrations, insert-your-enterprise-feature-here...
 
