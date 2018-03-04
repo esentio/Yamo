@@ -171,7 +171,7 @@ To configure your model, you need to override `OnModelCreating` method in your c
 
 For example, let's consider following table and class:
 
-```mssql
+```sql
 CREATE TABLE [dbo].[User] (
 	[Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY CLUSTERED, 
 	[Login] nvarchar(50) NOT NULL, 
@@ -322,7 +322,7 @@ using (var db = CreateContext())
 
 Generated SQL:
 
-```mssql
+```sql
 UPDATE [User] SET
 [Login] = @p0, 
 [FirstName] = @p1, 
@@ -346,7 +346,7 @@ public interface IHasPropertyModifiedTracking {
 
 If we modify `User` class to implement `IHasPropertyModifiedTracking`,  following update statement will be generated instead:
 
-```mssql
+```sql
 UPDATE [User] SET
 [Email] = @p3
 WHERE
@@ -406,7 +406,7 @@ In LOB applications it is quite common that tables contain audit fields. These s
 
 Imagine following table:
 
-```mssql
+```sql
 CREATE TABLE [dbo].[Blog] (
 	[Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY CLUSTERED, 
 	[Title] nvarchar(50) NOT NULL, 
@@ -567,7 +567,7 @@ using (var db = CreateContext())
 
 These will translate to following SQL queries:
 
-```mssql
+```sql
 SELECT [T0].[Id], [T0].[Title], [T0].[Content], [T0].[Created], [T0].[CreatedUserId], [T0].[Modified], [T0].[ModifiedUserId], [T0].[Deleted], [T0].[DeletedUserId] FROM [Blog] [T0] WHERE ([T0].[Title] = @p0)
 
 SELECT [T0].[Id], [T0].[Title], [T0].[Content], [T0].[Created], [T0].[CreatedUserId], [T0].[Modified], [T0].[ModifiedUserId], [T0].[Deleted], [T0].[DeletedUserId] FROM [Blog] [T0] WHERE ([T0].[CreatedUserId] IN (1, 2, 3))
@@ -614,7 +614,7 @@ Long story short: everything that has direct equivalent in SQL is translated; va
 
 However, it's still not enough when we need to use specific SQL functions in our query. E.g. something like:
 
-```mssql
+```sql
 ... WHERE DATEDIFF(day, column, @p) = 0
 ```
 
@@ -631,7 +631,7 @@ using (var db = CreateContext())
 
 This will be translated to:
 
-```mssql
+```sql
 SELECT [T0].[Id], [T0].[Title], [T0].[Content], [T0].[Created], [T0].[CreatedUserId], [T0].[Modified], [T0].[ModifiedUserId], [T0].[Deleted], [T0].[DeletedUserId] FROM [Blog] [T0] WHERE (DATEDIFF(day, [T0].[Created], @p0) = 0)
 ```
 
@@ -717,7 +717,7 @@ using (var db = CreateContext())
 
 Not only all variables are passed as SQL parameters, but entity properties are translated to their column names together with proper table alias:
 
-```mssql
+```sql
 SELECT [T0].[Id], [T0].[Title], [T0].[Content], [T0].[Created], [T0].[CreatedUserId], [T0].[Modified], [T0].[ModifiedUserId], [T0].[Deleted], [T0].[DeletedUserId] FROM [Blog] [T0] WHERE [T0].[Title] = @p0 AND [T0].[Deleted] IS NULL
 ```
 
@@ -743,7 +743,7 @@ using (var db = CreateContext())
 
 Let's first introduce the database and entities that will be used to explain SQL joins:
 
-```mssql
+```sql
 CREATE TABLE [dbo].[Article] (
 	[Id] int NOT NULL PRIMARY KEY CLUSTERED, 
 	[Price] decimal(10, 2) NOT NULL
@@ -852,7 +852,7 @@ using (var db = CreateContext())
 
 Corresponding SQL:
 
-```mssql
+```sql
 SELECT [T0].[Id], [T0].[Price], [T1].[TableId], [T1].[Id], [T1].[Language], [T1].[Description] FROM [Article] [T0] INNER JOIN [Label] [T1] ON ((([T1].[TableId] = @p0) AND ([T1].[Id] = [T0].[Id])) AND ([T1].[Language] = @p1))
 ```
 
