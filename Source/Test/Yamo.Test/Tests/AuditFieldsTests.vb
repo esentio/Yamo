@@ -160,33 +160,43 @@ Namespace Tests
 
     <TestMethod()>
     Public Overridable Sub SoftDeleteRecord()
-      Dim item = Me.ModelFactory.CreateItemWithAuditFields()
+      Dim item1 = Me.ModelFactory.CreateItemWithAuditFields()
+      Dim item2 = Me.ModelFactory.CreateItemWithAuditFields()
       Dim userId = 42
 
       Using db = CreateDbContext()
         db.UserId = userId
 
-        Dim affectedRows = db.Insert(item)
+        Dim affectedRows = db.Insert(item1)
+        Assert.AreEqual(1, affectedRows)
+
+        affectedRows = db.Insert(item2)
         Assert.AreEqual(1, affectedRows)
       End Using
 
-      Assert.IsFalse(item.Deleted.HasValue)
-      Assert.IsFalse(item.DeletedUserId.HasValue)
+      Assert.IsFalse(item1.Deleted.HasValue)
+      Assert.IsFalse(item1.DeletedUserId.HasValue)
+
+      Assert.IsFalse(item2.Deleted.HasValue)
+      Assert.IsFalse(item2.DeletedUserId.HasValue)
 
       Using db = CreateDbContext()
         db.UserId = userId
 
-        Dim affectedRows = db.SoftDelete(item)
+        Dim affectedRows = db.SoftDelete(item1)
         Assert.AreEqual(1, affectedRows)
-        Assert.IsTrue(item.Deleted.HasValue)
-        Assert.IsTrue(IsApproximatelyNow(item.Deleted.Value))
-        Assert.IsTrue(item.DeletedUserId.HasValue)
-        Assert.AreEqual(userId, item.DeletedUserId.Value)
+        Assert.IsTrue(item1.Deleted.HasValue)
+        Assert.IsTrue(IsApproximatelyNow(item1.Deleted.Value))
+        Assert.IsTrue(item1.DeletedUserId.HasValue)
+        Assert.AreEqual(userId, item1.DeletedUserId.Value)
       End Using
 
       Using db = CreateDbContext()
-        Dim result = db.From(Of ItemWithAuditFields).Where(Function(x) x.Id = item.Id).SelectAll().FirstOrDefault()
-        Assert.AreEqual(item, result)
+        Dim result = db.From(Of ItemWithAuditFields).Where(Function(x) x.Id = item1.Id).SelectAll().FirstOrDefault()
+        Assert.AreEqual(item1, result)
+
+        result = db.From(Of ItemWithAuditFields).Where(Function(x) x.Id = item2.Id).SelectAll().FirstOrDefault()
+        Assert.AreEqual(item2, result)
       End Using
     End Sub
 

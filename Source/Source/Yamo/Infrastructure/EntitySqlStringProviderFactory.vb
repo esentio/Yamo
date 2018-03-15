@@ -386,6 +386,21 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       sql.AppendLine(String.Join($", {Environment.NewLine}", setColumns))
 
+      sql.AppendLine("WHERE")
+
+      For Each prop In entity.GetKeyProperties().Select(Function(x) x.Property)
+        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, i, builder)
+        Dim parameterName = p.ParameterName
+        Dim parameterAddCall = p.ParameterAddCall
+
+        expressions.Add(parameterAddCall)
+        whereColumns.Add($"{builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)} = {parameterName}")
+
+        i += 1
+      Next
+
+      sql.Append(String.Join($" AND {Environment.NewLine}", whereColumns))
+
       Dim sqlVariableAssign = Expression.Assign(sqlVariable, Expression.Constant(sql.ToString(), GetType(String)))
       expressions.Add(sqlVariableAssign)
 
