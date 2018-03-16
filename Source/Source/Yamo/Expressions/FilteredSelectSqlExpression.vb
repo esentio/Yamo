@@ -11,6 +11,24 @@ Namespace Expressions
       MyBase.New(builder, executor)
     End Sub
 
+    Public Function [And](predicate As Expression(Of Func(Of T, Boolean))) As FilteredSelectSqlExpression(Of T)
+      Return InternalWhere(predicate, {0})
+    End Function
+
+    Public Function [And](predicate As Expression(Of Func(Of T, FormattableString))) As FilteredSelectSqlExpression(Of T)
+      Return InternalWhere(predicate, {0})
+    End Function
+
+    Public Function [And](predicate As String) As FilteredSelectSqlExpression(Of T)
+      Me.Builder.AddWhere(predicate)
+      Return Me
+    End Function
+
+    Private Function InternalWhere(predicate As Expression, entityIndexHints As Int32()) As FilteredSelectSqlExpression(Of T)
+      Me.Builder.AddWhere(predicate, entityIndexHints)
+      Return Me
+    End Function
+
     Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
       Return InternalOrderBy(keySelector, True)
     End Function

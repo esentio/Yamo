@@ -921,6 +921,86 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub SelectRecordByMultipleWhereConditions()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 42
+      items(0).Nvarchar50Column = "foo"
+      items(1).IntColumn = 420
+      items(1).Nvarchar50Column = "foo"
+      items(2).Nvarchar50Column = "bar"
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) x.IntColumn = 42).
+                        And(Function(x) x.Nvarchar50Column = "foo").
+                        SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(0), result(0))
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) x.IntColumn = 42 OrElse x.IntColumn = 420).
+                        And(Function(x) x.Nvarchar50Column = "foo").
+                        SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) x.IntColumn = 42 OrElse x.IntColumn = 420).
+                        And(Function(x) x.Nvarchar50Column = "bar").
+                        SelectAll().ToList()
+        Assert.AreEqual(0, result.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectRecordBySequentiallyBuildingWhereConditions()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 42
+      items(0).Nvarchar50Column = "foo"
+      items(1).Nvarchar50Column = "foo"
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where().
+                        SelectAll().ToList()
+        Assert.AreEqual(5, result.Count)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim exp = db.From(Of ItemWithAllSupportedValues).Where()
+
+        exp.And(Function(x) x.Nvarchar50Column = "foo")
+
+        Dim result = exp.SelectAll().ToList()
+
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim exp = db.From(Of ItemWithAllSupportedValues).Where()
+
+        exp.And(Function(x) x.IntColumn = 42)
+        exp.And(Function(x) x.Nvarchar50Column = "foo")
+
+        Dim result = exp.SelectAll().ToList()
+
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(0), result(0))
+      End Using
+    End Sub
+
     Protected Overridable Function CreateItems() As List(Of ItemWithAllSupportedValues)
       Return New List(Of ItemWithAllSupportedValues) From {
         Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues(),
