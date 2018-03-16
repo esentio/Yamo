@@ -130,6 +130,10 @@ Namespace Expressions
       Return New FilteredSelectSqlExpression(Of T1, T2, T3)(Me.Builder, Me.Executor)
     End Function
 
+    Public Function Where() As FilteredSelectSqlExpression(Of T1, T2, T3)
+      Return New FilteredSelectSqlExpression(Of T1, T2, T3)(Me.Builder, Me.Executor)
+    End Function
+
     Private Function InternalWhere(predicate As Expression, entityIndexHints As Int32()) As FilteredSelectSqlExpression(Of T1, T2, T3)
       Me.Builder.AddWhere(predicate, entityIndexHints)
       Return New FilteredSelectSqlExpression(Of T1, T2, T3)(Me.Builder, Me.Executor)
