@@ -1,4 +1,5 @@
-﻿Imports Yamo.Expressions.Builders
+﻿Imports System.Linq.Expressions
+Imports Yamo.Expressions.Builders
 Imports Yamo.Internal
 Imports Yamo.Internal.Query
 
@@ -9,7 +10,23 @@ Namespace Expressions
 
     Friend Sub New(context As DbContext)
       MyBase.New(context, New UpdateSqlExpressionBuilder(context), New QueryExecutor(context))
+      Me.Builder.SetMainTable(Of T)()
     End Sub
+
+    Public Function [Set](action As Expression(Of Action(Of T))) As SetUpdateSqlExpression(Of T)
+      Me.Builder.AddSet(action)
+      Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
+    End Function
+
+    Public Function [Set](predicate As Expression(Of Func(Of T, FormattableString))) As SetUpdateSqlExpression(Of T)
+      Me.Builder.AddSet(predicate)
+      Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
+    End Function
+
+    Public Function [Set](predicate As String) As SetUpdateSqlExpression(Of T)
+      Me.Builder.AddSet(predicate)
+      Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
+    End Function
 
     Friend Function Update(obj As T, Optional setAutoFields As Boolean = True) As Int32
       If SkipUpdate(obj) Then

@@ -93,5 +93,7 @@ Namespace Tests
       End Using
     End Sub
 
+    ' TODO: SIP - tests for UPDATE SET ... (WHERE ...)
+
   End Class
 End Namespace
