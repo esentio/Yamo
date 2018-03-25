@@ -92,6 +92,10 @@ Public Class DbContext
     Return (New UpdateSqlExpression(Of T)(Me)).Update(obj, setAutoFields)
   End Function
 
+  Public Function Update(Of T)() As UpdateSqlExpression(Of T)
+    Return New UpdateSqlExpression(Of T)(Me)
+  End Function
+
   Public Function Delete(Of T)(obj As T) As Int32
     Return (New DeleteSqlExpression(Of T)(Me, False)).Delete(obj)
   End Function

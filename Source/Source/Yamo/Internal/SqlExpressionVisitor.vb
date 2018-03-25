@@ -29,6 +29,8 @@ Namespace Internal
 
     Private m_UseAliases As Boolean
 
+    Private m_UseTableNamesOrAliases As Boolean
+
     Private m_CompensateForIgnoredNegation As Boolean
 
     Private m_CurrentLikeParameterFormat As String
@@ -39,7 +41,7 @@ Namespace Internal
     End Sub
 
     ' entityIndexHints might be nothing!!! - napisat do komentarov aj pre volajuce metody
-    Public Function Translate(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean) As SqlString
+    Public Function Translate(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -52,6 +54,7 @@ Namespace Internal
       m_Parameters = New List(Of SqlParameter)
       m_ParameterIndex = parameterIndex
       m_UseAliases = useAliases
+      m_UseTableNamesOrAliases = useTableNamesOrAliases
       m_CompensateForIgnoredNegation = False
       m_CurrentLikeParameterFormat = Nothing
 
@@ -75,6 +78,8 @@ Namespace Internal
             Return VisitEndsWithMethodCall(node)
           Case NameOf(String.Contains)
             Return VisitContainsMethodCall(node)
+          Case NameOf(String.Concat)
+            Return VisitConcatMethodCall(node)
         End Select
       End If
 
@@ -102,6 +107,12 @@ Namespace Internal
         If node.Method.Name = NameOf(Enumerable.Contains) Then
           Return VisitEnumerableContainsMethodCall(node)
         End If
+      End If
+
+      If node.Method.IsSpecialName AndAlso node.Object.NodeType = ExpressionType.Parameter AndAlso node.Method.Name.StartsWith("set_") Then
+        ' this is needed when we pass Action (in UPDATE SET... expressions)
+        ' TODO: SIP - investigate how indexers behave
+        Return VisitEntityPropertySetter(node)
       End If
 
       Return VisitAndEvaluate(node)
@@ -164,6 +175,31 @@ Namespace Internal
         Me.Visit(node.Arguments(0))
         m_Sql.Append(" + '%'")
       End If
+
+      Return node
+    End Function
+
+    Protected Function VisitConcatMethodCall(node As MethodCallExpression) As Expression
+      Dim expressions = node.Arguments
+      Dim count = node.Arguments.Count
+
+      If count = 1 AndAlso node.Arguments(0).NodeType = ExpressionType.NewArrayInit Then
+        ' for too many concat parameters, overload that accepts String() or Object() is used
+        ' there are also overloads that accepts IEnumerable(Of String) and IEnumerable(Of T), but I guess, they'll never be used in this context
+        Dim arr = DirectCast(node.Arguments(0), NewArrayExpression)
+        expressions = arr.Expressions
+        count = expressions.Count
+      End If
+
+      For i = 0 To count - 1
+        Me.Visit(expressions(i))
+
+        If Not i = count - 1 Then
+          m_Sql.Append(" ")
+          m_Sql.Append(m_Builder.DialectProvider.Formatter.StringConcatenationOperator)
+          m_Sql.Append(" ")
+        End If
+      Next
 
       Return node
     End Function
@@ -288,6 +324,19 @@ Namespace Internal
 
         m_Sql.Append("))")
       End If
+
+      Return node
+    End Function
+
+    Private Function VisitEntityPropertySetter(node As MethodCallExpression) As Expression
+      Dim propertyName = node.Method.Name.Substring(4) ' trim "set_"
+      Dim entityIndex = 0 ' should be always 0 in so far allowed scenarios (UPDATE SET) and m_EntityIndexHints should always be set
+
+      AppendEntityMemberAccess(propertyName, entityIndex)
+
+      m_Sql.Append(" = ")
+
+      Visit(node.Arguments(0))
 
       Return node
     End Function
@@ -538,10 +587,13 @@ Namespace Internal
       Dim entity = m_Model.GetEntity(entityIndex)
       Dim prop = entity.Entity.GetProperty(propertyName)
 
-      If m_UseAliases Then
+      If Not m_UseTableNamesOrAliases Then
+        m_Sql.Append(m_Builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName))
+      ElseIf m_UseAliases Then
         Dim tableAlias = m_Model.GetTableAlias(entity.Index)
         m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(tableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)}")
       Else
+        ' NOTE: this is not used right now
         m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.Entity.TableName)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)}")
       End If
     End Sub

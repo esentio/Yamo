@@ -50,7 +50,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub DeleteRecordsByCondition()
+    Public Overridable Sub DeleteRecordsWithCondition()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.Nvarchar50Column = "d"
 
@@ -72,7 +72,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub DeleteRecordsByFormattableSqlString()
+    Public Overridable Sub DeleteRecordsWithFormattableSqlString()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.Nvarchar50Column = "d"
 
@@ -95,7 +95,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub DeleteRecordsByRawSqlString()
+    Public Overridable Sub DeleteRecordsWithRawSqlString()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.Nvarchar50Column = "d"
 

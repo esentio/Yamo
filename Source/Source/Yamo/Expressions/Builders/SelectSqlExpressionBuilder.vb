@@ -150,7 +150,7 @@ Namespace Expressions.Builders
         sql = $"{joinTypeString} {Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName)} {Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)}"
         m_JoinExpressions.Add(sql)
       Else
-        Dim result = m_Visitor.Translate(predicate, entityIndexHints, m_Parameters.Count, True)
+        Dim result = m_Visitor.Translate(predicate, entityIndexHints, m_Parameters.Count, True, True)
         sql = $"{joinTypeString} {Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName)} {Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)} ON {result.Sql}"
         m_JoinExpressions.Add(sql)
         m_Parameters.AddRange(result.Parameters)
@@ -214,7 +214,7 @@ Namespace Expressions.Builders
     End Sub
 
     Public Sub AddWhere(predicate As Expression, entityIndexHints As Int32())
-      Dim result = m_Visitor.Translate(predicate, entityIndexHints, m_Parameters.Count, True)
+      Dim result = m_Visitor.Translate(predicate, entityIndexHints, m_Parameters.Count, True, True)
       m_WhereExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -224,7 +224,7 @@ Namespace Expressions.Builders
     End Sub
 
     Public Sub AddOrderBy(keySelector As Expression, entityIndexHints As Int32(), ascending As Boolean)
-      Dim result = m_Visitor.Translate(keySelector, entityIndexHints, m_Parameters.Count, True)
+      Dim result = m_Visitor.Translate(keySelector, entityIndexHints, m_Parameters.Count, True, True)
 
       If result.Parameters.Any() Then
         Throw New NotSupportedException("OrderBy expression cannot be translated to SQL.")

@@ -36,7 +36,7 @@ Namespace Expressions.Builders
     End Sub
 
     Public Sub AddSet(predicate As Expression)
-      Dim result = m_Visitor.Translate(predicate, {0}, m_Parameters.Count, False)
+      Dim result = m_Visitor.Translate(predicate, {0}, m_Parameters.Count, False, False)
       m_SetExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -50,7 +50,7 @@ Namespace Expressions.Builders
         m_ParameterIndexShift = m_Model.GetFirstEntity().Entity.GetNonKeyProperties().Where(Function(x) x.Property.SetOnUpdate).Count()
       End If
 
-      Dim result = m_Visitor.Translate(predicate, {0}, m_Parameters.Count + m_ParameterIndexShift.Value, False)
+      Dim result = m_Visitor.Translate(predicate, {0}, m_Parameters.Count + m_ParameterIndexShift.Value, False, False)
       m_WhereExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
