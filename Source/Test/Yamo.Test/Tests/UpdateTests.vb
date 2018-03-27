@@ -335,57 +335,95 @@ Namespace Tests
       End Using
     End Sub
 
-    ' TODO: SIP - tests for update with condition
+    <TestMethod()>
+    Public Overridable Sub UpdateRecordsWithCondition()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 1
 
-    '<TestMethod()>
-    'Public Overridable Sub UpdateRecordsWithCondition()
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 2
 
-    'End Sub
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item3.IntColumn = 3
 
-    '<TestMethod()>
-    'Public Overridable Sub UpdateRecordsWithFormattableSqlString()
-    '  Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
-    '  item1.Nvarchar50Column = "d"
+      InsertItems(item1, item2, item3)
 
-    '  Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
-    '  item2.Nvarchar50Column = ""
+      Using db = CreateDbContext()
+        Dim affectedRows = db.Update(Of ItemWithAllSupportedValues).
+                              Set(Sub(x) x.Nvarchar50Column = "lorem").
+                              Where(Function(x) x.IntColumn < 3).
+                              Execute()
+        Assert.AreEqual(2, affectedRows)
 
-    '  Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
-    '  item3.Nvarchar50Column = "d"
+        Dim result = db.From(Of ItemWithAllSupportedValues).SelectAll().ToList()
 
-    '  InsertItems(item1, item2, item3)
+        item1.Nvarchar50Column = "lorem"
+        item2.Nvarchar50Column = "lorem"
 
-    '  Using db = CreateDbContext()
-    '    Dim value = "d"
-    '    Dim affectedRows = db.Delete(Of ItemWithAllSupportedValues).Where(Function(x) DirectCast($"{x.Nvarchar50Column} = {value}", FormattableString)).Execute()
-    '    Assert.AreEqual(2, affectedRows)
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({item1, item2, item3}, result)
+      End Using
+    End Sub
 
-    '    Dim item = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.Id = item2.Id).SelectAll().FirstOrDefault()
-    '    Assert.IsNotNull(item)
-    '  End Using
-    'End Sub
+    <TestMethod()>
+    Public Overridable Sub UpdateRecordsWithFormattableSqlStringCondition()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 1
 
-    '<TestMethod()>
-    'Public Overridable Sub UpdateRecordsWithRawSqlString()
-    '  Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
-    '  item1.Nvarchar50Column = "d"
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 2
 
-    '  Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
-    '  item2.Nvarchar50Column = ""
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item3.IntColumn = 3
 
-    '  Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
-    '  item3.Nvarchar50Column = "d"
+      InsertItems(item1, item2, item3)
 
-    '  InsertItems(item1, item2, item3)
+      Using db = CreateDbContext()
+        Dim affectedRows = db.Update(Of ItemWithAllSupportedValues).
+                              Set(Sub(x) x.Nvarchar50Column = "lorem").
+                              Where(Function(x) DirectCast($"{x.IntColumn} < 3", FormattableString)).
+                              Execute()
+        Assert.AreEqual(2, affectedRows)
 
-    '  Using db = CreateDbContext()
-    '    Dim affectedRows = db.Delete(Of ItemWithAllSupportedValues).Where("Nvarchar50Column = 'd'").Execute()
-    '    Assert.AreEqual(2, affectedRows)
+        Dim result = db.From(Of ItemWithAllSupportedValues).SelectAll().ToList()
 
-    '    Dim item = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.Id = item2.Id).SelectAll().FirstOrDefault()
-    '    Assert.IsNotNull(item)
-    '  End Using
-    'End Sub
+        item1.Nvarchar50Column = "lorem"
+        item2.Nvarchar50Column = "lorem"
+
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({item1, item2, item3}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub UpdateRecordsWithRawSqlStringCondition()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 1
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 2
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item3.IntColumn = 3
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim affectedRows = db.Update(Of ItemWithAllSupportedValues).
+                              Set(Sub(x) x.Nvarchar50Column = "lorem").
+                              Where("IntColumn < 3").
+                              Execute()
+        Assert.AreEqual(2, affectedRows)
+
+        Dim result = db.From(Of ItemWithAllSupportedValues).SelectAll().ToList()
+
+        item1.Nvarchar50Column = "lorem"
+        item2.Nvarchar50Column = "lorem"
+
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({item1, item2, item3}, result)
+      End Using
+    End Sub
 
   End Class
 End Namespace
