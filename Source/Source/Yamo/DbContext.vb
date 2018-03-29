@@ -85,15 +85,15 @@ Public Class DbContext
   End Function
 
   Public Function Insert(Of T)(obj As T, Optional useDbIdentityAndDefaults As Boolean = True, Optional setAutoFields As Boolean = True) As Int32
-    Return (New InsertSqlExpression(Of T)(Me)).Insert(obj, useDbIdentityAndDefaults, setAutoFields)
+    Return (New InsertSqlExpression(Of T)(Me, useDbIdentityAndDefaults, setAutoFields)).Insert(obj)
   End Function
 
   Public Function Update(Of T)(obj As T, Optional setAutoFields As Boolean = True) As Int32
-    Return (New UpdateSqlExpression(Of T)(Me)).Update(obj, setAutoFields)
+    Return (New UpdateSqlExpression(Of T)(Me, setAutoFields)).Update(obj)
   End Function
 
-  Public Function Update(Of T)() As UpdateSqlExpression(Of T)
-    Return New UpdateSqlExpression(Of T)(Me)
+  Public Function Update(Of T)(Optional setAutoFields As Boolean = True) As UpdateSqlExpression(Of T)
+    Return New UpdateSqlExpression(Of T)(Me, setAutoFields)
   End Function
 
   Public Function Delete(Of T)(obj As T) As Int32

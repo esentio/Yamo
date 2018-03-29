@@ -681,7 +681,7 @@ Namespace Internal
     End Function
 
     Private Sub AppendNewParameter(value As Object)
-      Dim parameterName = m_Builder.CreateNewParameter(m_ParameterIndex + m_Parameters.Count)
+      Dim parameterName = m_Builder.CreateParameter(m_ParameterIndex + m_Parameters.Count)
 
       m_Sql.Append(parameterName)
       m_Parameters.Add(New SqlParameter(parameterName, value))

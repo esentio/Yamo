@@ -6,13 +6,16 @@ Namespace Expressions.Builders
   Public Class InsertSqlExpressionBuilder
     Inherits SqlExpressionBuilderBase
 
-    Public Sub New(context As DbContext)
+    Private m_UseDbIdentityAndDefaults As Boolean
+
+    Public Sub New(context As DbContext, useDbIdentityAndDefaults As Boolean)
       MyBase.New(context)
+      m_UseDbIdentityAndDefaults = useDbIdentityAndDefaults
     End Sub
 
-    Public Function CreateQuery(obj As Object, Optional useDbIdentityAndDefaults As Boolean = True) As InsertQuery
-      Dim provider = EntitySqlStringProviderCache.GetInsertProvider(Me, useDbIdentityAndDefaults, obj.GetType())
-      Dim result = provider(obj, useDbIdentityAndDefaults)
+    Public Function CreateQuery(obj As Object) As InsertQuery
+      Dim provider = EntitySqlStringProviderCache.GetInsertProvider(Me, m_UseDbIdentityAndDefaults, obj.GetType())
+      Dim result = provider(obj, m_UseDbIdentityAndDefaults)
 
       Return New InsertQuery(result.SqlString, result.ReadDbGeneratedValues, obj)
     End Function

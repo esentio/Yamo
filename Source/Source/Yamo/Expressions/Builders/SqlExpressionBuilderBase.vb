@@ -14,7 +14,7 @@ Namespace Expressions.Builders
       Me.DbContext = context
     End Sub
 
-    Public Function CreateNewParameter(index As Int32) As String
+    Public Function CreateParameter(index As Int32) As String
       Return Me.DialectProvider.Formatter.CreateParameter($"p{index.ToString(Globalization.CultureInfo.InvariantCulture)}")
     End Function
 
@@ -25,7 +25,7 @@ Namespace Expressions.Builders
       Dim parameters = New List(Of SqlParameter)(args.Length)
 
       For i = 0 To args.Length - 1
-        Dim paramName = CreateNewParameter(parameterIndex + i)
+        Dim paramName = CreateParameter(parameterIndex + i)
         paramNames(i) = paramName
         parameters.Add(New SqlParameter(paramName, args(i)))
       Next
