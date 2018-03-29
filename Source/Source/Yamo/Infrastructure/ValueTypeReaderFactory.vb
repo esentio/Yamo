@@ -2,7 +2,7 @@
 Imports System.Linq.Expressions
 Imports System.Reflection
 
-' TODO: SIP - will this still be needed in the future. Delete if not.
+' TODO: SIP - will this still be needed in the future? Delete if not.
 
 Namespace Infrastructure
 

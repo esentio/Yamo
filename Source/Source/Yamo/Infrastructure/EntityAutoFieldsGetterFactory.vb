@@ -7,6 +7,16 @@ Namespace Infrastructure
 
   Public Class EntityAutoFieldsGetterFactory
 
+    Public Shared Function CreateOnUpdateGetter(model As Model, entityType As Type) As Func(Of DbContext, Object())
+      Dim factories = model.GetEntity(entityType).GetProperties().Where(Function(p) p.SetOnUpdate).Select(Function(p) p.GetOnUpdateFactory()).ToArray()
+
+      If factories.Length = 0 Then
+        Throw New NotSupportedException($"Entity '{entityType}' doesn't support auto fields on update.")
+      End If
+
+      Return CreateGetter(model, entityType, factories)
+    End Function
+
     Public Shared Function CreateOnDeleteGetter(model As Model, entityType As Type) As Func(Of DbContext, Object())
       Dim factories = model.GetEntity(entityType).GetProperties().Where(Function(p) p.SetOnDelete).Select(Function(p) p.GetOnDeleteFactory()).ToArray()
 

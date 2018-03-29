@@ -468,7 +468,7 @@ SET IDENTITY_INSERT {tableName} OFF"
     End Function
 
     Protected Function CreateParameter(parametersVariable As Expression, value As Expression, prop As [Property], index As Int32, builder As SqlExpressionBuilderBase) As (ParameterName As String, ParameterAddCall As Expression)
-      Dim parameterNameValue = builder.CreateNewParameter(index)
+      Dim parameterNameValue = builder.CreateParameter(index)
       Dim parameterName = Expression.Constant(parameterNameValue, GetType(String))
       Dim parameterValue = Expression.Convert(value, GetType(Object))
 

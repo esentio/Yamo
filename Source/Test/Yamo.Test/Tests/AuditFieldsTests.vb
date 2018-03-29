@@ -298,7 +298,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SoftDeletelRecordsWithCondition()
+    Public Overridable Sub SoftDeleteRecordsWithCondition()
       Dim item1 = Me.ModelFactory.CreateItemWithAuditFields()
       item1.Description = "d"
 
@@ -323,6 +323,126 @@ Namespace Tests
         Assert.IsNotNull(result.SingleOrDefault(Function(x) x.Id = item1.Id AndAlso x.Deleted.HasValue AndAlso IsApproximatelyNow(x.Deleted.Value) AndAlso x.DeletedUserId.HasValue AndAlso x.DeletedUserId.Value = userId))
         Assert.IsNotNull(result.SingleOrDefault(Function(x) x.Id = item2.Id AndAlso Not (x.Deleted.HasValue AndAlso IsApproximatelyNow(x.Deleted.Value) AndAlso x.DeletedUserId.HasValue AndAlso x.DeletedUserId.Value = userId)))
         Assert.IsNotNull(result.SingleOrDefault(Function(x) x.Id = item3.Id AndAlso x.Deleted.HasValue AndAlso IsApproximatelyNow(x.Deleted.Value) AndAlso x.DeletedUserId.HasValue AndAlso x.DeletedUserId.Value = userId))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub UpdateAllRecordsAndSetAutoFields()
+      Dim item1 = Me.ModelFactory.CreateItemWithAuditFields()
+      item1.Description = ""
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAuditFields()
+      item2.Description = ""
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAuditFields()
+      item3.Description = ""
+
+      Dim userId = 42
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        db.UserId = userId
+
+        Dim affectedRows = db.Update(Of ItemWithAuditFields).
+                              Set(Sub(x) x.Description = "lorem").
+                              Execute()
+        Assert.AreEqual(3, affectedRows)
+
+        Dim result = db.From(Of ItemWithAuditFields).SelectAll().ToList()
+        Assert.IsTrue(result.All(Function(x) x.Description = "lorem" AndAlso x.Modified.HasValue AndAlso IsApproximatelyNow(x.Modified.Value) AndAlso x.ModifiedUserId.HasValue AndAlso x.ModifiedUserId.Value = userId))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub UpdateAllRecordsAndDontSetAutoFields()
+      Dim item1 = Me.ModelFactory.CreateItemWithAuditFields()
+      item1.Description = ""
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAuditFields()
+      item2.Description = ""
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAuditFields()
+      item3.Description = ""
+
+      Dim userId = 42
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        db.UserId = userId
+
+        Dim affectedRows = db.Update(Of ItemWithAuditFields)(setAutoFields:=False).
+                              Set(Sub(x) x.Description = "lorem").
+                              Execute()
+        Assert.AreEqual(3, affectedRows)
+
+        Dim result = db.From(Of ItemWithAuditFields).SelectAll().ToList()
+        Assert.IsTrue(result.All(Function(x) x.Description = "lorem" AndAlso Not x.Modified.HasValue AndAlso Not x.ModifiedUserId.HasValue))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub UpdateRecordsWithConditionAndSetAutoFields()
+      Dim item1 = Me.ModelFactory.CreateItemWithAuditFields()
+      item1.Description = "x"
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAuditFields()
+      item2.Description = ""
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAuditFields()
+      item3.Description = "x"
+
+      Dim userId = 42
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        db.UserId = userId
+
+        Dim affectedRows = db.Update(Of ItemWithAuditFields).
+                              Set(Sub(x) x.Description = "lorem").
+                              Where(Function(x) x.Description = "x").
+                              Execute()
+        Assert.AreEqual(2, affectedRows)
+
+        Dim result = db.From(Of ItemWithAuditFields).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        Assert.IsNotNull(result.SingleOrDefault(Function(x) x.Id = item1.Id AndAlso x.Description = "lorem" AndAlso x.Modified.HasValue AndAlso IsApproximatelyNow(x.Modified.Value) AndAlso x.ModifiedUserId.HasValue AndAlso x.ModifiedUserId.Value = userId))
+        Assert.IsNotNull(result.SingleOrDefault(Function(x) x.Id = item2.Id AndAlso Not (x.Description = "lorem" AndAlso x.Modified.HasValue AndAlso IsApproximatelyNow(x.Modified.Value) AndAlso x.ModifiedUserId.HasValue AndAlso x.ModifiedUserId.Value = userId)))
+        Assert.IsNotNull(result.SingleOrDefault(Function(x) x.Id = item3.Id AndAlso x.Description = "lorem" AndAlso x.Modified.HasValue AndAlso IsApproximatelyNow(x.Modified.Value) AndAlso x.ModifiedUserId.HasValue AndAlso x.ModifiedUserId.Value = userId))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub UpdateRecordsWithConditionAndDontSetAutoFields()
+      Dim item1 = Me.ModelFactory.CreateItemWithAuditFields()
+      item1.Description = "x"
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAuditFields()
+      item2.Description = ""
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAuditFields()
+      item3.Description = "x"
+
+      Dim userId = 42
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        db.UserId = userId
+
+        Dim affectedRows = db.Update(Of ItemWithAuditFields)(setAutoFields:=False).
+                              Set(Sub(x) x.Description = "lorem").
+                              Where(Function(x) x.Description = "x").
+                              Execute()
+        Assert.AreEqual(2, affectedRows)
+
+        Dim result = db.From(Of ItemWithAuditFields).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        Assert.IsNotNull(result.SingleOrDefault(Function(x) x.Id = item1.Id AndAlso x.Description = "lorem" AndAlso Not x.Modified.HasValue AndAlso Not x.ModifiedUserId.HasValue))
+        Assert.IsNotNull(result.SingleOrDefault(Function(x) x.Id = item2.Id AndAlso Not x.Description = "lorem" AndAlso Not x.Modified.HasValue AndAlso Not x.ModifiedUserId.HasValue))
+        Assert.IsNotNull(result.SingleOrDefault(Function(x) x.Id = item3.Id AndAlso x.Description = "lorem" AndAlso Not x.Modified.HasValue AndAlso Not x.ModifiedUserId.HasValue))
       End Using
     End Sub
 

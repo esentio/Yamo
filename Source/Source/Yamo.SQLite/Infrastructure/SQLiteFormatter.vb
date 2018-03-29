@@ -11,5 +11,11 @@ Namespace Infrastructure
       End Get
     End Property
 
+    Public Overrides ReadOnly Property StringConcatenationOperator As String
+      Get
+        Return "||"
+      End Get
+    End Property
+
   End Class
 End Namespace

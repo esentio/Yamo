@@ -8,6 +8,12 @@
       End Get
     End Property
 
+    Public Overridable ReadOnly Property StringConcatenationOperator As String
+      Get
+        Return "+"
+      End Get
+    End Property
+
     Public Overridable Function GetConstantEmptyStringValue() As String
       Return "''"
     End Function
