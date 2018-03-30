@@ -100,9 +100,9 @@ Namespace Expressions
       Return Me.Executor.ExecuteScalar(Of Int32)(query)
     End Function
 
-    Public Function FirstOrDefault() As T
-      Dim query = Me.Builder.CreateQuery()
-      Return Me.Executor.ReadFirstOrDefault(Of T)(query)
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Me.Builder.AddSelect(selector, {0})
+      Return New CustomSelectSqlExpression(Of TResult)(Me.Builder, Me.Executor)
     End Function
 
   End Class

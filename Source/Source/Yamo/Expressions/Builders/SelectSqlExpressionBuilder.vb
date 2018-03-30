@@ -299,6 +299,21 @@ Namespace Expressions.Builders
       m_SelectExpression = $"SELECT COUNT(*)"
     End Sub
 
+    Public Sub AddSelect(selector As Expression, entityIndexHints As Int32())
+      ' TODO: SIP - implement
+      Dim result = m_Visitor.TranslateAndTransform(selector, entityIndexHints, m_Parameters.Count)
+
+      'If result.Parameters.Any() Then
+      '  Throw New NotSupportedException("OrderBy expression cannot be translated to SQL.")
+      'End If
+
+      'If ascending Then
+      '  m_OrderByExpressions.Add(result.Sql)
+      'Else
+      '  m_OrderByExpressions.Add($"{result.Sql} DESC")
+      'End If
+    End Sub
+
     Private Sub BuildSelectExpression()
       Dim columns = New List(Of String)
 

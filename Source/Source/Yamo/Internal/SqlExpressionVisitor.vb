@@ -35,12 +35,14 @@ Namespace Internal
 
     Private m_CurrentLikeParameterFormat As String
 
+    Private m_InCustomSelectTransformMode As Boolean
+
     Public Sub New(builder As SqlExpressionBuilderBase, model As SqlModel)
       m_Builder = builder
       m_Model = model
     End Sub
 
-    ' entityIndexHints might be nothing!!! - napisat do komentarov aj pre volajuce metody
+    ' entityIndexHints might be nothing!!! - write to comments (also in caller methods)
     Public Function Translate(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
@@ -57,8 +59,39 @@ Namespace Internal
       m_UseTableNamesOrAliases = useTableNamesOrAliases
       m_CompensateForIgnoredNegation = False
       m_CurrentLikeParameterFormat = Nothing
+      m_InCustomSelectTransformMode = False
 
-      Visit(expression)
+      Visit(lambda.Body)
+
+      m_ExpressionParameters = Nothing
+
+      Return New SqlString(m_Sql.ToString(), m_Parameters)
+    End Function
+
+    ' entityIndexHints might be nothing!!! - write to comments (also in caller methods)
+    Public Function TranslateAndTransform(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As SqlString
+      If TypeOf expression IsNot LambdaExpression Then
+        Throw New ArgumentException("Expression must be of type LambdaExpression.")
+      End If
+
+      Dim lambda = DirectCast(expression, LambdaExpression)
+
+      If TypeOf lambda.Body IsNot NewExpression Then
+        Throw New ArgumentException("NewExpression is expected as LambdaExpression method body.")
+      End If
+
+      m_ExpressionParameters = lambda.Parameters
+      m_EntityIndexHints = entityIndexHints
+      m_Sql = New StringBuilder()
+      m_Parameters = New List(Of SqlParameter)
+      m_ParameterIndex = parameterIndex
+      m_UseAliases = True
+      m_UseTableNamesOrAliases = True
+      m_CompensateForIgnoredNegation = False
+      m_CurrentLikeParameterFormat = Nothing
+      m_InCustomSelectTransformMode = True
+
+      VisitAndTransform(DirectCast(lambda.Body, NewExpression))
 
       m_ExpressionParameters = Nothing
 
@@ -686,6 +719,114 @@ Namespace Internal
       m_Sql.Append(parameterName)
       m_Parameters.Add(New SqlParameter(parameterName, value))
     End Sub
+
+    Private Function VisitAndTransform(node As NewExpression) As Expression
+      If IsValueTuple(node.Type) Then
+        Return VisitAndTransformValueTupleOrAnonymousType(node)
+      ElseIf IsAnonymousType(node.Type) Then
+        Return VisitAndTransformValueTupleOrAnonymousType(node)
+      Else
+        Throw New Exception("Only NewExpression of ValueTuple or anonymous type is supported.")
+      End If
+    End Function
+
+    Private Function VisitAndTransformValueTupleOrAnonymousType(node As NewExpression) As Expression
+      ' TODO: SIP - refactor this mess (proof of concept)
+      Dim count = node.Arguments.Count
+
+      For i = 0 To count - 1
+        Dim arg = node.Arguments(i)
+
+        If arg.NodeType = ExpressionType.Parameter Then
+
+          ' TODO: SIP - add support for IJoin
+          Dim index = m_ExpressionParameters.IndexOf(DirectCast(arg, ParameterExpression))
+
+          'If m_EntityIndexHints Is Nothing Then
+          '  ' this should not happen, because IJoin should be used when index hints are not available
+          '  Throw New Exception("Unable to match expression parameter with entity.")
+          'End If
+
+          'If m_EntityIndexHints.Length <= index Then
+          '  Dim declaringType = currentNode.Member.DeclaringType
+          '  Throw New Exception($"None or unambiguous match of entity of type '{declaringType}'. Use IJoin instead?")
+          'End If
+
+          Dim entityIndex = m_EntityIndexHints(index)
+          Dim entity = m_Model.GetEntity(entityIndex)
+
+          Dim properties = entity.Entity.GetProperties()
+
+          For j = 0 To properties.Count - 1
+            If entity.IncludedColumns(j) Then
+              m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(properties(j).ColumnName)} {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(i, j))}")
+            End If
+
+            ' TODO: SIP - this won't work when some column is excluded
+            If Not j = properties.Count - 1 Then
+              m_Sql.Append(", ")
+            End If
+          Next
+        Else
+          Visit(arg)
+          m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(i))}")
+        End If
+
+        If Not i = count - 1 Then
+          m_Sql.Append(", ")
+        End If
+      Next
+
+      Return node
+    End Function
+
+    Private Function IsValueTuple(type As Type) As Boolean
+      If Not type.IsGenericType Then
+        Return False
+      End If
+
+      type = type.GetGenericTypeDefinition()
+
+      If type Is GetType(ValueTuple) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of )) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,)) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,,)) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,,,)) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,,,,)) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,,,,,)) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,,,,,,)) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,,,,,,,)) Then
+        Return True
+      End If
+
+      Return False
+    End Function
+
+    Private Function IsAnonymousType(type As Type) As Boolean
+      ' via https://stackoverflow.com/questions/2483023/how-to-test-if-a-type-is-anonymous
+      ' and https://elegantcode.com/2011/06/24/detecting-anonymous-types-on-mono/
+      Return Attribute.IsDefined(type, GetType(CompilerGeneratedAttribute), False) AndAlso
+             type.IsGenericType AndAlso
+             (type.Name.Contains("AnonymousType") OrElse type.Name.Contains("AnonType")) AndAlso
+             (type.Name.StartsWith("<>") OrElse type.Name.StartsWith("VB$")) AndAlso
+             (type.Attributes And TypeAttributes.NotPublic) = TypeAttributes.NotPublic
+    End Function
+
+    Private Function CreateColumnAlias(index As Int32) As String
+      Return $"C{(index).ToString(Globalization.CultureInfo.InvariantCulture)}"
+    End Function
+
+    Private Function CreateColumnAlias(index1 As Int32, index2 As Int32) As String
+      Return $"C{(index1).ToString(Globalization.CultureInfo.InvariantCulture)}_{(index2).ToString(Globalization.CultureInfo.InvariantCulture)}"
+    End Function
 
   End Class
 End Namespace
