@@ -1,3 +1,4 @@
+Imports System.Data.Common
 Imports Yamo.Expressions
 Imports Yamo.Infrastructure
 Imports Yamo.Internal
@@ -58,10 +59,17 @@ Public Class DbContext
     m_Database = New DatabaseFacade(Me)
   End Sub
 
+  Friend Sub NotifyCommandExecution(command As DbCommand)
+    OnCommandExecuting(command)
+  End Sub
+
   Protected Overridable Sub OnConfiguring(optionsBuilder As DbContextOptionsBuilder)
   End Sub
 
   Protected Overridable Sub OnModelCreating(modelBuilder As ModelBuilder)
+  End Sub
+
+  Protected Overridable Sub OnCommandExecuting(command As DbCommand)
   End Sub
 
   Public Function From(Of T)() As SelectSqlExpression(Of T)

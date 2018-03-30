@@ -1,4 +1,5 @@
-﻿Imports System.Data.SqlClient
+﻿Imports System.Data.Common
+Imports System.Data.SqlClient
 Imports Yamo.Test
 
 Public Class SqlServerTestDbContext
@@ -12,6 +13,10 @@ Public Class SqlServerTestDbContext
 
   Protected Overrides Sub OnConfiguring(optionsBuilder As DbContextOptionsBuilder)
     optionsBuilder.UseSqlServer(m_Connection)
+  End Sub
+
+  Protected Overrides Sub OnCommandExecuting(command As DbCommand)
+
   End Sub
 
 End Class

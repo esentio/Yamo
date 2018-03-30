@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Data.Sqlite
+﻿Imports System.Data.Common
+Imports Microsoft.Data.Sqlite
 Imports Yamo.Test
 
 Public Class SQLiteTestDbContext
@@ -12,6 +13,10 @@ Public Class SQLiteTestDbContext
 
   Protected Overrides Sub OnConfiguring(optionsBuilder As DbContextOptionsBuilder)
     optionsBuilder.UseSQLite(m_Connection)
+  End Sub
+
+  Protected Overrides Sub OnCommandExecuting(command As DbCommand)
+
   End Sub
 
 End Class
