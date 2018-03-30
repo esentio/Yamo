@@ -83,6 +83,8 @@ Namespace Internal.Query
         command.Parameters.Add(parameter)
       Next
 
+      m_DbContext.NotifyCommandExecution(command)
+
       Return command
     End Function
 
