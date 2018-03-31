@@ -72,7 +72,7 @@ Namespace Internal
     End Function
 
     ' entityIndexHints might be nothing!!! - write to comments (also in caller methods)
-    Public Function TranslateAndTransform(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As SqlString
+    Public Function TranslateAndTransform(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As List(Of CustomSelectSqlEntity))
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -95,11 +95,11 @@ Namespace Internal
       m_InCustomSelectTransformMode = True
       m_CustomSelectTransformModeInfo = Nothing
 
-      VisitAndTransform(DirectCast(lambda.Body, NewExpression))
+      Dim entities = VisitAndTransform(DirectCast(lambda.Body, NewExpression))
 
       m_ExpressionParameters = Nothing
 
-      Return New SqlString(m_Sql.ToString(), m_Parameters)
+      Return (New SqlString(m_Sql.ToString(), m_Parameters), entities)
     End Function
 
     Public Overrides Function Visit(node As Expression) As Expression
@@ -734,7 +734,7 @@ Namespace Internal
       m_Parameters.Add(New SqlParameter(parameterName, value))
     End Sub
 
-    Private Function VisitAndTransform(node As NewExpression) As Expression
+    Private Function VisitAndTransform(node As NewExpression) As List(Of CustomSelectSqlEntity)
       If IsValueTuple(node.Type) Then
         Return VisitAndTransformValueTupleOrAnonymousType(node)
       ElseIf IsAnonymousType(node.Type) Then
@@ -744,13 +744,16 @@ Namespace Internal
       End If
     End Function
 
-    Private Function VisitAndTransformValueTupleOrAnonymousType(node As NewExpression) As Expression
+    Private Function VisitAndTransformValueTupleOrAnonymousType(node As NewExpression) As List(Of CustomSelectSqlEntity)
       Dim count = node.Arguments.Count
+      Dim customEntities = New List(Of CustomSelectSqlEntity)(count)
 
       For i = 0 To count - 1
-        m_CustomSelectTransformModeInfo = (i, True)
-
         Dim arg = node.Arguments(i)
+
+        customEntities.Add(New CustomSelectSqlEntity(i, arg.Type))
+
+        m_CustomSelectTransformModeInfo = (i, True)
 
         Visit(arg)
 
@@ -763,7 +766,9 @@ Namespace Internal
         End If
       Next
 
-      Return node
+      CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, node)
+
+      Return customEntities
     End Function
 
     Private Function IsValueTuple(type As Type) As Boolean

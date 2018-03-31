@@ -104,6 +104,25 @@ Namespace Internal.Query
       Return 1
     End Function
 
+    Public Function ReadCustomFirstOrDefault(Of T)(query As SelectQuery) As T
+      ' TODO: SIP - implement
+      Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, GetType(T))
+
+      Dim value As T = Nothing
+
+      Using command = CreateCommand(query)
+        Using dataReader = command.ExecuteReader()
+          If dataReader.Read() Then
+            value = DirectCast(reader({"aaa", 42, Nothing}), T)
+            ' TODO: SIP - call reset on entities
+            'ResetPropertyModifiedTracking(value)
+          End If
+        End Using
+      End Using
+
+      Return value
+    End Function
+
     Private Function ReadSimpleFirstOrDefault(Of T)(query As SelectQuery) As T
       Dim reader = EntityReaderCache.GetReader(m_DialectProvider, m_DbContext.Model, GetType(T))
       Dim includedColumns = query.Model.GetFirstEntity().IncludedColumns
@@ -120,6 +139,26 @@ Namespace Internal.Query
       End Using
 
       Return value
+    End Function
+
+    Public Function ReadCustomList(Of T)(query As SelectQuery) As List(Of T)
+      ' TODO: SIP - implement
+      Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, GetType(T))
+
+      Dim values = New List(Of T)
+
+      Using command = CreateCommand(query)
+        Using dataReader = command.ExecuteReader()
+          While dataReader.Read()
+            Dim value = DirectCast(reader({"aaa", 42, Nothing}), T)
+            ' TODO: SIP - call reset on entities
+            'ResetPropertyModifiedTracking(value)
+            values.Add(value)
+          End While
+        End Using
+      End Using
+
+      Return values
     End Function
 
     Private Function ReadSimpleList(Of T)(query As SelectQuery) As List(Of T)

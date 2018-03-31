@@ -19,14 +19,20 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim result1 = db.From(Of ItemWithAllSupportedValues).
-                         Select(Function(x) (x.Nvarchar50Column, x.IntColumn, Item:=x))
-        'FirstOrDefault()
+                         Select(Function(x) (x.Nvarchar50Column, x.IntColumn, Item:=x)).
+                         FirstOrDefault()
 
         Dim result2 = db.From(Of ItemWithAllSupportedValues).
-                         Select(Function(x) New With {x.Nvarchar50Column, x.IntColumn, .Item = x})
-        'FirstOrDefault()
+                         Select(Function(x) New With {x.Nvarchar50Column, x.IntColumn, .Item = x}).
+                         FirstOrDefault()
 
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) (x.Nvarchar50Column, x.IntColumn, Item:=x)).
+                         ToList()
 
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) New With {x.Nvarchar50Column, x.IntColumn, .Item = x}).
+                         ToList()
 
         Assert.Fail()
 
