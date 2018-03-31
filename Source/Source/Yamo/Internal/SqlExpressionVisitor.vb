@@ -37,6 +37,8 @@ Namespace Internal
 
     Private m_InCustomSelectTransformMode As Boolean
 
+    Private m_CustomSelectTransformModeInfo As (Index As Int32, AppendColumnAlias As Boolean)?
+
     Public Sub New(builder As SqlExpressionBuilderBase, model As SqlModel)
       m_Builder = builder
       m_Model = model
@@ -60,6 +62,7 @@ Namespace Internal
       m_CompensateForIgnoredNegation = False
       m_CurrentLikeParameterFormat = Nothing
       m_InCustomSelectTransformMode = False
+      m_CustomSelectTransformModeInfo = Nothing
 
       Visit(lambda.Body)
 
@@ -90,6 +93,7 @@ Namespace Internal
       m_CompensateForIgnoredNegation = False
       m_CurrentLikeParameterFormat = Nothing
       m_InCustomSelectTransformMode = True
+      m_CustomSelectTransformModeInfo = Nothing
 
       VisitAndTransform(DirectCast(lambda.Body, NewExpression))
 
@@ -544,7 +548,12 @@ Namespace Internal
     End Function
 
     Protected Overrides Function VisitParameter(node As ParameterExpression) As Expression
-      Return node
+      If m_InCustomSelectTransformMode Then
+        Return VisitParameterInCustomSelectTransformMode(node)
+      Else
+        ' this shouldn't be called
+        Return node
+      End If
     End Function
 
     Protected Overrides Function VisitMember(node As MemberExpression) As Expression
@@ -569,22 +578,27 @@ Namespace Internal
         End If
 
         If currentNode.Expression.NodeType = ExpressionType.Parameter Then
-          isEntityMemberAccess = True
+          If m_InCustomSelectTransformMode AndAlso m_EntityIndexHints Is Nothing Then
+            ' handles expressions like: x.T1 (m_EntityIndexHints Is Nothing is used as a fast way to distinguish it from x.DbPropertyName expressions)
+            Return VisitJoinMemberInCustomSelectTransformMode(node)
+          Else
+            isEntityMemberAccess = True
 
-          Dim index = m_ExpressionParameters.IndexOf(DirectCast(currentNode.Expression, ParameterExpression))
+            Dim index = m_ExpressionParameters.IndexOf(DirectCast(currentNode.Expression, ParameterExpression))
 
-          If m_EntityIndexHints Is Nothing Then
-            ' this should not happen, because IJoin should be used when index hints are not available
-            Throw New Exception("Unable to match expression parameter with entity.")
+            If m_EntityIndexHints Is Nothing Then
+              ' this should not happen, because IJoin should be used when index hints are not available
+              Throw New Exception("Unable to match expression parameter with entity.")
+            End If
+
+            If index < 0 OrElse m_EntityIndexHints.Length <= index Then
+              Dim declaringType = currentNode.Member.DeclaringType
+              Throw New Exception($"None or unambiguous match of entity of type '{declaringType}'. Use IJoin instead?")
+            End If
+
+            propertyName = currentNode.Member.Name
+            entityIndex = m_EntityIndexHints(index)
           End If
-
-          If m_EntityIndexHints.Length <= index Then
-            Dim declaringType = currentNode.Member.DeclaringType
-            Throw New Exception($"None or unambiguous match of entity of type '{declaringType}'. Use IJoin instead?")
-          End If
-
-          propertyName = currentNode.Member.Name
-          entityIndex = m_EntityIndexHints(index)
 
         ElseIf currentNode.Expression.NodeType = ExpressionType.MemberAccess Then
           Dim parent = DirectCast(currentNode.Expression, MemberExpression)
@@ -731,44 +745,16 @@ Namespace Internal
     End Function
 
     Private Function VisitAndTransformValueTupleOrAnonymousType(node As NewExpression) As Expression
-      ' TODO: SIP - refactor this mess (proof of concept)
       Dim count = node.Arguments.Count
 
       For i = 0 To count - 1
+        m_CustomSelectTransformModeInfo = (i, True)
+
         Dim arg = node.Arguments(i)
 
-        If arg.NodeType = ExpressionType.Parameter Then
+        Visit(arg)
 
-          ' TODO: SIP - add support for IJoin
-          Dim index = m_ExpressionParameters.IndexOf(DirectCast(arg, ParameterExpression))
-
-          'If m_EntityIndexHints Is Nothing Then
-          '  ' this should not happen, because IJoin should be used when index hints are not available
-          '  Throw New Exception("Unable to match expression parameter with entity.")
-          'End If
-
-          'If m_EntityIndexHints.Length <= index Then
-          '  Dim declaringType = currentNode.Member.DeclaringType
-          '  Throw New Exception($"None or unambiguous match of entity of type '{declaringType}'. Use IJoin instead?")
-          'End If
-
-          Dim entityIndex = m_EntityIndexHints(index)
-          Dim entity = m_Model.GetEntity(entityIndex)
-
-          Dim properties = entity.Entity.GetProperties()
-
-          For j = 0 To properties.Count - 1
-            If entity.IncludedColumns(j) Then
-              m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(properties(j).ColumnName)} {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(i, j))}")
-            End If
-
-            ' TODO: SIP - this won't work when some column is excluded
-            If Not j = properties.Count - 1 Then
-              m_Sql.Append(", ")
-            End If
-          Next
-        Else
-          Visit(arg)
+        If m_CustomSelectTransformModeInfo.Value.AppendColumnAlias Then
           m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(i))}")
         End If
 
@@ -827,6 +813,58 @@ Namespace Internal
     Private Function CreateColumnAlias(index1 As Int32, index2 As Int32) As String
       Return $"C{(index1).ToString(Globalization.CultureInfo.InvariantCulture)}_{(index2).ToString(Globalization.CultureInfo.InvariantCulture)}"
     End Function
+
+    Private Function VisitParameterInCustomSelectTransformMode(node As ParameterExpression) As Expression
+      Dim index = m_ExpressionParameters.IndexOf(node)
+
+      If m_EntityIndexHints Is Nothing Then
+        ' this should not happen, because IJoin should be used when index hints are not available
+        Throw New Exception("Unable to match expression parameter with entity.")
+      End If
+
+      If index < 0 OrElse m_EntityIndexHints.Length <= index Then
+        Throw New Exception($"None or unambiguous match of entity of type '{node.Type}'. Use IJoin instead?")
+      End If
+
+      Dim entityIndex = m_EntityIndexHints(index)
+
+      AppendEntityMembers(entityIndex)
+
+      Return node
+    End Function
+
+    Private Function VisitJoinMemberInCustomSelectTransformMode(node As MemberExpression) As Expression
+      Dim entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(node.Member.Name)
+      AppendEntityMembers(entityIndex)
+      Return node
+    End Function
+
+    Private Sub AppendEntityMembers(entityIndex As Int32)
+      Dim entity = m_Model.GetEntity(entityIndex)
+
+      ' NOTE: excluding columns is not (yet) supported in this scenario, but column enumeration belows already supports it.
+      ' In case exclusion is added, test this! Also, if whole table is excluded, entity.GetColumnCount() returns 0 (and we'll
+      ' most likely get exception later). In this case we propably shouldn't support excluding whole table (it doesn't make sense anyway)!
+
+      Dim properties = entity.Entity.GetProperties()
+      Dim columnCount = entity.GetColumnCount()
+      Dim columnIndex = 0
+
+      For propertyIndex = 0 To properties.Count - 1
+        If entity.IncludedColumns(propertyIndex) Then
+          m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(properties(propertyIndex).ColumnName)} {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(m_CustomSelectTransformModeInfo.Value.Index, columnIndex))}")
+          columnIndex += 1
+        End If
+
+        If columnIndex = columnCount Then
+          Exit For
+        Else
+          m_Sql.Append(", ")
+        End If
+      Next
+
+      m_CustomSelectTransformModeInfo = (m_CustomSelectTransformModeInfo.Value.Index, False)
+    End Sub
 
   End Class
 End Namespace

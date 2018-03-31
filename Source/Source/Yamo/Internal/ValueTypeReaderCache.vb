@@ -2,8 +2,6 @@
 Imports Yamo.Infrastructure
 Imports Yamo.Metadata
 
-' TODO: SIP - will this still be needed in the future. Delete if not.
-
 Namespace Internal
 
   Public Class ValueTypeReaderCache
