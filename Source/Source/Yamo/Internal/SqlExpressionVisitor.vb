@@ -35,9 +35,9 @@ Namespace Internal
 
     Private m_CurrentLikeParameterFormat As String
 
-    Private m_InCustomSelectTransformMode As Boolean
+    Private m_InCustomSelectMode As Boolean
 
-    Private m_CustomSelectTransformModeInfo As (Index As Int32, AppendColumnAlias As Boolean)?
+    Private m_CustomSelectModeInfo As (Index As Int32, AppendColumnAlias As Boolean)?
 
     Public Sub New(builder As SqlExpressionBuilderBase, model As SqlModel)
       m_Builder = builder
@@ -61,8 +61,8 @@ Namespace Internal
       m_UseTableNamesOrAliases = useTableNamesOrAliases
       m_CompensateForIgnoredNegation = False
       m_CurrentLikeParameterFormat = Nothing
-      m_InCustomSelectTransformMode = False
-      m_CustomSelectTransformModeInfo = Nothing
+      m_InCustomSelectMode = False
+      m_CustomSelectModeInfo = Nothing
 
       Visit(lambda.Body)
 
@@ -72,7 +72,7 @@ Namespace Internal
     End Function
 
     ' entityIndexHints might be nothing!!! - write to comments (also in caller methods)
-    Public Function TranslateAndTransform(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As List(Of CustomSelectSqlEntity))
+    Public Function TranslateCustomSelect(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSelectSqlEntity())
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -92,14 +92,14 @@ Namespace Internal
       m_UseTableNamesOrAliases = True
       m_CompensateForIgnoredNegation = False
       m_CurrentLikeParameterFormat = Nothing
-      m_InCustomSelectTransformMode = True
-      m_CustomSelectTransformModeInfo = Nothing
+      m_InCustomSelectMode = True
+      m_CustomSelectModeInfo = Nothing
 
-      Dim entities = VisitAndTransform(DirectCast(lambda.Body, NewExpression))
+      Dim customEntities = VisitCustomSelect(DirectCast(lambda.Body, NewExpression))
 
       m_ExpressionParameters = Nothing
 
-      Return (New SqlString(m_Sql.ToString(), m_Parameters), entities)
+      Return (New SqlString(m_Sql.ToString(), m_Parameters), customEntities)
     End Function
 
     Public Overrides Function Visit(node As Expression) As Expression
@@ -548,8 +548,8 @@ Namespace Internal
     End Function
 
     Protected Overrides Function VisitParameter(node As ParameterExpression) As Expression
-      If m_InCustomSelectTransformMode Then
-        Return VisitParameterInCustomSelectTransformMode(node)
+      If m_InCustomSelectMode Then
+        Return VisitParameterInCustomSelectMode(node)
       Else
         ' this shouldn't be called
         Return node
@@ -578,9 +578,9 @@ Namespace Internal
         End If
 
         If currentNode.Expression.NodeType = ExpressionType.Parameter Then
-          If m_InCustomSelectTransformMode AndAlso m_EntityIndexHints Is Nothing Then
+          If m_InCustomSelectMode AndAlso m_EntityIndexHints Is Nothing Then
             ' handles expressions like: x.T1 (m_EntityIndexHints Is Nothing is used as a fast way to distinguish it from x.DbPropertyName expressions)
-            Return VisitJoinMemberInCustomSelectTransformMode(node)
+            Return VisitJoinMemberInCustomSelectMode(node)
           Else
             isEntityMemberAccess = True
 
@@ -734,30 +734,35 @@ Namespace Internal
       m_Parameters.Add(New SqlParameter(parameterName, value))
     End Sub
 
-    Private Function VisitAndTransform(node As NewExpression) As List(Of CustomSelectSqlEntity)
+    Private Function VisitCustomSelect(node As NewExpression) As CustomSelectSqlEntity()
       If IsValueTuple(node.Type) Then
-        Return VisitAndTransformValueTupleOrAnonymousType(node)
+        Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(node)
       ElseIf IsAnonymousType(node.Type) Then
-        Return VisitAndTransformValueTupleOrAnonymousType(node)
+        Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(node)
       Else
         Throw New Exception("Only NewExpression of ValueTuple or anonymous type is supported.")
       End If
     End Function
 
-    Private Function VisitAndTransformValueTupleOrAnonymousType(node As NewExpression) As List(Of CustomSelectSqlEntity)
+    Private Function VisitValueTupleOrAnonymousTypeInCustomSelectMode(node As NewExpression) As CustomSelectSqlEntity()
       Dim count = node.Arguments.Count
-      Dim customEntities = New List(Of CustomSelectSqlEntity)(count)
+      Dim customEntities = New CustomSelectSqlEntity(count - 1) {}
+
+      Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
 
       For i = 0 To count - 1
         Dim arg = node.Arguments(i)
+        Dim type = arg.Type
+        Dim entityIndex = entities.IndexOf(type)
+        Dim isEntity = Not entityIndex = -1
 
-        customEntities.Add(New CustomSelectSqlEntity(i, arg.Type))
+        customEntities(i) = New CustomSelectSqlEntity(i, isEntity, entityIndex, type)
 
-        m_CustomSelectTransformModeInfo = (i, True)
+        m_CustomSelectModeInfo = (i, True)
 
         Visit(arg)
 
-        If m_CustomSelectTransformModeInfo.Value.AppendColumnAlias Then
+        If m_CustomSelectModeInfo.Value.AppendColumnAlias Then
           m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(i))}")
         End If
 
@@ -766,7 +771,7 @@ Namespace Internal
         End If
       Next
 
-      CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, node)
+      CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, node, customEntities)
 
       Return customEntities
     End Function
@@ -819,7 +824,7 @@ Namespace Internal
       Return $"C{(index1).ToString(Globalization.CultureInfo.InvariantCulture)}_{(index2).ToString(Globalization.CultureInfo.InvariantCulture)}"
     End Function
 
-    Private Function VisitParameterInCustomSelectTransformMode(node As ParameterExpression) As Expression
+    Private Function VisitParameterInCustomSelectMode(node As ParameterExpression) As Expression
       Dim index = m_ExpressionParameters.IndexOf(node)
 
       If m_EntityIndexHints Is Nothing Then
@@ -838,7 +843,7 @@ Namespace Internal
       Return node
     End Function
 
-    Private Function VisitJoinMemberInCustomSelectTransformMode(node As MemberExpression) As Expression
+    Private Function VisitJoinMemberInCustomSelectMode(node As MemberExpression) As Expression
       Dim entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(node.Member.Name)
       AppendEntityMembers(entityIndex)
       Return node
@@ -857,7 +862,7 @@ Namespace Internal
 
       For propertyIndex = 0 To properties.Count - 1
         If entity.IncludedColumns(propertyIndex) Then
-          m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(properties(propertyIndex).ColumnName)} {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(m_CustomSelectTransformModeInfo.Value.Index, columnIndex))}")
+          m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(properties(propertyIndex).ColumnName)} {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(m_CustomSelectModeInfo.Value.Index, columnIndex))}")
           columnIndex += 1
         End If
 
@@ -868,7 +873,7 @@ Namespace Internal
         End If
       Next
 
-      m_CustomSelectTransformModeInfo = (m_CustomSelectTransformModeInfo.Value.Index, False)
+      m_CustomSelectModeInfo = (m_CustomSelectModeInfo.Value.Index, False)
     End Sub
 
   End Class

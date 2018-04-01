@@ -1,5 +1,8 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Data
+Imports System.Linq.Expressions
 Imports Yamo.Infrastructure
+Imports Yamo.Internal.Query
+Imports Yamo.Internal.Query.Metadata
 Imports Yamo.Metadata
 
 Namespace Internal
@@ -8,7 +11,7 @@ Namespace Internal
 
     Private Shared m_Instances As Dictionary(Of Int32, CustomResultReaderCache)
 
-    ' Func(Of Object(), T)
+    ' Func(Of IDataReader, CustomEntityReadInfo(), T)
     Private m_ResultFactories As Dictionary(Of Type, Object)
 
     Shared Sub New()
@@ -19,12 +22,12 @@ Namespace Internal
       m_ResultFactories = New Dictionary(Of Type, Object)
     End Sub
 
-    Public Shared Function GetResultFactory(Of T)(model As Model, resultType As Type) As Func(Of Object(), T)
+    Public Shared Function GetResultFactory(Of T)(model As Model, resultType As Type) As Func(Of IDataReader, CustomEntityReadInfo(), T)
       Return GetInstance(model).GetResultFactoryOrThrow(Of T)(model, resultType)
     End Function
 
-    Public Shared Sub CreateResultFactoryIfNotExists(model As Model, node As NewExpression)
-      GetInstance(model).CreateResultFactory(model, node)
+    Public Shared Sub CreateResultFactoryIfNotExists(model As Model, node As Expression, customEntities As CustomSelectSqlEntity())
+      GetInstance(model).CreateResultFactory(model, node, customEntities)
     End Sub
 
     Private Shared Function GetInstance(model As Model) As CustomResultReaderCache
@@ -51,12 +54,12 @@ Namespace Internal
       Return instance
     End Function
 
-    Private Function GetResultFactoryOrThrow(Of T)(model As Model, resultType As Type) As Func(Of Object(), T)
-      Dim resultFactory As Func(Of Object(), T) = Nothing
+    Private Function GetResultFactoryOrThrow(Of T)(model As Model, resultType As Type) As Func(Of IDataReader, CustomEntityReadInfo(), T)
+      Dim resultFactory As Func(Of IDataReader, CustomEntityReadInfo(), T) = Nothing
 
       SyncLock m_ResultFactories
         If m_ResultFactories.ContainsKey(resultType) Then
-          resultFactory = DirectCast(m_ResultFactories(resultType), Func(Of Object(), T))
+          resultFactory = DirectCast(m_ResultFactories(resultType), Func(Of IDataReader, CustomEntityReadInfo(), T))
         End If
       End SyncLock
 
@@ -67,7 +70,7 @@ Namespace Internal
       Return resultFactory
     End Function
 
-    Private Sub CreateResultFactory(model As Model, node As NewExpression)
+    Private Sub CreateResultFactory(model As Model, node As Expression, customEntities As CustomSelectSqlEntity())
       Dim resultType = node.Type
 
       SyncLock m_ResultFactories
@@ -76,7 +79,7 @@ Namespace Internal
         End If
       End SyncLock
 
-      Dim resultFactory = CustomResultReaderFactory.CreateResultFactory(node)
+      Dim resultFactory = CustomResultReaderFactory.CreateResultFactory(node, customEntities)
 
       SyncLock m_ResultFactories
         m_ResultFactories(resultType) = resultFactory

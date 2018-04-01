@@ -20,7 +20,11 @@ Namespace Internal
     End Sub
 
     Public Shared Function GetReader(Of T)(dialectProvider As SqlDialectProvider, model As Model) As Func(Of IDataReader, Int32, T)
-      Return GetInstance(dialectProvider, model).GetOrCreateReader(Of T)(dialectProvider)
+      Return DirectCast(GetInstance(dialectProvider, model).GetOrCreateReader(dialectProvider, GetType(T)), Func(Of IDataReader, Integer, T))
+    End Function
+
+    Public Shared Function GetReader(dialectProvider As SqlDialectProvider, model As Model, type As Type) As Object
+      Return GetInstance(dialectProvider, model).GetOrCreateReader(dialectProvider, type)
     End Function
 
     Private Shared Function GetInstance(dialectProvider As SqlDialectProvider, model As Model) As ValueTypeReaderCache
@@ -49,18 +53,17 @@ Namespace Internal
       Return instance
     End Function
 
-    Private Function GetOrCreateReader(Of T)(dialectProvider As SqlDialectProvider) As Func(Of IDataReader, Int32, T)
-      Dim type = GetType(T)
-      Dim reader As Func(Of IDataReader, Int32, T) = Nothing
+    Private Function GetOrCreateReader(dialectProvider As SqlDialectProvider, type As Type) As Object
+      Dim reader As Object = Nothing
 
       SyncLock m_Readers
         If m_Readers.ContainsKey(type) Then
-          reader = DirectCast(m_Readers(type), Func(Of IDataReader, Int32, T))
+          reader = m_Readers(type)
         End If
       End SyncLock
 
       If reader Is Nothing Then
-        reader = dialectProvider.ValueTypeReaderFactory.CreateReader(Of T)
+        reader = dialectProvider.ValueTypeReaderFactory.CreateReader(type)
       Else
         Return reader
       End If

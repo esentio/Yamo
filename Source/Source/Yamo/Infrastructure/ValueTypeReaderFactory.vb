@@ -7,8 +7,7 @@ Namespace Infrastructure
   Public Class ValueTypeReaderFactory
     Inherits ReaderFactoryBase
 
-    Public Overridable Function CreateReader(Of T)() As Func(Of IDataReader, Int32, T)
-      Dim type = GetType(T)
+    Public Overridable Function CreateReader(type As Type) As Object
       Dim readerParam = Expression.Parameter(GetType(IDataRecord), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
       Dim indexParam = Expression.Parameter(GetType(Int32), "index")
       Dim parameters = {readerParam, indexParam}
@@ -48,7 +47,7 @@ Namespace Infrastructure
 
       Dim body = Expression.Block({variable}, expressions)
 
-      Dim reader = Expression.Lambda(Of Func(Of IDataReader, Int32, T))(body, parameters)
+      Dim reader = Expression.Lambda(body, parameters)
       Return reader.Compile()
     End Function
 

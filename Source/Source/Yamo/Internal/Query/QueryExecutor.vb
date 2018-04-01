@@ -104,16 +104,16 @@ Namespace Internal.Query
       Return 1
     End Function
 
-    Public Function ReadCustomFirstOrDefault(Of T)(query As SelectQuery) As T
-      ' TODO: SIP - implement
+    Public Function ReadCustomFirstOrDefault(Of T)(query As CustomSelectQuery) As T
       Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, GetType(T))
+      Dim customEntityInfos = CustomEntityReadInfo.Create(m_DialectProvider, query.Model, query.Entities)
 
       Dim value As T = Nothing
 
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
           If dataReader.Read() Then
-            value = DirectCast(reader({"aaa", 42, Nothing}), T)
+            value = DirectCast(reader(dataReader, customEntityInfos), T)
             ' TODO: SIP - call reset on entities
             'ResetPropertyModifiedTracking(value)
           End If
@@ -141,16 +141,16 @@ Namespace Internal.Query
       Return value
     End Function
 
-    Public Function ReadCustomList(Of T)(query As SelectQuery) As List(Of T)
-      ' TODO: SIP - implement
+    Public Function ReadCustomList(Of T)(query As CustomSelectQuery) As List(Of T)
       Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, GetType(T))
+      Dim customEntityInfos = CustomEntityReadInfo.Create(m_DialectProvider, query.Model, query.Entities)
 
       Dim values = New List(Of T)
 
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
           While dataReader.Read()
-            Dim value = DirectCast(reader({"aaa", 42, Nothing}), T)
+            Dim value = DirectCast(reader(dataReader, customEntityInfos), T)
             ' TODO: SIP - call reset on entities
             'ResetPropertyModifiedTracking(value)
             values.Add(value)

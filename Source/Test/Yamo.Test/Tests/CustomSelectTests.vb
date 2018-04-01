@@ -34,6 +34,8 @@ Namespace Tests
                          Select(Function(x) New With {x.Nvarchar50Column, x.IntColumn, .Item = x}).
                          ToList()
 
+        'Dim a = result3(0).Nvarchar50Column
+
         Assert.Fail()
 
       End Using
