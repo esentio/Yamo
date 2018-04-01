@@ -79,10 +79,6 @@ Namespace Internal
 
       Dim lambda = DirectCast(expression, LambdaExpression)
 
-      If TypeOf lambda.Body IsNot NewExpression Then
-        Throw New ArgumentException("NewExpression is expected as LambdaExpression method body.")
-      End If
-
       m_ExpressionParameters = lambda.Parameters
       m_EntityIndexHints = entityIndexHints
       m_Sql = New StringBuilder()
@@ -95,7 +91,7 @@ Namespace Internal
       m_InCustomSelectMode = True
       m_CustomSelectModeInfo = Nothing
 
-      Dim customEntities = VisitCustomSelect(DirectCast(lambda.Body, NewExpression))
+      Dim customEntities = VisitCustomSelect(lambda.Body)
 
       m_ExpressionParameters = Nothing
 
@@ -734,13 +730,17 @@ Namespace Internal
       m_Parameters.Add(New SqlParameter(parameterName, value))
     End Sub
 
-    Private Function VisitCustomSelect(node As NewExpression) As CustomSelectSqlEntity()
-      If IsValueTuple(node.Type) Then
-        Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(node)
-      ElseIf IsAnonymousType(node.Type) Then
-        Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(node)
+    Private Function VisitCustomSelect(node As Expression) As CustomSelectSqlEntity()
+      If node.NodeType = ExpressionType.New Then
+        If IsValueTuple(node.Type) Then
+          Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(DirectCast(node, NewExpression))
+        ElseIf IsAnonymousType(node.Type) Then
+          Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(DirectCast(node, NewExpression))
+        Else
+          Throw New Exception("Only NewExpression of ValueTuple or anonymous type is supported.")
+        End If
       Else
-        Throw New Exception("Only NewExpression of ValueTuple or anonymous type is supported.")
+        Return VisitInCustomSelectMode(node)
       End If
     End Function
 
@@ -770,6 +770,30 @@ Namespace Internal
           m_Sql.Append(", ")
         End If
       Next
+
+      CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, node, customEntities)
+
+      Return customEntities
+    End Function
+
+    Private Function VisitInCustomSelectMode(node As Expression) As CustomSelectSqlEntity()
+      Dim customEntities = New CustomSelectSqlEntity(0) {}
+
+      Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
+
+      Dim type = node.Type
+      Dim entityIndex = entities.IndexOf(type)
+      Dim isEntity = Not entityIndex = -1
+
+      customEntities(0) = New CustomSelectSqlEntity(0, isEntity, entityIndex, type)
+
+      m_CustomSelectModeInfo = (0, True)
+
+      Visit(node)
+
+      If m_CustomSelectModeInfo.Value.AppendColumnAlias Then
+        m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(0))}")
+      End If
 
       CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, node, customEntities)
 

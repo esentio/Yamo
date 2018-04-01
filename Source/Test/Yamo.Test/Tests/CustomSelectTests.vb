@@ -18,6 +18,14 @@ Namespace Tests
       ' TODO: SIP - implement
 
       Using db = CreateDbContext()
+        Dim result5 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.Nvarchar50Column).
+                         FirstOrDefault()
+
+        Dim result6 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x).
+                         FirstOrDefault()
+
         Dim result1 = db.From(Of ItemWithAllSupportedValues).
                          Select(Function(x) (x.Nvarchar50Column, x.IntColumn, Item:=x)).
                          FirstOrDefault()

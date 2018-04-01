@@ -69,9 +69,14 @@ Namespace Infrastructure
         arguments.Add(valueVar)
       Next
 
-      Dim newExp = Expression.[New](DirectCast(node, NewExpression).Constructor, arguments)
-
-      expressions.Add(newExp)
+      If node.NodeType = ExpressionType.New Then
+        ' ValueTuple or anonymous type
+        Dim newExp = Expression.[New](DirectCast(node, NewExpression).Constructor, arguments)
+        expressions.Add(newExp)
+      Else
+        ' single value or entity
+        expressions.Add(variables(0))
+      End If
 
       Dim body = Expression.Block(variables, expressions)
 
