@@ -949,6 +949,215 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfEntity()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMinValues
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMaxValues
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select entity
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) x).
+                         FirstOrDefault()
+        Assert.AreEqual(item2, result1)
+
+        ' select entity, but no row is returned
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x).
+                         FirstOrDefault()
+        Assert.AreEqual(Nothing, result2)
+
+        ' select entities
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x).
+                         ToList()
+        CollectionAssert.AreEquivalent({item1, item2, item3}, result3)
+
+        ' select entities, but no row is returned
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x).
+                         ToList()
+        Assert.AreEqual(0, result4.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfJoinedEntity()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
+      Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
+      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+
+      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+
+      Using db = CreateDbContext()
+        ' select entity
+        Dim result1 = db.From(Of Article).
+                         Join(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article1.Id).
+                         Select(Function(a, l) l).
+                         FirstOrDefault()
+        Assert.AreEqual(label1En, result1)
+
+        ' select entity, but no row is returned
+        Dim result2 = db.From(Of Article).
+                         Join(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) l).
+                         FirstOrDefault()
+        Assert.AreEqual(Nothing, result2)
+
+        ' select entities
+        Dim result3 = db.From(Of Article).
+                         Join(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article3.Id).
+                         Select(Function(a, l) l).
+                         ToList()
+        CollectionAssert.AreEquivalent({label3En, label3Ger}, result3)
+
+        ' select entities, but no row is returned
+        Dim result4 = db.From(Of Article).
+                         Join(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) l).
+                         ToList()
+        Assert.AreEqual(0, result4.Count)
+
+        ' select entity (using IJoin)
+        Dim result5 = db.From(Of Article).
+                         Join(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article1.Id).
+                         Select(Function(j) j.T2).
+                         FirstOrDefault()
+        Assert.AreEqual(label1En, result1)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfValueWithExpression()
+      Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item.Nvarchar50ColumnNull = "lorem"
+      item.BitColumn = False
+      item.SmallintColumnNull = Nothing
+      item.IntColumn = 42
+      item.IntColumnNull = 6
+
+      InsertItems(item)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.Nvarchar50ColumnNull & " ipsum").
+                         FirstOrDefault()
+        Assert.AreEqual("lorem ipsum", result1)
+
+        ' TODO: SIP - is it worth to add support for negation in selects?
+        'Dim result2 = db.From(Of ItemWithAllSupportedValues).
+        '                 Select(Function(x) Not x.BitColumn).
+        '                 FirstOrDefault()
+        'Assert.AreEqual(48, result2)
+
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.IntColumn + 3).
+                         FirstOrDefault()
+        Assert.AreEqual(45, result3)
+
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.IntColumn + x.IntColumnNull.Value).
+                         FirstOrDefault()
+        Assert.AreEqual(48, result4)
+
+        ' TODO: SIP - is it worth to add support for conversion to non-null value for scenarios like this?
+        'Dim result5 = db.From(Of ItemWithAllSupportedValues).
+        '                 Select(Function(x) x.IntColumn + x.SmallintColumnNull.Value).
+        '                 FirstOrDefault()
+        'Assert.AreEqual(42, result5)
+
+        'Dim result6 = db.From(Of ItemWithAllSupportedValues).
+        '                 Select(Function(x) x.SmallintColumnNull.Value).
+        '                 FirstOrDefault()
+        'Assert.AreEqual(0S, result6)
+
+        ' TODO: SIP - is it worth to add support for null value detection for scenarios like this?
+        'Dim result7 = db.From(Of ItemWithAllSupportedValues).
+        '                 Select(Function(x) x.SmallintColumnNull.HasValue).
+        '                 FirstOrDefault()
+        'Assert.AreEqual(False, result7)
+
+        'Dim result8 = db.From(Of ItemWithAllSupportedValues).
+        '                 Select(Function(x) x.IntColumnNull.HasValue).
+        '                 FirstOrDefault()
+        'Assert.AreEqual(True, result8)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfNonNullableValueWhichMightBeNullInSqlResult()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
+      Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
+      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+
+      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) l.Id).
+                         FirstOrDefault()
+        Assert.AreEqual(0, result1)
+
+        Dim result2 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) CType(l.Id, Int32?)).
+                         FirstOrDefault()
+        Assert.AreEqual(Nothing, result2)
+
+        Dim result3 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article1.Id).
+                         Select(Function(a, l) CType(l.Id, Int32?)).
+                         FirstOrDefault()
+        Assert.AreEqual(New Int32?(label1En.Id), result3)
+
+        Dim result4 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Select(Function(a, l) l.Id).
+                         ToList()
+        CollectionAssert.AreEquivalent({label1En.Id, 0, label3En.Id, label3Ger.Id}, result4)
+
+        Dim result5 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Select(Function(a, l) CType(l.Id, Int32?)).
+                         ToList()
+        CollectionAssert.AreEquivalent({New Int32?(label1En.Id), New Int32?(), New Int32?(label3En.Id), New Int32?(label3Ger.Id)}, result5)
+
+        Dim result6 = db.From(Of Article).
+                         Where(Function(a) a.Id = -1).
+                         Select(Function(a) a.Id).
+                         FirstOrDefault()
+        Assert.AreEqual(0, result6)
+
+        Dim result7 = db.From(Of Article).
+                         Where(Function(a) a.Id = -1).
+                         Select(Function(a) CType(a.Id, Int32?)).
+                         FirstOrDefault()
+        Assert.AreEqual(Nothing, result7)
+      End Using
+    End Sub
 
 
 
@@ -959,8 +1168,9 @@ Namespace Tests
 
 
 
-
-
+    ' TODO: SIP - test property reset
+    ' TODO: SIP - test valuetuple
+    ' TODO: SIP - test anonymous type
 
 
     <TestMethod()>

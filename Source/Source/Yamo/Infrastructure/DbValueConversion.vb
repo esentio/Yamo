@@ -3,7 +3,7 @@
   Public Class DbValueConversion
 
     Public Overridable Function FromDbValue(Of T)(value As Object) As T
-      If value Is DBNull.Value Then
+      If value Is DBNull.Value OrElse value Is Nothing Then
         Return Nothing
       Else
         Return DirectCast(value, T)
