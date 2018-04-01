@@ -75,5 +75,38 @@ Namespace Expressions
       Return Me.Executor.ExecuteScalar(Of Int32)(query)
     End Function
 
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T1, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {0})
+    End Function
+
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T2, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {1})
+    End Function
+
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T3, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {2})
+    End Function
+
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T4, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {3})
+    End Function
+
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T5, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {4})
+    End Function
+
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T1, T2, T3, T4, T5, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {0, 1, 2, 3, 4})
+    End Function
+
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5), TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, Nothing)
+    End Function
+
+    Private Function InternalSelect(Of TResult)(selector As Expression, entityIndexHints As Int32()) As CustomSelectSqlExpression(Of TResult)
+      Me.Builder.AddSelect(selector, entityIndexHints)
+      Return New CustomSelectSqlExpression(Of TResult)(Me.Builder, Me.Executor)
+    End Function
+
   End Class
 End Namespace

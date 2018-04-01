@@ -101,7 +101,11 @@ Namespace Expressions
     End Function
 
     Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T, TResult))) As CustomSelectSqlExpression(Of TResult)
-      Me.Builder.AddSelect(selector, {0})
+      Return InternalSelect(Of TResult)(selector, {0})
+    End Function
+
+    Private Function InternalSelect(Of TResult)(selector As Expression, entityIndexHints As Int32()) As CustomSelectSqlExpression(Of TResult)
+      Me.Builder.AddSelect(selector, entityIndexHints)
       Return New CustomSelectSqlExpression(Of TResult)(Me.Builder, Me.Executor)
     End Function
 

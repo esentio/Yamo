@@ -26,6 +26,7 @@ Namespace Internal.Query
 
     Public Function ExecuteScalar(Of T)(query As Query) As T
       Using command = CreateCommand(query)
+        ' TODO: SIP - use ValueType reader instead?
         Return m_DialectProvider.DbValueConversion.FromDbValue(Of T)(command.ExecuteScalar())
       End Using
     End Function

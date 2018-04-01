@@ -58,5 +58,14 @@ Namespace Expressions
       Return Me.Executor.ReadFirstOrDefault(Of T)(query)
     End Function
 
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {0})
+    End Function
+
+    Private Function InternalSelect(Of TResult)(selector As Expression, entityIndexHints As Int32()) As CustomSelectSqlExpression(Of TResult)
+      Me.Builder.AddSelect(selector, entityIndexHints)
+      Return New CustomSelectSqlExpression(Of TResult)(Me.Builder, Me.Executor)
+    End Function
+
   End Class
 End Namespace

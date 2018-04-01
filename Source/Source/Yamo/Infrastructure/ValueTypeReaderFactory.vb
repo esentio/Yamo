@@ -32,6 +32,11 @@ Namespace Infrastructure
         Dim isDBNullCall = Expression.Call(readerParam, "IsDBNull", Nothing, indexParam)
         Dim cond = Expression.IfThenElse(isDBNullCall, propAssignNull, propAssign)
         expressions.Add(cond)
+      ElseIf type Is GetType(Byte()) Then
+        Dim propAssign = Expression.Assign(variable, readValueCall)
+        Dim isDBNullCall = Expression.Call(readerParam, "IsDBNull", Nothing, indexParam)
+        Dim cond = Expression.IfThenElse(isDBNullCall, propAssignNull, propAssign)
+        expressions.Add(cond)
       ElseIf underlyingType Is Nothing Then
         Dim propAssign = Expression.Assign(variable, readValueCall)
         expressions.Add(propAssign)
