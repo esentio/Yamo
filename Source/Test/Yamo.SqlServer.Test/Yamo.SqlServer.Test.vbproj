@@ -73,6 +73,7 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tests\PropertyModifiedTrackingTests.vb" />
     <Compile Include="Tests\AuditFieldsTests.vb" />
     <Compile Include="Tests\DbContextTests.vb" />
     <Compile Include="Tests\ExecuteScalarTests.vb" />

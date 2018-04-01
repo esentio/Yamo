@@ -12,6 +12,8 @@
 
     Public Property Children As List(Of LinkedItemChild)
 
+    Public Property RelatedItem As Object
+
     Public Overrides Function Equals(obj As Object) As Boolean
       If obj Is Nothing OrElse TypeOf obj IsNot LinkedItem Then
         Return False

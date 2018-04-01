@@ -115,8 +115,7 @@ Namespace Internal.Query
         Using dataReader = command.ExecuteReader()
           If dataReader.Read() Then
             value = DirectCast(reader(dataReader, customEntityInfos), T)
-            ' TODO: SIP - call reset on entities
-            'ResetPropertyModifiedTracking(value)
+            ' NOTE - ResetPropertyModifiedTracking is called in reader
           End If
         End Using
       End Using
@@ -152,8 +151,7 @@ Namespace Internal.Query
         Using dataReader = command.ExecuteReader()
           While dataReader.Read()
             Dim value = DirectCast(reader(dataReader, customEntityInfos), T)
-            ' TODO: SIP - call reset on entities
-            'ResetPropertyModifiedTracking(value)
+            ' NOTE - ResetPropertyModifiedTracking is called in reader
             values.Add(value)
           End While
         End Using

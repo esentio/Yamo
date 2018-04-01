@@ -1016,29 +1016,46 @@ Namespace Tests
                          FirstOrDefault()
         Assert.AreEqual(Nothing, result2)
 
-        ' select entities
+        ' select entity, but row with empty entity is returned
         Dim result3 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) l).
+                         FirstOrDefault()
+        Assert.AreEqual(Nothing, result3)
+
+        ' select entities
+        Dim result4 = db.From(Of Article).
                          Join(Of Label)(Function(a, l) a.Id = l.Id).
                          Where(Function(a, l) a.Id = article3.Id).
                          Select(Function(a, l) l).
                          ToList()
-        CollectionAssert.AreEquivalent({label3En, label3Ger}, result3)
+        CollectionAssert.AreEquivalent({label3En, label3Ger}, result4)
 
         ' select entities, but no row is returned
-        Dim result4 = db.From(Of Article).
+        Dim result5 = db.From(Of Article).
                          Join(Of Label)(Function(a, l) a.Id = l.Id).
                          Where(Function(a, l) a.Id = article2.Id).
                          Select(Function(a, l) l).
                          ToList()
-        Assert.AreEqual(0, result4.Count)
+        Assert.AreEqual(0, result5.Count)
+
+        ' select entities, but row with empty entity is returned
+        Dim result6 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) l).
+                         ToList()
+        Assert.AreEqual(1, result6.Count)
+        Assert.IsNull(result6(0))
 
         ' select entity (using IJoin)
-        Dim result5 = db.From(Of Article).
+        Dim result7 = db.From(Of Article).
                          Join(Of Label)(Function(a, l) a.Id = l.Id).
                          Where(Function(a, l) a.Id = article1.Id).
                          Select(Function(j) j.T2).
                          FirstOrDefault()
-        Assert.AreEqual(label1En, result1)
+        Assert.AreEqual(label1En, result7)
       End Using
     End Sub
 
@@ -1159,62 +1176,84 @@ Namespace Tests
       End Using
     End Sub
 
-
-
-
-
-
-
-
-
-
-    ' TODO: SIP - test property reset
-    ' TODO: SIP - test valuetuple
-    ' TODO: SIP - test anonymous type
-
-
     <TestMethod()>
-    Public Overridable Sub CustomSelect1()
+    Public Overridable Sub CustomSelectOfValueTuple()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.UniqueidentifierColumn = Guid.NewGuid
+      item1.BitColumn = False
+      item1.Nvarchar50Column = ""
+      item1.SmallintColumnNull = Nothing
+      item1.IntColumn = 0
+      item1.Numeric10and3Column = 0
 
-      InsertItems(item1)
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.UniqueidentifierColumn = Guid.NewGuid
+      item2.BitColumn = True
+      item2.Nvarchar50Column = "lorem ipsum"
+      item2.SmallintColumnNull = 6
+      item2.IntColumn = 42
+      item2.Numeric10and3Column = 42.6D
 
-      ' TODO: SIP - implement
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.UniqueidentifierColumn = Guid.NewGuid
+      item3.BitColumn = True
+      item3.Nvarchar50Column = "dolor sit"
+      item3.SmallintColumnNull = 3
+      item3.IntColumn = 9
+      item3.Numeric10and3Column = 100D
+
+      InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result5 = db.From(Of ItemWithAllSupportedValues).
-                         Select(Function(x) x.Nvarchar50Column).
-                         FirstOrDefault()
-
-        Dim result6 = db.From(Of ItemWithAllSupportedValues).
-                         Select(Function(x) x).
-                         FirstOrDefault()
-
+        ' select ValueTuple with simple values
         Dim result1 = db.From(Of ItemWithAllSupportedValues).
-                         Select(Function(x) (x.Nvarchar50Column, x.IntColumn, Item:=x)).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) (x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column)).
                          FirstOrDefault()
+        Assert.AreEqual((item2.UniqueidentifierColumn, item2.BitColumn, item2.Nvarchar50Column), result1)
 
+        ' select ValueTuple with simple values, but no row is returned
         Dim result2 = db.From(Of ItemWithAllSupportedValues).
-                         Select(Function(x) New With {x.Nvarchar50Column, x.IntColumn, .Item = x}).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) (x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column)).
                          FirstOrDefault()
+        Assert.AreEqual(New ValueTuple(Of Guid, Boolean, String), result2)
 
+        ' select ValueTuples
         Dim result3 = db.From(Of ItemWithAllSupportedValues).
-                         Select(Function(x) (x.Nvarchar50Column, x.IntColumn, Item:=x)).
+                         Select(Function(x) (x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column)).
                          ToList()
+        Assert.AreEqual(3, result3.Count)
+        Assert.IsTrue(result3.Contains((item1.UniqueidentifierColumn, item1.BitColumn, item1.Nvarchar50Column)))
+        Assert.IsTrue(result3.Contains((item2.UniqueidentifierColumn, item2.BitColumn, item2.Nvarchar50Column)))
+        Assert.IsTrue(result3.Contains((item3.UniqueidentifierColumn, item3.BitColumn, item3.Nvarchar50Column)))
 
+        ' select ValueTuples, but no row is returned
         Dim result4 = db.From(Of ItemWithAllSupportedValues).
-                         Select(Function(x) New With {x.Nvarchar50Column, x.IntColumn, .Item = x}).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) (x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column)).
                          ToList()
+        Assert.AreEqual(0, result4.Count)
 
-        'Dim a = result3(0).Nvarchar50Column
+        ' select ValueTuple with custom field names
+        Dim result5 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) (Value1:=x.UniqueidentifierColumn, Value2:=x.BitColumn, x.Nvarchar50Column)).
+                         FirstOrDefault()
+        Assert.AreEqual((item2.UniqueidentifierColumn, item2.BitColumn, item2.Nvarchar50Column), result5)
 
-        Assert.Fail()
-
+        ' select ValueTuple with simple and entity values
+        Dim result6 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) (x.IntColumn, x.Numeric10and3Column, Entity:=x, x.Nvarchar50Column)).
+                         FirstOrDefault()
+        Assert.AreEqual((item2.IntColumn, item2.Numeric10and3Column, item2, item2.Nvarchar50Column), result6)
+        Assert.AreEqual(item2, result6.Entity)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub CustomSelect2()
+    Public Overridable Sub CustomSelectOfValueTupleWithMultipleEntities()
       Dim article1 = Me.ModelFactory.CreateArticle(1)
       Dim article2 = Me.ModelFactory.CreateArticle(2)
       Dim article3 = Me.ModelFactory.CreateArticle(3)
@@ -1226,19 +1265,228 @@ Namespace Tests
       InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
 
       Using db = CreateDbContext()
+        ' select ValueTuple with 2 entities
         Dim result1 = db.From(Of Article).
-                         Join(Of Label)(Function(a, l) a.Id = l.Id).
-                         Select(Function(a, l) (Price:=a.Price, Artile:=a, Label:=l))
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article1.Id).
+                         Select(Function(a, l) (Article:=a, Label:=l)).
+                         FirstOrDefault()
+        Assert.AreEqual(article1, result1.Article)
+        Assert.AreEqual(label1En, result1.Label)
 
+        ' select ValueTuple with 2 entities, but one is missing
         Dim result2 = db.From(Of Article).
-                         Join(Of Label)(Function(a, l) a.Id = l.Id).
-                         Select(Function(j) (Price:=j.T1.Price, Artile:=j.T1, Label:=j.T2))
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) (Article:=a, Label:=l)).
+                         FirstOrDefault()
+        Assert.AreEqual(article2, result2.Article)
+        Assert.AreEqual(Nothing, result2.Label)
 
+        ' select ValueTuple with simple and entity values
+        Dim result3 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article1.Id).
+                         Select(Function(a, l) (Price:=a.Price, Article:=a, Label:=l, LabelId:=l.Id, Description:=l.Description)).
+                         FirstOrDefault()
+        Assert.AreEqual(article1.Price, result3.Price)
+        Assert.AreEqual(article1, result3.Article)
+        Assert.AreEqual(label1En, result3.Label)
+        Assert.AreEqual(label1En.Id, result3.LabelId)
+        Assert.AreEqual(label1En.Description, result3.Description)
 
-        Assert.Fail()
+        ' select ValueTuple with simple and entity values, but some are missing
+        Dim result4 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) (Price:=a.Price, Article:=a, Label:=l, LabelId:=l.Id, Description:=l.Description)).
+                         FirstOrDefault()
+        Assert.AreEqual(article2.Price, result4.Price)
+        Assert.AreEqual(article2, result4.Article)
+        Assert.AreEqual(Nothing, result4.Label)
+        Assert.AreEqual(0, result4.LabelId)
+        Assert.AreEqual(Nothing, result4.Description)
 
+        ' select ValueTuple with simple and entity values, but some are missing and converted to nullable(s)
+        Dim result5 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) (Price:=a.Price, Article:=a, Label:=l, LabelId:=CType(l.Id, Int32?), Description:=l.Description)).
+                         FirstOrDefault()
+        Assert.AreEqual(article2.Price, result5.Price)
+        Assert.AreEqual(article2, result5.Article)
+        Assert.AreEqual(Nothing, result5.Label)
+        Assert.AreEqual(New Int32?(), result5.LabelId)
+        Assert.AreEqual(Nothing, result5.Description)
       End Using
     End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfAnonymousType()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.UniqueidentifierColumn = Guid.NewGuid
+      item1.BitColumn = False
+      item1.Nvarchar50Column = ""
+      item1.SmallintColumnNull = Nothing
+      item1.IntColumn = 0
+      item1.Numeric10and3Column = 0
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.UniqueidentifierColumn = Guid.NewGuid
+      item2.BitColumn = True
+      item2.Nvarchar50Column = "lorem ipsum"
+      item2.SmallintColumnNull = 6
+      item2.IntColumn = 42
+      item2.Numeric10and3Column = 42.6D
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.UniqueidentifierColumn = Guid.NewGuid
+      item3.BitColumn = True
+      item3.Nvarchar50Column = "dolor sit"
+      item3.SmallintColumnNull = 3
+      item3.IntColumn = 9
+      item3.Numeric10and3Column = 100D
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select anonymous type with simple values
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New With {x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column}).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.UniqueidentifierColumn, result1.UniqueidentifierColumn)
+        Assert.AreEqual(item2.BitColumn, result1.BitColumn)
+        Assert.AreEqual(item2.Nvarchar50Column, result1.Nvarchar50Column)
+
+        ' select anonymous type with simple values, but no row is returned
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) New With {x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column}).
+                         FirstOrDefault()
+        Assert.AreEqual(Nothing, result2)
+
+        ' select anonymous types
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) New With {x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column}).
+                         ToList()
+        Assert.AreEqual(3, result3.Count)
+        Assert.IsTrue(result3.Any(Function(x) x.UniqueidentifierColumn = item1.UniqueidentifierColumn AndAlso x.BitColumn = item1.BitColumn AndAlso x.Nvarchar50Column = item1.Nvarchar50Column))
+        Assert.IsTrue(result3.Any(Function(x) x.UniqueidentifierColumn = item2.UniqueidentifierColumn AndAlso x.BitColumn = item2.BitColumn AndAlso x.Nvarchar50Column = item2.Nvarchar50Column))
+        Assert.IsTrue(result3.Any(Function(x) x.UniqueidentifierColumn = item3.UniqueidentifierColumn AndAlso x.BitColumn = item3.BitColumn AndAlso x.Nvarchar50Column = item3.Nvarchar50Column))
+
+        ' select anonymous types, but no row is returned
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) New With {x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column}).
+                         ToList()
+        Assert.AreEqual(0, result4.Count)
+
+        ' select anonymous type with custom field names
+        Dim result5 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New With {.Value1 = x.UniqueidentifierColumn, .Value2 = x.BitColumn, x.Nvarchar50Column}).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.UniqueidentifierColumn, result5.Value1)
+        Assert.AreEqual(item2.BitColumn, result5.Value2)
+        Assert.AreEqual(item2.Nvarchar50Column, result5.Nvarchar50Column)
+
+        ' select anonymous type with simple and entity values
+        Dim result6 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New With {x.IntColumn, x.Numeric10and3Column, .Entity = x, x.Nvarchar50Column}).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.IntColumn, result6.IntColumn)
+        Assert.AreEqual(item2.Numeric10and3Column, result6.Numeric10and3Column)
+        Assert.AreEqual(item2, result6.Entity)
+        Assert.AreEqual(item2.Nvarchar50Column, result6.Nvarchar50Column)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfAnonymousTypeWithMultipleEntities()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
+      Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
+      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+
+      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+
+      Using db = CreateDbContext()
+        ' select anonymous type with 2 entities
+        Dim result1 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article1.Id).
+                         Select(Function(a, l) New With {.Article = a, .Label = l}).
+                         FirstOrDefault()
+        Assert.AreEqual(article1, result1.Article)
+        Assert.AreEqual(label1En, result1.Label)
+
+        ' select anonymous type with 2 entities, but one is missing
+        Dim result2 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) New With {.Article = a, .Label = l}).
+                         FirstOrDefault()
+        Assert.AreEqual(article2, result2.Article)
+        Assert.AreEqual(Nothing, result2.Label)
+
+        ' select anonymous type with simple and entity values
+        Dim result3 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article1.Id).
+                         Select(Function(a, l) New With {.Price = a.Price, .Article = a, .Label = l, .LabelId = l.Id, .Description = l.Description}).
+                         FirstOrDefault()
+        Assert.AreEqual(article1.Price, result3.Price)
+        Assert.AreEqual(article1, result3.Article)
+        Assert.AreEqual(label1En, result3.Label)
+        Assert.AreEqual(label1En.Id, result3.LabelId)
+        Assert.AreEqual(label1En.Description, result3.Description)
+
+        ' select anonymous type with simple and entity values, but some are missing
+        Dim result4 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) New With {.Price = a.Price, .Article = a, .Label = l, .LabelId = l.Id, .Description = l.Description}).
+                         FirstOrDefault()
+        Assert.AreEqual(article2.Price, result4.Price)
+        Assert.AreEqual(article2, result4.Article)
+        Assert.AreEqual(Nothing, result4.Label)
+        Assert.AreEqual(0, result4.LabelId)
+        Assert.AreEqual(Nothing, result4.Description)
+
+        ' select anonymous type with simple and entity values, but some are missing and converted to nullable(s)
+        Dim result5 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) New With {.Price = a.Price, .Article = a, .Label = l, .LabelId = CType(l.Id, Int32?), .Description = l.Description}).
+                         FirstOrDefault()
+        Assert.AreEqual(article2.Price, result5.Price)
+        Assert.AreEqual(article2, result5.Article)
+        Assert.AreEqual(Nothing, result5.Label)
+        Assert.AreEqual(New Int32?(), result5.LabelId)
+        Assert.AreEqual(Nothing, result5.Description)
+      End Using
+    End Sub
+
+    ' TODO: SIP - is it worth to support ValueTuple nesting? (delete this if not)
+    '<TestMethod()>
+    'Public Overridable Sub CustomSelectOfValueTupleWithMoreThan7Fields()
+    '  Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMaxValues
+
+    '  InsertItems(item)
+
+    '  Using db = CreateDbContext()
+    '    ' test ValueTuple nesting
+    '    Dim result1 = db.From(Of ItemWithAllSupportedValues).
+    '                     Select(Function(x) (x.UniqueidentifierColumn, x.UniqueidentifierColumnNull, x.Nvarchar50Column, x.Nvarchar50ColumnNull, x.BitColumn, x.BitColumnNull, x.SmallintColumn, x.SmallintColumnNull, x.IntColumn, x.IntColumnNull)).
+    '                     FirstOrDefault()
+    '    Assert.AreEqual((item.UniqueidentifierColumn, item.UniqueidentifierColumnNull, item.Nvarchar50Column, item.Nvarchar50ColumnNull, item.BitColumn, item.BitColumnNull, item.SmallintColumn, item.SmallintColumnNull, item.IntColumn, item.IntColumnNull), result1)
+    '  End Using
+    'End Sub
 
   End Class
 End Namespace

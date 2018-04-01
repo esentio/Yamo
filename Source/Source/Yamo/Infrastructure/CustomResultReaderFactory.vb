@@ -54,7 +54,20 @@ Namespace Infrastructure
           Dim valueAssign = Expression.Assign(valueVar, entityReaderCallCast)
           Dim valueAssignNull = Expression.Assign(valueVar, Expression.Default(type))
 
-          expressions.Add(Expression.IfThenElse(containsPKReaderCall, valueAssign, valueAssignNull))
+          Dim valueAssignBlock As Expression
+
+          Dim ihpmtType = GetType(IHasPropertyModifiedTracking)
+          If ihpmtType.IsAssignableFrom(type) Then
+            Dim rpmtMethodInfo = ihpmtType.GetMethod(NameOf(IHasPropertyModifiedTracking.ResetPropertyModifiedTracking))
+            Dim rpmtCast = Expression.Convert(valueVar, ihpmtType)
+            Dim rpmtCall = Expression.Call(rpmtCast, rpmtMethodInfo)
+
+            valueAssignBlock = Expression.Block(valueAssign, rpmtCall)
+          Else
+            valueAssignBlock = valueAssign
+          End If
+
+          expressions.Add(Expression.IfThenElse(containsPKReaderCall, valueAssignBlock, valueAssignNull))
         Else
           Dim valueTypeReaderProp = Expression.Property(customEntityInfoVar, NameOf(CustomEntityReadInfo.ValueTypeReader))
           Dim valueTypeReaderType = GetType(Func(Of, , )).MakeGenericType(GetType(IDataReader), GetType(Int32), type)

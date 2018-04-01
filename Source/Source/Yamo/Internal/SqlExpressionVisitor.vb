@@ -733,6 +733,7 @@ Namespace Internal
     Private Function VisitCustomSelect(node As Expression) As CustomSelectSqlEntity()
       If node.NodeType = ExpressionType.New Then
         If IsValueTuple(node.Type) Then
+          ' TODO: SIP - does it make sense to support nullable ValueTuples as well?
           Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(DirectCast(node, NewExpression))
         ElseIf IsAnonymousType(node.Type) Then
           Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(DirectCast(node, NewExpression))
@@ -749,6 +750,8 @@ Namespace Internal
       Dim customEntities = New CustomSelectSqlEntity(count - 1) {}
 
       Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
+
+      ' NOTE: this will fail for nested ValueTuples, so we are limited to max 7 fields. Is it worth to support nesting?
 
       For i = 0 To count - 1
         Dim arg = node.Arguments(i)
