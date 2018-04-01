@@ -90,6 +90,7 @@
     </Compile>
     <Compile Include="SQLiteTestDbContext.vb" />
     <Compile Include="SQLiteTestEnvironment.vb" />
+    <Compile Include="Tests\PropertyModifiedTrackingTests.vb" />
     <Compile Include="Tests\AuditFieldsTests.vb" />
     <Compile Include="Tests\DataTests.vb" />
     <Compile Include="Tests\DbContextTests.vb" />
@@ -97,6 +98,7 @@
     <Compile Include="Tests\ExecuteScalarTests.vb" />
     <Compile Include="Tests\InsertTests.vb" />
     <Compile Include="Tests\ExecuteNonQueryTests.vb" />
+    <Compile Include="Tests\CustomSelectTests.vb" />
     <Compile Include="Tests\SelectTests.vb" />
     <Compile Include="Tests\SqlHelperDateDiffTests.vb" />
     <Compile Include="Tests\SelectWithSqlStringConditionTests.vb" />

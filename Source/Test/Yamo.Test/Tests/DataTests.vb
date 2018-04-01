@@ -99,26 +99,5 @@ Namespace Tests
       End Using
     End Sub
 
-    <TestMethod()>
-    Public Overridable Sub SelectRecordWithPropertyModifiedTracking()
-      Dim item1 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
-      Dim item2 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
-      Dim item3 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
-
-      Using db = CreateDbContext()
-        db.Insert(item1)
-        db.Insert(item2)
-        db.Insert(item3)
-      End Using
-
-      Using db = CreateDbContext()
-        Dim result = db.From(Of ItemWithPropertyModifiedTracking).SelectAll().ToList()
-        Assert.AreEqual(3, result.Count)
-        Assert.IsTrue(result.All(Function(x) Not x.IsAnyPropertyModified()))
-      End Using
-
-      ' TODO: SIP - test join
-    End Sub
-
   End Class
 End Namespace

@@ -24,6 +24,8 @@ Namespace Expressions.Builders
 
     Private m_Parameters As List(Of SqlParameter)
 
+    Private m_CustomEntities As CustomSelectSqlEntity()
+
     Public Sub New(context As DbContext)
       MyBase.New(context)
       m_Model = New SqlModel(Me.DbContext.Model)
@@ -33,9 +35,20 @@ Namespace Expressions.Builders
       m_OrderByExpressions = New List(Of String)
       m_SelectExpression = Nothing
       m_Parameters = New List(Of SqlParameter)
+      m_CustomEntities = Nothing
     End Sub
 
     Public Function CreateQuery() As SelectQuery
+      Dim sql = CreateSqlQuery()
+      Return New SelectQuery(sql.ToString(), m_Parameters.ToList(), m_Model)
+    End Function
+
+    Public Function CreateCustomQuery() As CustomSelectQuery
+      Dim sql = CreateSqlQuery()
+      Return New CustomSelectQuery(sql.ToString(), m_Parameters.ToList(), m_Model, m_CustomEntities)
+    End Function
+
+    Private Function CreateSqlQuery() As StringBuilder
       Dim sql As New StringBuilder
 
       If m_SelectExpression Is Nothing Then
@@ -59,7 +72,7 @@ Namespace Expressions.Builders
         sql.Append(String.Join(", ", m_OrderByExpressions))
       End If
 
-      Return New SelectQuery(sql.ToString(), m_Parameters.ToList(), m_Model)
+      Return sql
     End Function
 
     Public Sub SetMainTable(Of T)()
@@ -297,6 +310,13 @@ Namespace Expressions.Builders
 
     Public Sub AddSelectCount()
       m_SelectExpression = $"SELECT COUNT(*)"
+    End Sub
+
+    Public Sub AddSelect(selector As Expression, entityIndexHints As Int32())
+      Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, m_Parameters.Count)
+      m_SelectExpression = $"SELECT {result.SqlString.Sql}"
+      m_Parameters.AddRange(result.SqlString.Parameters)
+      m_CustomEntities = result.CustomEntities
     End Sub
 
     Private Sub BuildSelectExpression()

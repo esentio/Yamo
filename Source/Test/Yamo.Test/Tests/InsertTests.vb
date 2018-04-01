@@ -137,18 +137,5 @@ Namespace Tests
       End Using
     End Sub
 
-    <TestMethod()>
-    Public Overridable Sub InsertRecordWithPropertyModifiedTracking()
-      Dim item = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
-
-      Assert.IsTrue(item.IsAnyPropertyModified())
-
-      Using db = CreateDbContext()
-        Dim affectedRows = db.Insert(item)
-        Assert.AreEqual(1, affectedRows)
-        Assert.IsFalse(item.IsAnyPropertyModified())
-      End Using
-    End Sub
-
   End Class
 End Namespace

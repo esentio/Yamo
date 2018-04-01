@@ -35,12 +35,16 @@ Namespace Internal
 
     Private m_CurrentLikeParameterFormat As String
 
+    Private m_InCustomSelectMode As Boolean
+
+    Private m_CustomSelectModeInfo As (Index As Int32, AppendColumnAlias As Boolean)?
+
     Public Sub New(builder As SqlExpressionBuilderBase, model As SqlModel)
       m_Builder = builder
       m_Model = model
     End Sub
 
-    ' entityIndexHints might be nothing!!! - napisat do komentarov aj pre volajuce metody
+    ' entityIndexHints might be nothing!!! - write to comments (also in caller methods)
     Public Function Translate(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
@@ -57,12 +61,41 @@ Namespace Internal
       m_UseTableNamesOrAliases = useTableNamesOrAliases
       m_CompensateForIgnoredNegation = False
       m_CurrentLikeParameterFormat = Nothing
+      m_InCustomSelectMode = False
+      m_CustomSelectModeInfo = Nothing
 
-      Visit(expression)
+      Visit(lambda.Body)
 
       m_ExpressionParameters = Nothing
 
       Return New SqlString(m_Sql.ToString(), m_Parameters)
+    End Function
+
+    ' entityIndexHints might be nothing!!! - write to comments (also in caller methods)
+    Public Function TranslateCustomSelect(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSelectSqlEntity())
+      If TypeOf expression IsNot LambdaExpression Then
+        Throw New ArgumentException("Expression must be of type LambdaExpression.")
+      End If
+
+      Dim lambda = DirectCast(expression, LambdaExpression)
+
+      m_ExpressionParameters = lambda.Parameters
+      m_EntityIndexHints = entityIndexHints
+      m_Sql = New StringBuilder()
+      m_Parameters = New List(Of SqlParameter)
+      m_ParameterIndex = parameterIndex
+      m_UseAliases = True
+      m_UseTableNamesOrAliases = True
+      m_CompensateForIgnoredNegation = False
+      m_CurrentLikeParameterFormat = Nothing
+      m_InCustomSelectMode = True
+      m_CustomSelectModeInfo = Nothing
+
+      Dim customEntities = VisitCustomSelect(lambda.Body)
+
+      m_ExpressionParameters = Nothing
+
+      Return (New SqlString(m_Sql.ToString(), m_Parameters), customEntities)
     End Function
 
     Public Overrides Function Visit(node As Expression) As Expression
@@ -511,7 +544,12 @@ Namespace Internal
     End Function
 
     Protected Overrides Function VisitParameter(node As ParameterExpression) As Expression
-      Return node
+      If m_InCustomSelectMode Then
+        Return VisitParameterInCustomSelectMode(node)
+      Else
+        ' this shouldn't be called
+        Return node
+      End If
     End Function
 
     Protected Overrides Function VisitMember(node As MemberExpression) As Expression
@@ -536,22 +574,27 @@ Namespace Internal
         End If
 
         If currentNode.Expression.NodeType = ExpressionType.Parameter Then
-          isEntityMemberAccess = True
+          If m_InCustomSelectMode AndAlso m_EntityIndexHints Is Nothing Then
+            ' handles expressions like: x.T1 (m_EntityIndexHints Is Nothing is used as a fast way to distinguish it from x.DbPropertyName expressions)
+            Return VisitJoinMemberInCustomSelectMode(node)
+          Else
+            isEntityMemberAccess = True
 
-          Dim index = m_ExpressionParameters.IndexOf(DirectCast(currentNode.Expression, ParameterExpression))
+            Dim index = m_ExpressionParameters.IndexOf(DirectCast(currentNode.Expression, ParameterExpression))
 
-          If m_EntityIndexHints Is Nothing Then
-            ' this should not happen, because IJoin should be used when index hints are not available
-            Throw New Exception("Unable to match expression parameter with entity.")
+            If m_EntityIndexHints Is Nothing Then
+              ' this should not happen, because IJoin should be used when index hints are not available
+              Throw New Exception("Unable to match expression parameter with entity.")
+            End If
+
+            If index < 0 OrElse m_EntityIndexHints.Length <= index Then
+              Dim declaringType = currentNode.Member.DeclaringType
+              Throw New Exception($"None or unambiguous match of entity of type '{declaringType}'. Use IJoin instead?")
+            End If
+
+            propertyName = currentNode.Member.Name
+            entityIndex = m_EntityIndexHints(index)
           End If
-
-          If m_EntityIndexHints.Length <= index Then
-            Dim declaringType = currentNode.Member.DeclaringType
-            Throw New Exception($"None or unambiguous match of entity of type '{declaringType}'. Use IJoin instead?")
-          End If
-
-          propertyName = currentNode.Member.Name
-          entityIndex = m_EntityIndexHints(index)
 
         ElseIf currentNode.Expression.NodeType = ExpressionType.MemberAccess Then
           Dim parent = DirectCast(currentNode.Expression, MemberExpression)
@@ -685,6 +728,179 @@ Namespace Internal
 
       m_Sql.Append(parameterName)
       m_Parameters.Add(New SqlParameter(parameterName, value))
+    End Sub
+
+    Private Function VisitCustomSelect(node As Expression) As CustomSelectSqlEntity()
+      If node.NodeType = ExpressionType.New Then
+        If IsValueTuple(node.Type) Then
+          ' TODO: SIP - does it make sense to support nullable ValueTuples as well?
+          Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(DirectCast(node, NewExpression))
+        ElseIf IsAnonymousType(node.Type) Then
+          Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(DirectCast(node, NewExpression))
+        Else
+          Throw New Exception("Only NewExpression of ValueTuple or anonymous type is supported.")
+        End If
+      Else
+        Return VisitInCustomSelectMode(node)
+      End If
+    End Function
+
+    Private Function VisitValueTupleOrAnonymousTypeInCustomSelectMode(node As NewExpression) As CustomSelectSqlEntity()
+      Dim count = node.Arguments.Count
+      Dim customEntities = New CustomSelectSqlEntity(count - 1) {}
+
+      Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
+
+      ' NOTE: this will fail for nested ValueTuples, so we are limited to max 7 fields. Is it worth to support nesting?
+
+      For i = 0 To count - 1
+        Dim arg = node.Arguments(i)
+        Dim type = arg.Type
+        Dim entityIndex = entities.IndexOf(type)
+        Dim isEntity = Not entityIndex = -1
+
+        customEntities(i) = New CustomSelectSqlEntity(i, isEntity, entityIndex, type)
+
+        m_CustomSelectModeInfo = (i, True)
+
+        Visit(arg)
+
+        If m_CustomSelectModeInfo.Value.AppendColumnAlias Then
+          m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(i))}")
+        End If
+
+        If Not i = count - 1 Then
+          m_Sql.Append(", ")
+        End If
+      Next
+
+      CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, node, customEntities)
+
+      Return customEntities
+    End Function
+
+    Private Function VisitInCustomSelectMode(node As Expression) As CustomSelectSqlEntity()
+      Dim customEntities = New CustomSelectSqlEntity(0) {}
+
+      Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
+
+      Dim type = node.Type
+      Dim entityIndex = entities.IndexOf(type)
+      Dim isEntity = Not entityIndex = -1
+
+      customEntities(0) = New CustomSelectSqlEntity(0, isEntity, entityIndex, type)
+
+      m_CustomSelectModeInfo = (0, True)
+
+      Visit(node)
+
+      If m_CustomSelectModeInfo.Value.AppendColumnAlias Then
+        m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(0))}")
+      End If
+
+      CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, node, customEntities)
+
+      Return customEntities
+    End Function
+
+    Private Function IsValueTuple(type As Type) As Boolean
+      If Not type.IsGenericType Then
+        Return False
+      End If
+
+      type = type.GetGenericTypeDefinition()
+
+      If type Is GetType(ValueTuple) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of )) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,)) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,,)) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,,,)) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,,,,)) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,,,,,)) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,,,,,,)) Then
+        Return True
+      ElseIf type Is GetType(ValueTuple(Of ,,,,,,,)) Then
+        Return True
+      End If
+
+      Return False
+    End Function
+
+    Private Function IsAnonymousType(type As Type) As Boolean
+      ' via https://stackoverflow.com/questions/2483023/how-to-test-if-a-type-is-anonymous
+      ' and https://elegantcode.com/2011/06/24/detecting-anonymous-types-on-mono/
+      Return Attribute.IsDefined(type, GetType(CompilerGeneratedAttribute), False) AndAlso
+             type.IsGenericType AndAlso
+             (type.Name.Contains("AnonymousType") OrElse type.Name.Contains("AnonType")) AndAlso
+             (type.Name.StartsWith("<>") OrElse type.Name.StartsWith("VB$")) AndAlso
+             (type.Attributes And TypeAttributes.NotPublic) = TypeAttributes.NotPublic
+    End Function
+
+    Private Function CreateColumnAlias(index As Int32) As String
+      Return $"C{(index).ToString(Globalization.CultureInfo.InvariantCulture)}"
+    End Function
+
+    Private Function CreateColumnAlias(index1 As Int32, index2 As Int32) As String
+      Return $"C{(index1).ToString(Globalization.CultureInfo.InvariantCulture)}_{(index2).ToString(Globalization.CultureInfo.InvariantCulture)}"
+    End Function
+
+    Private Function VisitParameterInCustomSelectMode(node As ParameterExpression) As Expression
+      Dim index = m_ExpressionParameters.IndexOf(node)
+
+      If m_EntityIndexHints Is Nothing Then
+        ' this should not happen, because IJoin should be used when index hints are not available
+        Throw New Exception("Unable to match expression parameter with entity.")
+      End If
+
+      If index < 0 OrElse m_EntityIndexHints.Length <= index Then
+        Throw New Exception($"None or unambiguous match of entity of type '{node.Type}'. Use IJoin instead?")
+      End If
+
+      Dim entityIndex = m_EntityIndexHints(index)
+
+      AppendEntityMembers(entityIndex)
+
+      Return node
+    End Function
+
+    Private Function VisitJoinMemberInCustomSelectMode(node As MemberExpression) As Expression
+      Dim entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(node.Member.Name)
+      AppendEntityMembers(entityIndex)
+      Return node
+    End Function
+
+    Private Sub AppendEntityMembers(entityIndex As Int32)
+      Dim entity = m_Model.GetEntity(entityIndex)
+
+      ' NOTE: excluding columns is not (yet) supported in this scenario, but column enumeration belows already supports it.
+      ' In case exclusion is added, test this! Also, if whole table is excluded, entity.GetColumnCount() returns 0 (and we'll
+      ' most likely get exception later). In this case we propably shouldn't support excluding whole table (it doesn't make sense anyway)!
+
+      Dim properties = entity.Entity.GetProperties()
+      Dim columnCount = entity.GetColumnCount()
+      Dim columnIndex = 0
+
+      For propertyIndex = 0 To properties.Count - 1
+        If entity.IncludedColumns(propertyIndex) Then
+          m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(properties(propertyIndex).ColumnName)} {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(m_CustomSelectModeInfo.Value.Index, columnIndex))}")
+          columnIndex += 1
+        End If
+
+        If columnIndex = columnCount Then
+          Exit For
+        Else
+          m_Sql.Append(", ")
+        End If
+      Next
+
+      m_CustomSelectModeInfo = (m_CustomSelectModeInfo.Value.Index, False)
     End Sub
 
   End Class

@@ -26,6 +26,7 @@ Namespace Internal.Query
 
     Public Function ExecuteScalar(Of T)(query As Query) As T
       Using command = CreateCommand(query)
+        ' TODO: SIP - use ValueType reader instead?
         Return m_DialectProvider.DbValueConversion.FromDbValue(Of T)(command.ExecuteScalar())
       End Using
     End Function
@@ -104,6 +105,24 @@ Namespace Internal.Query
       Return 1
     End Function
 
+    Public Function ReadCustomFirstOrDefault(Of T)(query As CustomSelectQuery) As T
+      Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, GetType(T))
+      Dim customEntityInfos = CustomEntityReadInfo.Create(m_DialectProvider, query.Model, query.Entities)
+
+      Dim value As T = Nothing
+
+      Using command = CreateCommand(query)
+        Using dataReader = command.ExecuteReader()
+          If dataReader.Read() Then
+            value = DirectCast(reader(dataReader, customEntityInfos), T)
+            ' NOTE - ResetPropertyModifiedTracking is called in reader
+          End If
+        End Using
+      End Using
+
+      Return value
+    End Function
+
     Private Function ReadSimpleFirstOrDefault(Of T)(query As SelectQuery) As T
       Dim reader = EntityReaderCache.GetReader(m_DialectProvider, m_DbContext.Model, GetType(T))
       Dim includedColumns = query.Model.GetFirstEntity().IncludedColumns
@@ -120,6 +139,25 @@ Namespace Internal.Query
       End Using
 
       Return value
+    End Function
+
+    Public Function ReadCustomList(Of T)(query As CustomSelectQuery) As List(Of T)
+      Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, GetType(T))
+      Dim customEntityInfos = CustomEntityReadInfo.Create(m_DialectProvider, query.Model, query.Entities)
+
+      Dim values = New List(Of T)
+
+      Using command = CreateCommand(query)
+        Using dataReader = command.ExecuteReader()
+          While dataReader.Read()
+            Dim value = DirectCast(reader(dataReader, customEntityInfos), T)
+            ' NOTE - ResetPropertyModifiedTracking is called in reader
+            values.Add(value)
+          End While
+        End Using
+      End Using
+
+      Return values
     End Function
 
     Private Function ReadSimpleList(Of T)(query As SelectQuery) As List(Of T)
