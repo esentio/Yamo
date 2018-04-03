@@ -37,7 +37,7 @@ Namespace Internal
 
     Private m_InCustomSelectMode As Boolean
 
-    Private m_CustomSelectModeInfo As (Index As Int32, AppendColumnAlias As Boolean)?
+    Private m_CustomSelectModeInfo As (Index As Int32, ColumnAliases As String())?
 
     Public Sub New(builder As SqlExpressionBuilderBase, model As SqlModel)
       m_Builder = builder
@@ -72,7 +72,7 @@ Namespace Internal
     End Function
 
     ' entityIndexHints might be nothing!!! - write to comments (also in caller methods)
-    Public Function TranslateCustomSelect(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSelectSqlEntity())
+    Public Function TranslateCustomSelect(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSqlEntity())
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -730,13 +730,13 @@ Namespace Internal
       m_Parameters.Add(New SqlParameter(parameterName, value))
     End Sub
 
-    Private Function VisitCustomSelect(node As Expression) As CustomSelectSqlEntity()
+    Private Function VisitCustomSelect(node As Expression) As CustomSqlEntity()
       If node.NodeType = ExpressionType.New Then
         If IsValueTuple(node.Type) Then
           ' TODO: SIP - does it make sense to support nullable ValueTuples as well?
-          Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(DirectCast(node, NewExpression))
+          Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(DirectCast(node, NewExpression), True)
         ElseIf IsAnonymousType(node.Type) Then
-          Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(DirectCast(node, NewExpression))
+          Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(DirectCast(node, NewExpression), False)
         Else
           Throw New Exception("Only NewExpression of ValueTuple or anonymous type is supported.")
         End If
@@ -745,28 +745,44 @@ Namespace Internal
       End If
     End Function
 
-    Private Function VisitValueTupleOrAnonymousTypeInCustomSelectMode(node As NewExpression) As CustomSelectSqlEntity()
+    Private Function VisitValueTupleOrAnonymousTypeInCustomSelectMode(node As NewExpression, isValueTuple As Boolean) As CustomSqlEntity()
       Dim count = node.Arguments.Count
-      Dim customEntities = New CustomSelectSqlEntity(count - 1) {}
+      Dim customEntities = New CustomSqlEntity(count - 1) {}
 
       Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
 
       ' NOTE: this will fail for nested ValueTuples, so we are limited to max 7 fields. Is it worth to support nesting?
+
+      Dim properties As PropertyInfo() = Nothing
+
+      If Not isValueTuple Then
+        ' is the order ok when DeclaredProperties is used? node.Type.GetProperties() doesn't guarantee correct order according to MSDN
+        properties = node.Type.GetTypeInfo().DeclaredProperties.ToArray()
+      End If
 
       For i = 0 To count - 1
         Dim arg = node.Arguments(i)
         Dim type = arg.Type
         Dim entityIndex = entities.IndexOf(type)
         Dim isEntity = Not entityIndex = -1
+        Dim name As String
 
-        customEntities(i) = New CustomSelectSqlEntity(i, isEntity, entityIndex, type)
+        If isValueTuple Then
+          name = $"Item{(i + 1).ToString(Globalization.CultureInfo.InvariantCulture)}"
+        Else
+          name = properties(i).Name
+        End If
 
-        m_CustomSelectModeInfo = (i, True)
+        m_CustomSelectModeInfo = (i, Nothing)
 
         Visit(arg)
 
-        If m_CustomSelectModeInfo.Value.AppendColumnAlias Then
-          m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(i))}")
+        If isEntity Then
+          customEntities(i) = New CustomSqlEntity(i, entityIndex, type, m_CustomSelectModeInfo.Value.ColumnAliases, name)
+        Else
+          Dim columnAlias = CreateColumnAlias(i)
+          m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(columnAlias)}")
+          customEntities(i) = New CustomSqlEntity(i, type, columnAlias, name)
         End If
 
         If Not i = count - 1 Then
@@ -779,8 +795,8 @@ Namespace Internal
       Return customEntities
     End Function
 
-    Private Function VisitInCustomSelectMode(node As Expression) As CustomSelectSqlEntity()
-      Dim customEntities = New CustomSelectSqlEntity(0) {}
+    Private Function VisitInCustomSelectMode(node As Expression) As CustomSqlEntity()
+      Dim customEntities = New CustomSqlEntity(0) {}
 
       Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
 
@@ -788,14 +804,16 @@ Namespace Internal
       Dim entityIndex = entities.IndexOf(type)
       Dim isEntity = Not entityIndex = -1
 
-      customEntities(0) = New CustomSelectSqlEntity(0, isEntity, entityIndex, type)
-
-      m_CustomSelectModeInfo = (0, True)
+      m_CustomSelectModeInfo = (0, Nothing)
 
       Visit(node)
 
-      If m_CustomSelectModeInfo.Value.AppendColumnAlias Then
-        m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(0))}")
+      If isEntity Then
+        customEntities(0) = New CustomSqlEntity(0, entityIndex, type, m_CustomSelectModeInfo.Value.ColumnAliases, "")
+      Else
+        Dim columnAlias = CreateColumnAlias(0)
+        m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(columnAlias)}")
+        customEntities(0) = New CustomSqlEntity(0, type, columnAlias, "")
       End If
 
       CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, node, customEntities)
@@ -886,10 +904,13 @@ Namespace Internal
       Dim properties = entity.Entity.GetProperties()
       Dim columnCount = entity.GetColumnCount()
       Dim columnIndex = 0
+      Dim columnAliases = New String(columnCount - 1) {}
 
       For propertyIndex = 0 To properties.Count - 1
         If entity.IncludedColumns(propertyIndex) Then
-          m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(properties(propertyIndex).ColumnName)} {m_Builder.DialectProvider.Formatter.CreateIdentifier(CreateColumnAlias(m_CustomSelectModeInfo.Value.Index, columnIndex))}")
+          Dim columnAlias = CreateColumnAlias(m_CustomSelectModeInfo.Value.Index, columnIndex)
+          columnAliases(columnIndex) = columnAlias
+          m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(properties(propertyIndex).ColumnName)} {m_Builder.DialectProvider.Formatter.CreateIdentifier(columnAlias)}")
           columnIndex += 1
         End If
 
@@ -900,7 +921,7 @@ Namespace Internal
         End If
       Next
 
-      m_CustomSelectModeInfo = (m_CustomSelectModeInfo.Value.Index, False)
+      m_CustomSelectModeInfo = (m_CustomSelectModeInfo.Value.Index, columnAliases)
     End Sub
 
   End Class

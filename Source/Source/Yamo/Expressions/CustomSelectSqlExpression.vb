@@ -12,12 +12,12 @@ Namespace Expressions
     End Sub
 
     Public Function ToList() As List(Of T)
-      Dim query = Me.Builder.CreateCustomQuery()
+      Dim query = Me.Builder.CreateQuery()
       Return Me.Executor.ReadCustomList(Of T)(query)
     End Function
 
     Public Function FirstOrDefault() As T
-      Dim query = Me.Builder.CreateCustomQuery()
+      Dim query = Me.Builder.CreateQuery()
       Return Me.Executor.ReadCustomFirstOrDefault(Of T)(query)
     End Function
 

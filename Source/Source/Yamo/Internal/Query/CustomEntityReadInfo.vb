@@ -25,8 +25,9 @@ Namespace Internal.Query
     Private Sub New()
     End Sub
 
-    Public Shared Function Create(dialectProvider As SqlDialectProvider, model As SqlModel, customEntities As CustomSelectSqlEntity()) As CustomEntityReadInfo()
+    Public Shared Function Create(dialectProvider As SqlDialectProvider, model As SqlModel) As CustomEntityReadInfo()
       Dim entities = model.GetEntities()
+      Dim customEntities = model.GetCustomEntities()
 
       Dim result = New CustomEntityReadInfo(customEntities.Length - 1) {}
       Dim readerIndex = 0

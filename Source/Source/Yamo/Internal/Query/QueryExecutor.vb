@@ -105,9 +105,9 @@ Namespace Internal.Query
       Return 1
     End Function
 
-    Public Function ReadCustomFirstOrDefault(Of T)(query As CustomSelectQuery) As T
+    Public Function ReadCustomFirstOrDefault(Of T)(query As SelectQuery) As T
       Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, GetType(T))
-      Dim customEntityInfos = CustomEntityReadInfo.Create(m_DialectProvider, query.Model, query.Entities)
+      Dim customEntityInfos = CustomEntityReadInfo.Create(m_DialectProvider, query.Model)
 
       Dim value As T = Nothing
 
@@ -141,9 +141,9 @@ Namespace Internal.Query
       Return value
     End Function
 
-    Public Function ReadCustomList(Of T)(query As CustomSelectQuery) As List(Of T)
+    Public Function ReadCustomList(Of T)(query As SelectQuery) As List(Of T)
       Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, GetType(T))
-      Dim customEntityInfos = CustomEntityReadInfo.Create(m_DialectProvider, query.Model, query.Entities)
+      Dim customEntityInfos = CustomEntityReadInfo.Create(m_DialectProvider, query.Model)
 
       Dim values = New List(Of T)
 
