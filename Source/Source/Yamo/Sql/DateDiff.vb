@@ -1,4 +1,5 @@
-﻿Imports Yamo.Infrastructure
+﻿Imports System.Reflection
+Imports Yamo.Infrastructure
 
 Namespace Sql
 
@@ -37,8 +38,8 @@ Namespace Sql
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
-    Public Overloads Shared Function GetSqlFormat(methodName As String, dialectProvider As SqlDialectProvider) As String
-      Return dialectProvider.GetInternalSqlHelper(GetType(DateDiff)).GetSqlFormat(methodName)
+    Public Overloads Shared Function GetSqlFormat(method As MethodInfo, dialectProvider As SqlDialectProvider) As String
+      Return dialectProvider.GetInternalSqlHelper(GetType(DateDiff)).GetSqlFormat(method)
     End Function
 
   End Class

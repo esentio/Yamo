@@ -1,4 +1,5 @@
-﻿Imports Yamo.Sql
+﻿Imports System.Reflection
+Imports Yamo.Sql
 
 Namespace Sql
 
@@ -11,8 +12,8 @@ Namespace Sql
       End Get
     End Property
 
-    Public Function GetSqlFormat(methodName As String) As String Implements IInternalSqlHelper.GetSqlFormat
-      Select Case methodName
+    Public Function GetSqlFormat(method As MethodInfo) As String Implements IInternalSqlHelper.GetSqlFormat
+      Select Case method.Name
         Case NameOf(DateDiff.SameYear)
           Return "(DATEDIFF(year, {0}, {1}) = 0)"
         Case NameOf(DateDiff.SameQuarter)
@@ -30,7 +31,7 @@ Namespace Sql
         Case NameOf(DateDiff.SameMillisecond)
           Return "(DATEDIFF(millisecond, {0}, {1}) = 0)"
         Case Else
-          Throw New NotSupportedException($"Method '{methodName}' is not supported.")
+          Throw New NotSupportedException($"Method '{method.Name}' is not supported.")
       End Select
     End Function
   End Class

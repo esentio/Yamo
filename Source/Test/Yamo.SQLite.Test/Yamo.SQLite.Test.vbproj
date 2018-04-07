@@ -102,6 +102,7 @@
     <Compile Include="Tests\ExecuteNonQueryTests.vb" />
     <Compile Include="Tests\CustomSelectTests.vb" />
     <Compile Include="Tests\SelectTests.vb" />
+    <Compile Include="Tests\SqlHelperAggregateTests.vb" />
     <Compile Include="Tests\SqlHelperDateDiffTests.vb" />
     <Compile Include="Tests\SelectWithSqlStringConditionTests.vb" />
     <Compile Include="Tests\SelectWithConditionTests.vb" />

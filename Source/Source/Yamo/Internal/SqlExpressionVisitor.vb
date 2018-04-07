@@ -269,7 +269,7 @@ Namespace Internal
 
     Private Function VisitSqlHelperMethodCall(node As MethodCallExpression) As Expression
       Dim getSqlFormatMethod = node.Method.DeclaringType.GetMethod(NameOf(SqlHelper.GetSqlFormat), BindingFlags.Public Or BindingFlags.Static)
-      Dim format = DirectCast(getSqlFormatMethod.Invoke(Nothing, {node.Method.Name, m_Builder.DialectProvider}), String)
+      Dim format = DirectCast(getSqlFormatMethod.Invoke(Nothing, {node.Method, m_Builder.DialectProvider}), String)
 
       Dim args = New StringBuilder(node.Arguments.Count - 1) {}
       Dim sqlBuilder = m_Sql
