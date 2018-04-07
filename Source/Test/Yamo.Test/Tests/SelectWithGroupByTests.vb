@@ -155,6 +155,67 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub SelectWithGroupByAndAggregateFunctions()
+      Dim items = CreateItems()
+
+      items(0).Nvarchar50Column = "Lorem"
+      items(0).IntColumn = 10
+      items(0).Numeric10and3Column = 11.1D
+
+      items(1).Nvarchar50Column = "Ipsum"
+      items(1).IntColumn = 20
+      items(1).Numeric10and3Column = 22.2D
+
+      items(2).Nvarchar50Column = "Lorem"
+      items(2).IntColumn = 30
+      items(2).Numeric10and3Column = 33.3D
+
+      items(3).Nvarchar50Column = "Ipsum"
+      items(3).IntColumn = 40
+      items(3).Numeric10and3Column = 44.4D
+
+      items(4).Nvarchar50Column = "Lorem"
+      items(4).IntColumn = 50
+      items(4).Numeric10and3Column = 55.5D
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         GroupBy(Function(x) x.Nvarchar50Column).
+                         Select(Function(x) (x.Nvarchar50Column, Sql.Aggregate.Count())).
+                         ToList()
+
+        CollectionAssert.AreEquivalent({("Lorem", 3), ("Ipsum", 2)}, result1)
+
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         GroupBy(Function(x) x.Nvarchar50Column).
+                         Select(Function(x) New With {x.Nvarchar50Column, Sql.Aggregate.Count()}).
+                         ToList()
+
+        Assert.AreEqual(2, result2.Count)
+        Assert.IsTrue(result2.Any(Function(x) x.Nvarchar50Column = "Lorem" AndAlso x.Count = 3))
+        Assert.IsTrue(result2.Any(Function(x) x.Nvarchar50Column = "Ipsum" AndAlso x.Count = 2))
+
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         GroupBy(Function(x) x.Nvarchar50Column).
+                         Select(Function(x) (x.Nvarchar50Column, Sql.Aggregate.Sum(x.IntColumn), Sql.Aggregate.Max(x.Numeric10and3Column))).
+                         ToList()
+
+        CollectionAssert.AreEquivalent({("Lorem", 90, 55.5D), ("Ipsum", 60, 44.4D)}, result3)
+
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         GroupBy(Function(x) x.Nvarchar50Column).
+                         Select(Function(x) New With {x.Nvarchar50Column, .Sum = Sql.Aggregate.Sum(x.IntColumn), .Max = Sql.Aggregate.Max(x.Numeric10and3Column)}).
+                         ToList()
+
+        Assert.AreEqual(2, result4.Count)
+        Assert.IsTrue(result4.Any(Function(x) x.Nvarchar50Column = "Lorem" AndAlso x.Sum = 90 AndAlso x.Max = 55.5D))
+        Assert.IsTrue(result4.Any(Function(x) x.Nvarchar50Column = "Ipsum" AndAlso x.Sum = 60 AndAlso x.Max = 44.4D))
+      End Using
+    End Sub
+
     Protected Overridable Function CreateItems() As List(Of ItemWithAllSupportedValues)
       Return New List(Of ItemWithAllSupportedValues) From {
         Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues(),
