@@ -4,110 +4,77 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
-  Public Class FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+  Public Class HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
     Inherits SelectSqlExpressionBase
 
     Friend Sub New(builder As SelectSqlExpressionBuilder, executor As QueryExecutor)
       MyBase.New(builder, executor)
     End Sub
 
-    Public Function [And](predicate As Expression(Of Func(Of T1, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, {0})
+    Public Function [And](predicate As Expression(Of Func(Of T1, Boolean))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, {0})
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of T1, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, {0})
+    Public Function [And](predicate As Expression(Of Func(Of T1, FormattableString))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, {0})
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of T2, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, {1})
+    Public Function [And](predicate As Expression(Of Func(Of T2, Boolean))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, {1})
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of T2, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, {1})
+    Public Function [And](predicate As Expression(Of Func(Of T2, FormattableString))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, {1})
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of T3, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, {2})
+    Public Function [And](predicate As Expression(Of Func(Of T3, Boolean))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, {2})
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of T3, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, {2})
+    Public Function [And](predicate As Expression(Of Func(Of T3, FormattableString))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, {2})
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of T4, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, {3})
+    Public Function [And](predicate As Expression(Of Func(Of T4, Boolean))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, {3})
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of T4, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, {3})
+    Public Function [And](predicate As Expression(Of Func(Of T4, FormattableString))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, {3})
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of T5, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, {4})
+    Public Function [And](predicate As Expression(Of Func(Of T5, Boolean))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, {4})
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of T5, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, {4})
+    Public Function [And](predicate As Expression(Of Func(Of T5, FormattableString))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, {4})
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of T6, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, {5})
+    Public Function [And](predicate As Expression(Of Func(Of T6, Boolean))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, {5})
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of T6, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, {5})
+    Public Function [And](predicate As Expression(Of Func(Of T6, FormattableString))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, {5})
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6), Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, Nothing)
+    Public Function [And](predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6), Boolean))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, Nothing)
     End Function
 
-    Public Function [And](predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6), FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalWhere(predicate, Nothing)
+    Public Function [And](predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6), FormattableString))) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalHaving(predicate, Nothing)
     End Function
 
-    Public Function [And](predicate As String) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Me.Builder.AddWhere(predicate)
+    Public Function [And](predicate As String) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Me.Builder.AddHaving(predicate)
       Return Me
     End Function
 
-    Private Function InternalWhere(predicate As Expression, entityIndexHints As Int32()) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Me.Builder.AddWhere(predicate, entityIndexHints)
+    Private Function InternalHaving(predicate As Expression, entityIndexHints As Int32()) As HavingSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Me.Builder.AddHaving(predicate, entityIndexHints)
       Return Me
-    End Function
-
-    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalGroupBy(Of TKey)(keySelector, {0})
-    End Function
-
-    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalGroupBy(Of TKey)(keySelector, {1})
-    End Function
-
-    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T3, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalGroupBy(Of TKey)(keySelector, {2})
-    End Function
-
-    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T4, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalGroupBy(Of TKey)(keySelector, {3})
-    End Function
-
-    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T5, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalGroupBy(Of TKey)(keySelector, {4})
-    End Function
-
-    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T6, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalGroupBy(Of TKey)(keySelector, {5})
-    End Function
-
-    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6), TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Return InternalGroupBy(Of TKey)(keySelector, Nothing)
-    End Function
-
-    Private Function InternalGroupBy(Of TKey)(keySelector As Expression, entityIndexHints As Int32()) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
-      Me.Builder.AddGroupBy(keySelector, entityIndexHints)
-      Return New GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)(Me.Builder, Me.Executor)
     End Function
 
     Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)

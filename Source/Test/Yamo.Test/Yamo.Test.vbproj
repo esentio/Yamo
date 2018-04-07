@@ -88,6 +88,8 @@
     <Compile Include="Model\PropertyModifiedTrackingBase.vb" />
     <Compile Include="Model\ItemWithIdentityIdAndDefaultValues.vb" />
     <Compile Include="Model\ItemWithIdentityId.vb" />
+    <Compile Include="Tests\SelectWithHavingTests.vb" />
+    <Compile Include="Tests\SelectWithGroupByTests.vb" />
     <Compile Include="Tests\PropertyModifiedTrackingTests.vb" />
     <Compile Include="Tests\AuditFieldsTests.vb" />
     <Compile Include="Tests\ExecuteScalarTests.vb" />

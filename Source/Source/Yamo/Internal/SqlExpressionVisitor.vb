@@ -19,6 +19,8 @@ Namespace Internal
 
     Private m_ExpressionParameters As ReadOnlyCollection(Of ParameterExpression)
 
+    Private m_ExpressionParametersType As ExpressionParametersType
+
     Private m_EntityIndexHints As Int32()
 
     Private m_Sql As StringBuilder
@@ -37,15 +39,17 @@ Namespace Internal
 
     Private m_InCustomSelectMode As Boolean
 
-    Private m_CustomSelectModeInfo As (Index As Int32, ColumnAliases As String())?
+    Private m_CustomEntities As CustomSqlEntity()
+
+    Private m_CustomEntityIndex As Int32
 
     Public Sub New(builder As SqlExpressionBuilderBase, model As SqlModel)
       m_Builder = builder
       m_Model = model
     End Sub
 
-    ' entityIndexHints might be nothing!!! - write to comments (also in caller methods)
-    Public Function Translate(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
+    ' entityIndexHints is null when expressionParametersType is not ExpressionParametersType.Entities
+    Public Function Translate(expression As Expression, expressionParametersType As ExpressionParametersType, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -53,6 +57,7 @@ Namespace Internal
       Dim lambda = DirectCast(expression, LambdaExpression)
 
       m_ExpressionParameters = lambda.Parameters
+      m_ExpressionParametersType = expressionParametersType
       m_EntityIndexHints = entityIndexHints
       m_Sql = New StringBuilder()
       m_Parameters = New List(Of SqlParameter)
@@ -62,7 +67,8 @@ Namespace Internal
       m_CompensateForIgnoredNegation = False
       m_CurrentLikeParameterFormat = Nothing
       m_InCustomSelectMode = False
-      m_CustomSelectModeInfo = Nothing
+      m_CustomEntities = Nothing
+      m_CustomEntityIndex = 0
 
       Visit(lambda.Body)
 
@@ -71,8 +77,8 @@ Namespace Internal
       Return New SqlString(m_Sql.ToString(), m_Parameters)
     End Function
 
-    ' entityIndexHints might be nothing!!! - write to comments (also in caller methods)
-    Public Function TranslateCustomSelect(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSqlEntity())
+    ' entityIndexHints is null when expressionParametersType is not ExpressionParametersType.Entities
+    Public Function TranslateCustomSelect(expression As Expression, expressionParametersType As ExpressionParametersType, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSqlEntity())
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -80,6 +86,7 @@ Namespace Internal
       Dim lambda = DirectCast(expression, LambdaExpression)
 
       m_ExpressionParameters = lambda.Parameters
+      m_ExpressionParametersType = expressionParametersType
       m_EntityIndexHints = entityIndexHints
       m_Sql = New StringBuilder()
       m_Parameters = New List(Of SqlParameter)
@@ -89,13 +96,16 @@ Namespace Internal
       m_CompensateForIgnoredNegation = False
       m_CurrentLikeParameterFormat = Nothing
       m_InCustomSelectMode = True
-      m_CustomSelectModeInfo = Nothing
+      m_CustomEntities = Nothing
+      m_CustomEntityIndex = 0
 
-      Dim customEntities = VisitCustomSelect(lambda.Body)
+      VisitInCustomSelectMode(lambda.Body)
 
       m_ExpressionParameters = Nothing
 
-      Return (New SqlString(m_Sql.ToString(), m_Parameters), customEntities)
+      CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, lambda.Body, m_CustomEntities)
+
+      Return (New SqlString(m_Sql.ToString(), m_Parameters), m_CustomEntities)
     End Function
 
     Public Overrides Function Visit(node As Expression) As Expression
@@ -544,12 +554,22 @@ Namespace Internal
     End Function
 
     Protected Overrides Function VisitParameter(node As ParameterExpression) As Expression
-      If m_InCustomSelectMode Then
-        Return VisitParameterInCustomSelectMode(node)
-      Else
-        ' this shouldn't be called
-        Return node
+      Dim index = m_ExpressionParameters.IndexOf(node)
+
+      If m_EntityIndexHints Is Nothing Then
+        ' this should not happen, because IJoin should be used when index hints are not available
+        Throw New Exception("Unable to match expression parameter with entity.")
       End If
+
+      If index < 0 OrElse m_EntityIndexHints.Length <= index Then
+        Throw New Exception($"None or unambiguous match of entity of type '{node.Type}'. Use IJoin instead?")
+      End If
+
+      Dim entityIndex = m_EntityIndexHints(index)
+
+      AppendEntityMembersAccess(entityIndex)
+
+      Return node
     End Function
 
     Protected Overrides Function VisitMember(node As MemberExpression) As Expression
@@ -573,10 +593,13 @@ Namespace Internal
           End If
         End If
 
+        propertyName = currentNode.Member.Name
+
         If currentNode.Expression.NodeType = ExpressionType.Parameter Then
-          If m_InCustomSelectMode AndAlso m_EntityIndexHints Is Nothing Then
-            ' handles expressions like: x.T1 (m_EntityIndexHints Is Nothing is used as a fast way to distinguish it from x.DbPropertyName expressions)
-            Return VisitJoinMemberInCustomSelectMode(node)
+          If m_ExpressionParametersType = ExpressionParametersType.IJoin Then
+            entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(node.Member.Name)
+            AppendEntityMembersAccess(entityIndex)
+            Return node
           Else
             isEntityMemberAccess = True
 
@@ -592,7 +615,6 @@ Namespace Internal
               Throw New Exception($"None or unambiguous match of entity of type '{declaringType}'. Use IJoin instead?")
             End If
 
-            propertyName = currentNode.Member.Name
             entityIndex = m_EntityIndexHints(index)
           End If
 
@@ -602,7 +624,6 @@ Namespace Internal
           If parent.Expression IsNot Nothing AndAlso parent.Expression.NodeType = ExpressionType.Parameter Then
             isEntityMemberAccess = True
 
-            propertyName = currentNode.Member.Name
             entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(parent.Member.Name)
           End If
         End If
@@ -626,23 +647,15 @@ Namespace Internal
       End If
     End Function
 
-    Private Sub AppendEntityMemberAccess(propertyName As String, entityIndex As Int32)
-      Dim entity = m_Model.GetEntity(entityIndex)
-      Dim prop = entity.Entity.GetProperty(propertyName)
-
-      If Not m_UseTableNamesOrAliases Then
-        m_Sql.Append(m_Builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName))
-      ElseIf m_UseAliases Then
-        Dim tableAlias = m_Model.GetTableAlias(entity.Index)
-        m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(tableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)}")
-      Else
-        ' NOTE: this is not used right now
-        m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.Entity.TableName)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)}")
-      End If
-    End Sub
-
     Protected Overrides Function VisitNew(node As NewExpression) As Expression
-      Return VisitAndEvaluate(node)
+      If IsValueTuple(node.Type) Then
+        ' TODO: SIP - does it make sense to support nullable ValueTuples as well?
+        Return VisitValueTupleOrAnonymousType(node, True)
+      ElseIf IsAnonymousType(node.Type) Then
+        Return VisitValueTupleOrAnonymousType(node, False)
+      Else
+        Return VisitAndEvaluate(node)
+      End If
     End Function
 
     Protected Overrides Function VisitNewArray(node As NewArrayExpression) As Expression
@@ -652,6 +665,73 @@ Namespace Internal
     Protected Function VisitAndEvaluate(node As Expression) As Expression
       AppendNewParameter(Evaluate(node))
       Return node
+    End Function
+
+    Private Function VisitValueTupleOrAnonymousType(node As NewExpression, isValueTuple As Boolean) As Expression
+      Dim count = node.Arguments.Count
+
+      If m_InCustomSelectMode Then
+        m_CustomEntities = New CustomSqlEntity(count - 1) {}
+      End If
+
+      Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
+
+      ' NOTE: this will fail for nested ValueTuples, so we are limited to max 7 fields. Is it worth to support nesting?
+
+      For i = 0 To count - 1
+        Dim arg = node.Arguments(i)
+        Dim type = arg.Type
+        Dim entityIndex = entities.IndexOf(type)
+        Dim isEntity = Not entityIndex = -1
+
+        m_CustomEntityIndex = i
+
+        Visit(arg)
+
+        If m_InCustomSelectMode Then
+          If isEntity Then
+            m_CustomEntities(i) = New CustomSqlEntity(i, entityIndex, type)
+          Else
+            Dim columnAlias = CreateColumnAlias(i)
+            m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(columnAlias)}")
+            m_CustomEntities(i) = New CustomSqlEntity(i, type)
+          End If
+        End If
+
+        If Not i = count - 1 Then
+          m_Sql.Append(", ")
+        End If
+      Next
+
+      Return node
+    End Function
+
+    Private Function VisitInCustomSelectMode(node As Expression) As Expression
+      If node.NodeType = ExpressionType.New Then
+        Return Visit(node)
+      Else
+        m_CustomEntities = New CustomSqlEntity(0) {}
+
+        Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
+
+        Dim type = node.Type
+        Dim entityIndex = entities.IndexOf(type)
+        Dim isEntity = Not entityIndex = -1
+
+        m_CustomEntityIndex = 0
+
+        Visit(node)
+
+        If isEntity Then
+          m_CustomEntities(0) = New CustomSqlEntity(0, entityIndex, type)
+        Else
+          Dim columnAlias = CreateColumnAlias(0)
+          m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(columnAlias)}")
+          m_CustomEntities(0) = New CustomSqlEntity(0, type)
+        End If
+
+        Return node
+      End If
     End Function
 
     Protected Function Evaluate(node As Expression) As Object
@@ -711,116 +791,6 @@ Namespace Internal
       Return value
     End Function
 
-    Protected Function IsNullConstant(node As Expression) As Boolean
-      Return node.NodeType = ExpressionType.Constant AndAlso DirectCast(node, ConstantExpression).Value Is Nothing
-    End Function
-
-    Private Function StripQuotes(node As Expression) As Expression
-      While node.NodeType = ExpressionType.Quote
-        node = DirectCast(node, UnaryExpression).Operand
-      End While
-
-      Return node
-    End Function
-
-    Private Sub AppendNewParameter(value As Object)
-      Dim parameterName = m_Builder.CreateParameter(m_ParameterIndex + m_Parameters.Count)
-
-      m_Sql.Append(parameterName)
-      m_Parameters.Add(New SqlParameter(parameterName, value))
-    End Sub
-
-    Private Function VisitCustomSelect(node As Expression) As CustomSqlEntity()
-      If node.NodeType = ExpressionType.New Then
-        If IsValueTuple(node.Type) Then
-          ' TODO: SIP - does it make sense to support nullable ValueTuples as well?
-          Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(DirectCast(node, NewExpression), True)
-        ElseIf IsAnonymousType(node.Type) Then
-          Return VisitValueTupleOrAnonymousTypeInCustomSelectMode(DirectCast(node, NewExpression), False)
-        Else
-          Throw New Exception("Only NewExpression of ValueTuple or anonymous type is supported.")
-        End If
-      Else
-        Return VisitInCustomSelectMode(node)
-      End If
-    End Function
-
-    Private Function VisitValueTupleOrAnonymousTypeInCustomSelectMode(node As NewExpression, isValueTuple As Boolean) As CustomSqlEntity()
-      Dim count = node.Arguments.Count
-      Dim customEntities = New CustomSqlEntity(count - 1) {}
-
-      Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
-
-      ' NOTE: this will fail for nested ValueTuples, so we are limited to max 7 fields. Is it worth to support nesting?
-
-      Dim properties As PropertyInfo() = Nothing
-
-      If Not isValueTuple Then
-        ' is the order ok when DeclaredProperties is used? node.Type.GetProperties() doesn't guarantee correct order according to MSDN
-        properties = node.Type.GetTypeInfo().DeclaredProperties.ToArray()
-      End If
-
-      For i = 0 To count - 1
-        Dim arg = node.Arguments(i)
-        Dim type = arg.Type
-        Dim entityIndex = entities.IndexOf(type)
-        Dim isEntity = Not entityIndex = -1
-        Dim name As String
-
-        If isValueTuple Then
-          name = $"Item{(i + 1).ToString(Globalization.CultureInfo.InvariantCulture)}"
-        Else
-          name = properties(i).Name
-        End If
-
-        m_CustomSelectModeInfo = (i, Nothing)
-
-        Visit(arg)
-
-        If isEntity Then
-          customEntities(i) = New CustomSqlEntity(i, entityIndex, type, m_CustomSelectModeInfo.Value.ColumnAliases, name)
-        Else
-          Dim columnAlias = CreateColumnAlias(i)
-          m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(columnAlias)}")
-          customEntities(i) = New CustomSqlEntity(i, type, columnAlias, name)
-        End If
-
-        If Not i = count - 1 Then
-          m_Sql.Append(", ")
-        End If
-      Next
-
-      CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, node, customEntities)
-
-      Return customEntities
-    End Function
-
-    Private Function VisitInCustomSelectMode(node As Expression) As CustomSqlEntity()
-      Dim customEntities = New CustomSqlEntity(0) {}
-
-      Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
-
-      Dim type = node.Type
-      Dim entityIndex = entities.IndexOf(type)
-      Dim isEntity = Not entityIndex = -1
-
-      m_CustomSelectModeInfo = (0, Nothing)
-
-      Visit(node)
-
-      If isEntity Then
-        customEntities(0) = New CustomSqlEntity(0, entityIndex, type, m_CustomSelectModeInfo.Value.ColumnAliases, "")
-      Else
-        Dim columnAlias = CreateColumnAlias(0)
-        m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(columnAlias)}")
-        customEntities(0) = New CustomSqlEntity(0, type, columnAlias, "")
-      End If
-
-      CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, node, customEntities)
-
-      Return customEntities
-    End Function
-
     Private Function IsValueTuple(type As Type) As Boolean
       If Not type.IsGenericType Then
         Return False
@@ -861,6 +831,18 @@ Namespace Internal
              (type.Attributes And TypeAttributes.NotPublic) = TypeAttributes.NotPublic
     End Function
 
+    Protected Function IsNullConstant(node As Expression) As Boolean
+      Return node.NodeType = ExpressionType.Constant AndAlso DirectCast(node, ConstantExpression).Value Is Nothing
+    End Function
+
+    Private Function StripQuotes(node As Expression) As Expression
+      While node.NodeType = ExpressionType.Quote
+        node = DirectCast(node, UnaryExpression).Operand
+      End While
+
+      Return node
+    End Function
+
     Private Function CreateColumnAlias(index As Int32) As String
       Return $"C{(index).ToString(Globalization.CultureInfo.InvariantCulture)}"
     End Function
@@ -869,32 +851,29 @@ Namespace Internal
       Return $"C{(index1).ToString(Globalization.CultureInfo.InvariantCulture)}_{(index2).ToString(Globalization.CultureInfo.InvariantCulture)}"
     End Function
 
-    Private Function VisitParameterInCustomSelectMode(node As ParameterExpression) As Expression
-      Dim index = m_ExpressionParameters.IndexOf(node)
+    Private Sub AppendNewParameter(value As Object)
+      Dim parameterName = m_Builder.CreateParameter(m_ParameterIndex + m_Parameters.Count)
 
-      If m_EntityIndexHints Is Nothing Then
-        ' this should not happen, because IJoin should be used when index hints are not available
-        Throw New Exception("Unable to match expression parameter with entity.")
+      m_Sql.Append(parameterName)
+      m_Parameters.Add(New SqlParameter(parameterName, value))
+    End Sub
+
+    Private Sub AppendEntityMemberAccess(propertyName As String, entityIndex As Int32)
+      Dim entity = m_Model.GetEntity(entityIndex)
+      Dim prop = entity.Entity.GetProperty(propertyName)
+
+      If Not m_UseTableNamesOrAliases Then
+        m_Sql.Append(m_Builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName))
+      ElseIf m_UseAliases Then
+        Dim tableAlias = m_Model.GetTableAlias(entity.Index)
+        m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(tableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)}")
+      Else
+        ' NOTE: this is not used right now
+        m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.Entity.TableName)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)}")
       End If
+    End Sub
 
-      If index < 0 OrElse m_EntityIndexHints.Length <= index Then
-        Throw New Exception($"None or unambiguous match of entity of type '{node.Type}'. Use IJoin instead?")
-      End If
-
-      Dim entityIndex = m_EntityIndexHints(index)
-
-      AppendEntityMembers(entityIndex)
-
-      Return node
-    End Function
-
-    Private Function VisitJoinMemberInCustomSelectMode(node As MemberExpression) As Expression
-      Dim entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(node.Member.Name)
-      AppendEntityMembers(entityIndex)
-      Return node
-    End Function
-
-    Private Sub AppendEntityMembers(entityIndex As Int32)
+    Private Sub AppendEntityMembersAccess(entityIndex As Int32)
       Dim entity = m_Model.GetEntity(entityIndex)
 
       ' NOTE: excluding columns is not (yet) supported in this scenario, but column enumeration belows already supports it.
@@ -904,13 +883,16 @@ Namespace Internal
       Dim properties = entity.Entity.GetProperties()
       Dim columnCount = entity.GetColumnCount()
       Dim columnIndex = 0
-      Dim columnAliases = New String(columnCount - 1) {}
 
       For propertyIndex = 0 To properties.Count - 1
         If entity.IncludedColumns(propertyIndex) Then
-          Dim columnAlias = CreateColumnAlias(m_CustomSelectModeInfo.Value.Index, columnIndex)
-          columnAliases(columnIndex) = columnAlias
-          m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(properties(propertyIndex).ColumnName)} {m_Builder.DialectProvider.Formatter.CreateIdentifier(columnAlias)}")
+          m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(properties(propertyIndex).ColumnName)}")
+
+          If m_InCustomSelectMode Then
+            Dim columnAlias = CreateColumnAlias(m_CustomEntityIndex, columnIndex)
+            m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(columnAlias)}")
+          End If
+
           columnIndex += 1
         End If
 
@@ -920,8 +902,6 @@ Namespace Internal
           m_Sql.Append(", ")
         End If
       Next
-
-      m_CustomSelectModeInfo = (m_CustomSelectModeInfo.Value.Index, columnAliases)
     End Sub
 
   End Class

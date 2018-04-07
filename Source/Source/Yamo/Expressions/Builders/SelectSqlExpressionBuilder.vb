@@ -18,6 +18,10 @@ Namespace Expressions.Builders
 
     Private m_WhereExpressions As List(Of String)
 
+    Private m_GroupByExpressions As List(Of String) ' couldn't be just string?
+
+    Private m_HavingExpressions As List(Of String)
+
     Private m_OrderByExpressions As List(Of String)
 
     Private m_SelectExpression As String
@@ -28,9 +32,12 @@ Namespace Expressions.Builders
       MyBase.New(context)
       m_Model = New SqlModel(Me.DbContext.Model)
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
-      m_JoinExpressions = New List(Of String)
-      m_WhereExpressions = New List(Of String)
-      m_OrderByExpressions = New List(Of String)
+      ' lists are created only when necessary
+      m_JoinExpressions = Nothing
+      m_WhereExpressions = Nothing
+      m_GroupByExpressions = Nothing
+      m_HavingExpressions = Nothing
+      m_OrderByExpressions = Nothing
       m_SelectExpression = Nothing
       m_Parameters = New List(Of SqlParameter)
     End Sub
@@ -45,16 +52,28 @@ Namespace Expressions.Builders
       sql.Append(m_SelectExpression)
       sql.Append($" FROM {Me.DialectProvider.Formatter.CreateIdentifier(m_Model.GetFirstEntity().Entity.TableName)} {Me.DialectProvider.Formatter.CreateIdentifier(m_Model.GetFirstTableAlias())}")
 
-      For Each joinExpression In m_JoinExpressions
-        sql.Append($" {joinExpression}")
-      Next
+      If m_JoinExpressions IsNot Nothing Then
+        For Each joinExpression In m_JoinExpressions
+          sql.Append($" {joinExpression}")
+        Next
+      End If
 
-      If m_WhereExpressions.Any() Then
+      If m_WhereExpressions IsNot Nothing Then
         sql.Append($" WHERE ")
         sql.Append(String.Join(" AND ", m_WhereExpressions))
       End If
 
-      If m_OrderByExpressions.Any() Then
+      If m_GroupByExpressions IsNot Nothing Then
+        sql.Append($" GROUP BY ")
+        sql.Append(String.Join(", ", m_GroupByExpressions))
+      End If
+
+      If m_HavingExpressions IsNot Nothing Then
+        sql.Append($" HAVING ")
+        sql.Append(String.Join(" AND ", m_HavingExpressions))
+      End If
+
+      If m_OrderByExpressions IsNot Nothing Then
         sql.Append($" ORDER BY ")
         sql.Append(String.Join(", ", m_OrderByExpressions))
       End If
@@ -75,7 +94,7 @@ Namespace Expressions.Builders
           Dim indexes = visitor.GetIndexesOfReferencedEntities(predicate)
 
           ' if only 2 entities were used and latter one is currently joined entity, we can use this as a hint
-          ' since currently joined entity hasn't been added to the model yet, value returned from GetEntityCount() call is the (future) index
+          ' since at this moment joined entity hasn't been added to the model yet, value returned from GetEntityCount() call is the (future) index
           If indexes.Length = 2 AndAlso indexes(1) = m_Model.GetEntityCount() Then
             Return indexes
           End If
@@ -117,6 +136,10 @@ Namespace Expressions.Builders
     End Function
 
     Public Sub AddJoin(Of TJoined)(joinType As JoinType, predicate As Expression, entityIndexHints As Int32())
+      If m_JoinExpressions Is Nothing Then
+        m_JoinExpressions = New List(Of String)
+      End If
+
       If entityIndexHints Is Nothing Then
         entityIndexHints = TryGetEntityIndexHints(predicate)
       End If
@@ -150,7 +173,8 @@ Namespace Expressions.Builders
         sql = $"{joinTypeString} {Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName)} {Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)}"
         m_JoinExpressions.Add(sql)
       Else
-        Dim result = m_Visitor.Translate(predicate, entityIndexHints, m_Parameters.Count, True, True)
+        Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
+        Dim result = m_Visitor.Translate(predicate, parametersType, entityIndexHints, m_Parameters.Count, True, True)
         sql = $"{joinTypeString} {Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName)} {Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)} ON {result.Sql}"
         m_JoinExpressions.Add(sql)
         m_Parameters.AddRange(result.Parameters)
@@ -214,27 +238,69 @@ Namespace Expressions.Builders
     End Sub
 
     Public Sub AddWhere(predicate As Expression, entityIndexHints As Int32())
-      Dim result = m_Visitor.Translate(predicate, entityIndexHints, m_Parameters.Count, True, True)
+      If m_WhereExpressions Is Nothing Then
+        m_WhereExpressions = New List(Of String)
+      End If
+
+      Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
+      Dim result = m_Visitor.Translate(predicate, parametersType, entityIndexHints, m_Parameters.Count, True, True)
       m_WhereExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
 
     Public Sub AddWhere(predicate As String)
+      If m_WhereExpressions Is Nothing Then
+        m_WhereExpressions = New List(Of String)
+      End If
+
       m_WhereExpressions.Add(predicate)
     End Sub
 
-    Public Sub AddOrderBy(keySelector As Expression, entityIndexHints As Int32(), ascending As Boolean)
-      Dim result = m_Visitor.Translate(keySelector, entityIndexHints, m_Parameters.Count, True, True)
-
-      If result.Parameters.Any() Then
-        Throw New NotSupportedException("OrderBy expression cannot be translated to SQL.")
+    Public Sub AddGroupBy(keySelector As Expression, entityIndexHints As Int32())
+      If m_GroupByExpressions Is Nothing Then
+        m_GroupByExpressions = New List(Of String)
       End If
+
+      Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
+      Dim result = m_Visitor.Translate(keySelector, parametersType, entityIndexHints, m_Parameters.Count, True, True)
+      m_GroupByExpressions.Add(result.Sql)
+      m_Parameters.AddRange(result.Parameters)
+    End Sub
+
+    Public Sub AddHaving(predicate As Expression, entityIndexHints As Int32())
+      If m_HavingExpressions Is Nothing Then
+        m_HavingExpressions = New List(Of String)
+      End If
+
+      Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
+      Dim result = m_Visitor.Translate(predicate, parametersType, entityIndexHints, m_Parameters.Count, True, True)
+      m_HavingExpressions.Add(result.Sql)
+      m_Parameters.AddRange(result.Parameters)
+    End Sub
+
+    Public Sub AddHaving(predicate As String)
+      If m_HavingExpressions Is Nothing Then
+        m_HavingExpressions = New List(Of String)
+      End If
+
+      m_HavingExpressions.Add(predicate)
+    End Sub
+
+    Public Sub AddOrderBy(keySelector As Expression, entityIndexHints As Int32(), ascending As Boolean)
+      If m_OrderByExpressions Is Nothing Then
+        m_OrderByExpressions = New List(Of String)
+      End If
+
+      Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
+      Dim result = m_Visitor.Translate(keySelector, parametersType, entityIndexHints, m_Parameters.Count, True, True)
 
       If ascending Then
         m_OrderByExpressions.Add(result.Sql)
       Else
         m_OrderByExpressions.Add($"{result.Sql} DESC")
       End If
+
+      m_Parameters.AddRange(result.Parameters)
     End Sub
 
     Public Sub AddSelectAll(ParamArray entityTypes As Type())
@@ -300,7 +366,8 @@ Namespace Expressions.Builders
     End Sub
 
     Public Sub AddSelect(selector As Expression, entityIndexHints As Int32())
-      Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, m_Parameters.Count)
+      Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
+      Dim result = m_Visitor.TranslateCustomSelect(selector, parametersType, entityIndexHints, m_Parameters.Count)
       m_SelectExpression = $"SELECT {result.SqlString.Sql}"
       m_Parameters.AddRange(result.SqlString.Parameters)
       m_Model.SetCustomEntities(result.CustomEntities)
