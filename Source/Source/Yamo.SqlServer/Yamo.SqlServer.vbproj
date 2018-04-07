@@ -15,7 +15,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <PackageTags>orm;micro-orm;sql;database;sqlserver</PackageTags>
     <Company />
     <Authors>Peter Šimno</Authors>
