@@ -10,7 +10,7 @@ Namespace Infrastructure
   Public Class CustomResultReaderFactory
     Inherits ReaderFactoryBase
 
-    Public Shared Function CreateResultFactory(node As Expression, customEntities As CustomSelectSqlEntity()) As Object
+    Public Shared Function CreateResultFactory(node As Expression, customEntities As CustomSqlEntity()) As Object
       Dim readerParam = Expression.Parameter(GetType(IDataReader), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
       Dim customEntityInfosParam = Expression.Parameter(GetType(CustomEntityReadInfo()), "customEntityInfos")
       Dim parameters = {readerParam, customEntityInfosParam}

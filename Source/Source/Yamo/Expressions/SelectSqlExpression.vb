@@ -76,6 +76,15 @@ Namespace Expressions
       Return New FilteredSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
     End Function
 
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As GroupedSelectSqlExpression(Of T)
+      Return InternalGroupBy(Of TKey)(keySelector, {0})
+    End Function
+
+    Private Function InternalGroupBy(Of TKey)(keySelector As Expression, entityIndexHints As Int32()) As GroupedSelectSqlExpression(Of T)
+      Me.Builder.AddGroupBy(keySelector, entityIndexHints)
+      Return New GroupedSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
+    End Function
+
     Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
       Return InternalOrderBy(keySelector, True)
     End Function

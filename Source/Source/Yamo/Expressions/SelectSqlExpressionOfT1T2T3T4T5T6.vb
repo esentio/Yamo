@@ -203,6 +203,39 @@ Namespace Expressions
       Return New FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)(Me.Builder, Me.Executor)
     End Function
 
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalGroupBy(Of TKey)(keySelector, {0})
+    End Function
+
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalGroupBy(Of TKey)(keySelector, {1})
+    End Function
+
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T3, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalGroupBy(Of TKey)(keySelector, {2})
+    End Function
+
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T4, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalGroupBy(Of TKey)(keySelector, {3})
+    End Function
+
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T5, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalGroupBy(Of TKey)(keySelector, {4})
+    End Function
+
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T6, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalGroupBy(Of TKey)(keySelector, {5})
+    End Function
+
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6), TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Return InternalGroupBy(Of TKey)(keySelector, Nothing)
+    End Function
+
+    Private Function InternalGroupBy(Of TKey)(keySelector As Expression, entityIndexHints As Int32()) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
+      Me.Builder.AddGroupBy(keySelector, entityIndexHints)
+      Return New GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)(Me.Builder, Me.Executor)
+    End Function
+
     Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6)
       Return InternalOrderBy(Of TKey)(keySelector, {0}, True)
     End Function

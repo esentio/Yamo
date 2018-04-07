@@ -2,7 +2,7 @@
 
 Namespace Internal.Query.Metadata
 
-  Public Class CustomSelectSqlEntity
+  Public Class CustomSqlEntity
     ' TODO: SIP - structure instead?
 
     Public ReadOnly Property Index As Int32
@@ -13,9 +13,18 @@ Namespace Internal.Query.Metadata
 
     Public ReadOnly Property Type As Type
 
-    Public Sub New(index As Int32, isEntity As Boolean, entityIndex As Int32, type As Type)
+    ' simple value
+    Public Sub New(index As Int32, type As Type)
       Me.Index = index
-      Me.IsEntity = isEntity
+      Me.IsEntity = False
+      Me.EntityIndex = -1
+      Me.Type = type
+    End Sub
+
+    ' entity
+    Public Sub New(index As Int32, entityIndex As Int32, type As Type)
+      Me.Index = index
+      Me.IsEntity = True
       Me.EntityIndex = entityIndex
       Me.Type = type
     End Sub

@@ -26,7 +26,7 @@ Namespace Internal
       Return GetInstance(model).GetResultFactoryOrThrow(Of T)(model, resultType)
     End Function
 
-    Public Shared Sub CreateResultFactoryIfNotExists(model As Model, node As Expression, customEntities As CustomSelectSqlEntity())
+    Public Shared Sub CreateResultFactoryIfNotExists(model As Model, node As Expression, customEntities As CustomSqlEntity())
       GetInstance(model).CreateResultFactory(model, node, customEntities)
     End Sub
 
@@ -70,7 +70,7 @@ Namespace Internal
       Return resultFactory
     End Function
 
-    Private Sub CreateResultFactory(model As Model, node As Expression, customEntities As CustomSelectSqlEntity())
+    Private Sub CreateResultFactory(model As Model, node As Expression, customEntities As CustomSqlEntity())
       Dim resultType = node.Type
 
       SyncLock m_ResultFactories

@@ -39,7 +39,7 @@ Namespace Expressions.Builders
     End Sub
 
     Public Sub AddSet(predicate As Expression)
-      Dim result = m_Visitor.Translate(predicate, {0}, m_Parameters.Count, False, False)
+      Dim result = m_Visitor.Translate(predicate, ExpressionParametersType.Entities, {0}, m_Parameters.Count, False, False)
       m_SetExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -53,7 +53,7 @@ Namespace Expressions.Builders
         AddAutoFieldSetters()
       End If
 
-      Dim result = m_Visitor.Translate(predicate, {0}, m_Parameters.Count, False, False)
+      Dim result = m_Visitor.Translate(predicate, ExpressionParametersType.Entities, {0}, m_Parameters.Count, False, False)
       m_WhereExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub

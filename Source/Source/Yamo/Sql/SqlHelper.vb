@@ -1,4 +1,5 @@
-﻿Imports Yamo.Infrastructure
+﻿Imports System.Reflection
+Imports Yamo.Infrastructure
 
 Namespace Sql
 
@@ -7,7 +8,7 @@ Namespace Sql
     Protected Sub New()
     End Sub
 
-    Public Shared Function GetSqlFormat(methodName As String, dialectProvider As SqlDialectProvider) As String
+    Public Shared Function GetSqlFormat(method As MethodInfo, dialectProvider As SqlDialectProvider) As String
       Throw New Exception("This method has to be overloaded.")
     End Function
 

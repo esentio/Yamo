@@ -8,6 +8,8 @@ Namespace Internal.Query.Metadata
 
     Private m_Enitities As List(Of SqlEntity)
 
+    Private m_CustomEntities As CustomSqlEntity()
+
     Public Sub New(model As Model)
       Me.Model = model
       m_Enitities = New List(Of SqlEntity)
@@ -71,6 +73,14 @@ Namespace Internal.Query.Metadata
 
     Public Function GetEntityCount() As Int32
       Return m_Enitities.Count
+    End Function
+
+    Public Sub SetCustomEntities(entities As CustomSqlEntity())
+      m_CustomEntities = entities
+    End Sub
+
+    Public Function GetCustomEntities() As CustomSqlEntity()
+      Return m_CustomEntities.ToArray()
     End Function
 
   End Class

@@ -88,6 +88,8 @@
     <Compile Include="Model\PropertyModifiedTrackingBase.vb" />
     <Compile Include="Model\ItemWithIdentityIdAndDefaultValues.vb" />
     <Compile Include="Model\ItemWithIdentityId.vb" />
+    <Compile Include="Tests\SelectWithHavingTests.vb" />
+    <Compile Include="Tests\SelectWithGroupByTests.vb" />
     <Compile Include="Tests\PropertyModifiedTrackingTests.vb" />
     <Compile Include="Tests\AuditFieldsTests.vb" />
     <Compile Include="Tests\ExecuteScalarTests.vb" />
@@ -95,6 +97,7 @@
     <Compile Include="Tests\CustomSelectTests.vb" />
     <Compile Include="Tests\SelectTests.vb" />
     <Compile Include="Tests\SelectCountTests.vb" />
+    <Compile Include="Tests\SqlHelperAggregateTests.vb" />
     <Compile Include="Tests\SqlHelperDateDiffTests.vb" />
     <Compile Include="Tests\SelectWithSqlStringConditionTests.vb" />
     <Compile Include="Tests\SelectWithSortTests.vb" />
