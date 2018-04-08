@@ -352,7 +352,7 @@ After operatios like insert, update or select, `ResetPropertyModifiedTracking` i
 
 Note that if  `IsAnyPropertyModified` call returns `false`, no SQL `UPDATE` statement is executed.
 
-Parameterless `Update` method returns an instance of `UpdateSqlExpression`, which allows you to build update command and update more than one object at once. Just don't forget to call Execute method at the end.
+Parameterless `Update` method returns an instance of `UpdateSqlExpression`, which allows you to build `UPDATE` command and update more than one object at once. Just don't forget to call `Execute` method at the end.
 
 ````c#
 using (var db = CreateContext())
@@ -409,7 +409,7 @@ using (var db = CreateContext())
 }
 ```
 
-Besides normal deletes, Yamo supports also soft deletes. More on them in the next chapter.
+Besides normal deletes, Yamo also supports soft deletes. More on them in the next chapter.
 
 ###### Planned features:
 
@@ -1083,7 +1083,7 @@ using (var db = CreateContext())
 
 Returning just POCOs or simple count would be very limiting. For these scenarios use custom selects.
 
-You can return simple values:
+You can return simple value(s):
 
 ```c#
 using (var db = CreateContext())
