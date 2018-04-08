@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -136,6 +137,11 @@ namespace Yamo.PlaygroundCS
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(m_Connection);
+        }
+
+        protected override void OnCommandExecuting(DbCommand command)
+        {
+            // log command.CommandText
         }
     }
 

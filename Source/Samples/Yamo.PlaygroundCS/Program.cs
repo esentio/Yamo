@@ -26,6 +26,7 @@ namespace Yamo.PlaygroundCS
             //Test7();
             //Test8a();
             //Test8b();
+            //Test8c();
             //Test9();
             //Test10();
             //Test11();
@@ -42,7 +43,15 @@ namespace Yamo.PlaygroundCS
             //Test22();
             //Test23();
             //Test24();
-            Test25();
+            //Test25();
+            //Test26();
+            //Test27();
+            //Test28();
+            //Test29();
+            //Test30();
+            //Test31();
+            //Test32();
+            //Test33();
         }
 
         public static MyContext CreateContext()
@@ -164,6 +173,26 @@ namespace Yamo.PlaygroundCS
             }
         }
 
+        public static void Test8c()
+        {
+            using (var db = CreateContext())
+            {
+                // in VB.NET, you can also write:
+                // db.Update(Of User).Set(Function(u) u.Email = "")
+                db.Update<User>().Set(u => u.Email, "").Execute();
+
+                // in VB.NET, you can also write:
+                // db.Update(Of User).Set(Function(u) u.Login = u.Login & "_invalid")
+                db.Update<User>().Set(u => u.Login, u => u.Login + "_invalid").Execute();
+
+                db.Update<User>()
+                  .Set(u => u.FirstName, "John")
+                  .Set(u => u.LastName, "Smith")
+                  .Where(u => u.Id == 42)
+                  .Execute();
+            }
+        }
+
         public static void Test9()
         {
             using (var db = CreateContext())
@@ -201,11 +230,18 @@ namespace Yamo.PlaygroundCS
                 // Created will contain current timestamp and CreatedUserId will contain user id
                 db.Insert<Blog>(blog);
 
+                blog.Title = "My really awesome blog post";
+
                 // Modified will contain current timestamp and ModifiedUserId will contain user id
                 db.Update<Blog>(blog);
 
+                blog.Title = "My awesome blog post";
+
                 // Modified will contain OLD timestamp and ModifiedUserId will contain OLD user id
                 db.Update<Blog>(blog, setAutoFields: false);
+
+                // Modified in all records will contain current timestamp and ModifiedUserId in all records will contain user id
+                db.Update<Blog>().Set(b => b.Content, "").Execute();
 
                 // Deleted will contain current timestamp and DeletedUserId will contain user id
                 db.SoftDelete<Blog>(blog);
@@ -245,6 +281,12 @@ namespace Yamo.PlaygroundCS
 
                 var result4 = db.From<Blog>()
                                 .Where(b => b.Deleted.HasValue && b.Title.StartsWith("Lorem"))
+                                .SelectAll().ToList();
+
+                // same as above
+                var result5 = db.From<Blog>()
+                                .Where(b => b.Deleted.HasValue)
+                                .And(b => b.Title.StartsWith("Lorem"))
                                 .SelectAll().ToList();
             }
         }
@@ -299,8 +341,8 @@ namespace Yamo.PlaygroundCS
             {
                 var list = db.From<Article>()
                              .Join<Label>((a, l) => l.TableId == nameof(Article) &&
-                                                    (l.Id == a.Id &&
-                                                    l.Language == "en"))
+                                                    l.Id == a.Id &&
+                                                    l.Language == "en")
                              .SelectAll().ToList();
 
                 foreach (var article in list)
@@ -456,21 +498,128 @@ namespace Yamo.PlaygroundCS
             }
         }
 
-        //public static void Test26()
-        //{
-        //    using (var db = CreateContext())
-        //    {
-        //        var list = db.From<Category>()
-        //                     .LeftJoin<ArticleCategory>((c, ac) => c.Id == ac.CategoryId)
-        //                     .SelectT1().Include((c, ac) => c.ArticleCount = Sql.Count(ac.ArticleId))
-        //                     .GroupBy((c, ac) => c)
-        //                     .ToList();
+        public static void Test26()
+        {
+            using (var db = CreateContext())
+            {
+                var articlesCount = db.From<Article>().SelectCount();
+            }
+        }
 
-        //        foreach (var category in list)
-        //        {
-        //            Console.WriteLine($"Category {category.Id} has {category.ArticleCount} article(s).");
-        //        }
-        //    }
-        //}
+        public static void Test27()
+        {
+            using (var db = CreateContext())
+            {
+                // get prices of all articles
+                var prices = db.From<Article>()
+                               .Select(a => a.Price)
+                               .ToList();
+            }
+        }
+
+        public static void Test28()
+        {
+            using (var db = CreateContext())
+            {
+                // get all categories of single article
+                var articleId = 42;
+                var categories = db.From<Article>()
+                                   .Join<ArticleCategory>(j => j.T1.Id == j.T2.ArticleId)
+                                   .Join<Category>(j => j.T2.CategoryId == j.T3.Id)
+                                   .Where(j => j.T1.Id == articleId)
+                                   .Select(j => j.T3)
+                                   .ToList();
+            }
+        }
+
+        public static void Test29()
+        {
+            using (var db = CreateContext())
+            {
+                // get ids of original articles plus articles and their substitutions
+                var list = db.From<ArticleSubstitution>()
+                             .Join<Article>(j => j.T1.OriginalArticleId == j.T2.Id)
+                             .Join<Article>(j => j.T1.SubstitutionArticleId == j.T3.Id)
+                             .Select(j => new
+                             {
+                                 OriginalId = j.T2.Id,
+                                 Original = j.T2,
+                                 Substitution = j.T3
+                             })
+                             .ToList();
+            }
+        }
+
+        public static void Test30()
+        {
+            //using (var db = CreateContext())
+            //{
+            //    var list = db.From<ArticleSubstitution>()
+            //                 .Join<Article>(j => j.T1.OriginalArticleId == j.T2.Id)
+            //                 .Join<Article>(j => j.T1.SubstitutionArticleId == j.T3.Id)
+            //                 .Select(j => (j.T2, j.T3))
+            //                 .ToList();
+            //}
+
+            //Using db = CreateDbContext()
+            //  Dim list = db.From(Of ArticleSubstitution).
+            //                Join(Of Article)(Function(j) j.T1.OriginalArticleId = j.T2.Id).
+            //                Join(Of Article)(Function(j) j.T1.SubstitutionArticleId == j.T3.Id).
+            //                Select(Function(x) (OriginalId:=j.T2.Id, Original:=j.T2, Substitution:=j.T3)).
+            //                ToList()
+            //End Using
+        }
+
+        public static void Test31()
+        {
+            using (var db = CreateContext())
+            {
+                // get how many articles have the same price
+                var pricelist = db.From<Article>()
+                                  .GroupBy(a => a.Price)
+                                  .Select(a => new
+                                  {
+                                      a.Price,
+                                      ArticleCount = Yamo.Sql.Aggregate.Count()
+                                  })
+                                  .ToList();
+            }
+        }
+
+
+        public static void Test32()
+        {
+            using (var db = CreateContext())
+            {
+                // get article, article description and number of substitutions
+                var list = db.From<ArticleSubstitution>()
+                             .Join<Article>(j => j.T1.OriginalArticleId == j.T2.Id)
+                             .Join<Label>(j => j.T3.TableId == nameof(Article) &&
+                                               j.T3.Id == j.T2.Id &&
+                                               j.T3.Language == "en")
+                             .GroupBy(j => new { j.T2, j.T3.Description })
+                             .Select(j => new
+                             {
+                                 Article = j.T2,
+                                 ArticleDescription = j.T3.Description,
+                                 SubstitutionsCount = Yamo.Sql.Aggregate.Count(j.T1.SubstitutionArticleId)
+                             })
+                             .ToList();
+            }
+        }
+
+        public static void Test33()
+        {
+            using (var db = CreateContext())
+            {
+                // get tables which have at least 10 translations
+                var tables = db.From<Label>()
+                               .GroupBy(l => l.TableId)
+                               .Having(l => 10 < Yamo.Sql.Aggregate.Count())
+                               .Select(l => l.TableId)
+                               .ToList();
+            }
+        }
+
     }
 }

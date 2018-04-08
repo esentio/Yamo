@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Yamo.Infrastructure;
@@ -23,9 +24,9 @@ namespace Yamo.PlaygroundCS.Sql
 
         // ...
 
-        public new static string GetSqlFormat(string methodName, SqlFormatter formatter)
+        public new static string GetSqlFormat(MethodInfo method, SqlFormatter formatter)
         {
-            switch (methodName)
+            switch (method.Name)
             {
                 case nameof(DateDiff.SameYear):
                     return "DATEDIFF(year, {0}, {1}) = 0";
@@ -33,7 +34,7 @@ namespace Yamo.PlaygroundCS.Sql
                     return "DATEDIFF(quarter, {0}, {1}) = 0";
                 // ...
                 default:
-                    throw new NotSupportedException($"Method '{methodName}' is not supported.");
+                    throw new NotSupportedException($"Method '{method.Name}' is not supported.");
             }
         }
     }
