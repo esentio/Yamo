@@ -16,6 +16,16 @@ Namespace Expressions
       Return Me
     End Function
 
+    Public Function [Set](Of TProperty)(keySelector As Expression(Of Func(Of T, TProperty)), value As TProperty) As SetUpdateSqlExpression(Of T)
+      Me.Builder.AddSet(keySelector, value)
+      Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
+    End Function
+
+    Public Function [Set](Of TProperty)(keySelector As Expression(Of Func(Of T, TProperty)), valueSelector As Expression(Of Func(Of T, TProperty))) As SetUpdateSqlExpression(Of T)
+      Me.Builder.AddSet(keySelector, valueSelector)
+      Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
+    End Function
+
     Public Function [Set](predicate As Expression(Of Func(Of T, FormattableString))) As SetUpdateSqlExpression(Of T)
       Me.Builder.AddSet(predicate)
       Return Me
@@ -24,6 +34,11 @@ Namespace Expressions
     Public Function [Set](predicate As String) As SetUpdateSqlExpression(Of T)
       Me.Builder.AddSet(predicate)
       Return Me
+    End Function
+
+    Public Function SetNull(Of TProperty)(keySelector As Expression(Of Func(Of T, TProperty))) As SetUpdateSqlExpression(Of T)
+      Me.Builder.AddSet(keySelector, DirectCast(Nothing, Object))
+      Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
 
     Public Function Where(predicate As Expression(Of Func(Of T, Boolean))) As FilteredUpdateSqlExpression(Of T)

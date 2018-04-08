@@ -44,6 +44,22 @@ Namespace Expressions.Builders
       m_Parameters.AddRange(result.Parameters)
     End Sub
 
+    Public Sub AddSet(predicate As Expression, value As Object)
+      Dim result = m_Visitor.Translate(predicate, ExpressionParametersType.Entities, {0}, m_Parameters.Count, False, False)
+      m_Parameters.AddRange(result.Parameters)
+      Dim parameterName = CreateParameter(m_Parameters.Count)
+      m_SetExpressions.Add($"{result.Sql} = {parameterName}")
+      m_Parameters.Add(New SqlParameter(parameterName, value))
+    End Sub
+
+    Public Sub AddSet(predicate As Expression, valueSelector As Expression)
+      Dim result1 = m_Visitor.Translate(predicate, ExpressionParametersType.Entities, {0}, m_Parameters.Count, False, False)
+      m_Parameters.AddRange(result1.Parameters)
+      Dim result2 = m_Visitor.Translate(valueSelector, ExpressionParametersType.Entities, {0}, m_Parameters.Count, False, False)
+      m_Parameters.AddRange(result2.Parameters)
+      m_SetExpressions.Add($"{result1.Sql} = {result2.Sql}")
+    End Sub
+
     Public Sub AddSet(predicate As String)
       m_SetExpressions.Add(predicate)
     End Sub
