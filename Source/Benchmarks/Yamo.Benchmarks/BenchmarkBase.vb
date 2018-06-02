@@ -8,6 +8,7 @@ Imports BenchmarkDotNet.Engines
 '<SimpleJob(launchCount:=1, warmupCount:=3, targetCount:=5, invocationCount:=100, id:="QuickJob")>
 '<SimpleJob(1, 1, 1, 1)>
 <RankColumn()>
+<MemoryDiagnoser()>
 <GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)>
 <OrderProvider(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)>
 Public MustInherit Class BenchmarkBase
