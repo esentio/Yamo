@@ -12,7 +12,7 @@ Namespace Internal
 
     Private m_ContainsPKReaders As Dictionary(Of Type, Func(Of IDataReader, Int32, Int32(), Boolean))
 
-    Private m_PKReaders As Dictionary(Of Type, Func(Of IDataReader, Int32, Int32(), Int32))
+    Private m_PKReaders As Dictionary(Of Type, Func(Of IDataReader, Int32, Int32(), Object))
 
     Private m_DbGeneratedValuesReaders As Dictionary(Of Type, Action(Of IDataReader, Int32, Object))
 
@@ -23,7 +23,7 @@ Namespace Internal
     Private Sub New()
       m_Readers = New Dictionary(Of Type, Func(Of IDataReader, Int32, BitArray, Object))
       m_ContainsPKReaders = New Dictionary(Of Type, Func(Of IDataReader, Int32, Int32(), Boolean))
-      m_PKReaders = New Dictionary(Of Type, Func(Of IDataReader, Int32, Int32(), Int32))
+      m_PKReaders = New Dictionary(Of Type, Func(Of IDataReader, Int32, Int32(), Object))
       m_DbGeneratedValuesReaders = New Dictionary(Of Type, Action(Of IDataReader, Int32, Object))
     End Sub
 
@@ -35,7 +35,7 @@ Namespace Internal
       Return GetInstance(dialectProvider, model).GetOrCreateContainsPKReader(dialectProvider, model, type)
     End Function
 
-    Public Shared Function GetPKReader(dialectProvider As SqlDialectProvider, model As Model, type As Type) As Func(Of IDataReader, Int32, Int32(), Int32)
+    Public Shared Function GetPKReader(dialectProvider As SqlDialectProvider, model As Model, type As Type) As Func(Of IDataReader, Int32, Int32(), Object)
       Return GetInstance(dialectProvider, model).GetOrCreatePKReader(dialectProvider, model, type)
     End Function
 
@@ -113,8 +113,8 @@ Namespace Internal
       Return reader
     End Function
 
-    Private Function GetOrCreatePKReader(dialectProvider As SqlDialectProvider, model As Model, type As Type) As Func(Of IDataReader, Int32, Int32(), Int32)
-      Dim reader As Func(Of IDataReader, Int32, Int32(), Int32) = Nothing
+    Private Function GetOrCreatePKReader(dialectProvider As SqlDialectProvider, model As Model, type As Type) As Func(Of IDataReader, Int32, Int32(), Object)
+      Dim reader As Func(Of IDataReader, Int32, Int32(), Object) = Nothing
 
       SyncLock m_PKReaders
         If m_PKReaders.ContainsKey(type) Then

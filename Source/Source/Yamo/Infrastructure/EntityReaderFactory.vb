@@ -106,18 +106,16 @@ Namespace Infrastructure
       Return reader.Compile()
     End Function
 
-    Public Overridable Function CreatePKReader(model As Model, entityType As Type) As Func(Of IDataReader, Int32, Int32(), Int32)
+    Public Overridable Function CreatePKReader(model As Model, entityType As Type) As Func(Of IDataReader, Int32, Int32(), Object)
       Dim readerParam = Expression.Parameter(GetType(IDataRecord), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
       Dim indexParam = Expression.Parameter(GetType(Int32), "index")
       Dim pkOffsetsParam = Expression.Parameter(GetType(Int32()), "pkOffsets")
       Dim parameters = {readerParam, indexParam, pkOffsetsParam}
 
-      Dim hashCodeVariable = Expression.Variable(GetType(Int32), "hashCode")
+      Dim pkVariable = Expression.Variable(GetType(Object), "pk")
 
-      Dim variables = New List(Of ParameterExpression) From {hashCodeVariable}
+      Dim variables = New List(Of ParameterExpression) From {pkVariable}
       Dim expressions = New List(Of Expression)
-
-      Dim dbNullHashCode = Expression.Constant(DBNull.Value.GetHashCode())
 
       Dim entity = model.GetEntity(entityType)
       Dim keyProperties = entity.GetKeyProperties()
@@ -126,65 +124,65 @@ Namespace Infrastructure
         Throw New Exception($"Missing PK definition for entity '{entityType}'.")
 
       ElseIf keyProperties.Count = 1 Then
-        ' return GetHashCode of (single) PK column
-        Dim propInfo = keyProperties(0)
-        AssignHashCodeToVariable(propInfo.Property, 0, readerParam, indexParam, pkOffsetsParam, hashCodeVariable, dbNullHashCode, expressions)
+        ' return (single) PK column
+        AssignPKToVariable(readerParam, indexParam, pkOffsetsParam, pkVariable, expressions)
 
       ElseIf 8 < keyProperties.Count Then
         Throw New Exception("Maximum of 8 primary key columns is supported.")
 
       Else
-        ' return GetHashCode of ValueTuple that consists of all PK columns
-        ' using ValueTuple is just simple workaround until .NET becomes System.HashCode: https://github.com/dotnet/corefx/issues/14354
-
-        Dim partialHashCodeVariables = New ParameterExpression(keyProperties.Count - 1) {}
+        ' return ValueTuple that consists of all PK columns
+        Dim partialPKVariables = New ParameterExpression(keyProperties.Count - 1) {}
         Dim typeArguments = New Type(keyProperties.Count - 1) {}
 
         For i = 0 To keyProperties.Count - 1
-          Dim partialHashCodeVariable = Expression.Variable(GetType(Int32))
-          Dim propInfo = keyProperties(i)
+          Dim partialPKVariable = Expression.Variable(GetType(Object))
 
-          AssignHashCodeToVariable(propInfo.Property, i, readerParam, indexParam, pkOffsetsParam, partialHashCodeVariable, dbNullHashCode, expressions)
+          AssignPKPartToVariable(i, readerParam, indexParam, pkOffsetsParam, partialPKVariable, expressions)
 
-          partialHashCodeVariables(i) = partialHashCodeVariable
-          typeArguments(i) = GetType(Int32)
+          partialPKVariables(i) = partialPKVariable
+          typeArguments(i) = GetType(Object)
         Next
 
-        Dim tupleValue = Expression.Call(GetType(ValueTuple), "Create", typeArguments, partialHashCodeVariables)
-        Dim hashCode = Expression.Call(tupleValue, "GetHashCode", Nothing)
-        Dim assignHashCode = Expression.Assign(hashCodeVariable, hashCode)
+        Dim tupleValue = Expression.Call(GetType(ValueTuple), "Create", typeArguments, partialPKVariables)
+        Dim assignPK = Expression.Assign(pkVariable, Expression.Convert(tupleValue, GetType(Object)))
 
-        variables.AddRange(partialHashCodeVariables)
-        expressions.Add(assignHashCode)
+        variables.AddRange(partialPKVariables)
+        expressions.Add(assignPK)
       End If
 
-      expressions.Add(hashCodeVariable)
+      expressions.Add(pkVariable)
 
       Dim body = Expression.Block(variables, expressions)
 
-      Dim reader = Expression.Lambda(Of Func(Of IDataReader, Int32, Int32(), Int32))(body, parameters)
+      Dim reader = Expression.Lambda(Of Func(Of IDataReader, Int32, Int32(), Object))(body, parameters)
       Return reader.Compile()
     End Function
 
-    Protected Sub AssignHashCodeToVariable(prop As [Property], index As Int32, readerParam As ParameterExpression, indexParam As ParameterExpression, pkOffsetsParam As ParameterExpression, variable As ParameterExpression, dbNullHashCode As Expression, expressions As List(Of Expression))
+    Protected Sub AssignPKToVariable(readerParam As ParameterExpression, indexParam As ParameterExpression, pkOffsetsParam As ParameterExpression, variable As ParameterExpression, expressions As List(Of Expression))
+      Dim offset = Expression.ArrayIndex(pkOffsetsParam, Expression.Constant(0))
+      Dim readIndexArg = Expression.Add(indexParam, offset)
+      Dim readValueCall = Expression.Call(readerParam, "GetValue", Nothing, readIndexArg)
+      Dim varAssignReadValue = Expression.Assign(variable, readValueCall)
+
+      expressions.Add(varAssignReadValue)
+
+      ' because we check for null later, convert any DBNull to null
+      Dim isDBNullCall = Expression.Equal(variable, Expression.Constant(DBNull.Value))
+      Dim varAssignNullValue = Expression.Assign(variable, Expression.Constant(Nothing))
+
+      Dim cond = Expression.IfThen(isDBNullCall, varAssignNullValue)
+
+      expressions.Add(cond)
+    End Sub
+
+    Protected Sub AssignPKPartToVariable(index As Int32, readerParam As ParameterExpression, indexParam As ParameterExpression, pkOffsetsParam As ParameterExpression, variable As ParameterExpression, expressions As List(Of Expression))
       Dim offset = Expression.ArrayIndex(pkOffsetsParam, Expression.Constant(index))
       Dim readIndexArg = Expression.Add(indexParam, offset)
-      Dim readValueCall = Expression.Call(readerParam, GetReadMethodForType(prop.PropertyType).Method, Nothing, readIndexArg) ' NOTE: Convert can be ignored here
-      Dim readValueHashCode = Expression.Call(readValueCall, "GetHashCode", Nothing)
-      Dim varAssignReadValueHashCode = Expression.Assign(variable, readValueHashCode)
-      Dim varAssignDBNullHashCode = Expression.Assign(variable, dbNullHashCode)
-      Dim isDBNullCall = Expression.Call(readerParam, "IsDBNull", Nothing, readIndexArg)
-      Dim cond = Expression.IfThenElse(isDBNullCall, varAssignDBNullHashCode, varAssignReadValueHashCode)
+      Dim readValueCall = Expression.Call(readerParam, "GetValue", Nothing, readIndexArg)
+      Dim varAssignReadValue = Expression.Assign(variable, readValueCall)
 
-      Dim underlyingNullableType = Nullable.GetUnderlyingType(prop.PropertyType)
-
-      If prop.PropertyType Is GetType(String) Then
-        expressions.Add(cond)
-      ElseIf underlyingNullableType Is Nothing Then
-        expressions.Add(varAssignReadValueHashCode)
-      Else
-        expressions.Add(cond)
-      End If
+      expressions.Add(varAssignReadValue)
     End Sub
 
     Public Overridable Function CreateDbGeneratedValuesReader(model As Model, entityType As Type) As Action(Of IDataReader, Int32, Object)
