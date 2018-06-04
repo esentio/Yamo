@@ -21,14 +21,15 @@
     End Sub
 
     Friend Function AddProperty(name As String, propertyType As Type) As [Property]
-      If m_PropertiesDictionary.ContainsKey(name) Then
-        Return m_PropertiesDictionary(name)
-      Else
-        Dim [property] = New [Property](name, propertyType)
-        m_PropertiesDictionary.Add(name, [property])
-        m_Properties.Add([property])
-        Return [property]
+      Dim prop As [Property] = Nothing
+
+      If Not m_PropertiesDictionary.TryGetValue(name, prop) Then
+        prop = New [Property](name, propertyType)
+        m_PropertiesDictionary.Add(name, prop)
+        m_Properties.Add(prop)
       End If
+
+      Return prop
     End Function
 
     Public Function GetProperty(name As String) As [Property]
@@ -70,31 +71,33 @@
     End Function
 
     Friend Function AddReferenceNavigation(propertyName As String, relatedEntityType As Type) As ReferenceNavigation
-      If m_RelationshipNavigations.ContainsKey(propertyName) Then
-        If TypeOf m_RelationshipNavigations(propertyName) Is ReferenceNavigation Then
-          Return DirectCast(m_RelationshipNavigations(propertyName), ReferenceNavigation)
-        Else
+      Dim navigation As RelationshipNavigation = Nothing
+
+      If m_RelationshipNavigations.TryGetValue(propertyName, navigation) Then
+        If TypeOf navigation IsNot ReferenceNavigation Then
           Throw New Exception($"Cannot add reference navigation. Property '{propertyName}' is already assigned for different type of navigation.")
         End If
       Else
-        Dim referenceNavigation = New ReferenceNavigation(propertyName, relatedEntityType)
-        m_RelationshipNavigations.Add(propertyName, referenceNavigation)
-        Return referenceNavigation
+        navigation = New ReferenceNavigation(propertyName, relatedEntityType)
+        m_RelationshipNavigations.Add(propertyName, navigation)
       End If
+
+      Return DirectCast(navigation, ReferenceNavigation)
     End Function
 
     Friend Function AddCollectionNavigation(propertyName As String, relatedEntityType As Type, collectionType As Type) As CollectionNavigation
-      If m_RelationshipNavigations.ContainsKey(propertyName) Then
-        If TypeOf m_RelationshipNavigations(propertyName) Is CollectionNavigation Then
-          Return DirectCast(m_RelationshipNavigations(propertyName), CollectionNavigation)
-        Else
+      Dim navigation As RelationshipNavigation = Nothing
+
+      If m_RelationshipNavigations.TryGetValue(propertyName, navigation) Then
+        If TypeOf navigation IsNot CollectionNavigation Then
           Throw New Exception($"Cannot add collection navigation. Property '{propertyName}' is already assigned for different type of navigation.")
         End If
       Else
-        Dim collectionNavigation = New CollectionNavigation(propertyName, relatedEntityType, collectionType)
-        m_RelationshipNavigations.Add(propertyName, collectionNavigation)
-        Return collectionNavigation
+        navigation = New CollectionNavigation(propertyName, relatedEntityType, collectionType)
+        m_RelationshipNavigations.Add(propertyName, navigation)
       End If
+
+      Return DirectCast(navigation, CollectionNavigation)
     End Function
 
     Public Function GetRelationshipNavigations(relatedEntityType As Type) As IEnumerable(Of RelationshipNavigation)

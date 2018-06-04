@@ -6,19 +6,19 @@ Namespace Internal
 
   Public Class EntityRelationshipSetterCache
 
-    Private Shared m_Instances As Dictionary(Of Int32, EntityRelationshipSetterCache)
+    Private Shared m_Instances As Dictionary(Of Model, EntityRelationshipSetterCache)
 
-    Private m_Setters As Dictionary(Of Int32, Action(Of Object, Object))
+    Private m_Setters As Dictionary(Of (Type, String), Action(Of Object, Object))
 
-    Private m_CollectionInitSetters As Dictionary(Of Int32, Action(Of Object))
+    Private m_CollectionInitSetters As Dictionary(Of (Type, String), Action(Of Object))
 
     Shared Sub New()
-      m_Instances = New Dictionary(Of Int32, EntityRelationshipSetterCache)
+      m_Instances = New Dictionary(Of Model, EntityRelationshipSetterCache)
     End Sub
 
     Private Sub New()
-      m_Setters = New Dictionary(Of Int32, Action(Of Object, Object))
-      m_CollectionInitSetters = New Dictionary(Of Int32, Action(Of Object))
+      m_Setters = New Dictionary(Of (Type, String), Action(Of Object, Object))
+      m_CollectionInitSetters = New Dictionary(Of (Type, String), Action(Of Object))
     End Sub
 
     Public Shared Function GetSetter(model As Model, entityType As Type, relationshipNavigation As RelationshipNavigation) As Action(Of Object, Object)
@@ -30,25 +30,14 @@ Namespace Internal
     End Function
 
     Private Shared Function GetInstance(model As Model) As EntityRelationshipSetterCache
-      Dim instance As EntityRelationshipSetterCache
-      Dim key = model.GetHashCode()
+      Dim instance As EntityRelationshipSetterCache = Nothing
 
-      If m_Instances Is Nothing Then
-        SyncLock m_Instances
+      SyncLock m_Instances
+        If Not m_Instances.TryGetValue(model, instance) Then
           instance = New EntityRelationshipSetterCache
-          m_Instances = New Dictionary(Of Int32, EntityRelationshipSetterCache)
-          m_Instances.Add(key, instance)
-        End SyncLock
-      Else
-        SyncLock m_Instances
-          If m_Instances.ContainsKey(key) Then
-            instance = m_Instances(key)
-          Else
-            instance = New EntityRelationshipSetterCache
-            m_Instances.Add(key, instance)
-          End If
-        End SyncLock
-      End If
+          m_Instances.Add(model, instance)
+        End If
+      End SyncLock
 
       Return instance
     End Function
@@ -56,13 +45,10 @@ Namespace Internal
     Private Function GetOrCreateSetter(model As Model, entityType As Type, relationshipNavigation As RelationshipNavigation) As Action(Of Object, Object)
       Dim setter As Action(Of Object, Object) = Nothing
 
-      ' TODO: use System.HashCode instead (when available in .NET)
-      Dim key = (entityType, relationshipNavigation.PropertyName).GetHashCode()
+      Dim key = (entityType, relationshipNavigation.PropertyName)
 
       SyncLock m_Setters
-        If m_Setters.ContainsKey(key) Then
-          setter = m_Setters(key)
-        End If
+        m_Setters.TryGetValue(key, setter)
       End SyncLock
 
       If setter Is Nothing Then
@@ -81,13 +67,10 @@ Namespace Internal
     Private Function GetOrCreateCollectionInitSetter(model As Model, entityType As Type, collectionNavigation As CollectionNavigation) As Action(Of Object)
       Dim setter As Action(Of Object) = Nothing
 
-      ' TODO: use System.HashCode instead (when available in .NET)
-      Dim key = (entityType, collectionNavigation.PropertyName).GetHashCode()
+      Dim key = (entityType, collectionNavigation.PropertyName)
 
       SyncLock m_CollectionInitSetters
-        If m_CollectionInitSetters.ContainsKey(key) Then
-          setter = m_CollectionInitSetters(key)
-        End If
+        m_CollectionInitSetters.TryGetValue(key, setter)
       End SyncLock
 
       If setter Is Nothing Then

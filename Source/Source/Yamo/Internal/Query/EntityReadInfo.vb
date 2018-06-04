@@ -16,7 +16,7 @@ Namespace Internal.Query
 
     Public ReadOnly Property ContainsPKReader As Func(Of IDataReader, Int32, Int32(), Boolean)
 
-    Public ReadOnly Property PKReader As Func(Of IDataReader, Int32, Int32(), Int32)
+    Public ReadOnly Property PKReader As Func(Of IDataReader, Int32, Int32(), Object)
 
     Public ReadOnly Property PKOffsets As Int32()
 

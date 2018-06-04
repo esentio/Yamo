@@ -22,14 +22,12 @@ Namespace Internal
     End Function
 
     Private Shared Function GetInstance(dialectProvider As SqlDialectProvider) As ModelCache
-      Dim instance As ModelCache
+      Dim instance As ModelCache = Nothing
 
       Dim key = dialectProvider.GetType()
 
       SyncLock m_Instances
-        If m_Instances.ContainsKey(key) Then
-          instance = m_Instances(key)
-        Else
+        If Not m_Instances.TryGetValue(key, instance) Then
           instance = New ModelCache
           m_Instances.Add(key, instance)
         End If
@@ -43,9 +41,7 @@ Namespace Internal
       Dim key = context.GetType()
 
       SyncLock m_Models
-        If m_Models.ContainsKey(key) Then
-          model = m_Models(key)
-        End If
+        m_Models.TryGetValue(key, model)
       End SyncLock
 
       If model Is Nothing Then

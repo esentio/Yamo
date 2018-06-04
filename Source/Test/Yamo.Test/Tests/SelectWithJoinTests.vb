@@ -147,8 +147,8 @@ Namespace Tests
         Dim article3Result = result.First(Function(a) a.Id = 3)
         Assert.AreEqual(3, article3Result.Parts.Count)
         Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
       End Using
     End Sub
 
@@ -180,8 +180,8 @@ Namespace Tests
         Dim article3Result = result.First(Function(a) a.Id = 3)
         Assert.AreEqual(3, article3Result.Parts.Count)
         Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
       End Using
     End Sub
 
@@ -210,8 +210,8 @@ Namespace Tests
         Dim article3Result = result.First(Function(a) a.Id = 3)
         Assert.AreEqual(3, article3Result.Parts.Count)
         Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
       End Using
     End Sub
 
@@ -243,8 +243,8 @@ Namespace Tests
         Dim article3Result = result.First(Function(a) a.Id = 3)
         Assert.AreEqual(3, article3Result.Parts.Count)
         Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
       End Using
     End Sub
 
@@ -270,25 +270,79 @@ Namespace Tests
         Assert.AreEqual(5, article1Result.Parts.Count)
         Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 1001))
         Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
+        Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
+        Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
         Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 4001))
 
         Dim article2Result = result.First(Function(a) a.Id = 2)
         Assert.AreEqual(5, article2Result.Parts.Count)
         Assert.IsNotNull(article2Result.Parts.SingleOrDefault(Function(p) p.Id = 1001))
         Assert.IsNotNull(article2Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article2Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article2Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
+        Assert.IsNotNull(article2Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
+        Assert.IsNotNull(article2Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
         Assert.IsNotNull(article2Result.Parts.SingleOrDefault(Function(p) p.Id = 4001))
 
         Dim article3Result = result.First(Function(a) a.Id = 3)
         Assert.AreEqual(5, article3Result.Parts.Count)
         Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 1001))
         Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
-        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
         Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 4001))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWith1ToNRelationshipWithScatteredMasterEntityInResultset()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+      Dim article4 = Me.ModelFactory.CreateArticle(4)
+
+      Dim article1Part1 = Me.ModelFactory.CreateArticlePart(1001, 1)
+      article1Part1.Price = 2
+
+      Dim article3Part1 = Me.ModelFactory.CreateArticlePart(3001, 3)
+      article3Part1.Price = 1
+
+      Dim article3Part2 = Me.ModelFactory.CreateArticlePart(3002, 3)
+      article3Part2.Price = 3
+
+      Dim article3Part3 = Me.ModelFactory.CreateArticlePart(3003, 3)
+      article3Part3.Price = 6
+
+      Dim article4Part1 = Me.ModelFactory.CreateArticlePart(4001, 4)
+      article4Part1.Price = 5
+
+      Dim article4Part2 = Me.ModelFactory.CreateArticlePart(4002, 4)
+      article4Part2.Price = 4
+
+      InsertItems(article1, article2, article3, article4, article1Part1, article3Part1, article3Part2, article3Part3, article4Part1, article4Part2)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of ArticlePart)(Function(a, p) a.Id = p.ArticleId).
+                        OrderBy(Function(a, p) p.Price).
+                        SelectAll().ToList()
+        Assert.AreEqual(4, result.Count)
+
+        Dim article1Result = result.First(Function(a) a.Id = 1)
+        Assert.AreEqual(1, article1Result.Parts.Count)
+        Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 1001))
+
+        Dim article2Result = result.First(Function(a) a.Id = 2)
+        Assert.AreEqual(0, article2Result.Parts.Count)
+
+        Dim article3Result = result.First(Function(a) a.Id = 3)
+        Assert.AreEqual(3, article3Result.Parts.Count)
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
+
+        Dim article4Result = result.First(Function(a) a.Id = 4)
+        Assert.AreEqual(2, article4Result.Parts.Count)
+        Assert.IsNotNull(article4Result.Parts.SingleOrDefault(Function(p) p.Id = 4001))
+        Assert.IsNotNull(article4Result.Parts.SingleOrDefault(Function(p) p.Id = 4002))
       End Using
     End Sub
 

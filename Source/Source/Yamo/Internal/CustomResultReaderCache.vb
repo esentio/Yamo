@@ -9,13 +9,13 @@ Namespace Internal
 
   Public Class CustomResultReaderCache
 
-    Private Shared m_Instances As Dictionary(Of Int32, CustomResultReaderCache)
+    Private Shared m_Instances As Dictionary(Of Model, CustomResultReaderCache)
 
     ' Func(Of IDataReader, CustomEntityReadInfo(), T)
     Private m_ResultFactories As Dictionary(Of Type, Object)
 
     Shared Sub New()
-      m_Instances = New Dictionary(Of Int32, CustomResultReaderCache)
+      m_Instances = New Dictionary(Of Model, CustomResultReaderCache)
     End Sub
 
     Private Sub New()
@@ -31,25 +31,14 @@ Namespace Internal
     End Sub
 
     Private Shared Function GetInstance(model As Model) As CustomResultReaderCache
-      Dim instance As CustomResultReaderCache
-      Dim key = model.GetHashCode()
+      Dim instance As CustomResultReaderCache = Nothing
 
-      If m_Instances Is Nothing Then
-        SyncLock m_Instances
+      SyncLock m_Instances
+        If Not m_Instances.TryGetValue(model, instance) Then
           instance = New CustomResultReaderCache
-          m_Instances = New Dictionary(Of Int32, CustomResultReaderCache)
-          m_Instances.Add(key, instance)
-        End SyncLock
-      Else
-        SyncLock m_Instances
-          If m_Instances.ContainsKey(key) Then
-            instance = m_Instances(key)
-          Else
-            instance = New CustomResultReaderCache
-            m_Instances.Add(key, instance)
-          End If
-        End SyncLock
-      End If
+          m_Instances.Add(model, instance)
+        End If
+      End SyncLock
 
       Return instance
     End Function
@@ -58,8 +47,10 @@ Namespace Internal
       Dim resultFactory As Func(Of IDataReader, CustomEntityReadInfo(), T) = Nothing
 
       SyncLock m_ResultFactories
-        If m_ResultFactories.ContainsKey(resultType) Then
-          resultFactory = DirectCast(m_ResultFactories(resultType), Func(Of IDataReader, CustomEntityReadInfo(), T))
+        Dim value As Object = Nothing
+
+        If m_ResultFactories.TryGetValue(resultType, value) Then
+          resultFactory = DirectCast(value, Func(Of IDataReader, CustomEntityReadInfo(), T))
         End If
       End SyncLock
 

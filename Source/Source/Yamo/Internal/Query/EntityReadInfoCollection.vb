@@ -125,7 +125,7 @@ Namespace Internal.Query
       Return False
     End Function
 
-    Public Sub FillPks(dataReader As DbDataReader, pks As Int32?())
+    Public Sub FillPks(dataReader As DbDataReader, pks As Object())
       For i = 0 To Me.Count - 1
         Dim entityInfo = Me.Items(i)
 
@@ -139,35 +139,27 @@ Namespace Internal.Query
       Next
     End Sub
 
-    Public Function GetChainKey(entityIndex As Int32, pks As Int32?()) As Int32
-      ' using ValueTuple is just simple workaround until .NET becomes System.HashCode
-
+    Public Function GetChainKey(entityIndex As Int32, pks As Object()) As ChainKey
       Dim chainIndex = m_ChainIndexes(entityIndex)
 
       Select Case chainIndex.Count
         Case 1
-          Return GetHashCodeOfPk(pks, chainIndex, 0)
+          Return New ChainKey({pks(chainIndex(0))})
         Case 2
-          Return (GetHashCodeOfPk(pks, chainIndex, 0), GetHashCodeOfPk(pks, chainIndex, 1)).GetHashCode()
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1))})
         Case 3
-          Return (GetHashCodeOfPk(pks, chainIndex, 0), GetHashCodeOfPk(pks, chainIndex, 1), GetHashCodeOfPk(pks, chainIndex, 2)).GetHashCode()
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2))})
         Case 4
-          Return (GetHashCodeOfPk(pks, chainIndex, 0), GetHashCodeOfPk(pks, chainIndex, 1), GetHashCodeOfPk(pks, chainIndex, 2), GetHashCodeOfPk(pks, chainIndex, 3)).GetHashCode()
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3))})
         Case 5
-          Return (GetHashCodeOfPk(pks, chainIndex, 0), GetHashCodeOfPk(pks, chainIndex, 1), GetHashCodeOfPk(pks, chainIndex, 2), GetHashCodeOfPk(pks, chainIndex, 3), GetHashCodeOfPk(pks, chainIndex, 4)).GetHashCode()
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4))})
         Case 6
-          Return (GetHashCodeOfPk(pks, chainIndex, 0), GetHashCodeOfPk(pks, chainIndex, 1), GetHashCodeOfPk(pks, chainIndex, 2), GetHashCodeOfPk(pks, chainIndex, 3), GetHashCodeOfPk(pks, chainIndex, 4), GetHashCodeOfPk(pks, chainIndex, 5)).GetHashCode()
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4)), pks(chainIndex(5))})
         Case 7
-          Return (GetHashCodeOfPk(pks, chainIndex, 0), GetHashCodeOfPk(pks, chainIndex, 1), GetHashCodeOfPk(pks, chainIndex, 2), GetHashCodeOfPk(pks, chainIndex, 3), GetHashCodeOfPk(pks, chainIndex, 4), GetHashCodeOfPk(pks, chainIndex, 5), GetHashCodeOfPk(pks, chainIndex, 6)).GetHashCode()
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4)), pks(chainIndex(5)), pks(chainIndex(6))})
         Case Else
           Throw New Exception("Too much joins.")
       End Select
-    End Function
-
-    Private Function GetHashCodeOfPk(pks As Int32?(), chainIndex As List(Of Int32), index As Int32) As Int32
-      ' using ValueTuple is just simple workaround until .NET becomes System.HashCode
-      ' we need to differenciate Nothing from 0
-      Return (pks(chainIndex(index)).HasValue, pks(chainIndex(index))).GetHashCode()
     End Function
 
   End Class

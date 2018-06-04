@@ -9,18 +9,21 @@
     End Sub
 
     Friend Function AddEntity(entityType As Type) As Entity
-      If m_Entities.ContainsKey(entityType) Then
-        Return m_Entities(entityType)
-      Else
-        Dim entity = New Entity(entityType)
+      Dim entity As Entity = Nothing
+
+      If Not m_Entities.TryGetValue(entityType, entity) Then
+        entity = New Entity(entityType)
         m_Entities.Add(entityType, entity)
-        Return entity
       End If
+
+      Return entity
     End Function
 
     Public Function GetEntity(entityType As Type) As Entity
-      If m_Entities.ContainsKey(entityType) Then
-        Return m_Entities(entityType)
+      Dim entity As Entity = Nothing
+
+      If m_Entities.TryGetValue(entityType, entity) Then
+        Return entity
       Else
         Throw New Exception($"Entity '{entityType}' is not defined in the model.")
       End If

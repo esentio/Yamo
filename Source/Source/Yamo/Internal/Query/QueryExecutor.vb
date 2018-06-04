@@ -236,7 +236,7 @@ Namespace Internal.Query
 
     Private Function ReadJoinedListWithCollectionNavigation(Of T)(query As SelectQuery, entityInfos As EntityReadInfoCollection) As List(Of T)
       Dim cache = New ReaderEntityValueCache(entityInfos.Count)
-      Dim pks = New Int32?(entityInfos.Count - 1) {}
+      Dim pks = New Object(entityInfos.Count - 1) {}
 
       Dim values = New List(Of T)
 
@@ -257,8 +257,8 @@ Namespace Internal.Query
       Return values
     End Function
 
-    Private Function Read(entityInfos As EntityReadInfoCollection, entityInfo As EntityReadInfo, cache As ReaderEntityValueCache, pks As Int32?(), dataReader As IDataReader, declaringValue As Object) As Object
-      Dim value As Object
+    Private Function Read(entityInfos As EntityReadInfoCollection, entityInfo As EntityReadInfo, cache As ReaderEntityValueCache, pks As Object(), dataReader As IDataReader, declaringValue As Object) As Object
+      Dim value As Object = Nothing
       Dim entityIndex = entityInfo.Entity.Index
       Dim valueFromCache = False
 
@@ -266,14 +266,13 @@ Namespace Internal.Query
         Return Nothing
       End If
 
-      If Not pks(entityIndex).HasValue Then
+      If pks(entityIndex) Is Nothing Then
         Return Nothing
       End If
 
       Dim key = entityInfos.GetChainKey(entityIndex, pks)
 
-      If cache.Contains(entityIndex, key) Then
-        value = cache.GetValue(entityIndex, key)
+      If cache.TryGetValue(entityIndex, key, value) Then
         valueFromCache = True
       Else
         value = entityInfo.Reader(dataReader, entityInfo.ReaderIndex, entityInfo.Entity.IncludedColumns)

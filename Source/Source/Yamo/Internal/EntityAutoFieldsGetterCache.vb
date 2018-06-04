@@ -5,14 +5,14 @@ Namespace Internal
 
   Public Class EntityAutoFieldsGetterCache
 
-    Private Shared m_Instances As Dictionary(Of Int32, EntityAutoFieldsGetterCache)
+    Private Shared m_Instances As Dictionary(Of Model, EntityAutoFieldsGetterCache)
 
     Private m_OnUpdateGetters As Dictionary(Of Type, Func(Of DbContext, Object()))
 
     Private m_OnDeleteGetters As Dictionary(Of Type, Func(Of DbContext, Object()))
 
     Shared Sub New()
-      m_Instances = New Dictionary(Of Int32, EntityAutoFieldsGetterCache)
+      m_Instances = New Dictionary(Of Model, EntityAutoFieldsGetterCache)
     End Sub
 
     Private Sub New()
@@ -29,25 +29,14 @@ Namespace Internal
     End Function
 
     Private Shared Function GetInstance(model As Model) As EntityAutoFieldsGetterCache
-      Dim instance As EntityAutoFieldsGetterCache
-      Dim key = model.GetHashCode()
+      Dim instance As EntityAutoFieldsGetterCache = Nothing
 
-      If m_Instances Is Nothing Then
-        SyncLock m_Instances
+      SyncLock m_Instances
+        If Not m_Instances.TryGetValue(model, instance) Then
           instance = New EntityAutoFieldsGetterCache
-          m_Instances = New Dictionary(Of Int32, EntityAutoFieldsGetterCache)
-          m_Instances.Add(key, instance)
-        End SyncLock
-      Else
-        SyncLock m_Instances
-          If m_Instances.ContainsKey(key) Then
-            instance = m_Instances(key)
-          Else
-            instance = New EntityAutoFieldsGetterCache
-            m_Instances.Add(key, instance)
-          End If
-        End SyncLock
-      End If
+          m_Instances.Add(model, instance)
+        End If
+      End SyncLock
 
       Return instance
     End Function
@@ -56,9 +45,7 @@ Namespace Internal
       Dim getter As Func(Of DbContext, Object()) = Nothing
 
       SyncLock m_OnUpdateGetters
-        If m_OnUpdateGetters.ContainsKey(entityType) Then
-          getter = m_OnUpdateGetters(entityType)
-        End If
+        m_OnUpdateGetters.TryGetValue(entityType, getter)
       End SyncLock
 
       If getter Is Nothing Then
@@ -78,9 +65,7 @@ Namespace Internal
       Dim getter As Func(Of DbContext, Object()) = Nothing
 
       SyncLock m_OnDeleteGetters
-        If m_OnDeleteGetters.ContainsKey(entityType) Then
-          getter = m_OnDeleteGetters(entityType)
-        End If
+        m_OnDeleteGetters.TryGetValue(entityType, getter)
       End SyncLock
 
       If getter Is Nothing Then
