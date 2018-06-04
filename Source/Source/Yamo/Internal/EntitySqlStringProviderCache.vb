@@ -7,7 +7,7 @@ Namespace Internal
 
   Public Class EntitySqlStringProviderCache
 
-    Private Shared m_Instances As Dictionary(Of Int32, EntitySqlStringProviderCache)
+    Private Shared m_Instances As Dictionary(Of (SqlDialectProvider, Model), EntitySqlStringProviderCache)
 
     Private m_InsertProviders As Dictionary(Of Type, Func(Of Object, Boolean, CreateInsertSqlStringResult))
 
@@ -20,7 +20,7 @@ Namespace Internal
     Private m_SoftDeleteWithoutConditionProviders As Dictionary(Of Type, Func(Of Object(), SqlString))
 
     Shared Sub New()
-      m_Instances = New Dictionary(Of Integer, EntitySqlStringProviderCache)
+      m_Instances = New Dictionary(Of (SqlDialectProvider, Model), EntitySqlStringProviderCache)
     End Sub
 
     Private Sub New()
@@ -52,27 +52,16 @@ Namespace Internal
     End Function
 
     Private Shared Function GetInstance(dialectProvider As SqlDialectProvider, model As Model) As EntitySqlStringProviderCache
-      Dim instance As EntitySqlStringProviderCache
+      Dim instance As EntitySqlStringProviderCache = Nothing
 
-      ' TODO: use System.HashCode instead (when available in .NET)
-      Dim key = (dialectProvider, model).GetHashCode()
+      Dim key = (dialectProvider, model)
 
-      If m_Instances Is Nothing Then
-        SyncLock m_Instances
+      SyncLock m_Instances
+        If Not m_Instances.TryGetValue(key, instance) Then
           instance = New EntitySqlStringProviderCache
-          m_Instances = New Dictionary(Of Int32, EntitySqlStringProviderCache)
           m_Instances.Add(key, instance)
-        End SyncLock
-      Else
-        SyncLock m_Instances
-          If m_Instances.ContainsKey(key) Then
-            instance = m_Instances(key)
-          Else
-            instance = New EntitySqlStringProviderCache
-            m_Instances.Add(key, instance)
-          End If
-        End SyncLock
-      End If
+        End If
+      End SyncLock
 
       Return instance
     End Function
@@ -81,9 +70,7 @@ Namespace Internal
       Dim provider As Func(Of Object, Boolean, CreateInsertSqlStringResult) = Nothing
 
       SyncLock m_InsertProviders
-        If m_InsertProviders.ContainsKey(type) Then
-          provider = m_InsertProviders(type)
-        End If
+        m_InsertProviders.TryGetValue(type, provider)
       End SyncLock
 
       If provider Is Nothing Then
@@ -103,9 +90,7 @@ Namespace Internal
       Dim provider As Func(Of Object, SqlString) = Nothing
 
       SyncLock m_UpdateProviders
-        If m_UpdateProviders.ContainsKey(type) Then
-          provider = m_UpdateProviders(type)
-        End If
+        m_UpdateProviders.TryGetValue(type, provider)
       End SyncLock
 
       If provider Is Nothing Then
@@ -125,9 +110,7 @@ Namespace Internal
       Dim provider As Func(Of Object, SqlString) = Nothing
 
       SyncLock m_DeleteProviders
-        If m_DeleteProviders.ContainsKey(type) Then
-          provider = m_DeleteProviders(type)
-        End If
+        m_DeleteProviders.TryGetValue(type, provider)
       End SyncLock
 
       If provider Is Nothing Then
@@ -147,9 +130,7 @@ Namespace Internal
       Dim provider As Func(Of Object, SqlString) = Nothing
 
       SyncLock m_SoftDeleteProviders
-        If m_SoftDeleteProviders.ContainsKey(type) Then
-          provider = m_SoftDeleteProviders(type)
-        End If
+        m_SoftDeleteProviders.TryGetValue(type, provider)
       End SyncLock
 
       If provider Is Nothing Then
@@ -169,9 +150,7 @@ Namespace Internal
       Dim provider As Func(Of Object(), SqlString) = Nothing
 
       SyncLock m_SoftDeleteWithoutConditionProviders
-        If m_SoftDeleteWithoutConditionProviders.ContainsKey(type) Then
-          provider = m_SoftDeleteWithoutConditionProviders(type)
-        End If
+        m_SoftDeleteWithoutConditionProviders.TryGetValue(type, provider)
       End SyncLock
 
       If provider Is Nothing Then
