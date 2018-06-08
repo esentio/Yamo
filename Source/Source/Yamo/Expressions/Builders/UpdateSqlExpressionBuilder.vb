@@ -86,7 +86,7 @@ Namespace Expressions.Builders
         m_AutoFieldsParametersInfo = (index, columns)
 
         For i = 0 To columns.Length - 1
-          m_SetExpressions.Add($"{Me.DialectProvider.Formatter.CreateIdentifier(columns(i))} = {CreateParameter(index + i)}")
+          m_SetExpressions.Add(Me.DialectProvider.Formatter.CreateIdentifier(columns(i)) & " = " & CreateParameter(index + i))
           m_Parameters.Add(Nothing) ' will ve set later
         Next
       Else
@@ -99,7 +99,9 @@ Namespace Expressions.Builders
 
       Dim sql As New StringBuilder
 
-      sql.AppendLine($"UPDATE {Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName)}")
+      sql.Append("UPDATE ")
+      Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName)
+      sql.AppendLine()
 
       If Not m_AutoFieldsParametersInfo.HasValue Then
         AddAutoFieldSetters()
@@ -117,13 +119,13 @@ Namespace Expressions.Builders
         Next
       End If
 
-      sql.Append($"SET ")
-      sql.Append(String.Join(", ", m_SetExpressions))
+      sql.Append("SET ")
+      Helpers.Text.AppendJoin(sql, ", ", m_SetExpressions)
 
       If m_WhereExpressions.Any() Then
         sql.AppendLine()
-        sql.Append($"WHERE ")
-        sql.Append(String.Join(" AND ", m_WhereExpressions))
+        sql.Append("WHERE ")
+        Helpers.Text.AppendJoin(sql, " AND ", m_WhereExpressions)
       End If
 
       Return New Query(sql.ToString(), m_Parameters.ToList())

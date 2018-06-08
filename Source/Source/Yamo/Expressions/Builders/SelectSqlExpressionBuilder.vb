@@ -43,39 +43,44 @@ Namespace Expressions.Builders
     End Sub
 
     Public Function CreateQuery() As SelectQuery
-      Dim sql As New StringBuilder
+      Dim sql = New StringBuilder
 
       If m_SelectExpression Is Nothing Then
-        BuildSelectExpression()
+        BuildAndAppendSelectExpression(sql)
+      Else
+        sql.Append(m_SelectExpression)
       End If
 
-      sql.Append(m_SelectExpression)
-      sql.Append($" FROM {Me.DialectProvider.Formatter.CreateIdentifier(m_Model.GetFirstEntity().Entity.TableName)} {Me.DialectProvider.Formatter.CreateIdentifier(m_Model.GetFirstTableAlias())}")
+      sql.Append(" FROM ")
+      Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstEntity().Entity.TableName)
+      sql.Append(" ")
+      Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstTableAlias())
 
       If m_JoinExpressions IsNot Nothing Then
         For Each joinExpression In m_JoinExpressions
-          sql.Append($" {joinExpression}")
+          sql.Append(" ")
+          sql.Append(joinExpression)
         Next
       End If
 
       If m_WhereExpressions IsNot Nothing Then
-        sql.Append($" WHERE ")
-        sql.Append(String.Join(" AND ", m_WhereExpressions))
+        sql.Append(" WHERE ")
+        Helpers.Text.AppendJoin(sql, " AND ", m_WhereExpressions)
       End If
 
       If m_GroupByExpressions IsNot Nothing Then
-        sql.Append($" GROUP BY ")
-        sql.Append(String.Join(", ", m_GroupByExpressions))
+        sql.Append(" GROUP BY ")
+        Helpers.Text.AppendJoin(sql, ", ", m_GroupByExpressions)
       End If
 
       If m_HavingExpressions IsNot Nothing Then
-        sql.Append($" HAVING ")
-        sql.Append(String.Join(" AND ", m_HavingExpressions))
+        sql.Append(" HAVING ")
+        Helpers.Text.AppendJoin(sql, " AND ", m_HavingExpressions)
       End If
 
       If m_OrderByExpressions IsNot Nothing Then
-        sql.Append($" ORDER BY ")
-        sql.Append(String.Join(", ", m_OrderByExpressions))
+        sql.Append(" ORDER BY ")
+        Helpers.Text.AppendJoin(sql, ", ", m_OrderByExpressions)
       End If
 
       Return New SelectQuery(sql.ToString(), m_Parameters.ToList(), m_Model)
@@ -170,12 +175,12 @@ Namespace Expressions.Builders
       Dim tableAlias = m_Model.GetLastTableAlias()
 
       If predicate Is Nothing Then
-        sql = $"{joinTypeString} {Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName)} {Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)}"
+        sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)
         m_JoinExpressions.Add(sql)
       Else
         Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
         Dim result = m_Visitor.Translate(predicate, parametersType, entityIndexHints, m_Parameters.Count, True, True)
-        sql = $"{joinTypeString} {Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName)} {Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)} ON {result.Sql}"
+        sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & " ON " & result.Sql
         m_JoinExpressions.Add(sql)
         m_Parameters.AddRange(result.Parameters)
       End If
@@ -297,7 +302,7 @@ Namespace Expressions.Builders
       If ascending Then
         m_OrderByExpressions.Add(result.Sql)
       Else
-        m_OrderByExpressions.Add($"{result.Sql} DESC")
+        m_OrderByExpressions.Add(result.Sql & " DESC")
       End If
 
       m_Parameters.AddRange(result.Parameters)
@@ -362,44 +367,46 @@ Namespace Expressions.Builders
     End Sub
 
     Public Sub AddSelectCount()
-      m_SelectExpression = $"SELECT COUNT(*)"
+      m_SelectExpression = "SELECT COUNT(*)"
     End Sub
 
     Public Sub AddSelect(selector As Expression, entityIndexHints As Int32())
       Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
       Dim result = m_Visitor.TranslateCustomSelect(selector, parametersType, entityIndexHints, m_Parameters.Count)
-      m_SelectExpression = $"SELECT {result.SqlString.Sql}"
+      m_SelectExpression = "SELECT " & result.SqlString.Sql
       m_Parameters.AddRange(result.SqlString.Parameters)
       m_Model.SetCustomEntities(result.CustomEntities)
     End Sub
 
-    Private Sub BuildSelectExpression()
-      Dim columns = New List(Of String)
+    Private Sub BuildAndAppendSelectExpression(sql As StringBuilder)
+      sql.Append("SELECT ")
+
+      Dim first = True
 
       For i = 0 To m_Model.GetEntityCount() - 1
         Dim entity = m_Model.GetEntity(i)
 
         If Not entity.IsExcluded Then
           Dim formattedTableAlias = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)
-          columns.AddRange(GetColumns(entity, formattedTableAlias))
+          Dim properties = entity.Entity.GetProperties()
+
+          For j = 0 To properties.Count - 1
+            If entity.IncludedColumns(j) Then
+              If first Then
+                first = False
+              Else
+                sql.Append(", ")
+              End If
+
+              sql.Append(formattedTableAlias)
+              sql.Append(".")
+              Me.DialectProvider.Formatter.AppendIdentifier(sql, properties(j).ColumnName)
+            End If
+          Next
         End If
       Next
-
-      m_SelectExpression = $"SELECT {String.Join(", ", columns)}"
     End Sub
 
-    Private Function GetColumns(entity As SqlEntity, formattedTableAlias As String) As List(Of String)
-      Dim columns = New List(Of String)
-      Dim properties = entity.Entity.GetProperties()
-
-      For i = 0 To properties.Count - 1
-        If entity.IncludedColumns(i) Then
-          columns.Add($"{formattedTableAlias}.{Me.DialectProvider.Formatter.CreateIdentifier(properties(i).ColumnName)}")
-        End If
-      Next
-
-      Return columns
-    End Function
 
   End Class
 End Namespace

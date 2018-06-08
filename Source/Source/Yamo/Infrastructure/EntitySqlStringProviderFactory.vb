@@ -3,6 +3,7 @@ Imports System.Linq.Expressions
 Imports System.Reflection
 Imports System.Text
 Imports Yamo.Expressions.Builders
+Imports Yamo.Internal
 Imports Yamo.Internal.Query
 Imports Yamo.Metadata
 
@@ -60,8 +61,8 @@ Namespace Infrastructure
         Dim columnName = builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)
 
         If prop.IsIdentity OrElse prop.HasDefaultValue Then
-          Dim declareColumn = $"{columnName} {GetDbTypeDefinition(prop.PropertyType)}"
-          Dim outputColumnName = $"inserted.{columnName}"
+          Dim declareColumn = columnName & " " & GetDbTypeDefinition(prop.PropertyType)
+          Dim outputColumnName = "inserted." & columnName
 
           declareColumnsWhenUseDbIdentityAndDefaults.Add(declareColumn)
           outputColumnNamesWhenUseDbIdentityAndDefaults.Add(outputColumnName)
@@ -170,7 +171,9 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim setColumns = New List(Of String)
       Dim whereColumns = New List(Of String)
 
-      sql.AppendLine($"UPDATE {builder.DialectProvider.Formatter.CreateIdentifier(entity.TableName)} SET")
+      sql.Append("UPDATE ")
+      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName)
+      sql.AppendLine(" SET")
 
       Dim i = 0
       For Each prop In entity.GetNonKeyProperties().Select(Function(x) x.Property)
@@ -179,12 +182,13 @@ SET IDENTITY_INSERT {tableName} OFF"
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        setColumns.Add($"{builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)} = {parameterName}")
+        setColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
 
         i += 1
       Next
 
-      sql.AppendLine(String.Join($", {Environment.NewLine}", setColumns))
+      Helpers.Text.AppendJoin(sql, ", " & Environment.NewLine, setColumns)
+      sql.AppendLine()
       sql.AppendLine("WHERE")
 
       For Each prop In entity.GetKeyProperties().Select(Function(x) x.Property)
@@ -193,12 +197,12 @@ SET IDENTITY_INSERT {tableName} OFF"
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        whereColumns.Add($"{builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)} = {parameterName}")
+        whereColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
 
         i += 1
       Next
 
-      sql.Append(String.Join($" AND {Environment.NewLine}", whereColumns))
+      Helpers.Text.AppendJoin(sql, " AND " & Environment.NewLine, whereColumns)
 
       Dim sqlVariableAssign = Expression.Assign(sqlVariable, Expression.Constant(sql.ToString(), GetType(String)))
       expressions.Add(sqlVariableAssign)
@@ -241,7 +245,7 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       Dim whereColumns = New List(Of String)
 
-      Dim appendCall = Expression.Call(sqlVariable, "AppendLine", {}, Expression.Constant($"UPDATE {builder.DialectProvider.Formatter.CreateIdentifier(entity.TableName)} SET", GetType(String)))
+      Dim appendCall = Expression.Call(sqlVariable, "AppendLine", {}, Expression.Constant("UPDATE " & builder.DialectProvider.Formatter.CreateIdentifier(entity.TableName) & " SET", GetType(String)))
       expressions.Add(appendCall)
 
       Dim i = 0
@@ -252,7 +256,7 @@ SET IDENTITY_INSERT {tableName} OFF"
 
         Dim modifiedExpressions = New List(Of Expression)
 
-        Dim addSetColumnCall = Expression.Call(setColumnsVariable, "Add", {}, Expression.Constant($"{builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)} = {parameterName}", GetType(String)))
+        Dim addSetColumnCall = Expression.Call(setColumnsVariable, "Add", {}, Expression.Constant(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName, GetType(String)))
         modifiedExpressions.Add(addSetColumnCall)
 
         modifiedExpressions.Add(parameterAddCall)
@@ -266,7 +270,7 @@ SET IDENTITY_INSERT {tableName} OFF"
       Next
 
       Dim jonMethod = GetType(String).GetMethod("Join", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(IEnumerable(Of String))}, {})
-      Dim joinCall = Expression.Call(jonMethod, Expression.Constant($", {Environment.NewLine}", GetType(String)), setColumnsVariable)
+      Dim joinCall = Expression.Call(jonMethod, Expression.Constant(", " & Environment.NewLine, GetType(String)), setColumnsVariable)
 
       appendCall = Expression.Call(sqlVariable, "AppendLine", {}, joinCall)
       expressions.Add(appendCall)
@@ -280,13 +284,13 @@ SET IDENTITY_INSERT {tableName} OFF"
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        whereColumns.Add($"{builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)} = {parameterName}")
+        whereColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
 
         i += 1
       Next
 
       Dim appendMethod = GetType(StringBuilder).GetMethod("Append", BindingFlags.Public Or BindingFlags.Instance, Nothing, {GetType(String)}, {})
-      appendCall = Expression.Call(sqlVariable, appendMethod, Expression.Constant(String.Join($" AND {Environment.NewLine}", whereColumns), GetType(String)))
+      appendCall = Expression.Call(sqlVariable, appendMethod, Expression.Constant(String.Join(" AND " & Environment.NewLine, whereColumns), GetType(String)))
       expressions.Add(appendCall)
 
       Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, New ParameterModifier(0) {})
@@ -319,7 +323,9 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim sql = New StringBuilder
       Dim whereColumns = New List(Of String)
 
-      sql.AppendLine($"DELETE FROM {builder.DialectProvider.Formatter.CreateIdentifier(entity.TableName)}")
+      sql.Append("DELETE FROM ")
+      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName)
+      sql.AppendLine()
       sql.AppendLine("WHERE")
 
       Dim i = 0
@@ -329,12 +335,12 @@ SET IDENTITY_INSERT {tableName} OFF"
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        whereColumns.Add($"{builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)} = {parameterName}")
+        whereColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
 
         i += 1
       Next
 
-      sql.Append(String.Join($" AND {Environment.NewLine}", whereColumns))
+      Helpers.Text.AppendJoin(sql, " AND " & Environment.NewLine, whereColumns)
 
       Dim sqlVariableAssign = Expression.Assign(sqlVariable, Expression.Constant(sql.ToString(), GetType(String)))
       expressions.Add(sqlVariableAssign)
@@ -370,7 +376,9 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim setColumns = New List(Of String)
       Dim whereColumns = New List(Of String)
 
-      sql.AppendLine($"UPDATE {builder.DialectProvider.Formatter.CreateIdentifier(entity.TableName)} SET")
+      sql.Append("UPDATE ")
+      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName)
+      sql.AppendLine(" SET")
 
       Dim i = 0
       For Each prop In entity.GetNonKeyProperties().Where(Function(x) x.Property.SetOnDelete).Select(Function(x) x.Property)
@@ -379,13 +387,13 @@ SET IDENTITY_INSERT {tableName} OFF"
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        setColumns.Add($"{builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)} = {parameterName}")
+        setColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
 
         i += 1
       Next
 
-      sql.AppendLine(String.Join($", {Environment.NewLine}", setColumns))
-
+      Helpers.Text.AppendJoin(sql, ", " & Environment.NewLine, setColumns)
+      sql.AppendLine()
       sql.AppendLine("WHERE")
 
       For Each prop In entity.GetKeyProperties().Select(Function(x) x.Property)
@@ -394,12 +402,12 @@ SET IDENTITY_INSERT {tableName} OFF"
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        whereColumns.Add($"{builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)} = {parameterName}")
+        whereColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
 
         i += 1
       Next
 
-      sql.Append(String.Join($" AND {Environment.NewLine}", whereColumns))
+      Helpers.Text.AppendJoin(sql, " AND " & Environment.NewLine, whereColumns)
 
       Dim sqlVariableAssign = Expression.Assign(sqlVariable, Expression.Constant(sql.ToString(), GetType(String)))
       expressions.Add(sqlVariableAssign)
@@ -431,7 +439,9 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim sql = New StringBuilder
       Dim setColumns = New List(Of String)
 
-      sql.AppendLine($"UPDATE {builder.DialectProvider.Formatter.CreateIdentifier(entity.TableName)} SET")
+      sql.Append("UPDATE ")
+      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName)
+      sql.AppendLine(" SET")
 
       Dim i = 0
       For Each prop In entity.GetNonKeyProperties().Where(Function(x) x.Property.SetOnDelete).Select(Function(x) x.Property)
@@ -441,12 +451,12 @@ SET IDENTITY_INSERT {tableName} OFF"
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        setColumns.Add($"{builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)} = {parameterName}")
+        setColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
 
         i += 1
       Next
 
-      sql.AppendLine(String.Join($", {Environment.NewLine}", setColumns))
+      Helpers.Text.AppendJoin(sql, ", " & Environment.NewLine, setColumns)
 
       Dim sqlVariableAssign = Expression.Assign(sqlVariable, Expression.Constant(sql.ToString(), GetType(String)))
       expressions.Add(sqlVariableAssign)

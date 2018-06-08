@@ -582,20 +582,24 @@ Namespace Internal
       Dim isNullableHasValueAccess = False
 
       Dim currentNode = node
+      Dim exp = currentNode.Expression
 
-      If currentNode.Expression IsNot Nothing Then
-        If Nullable.GetUnderlyingType(currentNode.Expression.Type) IsNot Nothing Then
+      If exp IsNot Nothing Then
+        ' this is hot path; checking IsValueType before calling Nullable.GetUnderlyingType seems to be faster for most use cases
+        If exp.Type.IsValueType AndAlso Nullable.GetUnderlyingType(exp.Type) IsNot Nothing Then
           If currentNode.Member.Name = "Value" Then
-            currentNode = DirectCast(currentNode.Expression, MemberExpression)
+            currentNode = DirectCast(exp, MemberExpression)
+            exp = currentNode.Expression
           ElseIf currentNode.Member.Name = "HasValue" Then
             isNullableHasValueAccess = True
-            currentNode = DirectCast(currentNode.Expression, MemberExpression)
+            currentNode = DirectCast(exp, MemberExpression)
+            exp = currentNode.Expression
           End If
         End If
 
         propertyName = currentNode.Member.Name
 
-        If currentNode.Expression.NodeType = ExpressionType.Parameter Then
+        If exp.NodeType = ExpressionType.Parameter Then
           If m_ExpressionParametersType = ExpressionParametersType.IJoin Then
             entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(node.Member.Name)
             AppendEntityMembersAccess(entityIndex)
@@ -603,7 +607,7 @@ Namespace Internal
           Else
             isEntityMemberAccess = True
 
-            Dim index = m_ExpressionParameters.IndexOf(DirectCast(currentNode.Expression, ParameterExpression))
+            Dim index = m_ExpressionParameters.IndexOf(DirectCast(exp, ParameterExpression))
 
             If m_EntityIndexHints Is Nothing Then
               ' this should not happen, because IJoin should be used when index hints are not available
@@ -618,8 +622,8 @@ Namespace Internal
             entityIndex = m_EntityIndexHints(index)
           End If
 
-        ElseIf currentNode.Expression.NodeType = ExpressionType.MemberAccess Then
-          Dim parent = DirectCast(currentNode.Expression, MemberExpression)
+        ElseIf exp.NodeType = ExpressionType.MemberAccess Then
+          Dim parent = DirectCast(exp, MemberExpression)
 
           If parent.Expression IsNot Nothing AndAlso parent.Expression.NodeType = ExpressionType.Parameter Then
             isEntityMemberAccess = True
@@ -693,7 +697,8 @@ Namespace Internal
             m_CustomEntities(i) = New CustomSqlEntity(i, entityIndex, type)
           Else
             Dim columnAlias = CreateColumnAlias(i)
-            m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(columnAlias)}")
+            m_Sql.Append(" ")
+            m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
             m_CustomEntities(i) = New CustomSqlEntity(i, type)
           End If
         End If
@@ -726,7 +731,8 @@ Namespace Internal
           m_CustomEntities(0) = New CustomSqlEntity(0, entityIndex, type)
         Else
           Dim columnAlias = CreateColumnAlias(0)
-          m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(columnAlias)}")
+          m_Sql.Append(" ")
+          m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
           m_CustomEntities(0) = New CustomSqlEntity(0, type)
         End If
 
@@ -844,11 +850,11 @@ Namespace Internal
     End Function
 
     Private Function CreateColumnAlias(index As Int32) As String
-      Return $"C{(index).ToString(Globalization.CultureInfo.InvariantCulture)}"
+      Return "C" & index.ToString(Globalization.CultureInfo.InvariantCulture)
     End Function
 
     Private Function CreateColumnAlias(index1 As Int32, index2 As Int32) As String
-      Return $"C{(index1).ToString(Globalization.CultureInfo.InvariantCulture)}_{(index2).ToString(Globalization.CultureInfo.InvariantCulture)}"
+      Return "C" & index1.ToString(Globalization.CultureInfo.InvariantCulture) & "_" & index2.ToString(Globalization.CultureInfo.InvariantCulture)
     End Function
 
     Private Sub AppendNewParameter(value As Object)
@@ -863,13 +869,17 @@ Namespace Internal
       Dim prop = entity.Entity.GetProperty(propertyName)
 
       If Not m_UseTableNamesOrAliases Then
-        m_Sql.Append(m_Builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName))
+        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, prop.ColumnName)
       ElseIf m_UseAliases Then
         Dim tableAlias = m_Model.GetTableAlias(entity.Index)
-        m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(tableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)}")
+        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, tableAlias)
+        m_Sql.Append(".")
+        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, prop.ColumnName)
       Else
         ' NOTE: this is not used right now
-        m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.Entity.TableName)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)}")
+        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.Entity.TableName)
+        m_Sql.Append(".")
+        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, prop.ColumnName)
       End If
     End Sub
 
@@ -886,11 +896,14 @@ Namespace Internal
 
       For propertyIndex = 0 To properties.Count - 1
         If entity.IncludedColumns(propertyIndex) Then
-          m_Sql.Append($"{m_Builder.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)}.{m_Builder.DialectProvider.Formatter.CreateIdentifier(properties(propertyIndex).ColumnName)}")
+          m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.TableAlias)
+          m_Sql.Append(".")
+          m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, properties(propertyIndex).ColumnName)
 
           If m_InCustomSelectMode Then
             Dim columnAlias = CreateColumnAlias(m_CustomEntityIndex, columnIndex)
-            m_Sql.Append($" {m_Builder.DialectProvider.Formatter.CreateIdentifier(columnAlias)}")
+            m_Sql.Append(" ")
+            m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
           End If
 
           columnIndex += 1

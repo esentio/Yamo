@@ -64,11 +64,13 @@ Namespace Expressions.Builders
     Private Function CreateDeleteQuery() As Query
       Dim sql As New StringBuilder
 
-      sql.AppendLine($"DELETE FROM {Me.DialectProvider.Formatter.CreateIdentifier(m_Model.GetFirstEntity().Entity.TableName)}")
+      sql.Append("DELETE FROM ")
+      Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstEntity().Entity.TableName)
+      sql.AppendLine()
 
       If m_WhereExpressions.Any() Then
-        sql.Append($" WHERE ")
-        sql.Append(String.Join(" AND ", m_WhereExpressions))
+        sql.Append(" WHERE ")
+        Helpers.Text.AppendJoin(sql, " AND ", m_WhereExpressions)
       End If
 
       Return New Query(sql.ToString(), m_Parameters.ToList())
@@ -89,8 +91,8 @@ Namespace Expressions.Builders
       sql.Append(sqlString.Sql)
 
       If m_WhereExpressions.Any() Then
-        sql.Append($"WHERE ")
-        sql.Append(String.Join(" AND ", m_WhereExpressions))
+        sql.Append(" WHERE ")
+        Helpers.Text.AppendJoin(sql, " AND ", m_WhereExpressions)
 
         parameters = New List(Of SqlParameter)(sqlString.Parameters.Count + m_Parameters.Count)
         parameters.AddRange(sqlString.Parameters)

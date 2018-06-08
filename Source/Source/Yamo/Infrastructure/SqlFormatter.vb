@@ -1,4 +1,6 @@
-﻿Namespace Infrastructure
+﻿Imports System.Text
+
+Namespace Infrastructure
 
   Public Class SqlFormatter
 
@@ -47,12 +49,18 @@
     End Function
 
     Public Overridable Function CreateParameter(name As String) As String
-      Return $"@{name}"
+      Return "@" & name
     End Function
 
     Public Overridable Function CreateIdentifier(name As String) As String
-      Return $"[{name}]"
+      Return "[" & name & "]"
     End Function
+
+    Public Overridable Sub AppendIdentifier(sql As StringBuilder, name As String)
+      sql.Append("[")
+      sql.Append(name)
+      sql.Append("]")
+    End Sub
 
   End Class
 End Namespace
