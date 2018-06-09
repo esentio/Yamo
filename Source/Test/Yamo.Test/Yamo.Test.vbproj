@@ -73,6 +73,9 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTestDbContextOptionsExtensions.vb" />
+    <Compile Include="UnitTestDialectProvider.vb" />
+    <Compile Include="UnitTestDbContext.vb" />
     <Compile Include="Model\Article.vb" />
     <Compile Include="Model\ArticleSubstitution.vb" />
     <Compile Include="Model\LinkedItemChild.vb" />
@@ -88,7 +91,9 @@
     <Compile Include="Model\PropertyModifiedTrackingBase.vb" />
     <Compile Include="Model\ItemWithIdentityIdAndDefaultValues.vb" />
     <Compile Include="Model\ItemWithIdentityId.vb" />
+    <Compile Include="Tests\BaseUnitTests.vb" />
     <Compile Include="Tests\BaseIntegrationTests.vb" />
+    <Compile Include="Tests\ExpressionTests.vb" />
     <Compile Include="Tests\SelectWithHavingTests.vb" />
     <Compile Include="Tests\SelectWithGroupByTests.vb" />
     <Compile Include="Tests\PropertyModifiedTrackingTests.vb" />
@@ -133,6 +138,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="BaseTestDbContext.vb" />
+    <Compile Include="UnitTestEnvironment.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

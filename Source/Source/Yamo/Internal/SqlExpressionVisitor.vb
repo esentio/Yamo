@@ -152,9 +152,10 @@ Namespace Internal
         End If
       End If
 
-      If node.Method.IsSpecialName AndAlso node.Object.NodeType = ExpressionType.Parameter AndAlso node.Method.Name.StartsWith("set_") Then
+      ' node.Object is null when static indexer is called
+      If node.Method.IsSpecialName AndAlso node.Object IsNot Nothing AndAlso node.Object.NodeType = ExpressionType.Parameter AndAlso node.Method.Name.StartsWith("set_") Then
         ' this is needed when we pass Action (in UPDATE SET... expressions)
-        ' TODO: SIP - investigate how indexers behave
+        ' TODO: SIP - investigate how indexers behave and whether they can cause a problem here
         Return VisitEntityPropertySetter(node)
       End If
 
@@ -741,9 +742,33 @@ Namespace Internal
     End Function
 
     Protected Function Evaluate(node As Expression) As Object
-      ' TODO: rewrite and make faster when possible!!! Currently, only simple captured variables are obtained fast.
-      ' For everything else, lambda compilation is used, which is slow.
-      ' Study:
+      ' We try to use optimized evaluation for these expressions:
+      ' - field access (captured closure variables are fields too)
+      ' - static field access
+      ' - property access
+      ' - static property access
+      ' - parameterless method call
+      ' - parameterless static method call
+      ' For mentioned scenarios, we dynamically compile caller function in first use (slow). All repeated calls should be fast then.
+      ' Other option would be to use reflection and call FieldInfo.GetValue, PropertyInfo.GetValue and MethodInfo.Invoke methods.
+      ' Note that this is still faster than lambda compilation (of whole expression)!
+      '
+      ' Following expressions are currently not optimized:
+      ' - method call with parameters
+      ' - static method call with parameters
+      ' - indexers
+      ' For these scenarios, expression is wrapped in lambda and compiled, which is slow.
+      ' We can apply same technique as mentioned above to optimize also these cases. We just need to evaluate parameters in the same
+      ' way and be able to compile caller functions that accept various parameters. But it would complicate the solution and the effect
+      ' is currently questionable (is there "enough" ConstantExpression subexpressions?; how many parameters is enough to hardcode; ...).
+      ' Maybe for hot paths it still makes sense to do it (performance tests needed).
+      '
+      ' If the expression represents "chain" like "value.Property1.Property2.Method()", we recursively evaluate subexpressions.
+      ' As with parameters and functions, also here we might end up with slower execution than with lambda compilation (multiple
+      ' compilations vs one). But expressions like "localCapturedValue.PropertyValue" will be quite often, so it makes sense imho.
+      ' And unless most subexpression are not unoptimized evaluations, it'll help on hot paths.
+
+      ' Links:
       ' https://stackoverflow.com/questions/2616638/access-the-value-of-a-member-expression
       ' https://stackoverflow.com/questions/1613239/getting-the-object-out-of-a-memberexpression
       ' https://blogs.msdn.microsoft.com/csharpfaq/2010/03/11/how-can-i-get-objects-and-property-values-from-expression-trees/
@@ -753,28 +778,64 @@ Namespace Internal
       Dim value As Object = Nothing
       Dim valueSet = False
 
-      ' shortcut for captured variables
       If node.NodeType = ExpressionType.MemberAccess Then
+        ' field/property
         Dim memberExpression = DirectCast(node, MemberExpression)
+        Dim memberInfo = memberExpression.Member
         Dim exp = memberExpression.Expression
 
         If exp Is Nothing Then
-          ' shared property/field
-          If memberExpression.Member.MemberType = MemberTypes.Property Then
-            value = DirectCast(memberExpression.Member, PropertyInfo).GetValue(Nothing)
+          ' static field/property
+          If memberInfo.MemberType = MemberTypes.Field Then
+            value = MemberCallerCache.GetStaticFieldCaller(memberInfo.ReflectedType, DirectCast(memberInfo, FieldInfo))()
             valueSet = True
-          ElseIf memberExpression.Member.MemberType = MemberTypes.Field Then
-            value = DirectCast(memberExpression.Member, FieldInfo).GetValue(Nothing)
+          ElseIf memberInfo.MemberType = MemberTypes.Property Then
+            value = MemberCallerCache.GetStaticPropertyCaller(memberInfo.ReflectedType, DirectCast(memberInfo, PropertyInfo))()
             valueSet = True
           End If
-        ElseIf exp.NodeType = ExpressionType.Constant Then
-          Dim obj = DirectCast(exp, ConstantExpression).Value
+        Else
+          ' instance field/property
+          Dim obj = Nothing
 
-          If memberExpression.Member.MemberType = MemberTypes.Property Then
-            value = DirectCast(memberExpression.Member, PropertyInfo).GetValue(obj)
+          If exp.NodeType = ExpressionType.Constant Then
+            obj = DirectCast(exp, ConstantExpression).Value
+          Else
+            obj = Evaluate(exp) ' if the chain is too long, isn't it faster just to compile whole expression?
+          End If
+
+          If memberInfo.MemberType = MemberTypes.Field Then
+            value = MemberCallerCache.GetFieldCaller(memberInfo.ReflectedType, DirectCast(memberInfo, FieldInfo))(obj)
             valueSet = True
-          ElseIf memberExpression.Member.MemberType = MemberTypes.Field Then
-            value = DirectCast(memberExpression.Member, FieldInfo).GetValue(obj)
+          ElseIf memberInfo.MemberType = MemberTypes.Property Then
+            value = MemberCallerCache.GetPropertyCaller(memberInfo.ReflectedType, DirectCast(memberInfo, PropertyInfo))(obj)
+            valueSet = True
+          End If
+        End If
+
+      ElseIf node.NodeType = ExpressionType.Call Then
+        ' method/indexer
+        Dim methodCallExpression = DirectCast(node, MethodCallExpression)
+
+        ' for simplicity, we optimize only calls to parameterless methods
+        If methodCallExpression.Arguments.Count = 0 Then
+          Dim methodInfo = methodCallExpression.Method
+          Dim exp = methodCallExpression.Object
+
+          If exp Is Nothing Then
+            ' static method
+            value = MemberCallerCache.GetStaticMethodCaller(methodInfo.ReflectedType, methodInfo)()
+            valueSet = True
+          Else
+            ' instance method
+            Dim obj = Nothing
+
+            If exp.NodeType = ExpressionType.Constant Then
+              obj = DirectCast(exp, ConstantExpression).Value
+            Else
+              obj = Evaluate(exp) ' if the chain is too long, isn't it faster just to compile whole expression?
+            End If
+
+            value = MemberCallerCache.GetMethodCaller(methodInfo.ReflectedType, methodInfo)(obj)
             valueSet = True
           End If
         End If
