@@ -3,7 +3,7 @@
 Namespace Tests
 
   Public MustInherit Class DbContextTests
-    Inherits TestsBase
+    Inherits BaseIntegrationTests
 
     <TestMethod()>
     Public MustOverride Sub CreateContextWithConnection()

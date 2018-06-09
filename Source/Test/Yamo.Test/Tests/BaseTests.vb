@@ -3,7 +3,7 @@ Imports Yamo.Test.Model
 
 Namespace Tests
 
-  Public MustInherit Class TestsBase
+  Public MustInherit Class BaseTests
 
     Protected ReadOnly Property TestEnvironment As ITestEnvironment
 
@@ -15,13 +15,19 @@ Namespace Tests
     End Sub
 
     <TestInitialize()>
-    Public Overridable Sub Initialize()
-      ReinitializeDatabase()
+    Public Sub Initialize()
+      OnInitialize()
+    End Sub
+
+    Public Overridable Sub OnInitialize()
     End Sub
 
     <TestCleanup()>
-    Public Overridable Sub Uninitialize()
-      UninitializeDatabase()
+    Public Sub Uninitialize()
+      OnUninitialize()
+    End Sub
+
+    Public Overridable Sub OnUninitialize()
     End Sub
 
     Protected MustOverride Function CreateTestEnvironment() As ITestEnvironment
@@ -29,41 +35,6 @@ Namespace Tests
     Protected Overridable Function CreateDbContext() As BaseTestDbContext
       Return Me.TestEnvironment.CreateDbContext()
     End Function
-
-    Protected Overridable Sub InitializeDatabase()
-      Using db = CreateDbContext()
-        Dim sql = File.ReadAllText("Sql\DbInitialize.sql")
-        db.ExecuteNonQuery(sql)
-      End Using
-    End Sub
-
-    Protected Overridable Sub UninitializeDatabase()
-      Using db = CreateDbContext()
-        Dim sql = File.ReadAllText("Sql\DbUninitialize.sql")
-        db.ExecuteNonQuery(sql)
-      End Using
-    End Sub
-
-    Protected Overridable Sub ReinitializeDatabase()
-      UninitializeDatabase()
-      InitializeDatabase()
-    End Sub
-
-    Protected Overridable Sub InsertItems(items As IEnumerable)
-      Using db = CreateDbContext()
-        For Each item In items
-          db.Insert(item)
-        Next
-      End Using
-    End Sub
-
-    Protected Overridable Sub InsertItems(ParamArray items As Object())
-      Using db = CreateDbContext()
-        For Each item In items
-          db.Insert(item)
-        Next
-      End Using
-    End Sub
 
   End Class
 End Namespace

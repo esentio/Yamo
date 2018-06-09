@@ -3,7 +3,7 @@
 Namespace Tests
 
   Public MustInherit Class SelectWithGroupByTests
-    Inherits TestsBase
+    Inherits BaseIntegrationTests
 
     Protected Const English As String = "en"
 

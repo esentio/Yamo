@@ -3,7 +3,7 @@
 Namespace Tests
 
   Public MustInherit Class TransactionTests
-    Inherits TestsBase
+    Inherits BaseIntegrationTests
 
     <TestMethod()>
     Public Overridable Sub Rollback()

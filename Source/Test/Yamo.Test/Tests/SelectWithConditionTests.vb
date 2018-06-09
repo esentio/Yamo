@@ -3,7 +3,7 @@
 Namespace Tests
 
   Public MustInherit Class SelectWithConditionTests
-    Inherits TestsBase
+    Inherits BaseIntegrationTests
 
     <TestMethod()>
     Public Overridable Sub SelectRecordByGuid()

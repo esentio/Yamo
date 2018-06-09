@@ -3,7 +3,7 @@
 Namespace Tests
 
   Public MustInherit Class InsertTests
-    Inherits TestsBase
+    Inherits BaseIntegrationTests
 
     <TestMethod()>
     Public Overridable Sub InsertRecordWithAllSupportedValues()

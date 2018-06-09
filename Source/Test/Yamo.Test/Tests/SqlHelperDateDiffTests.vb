@@ -3,7 +3,7 @@
 Namespace Tests
 
   Public MustInherit Class SqlHelperDateDiffTests
-    Inherits TestsBase
+    Inherits BaseIntegrationTests
 
     <TestMethod()>
     Public Overridable Sub SelectRecordByDateTimeUsingSqlDateDiffSameYear()

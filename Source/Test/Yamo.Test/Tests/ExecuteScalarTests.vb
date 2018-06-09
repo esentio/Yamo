@@ -3,7 +3,7 @@
 Namespace Tests
 
   Public MustInherit Class ExecuteScalarTests
-    Inherits TestsBase
+    Inherits BaseIntegrationTests
 
     <TestMethod()>
     Public Overridable Sub ExecuteScalarOfGuid()
