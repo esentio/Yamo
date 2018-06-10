@@ -12,7 +12,7 @@ Namespace Internal.Query
 
     Public ReadOnly Property HasCollectionNavigation As Boolean
 
-    ' probably change to something like BitArray in the future (list is used just for convenience in GetChainKey method - once better hashing API is avaliable, refactor this!)
+    ' probably change to something like Boolean() in the future (list is used just for convenience in GetChainKey method - once better hashing API is avaliable, refactor this!)
     Private m_ChainIndexes As List(Of Int32)()
 
     Private Sub New()
@@ -74,7 +74,7 @@ Namespace Internal.Query
       m_ChainIndexes = New List(Of Integer)(Me.Count - 1) {}
 
       For i = 0 To Me.Count - 1
-        Dim flags = New BitArray(Me.Count, False)
+        Dim flags = New Boolean(Me.Count - 1) {}
 
         MarkMainPath(flags, i)
 
@@ -94,7 +94,7 @@ Namespace Internal.Query
       Next
     End Sub
 
-    Private Sub MarkMainPath(flags As BitArray, entityIndex As Int32)
+    Private Sub MarkMainPath(flags As Boolean(), entityIndex As Int32)
       flags(entityIndex) = True
 
       If Me.Items(entityIndex).Entity.Relationship IsNot Nothing Then
@@ -102,7 +102,7 @@ Namespace Internal.Query
       End If
     End Sub
 
-    Private Function Mark1To1Paths(flags As BitArray, entityIndex As Int32) As Boolean
+    Private Function Mark1To1Paths(flags As Boolean(), entityIndex As Int32) As Boolean
       If entityIndex = 0 Then
         flags(0) = True ' should be already true anyway
         Return True

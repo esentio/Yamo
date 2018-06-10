@@ -8,7 +8,7 @@ Namespace Internal
 
     Private Shared m_Instances As Dictionary(Of (SqlDialectProvider, Model), EntityReaderCache)
 
-    Private m_Readers As Dictionary(Of Type, Func(Of IDataReader, Int32, BitArray, Object))
+    Private m_Readers As Dictionary(Of Type, Func(Of IDataReader, Int32, Boolean(), Object))
 
     Private m_ContainsPKReaders As Dictionary(Of Type, Func(Of IDataReader, Int32, Int32(), Boolean))
 
@@ -21,13 +21,13 @@ Namespace Internal
     End Sub
 
     Private Sub New()
-      m_Readers = New Dictionary(Of Type, Func(Of IDataReader, Int32, BitArray, Object))
+      m_Readers = New Dictionary(Of Type, Func(Of IDataReader, Int32, Boolean(), Object))
       m_ContainsPKReaders = New Dictionary(Of Type, Func(Of IDataReader, Int32, Int32(), Boolean))
       m_PKReaders = New Dictionary(Of Type, Func(Of IDataReader, Int32, Int32(), Object))
       m_DbGeneratedValuesReaders = New Dictionary(Of Type, Action(Of IDataReader, Int32, Object))
     End Sub
 
-    Public Shared Function GetReader(dialectProvider As SqlDialectProvider, model As Model, type As Type) As Func(Of IDataReader, Int32, BitArray, Object)
+    Public Shared Function GetReader(dialectProvider As SqlDialectProvider, model As Model, type As Type) As Func(Of IDataReader, Int32, Boolean(), Object)
       Return GetInstance(dialectProvider, model).GetOrCreateReader(dialectProvider, model, type)
     End Function
 
@@ -58,8 +58,8 @@ Namespace Internal
       Return instance
     End Function
 
-    Private Function GetOrCreateReader(dialectProvider As SqlDialectProvider, model As Model, type As Type) As Func(Of IDataReader, Int32, BitArray, Object)
-      Dim reader As Func(Of IDataReader, Int32, BitArray, Object) = Nothing
+    Private Function GetOrCreateReader(dialectProvider As SqlDialectProvider, model As Model, type As Type) As Func(Of IDataReader, Int32, Boolean(), Object)
+      Dim reader As Func(Of IDataReader, Int32, Boolean(), Object) = Nothing
 
       SyncLock m_Readers
         m_Readers.TryGetValue(type, reader)

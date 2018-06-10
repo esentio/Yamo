@@ -14,7 +14,7 @@ Namespace Internal.Query
 
     Public ReadOnly Property Entity As SqlEntity
 
-    Public ReadOnly Property EntityReader As Func(Of IDataReader, Int32, BitArray, Object)
+    Public ReadOnly Property EntityReader As Func(Of IDataReader, Int32, Boolean(), Object)
 
     Public ReadOnly Property ContainsPKReader As Func(Of IDataReader, Int32, Int32(), Boolean)
 

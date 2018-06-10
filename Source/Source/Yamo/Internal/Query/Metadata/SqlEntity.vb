@@ -15,7 +15,7 @@ Namespace Internal.Query.Metadata
 
     Public ReadOnly Property IsExcluded As Boolean
 
-    Public ReadOnly Property IncludedColumns As BitArray
+    Public ReadOnly Property IncludedColumns As Boolean()
 
     Sub New(entity As Entity, tableAlias As String, index As Int32)
       Me.Entity = entity
@@ -23,7 +23,15 @@ Namespace Internal.Query.Metadata
       Me.Index = index
       Me.Relationship = Nothing
       Me.IsExcluded = False
-      Me.IncludedColumns = New BitArray(Me.Entity.GetPropertiesCount(), True)
+
+      Dim lastIndex = Me.Entity.GetPropertiesCount() - 1
+      Dim includedColumns = New Boolean(lastIndex) {}
+
+      For i = 0 To lastIndex
+        includedColumns(i) = True
+      Next
+
+      Me.IncludedColumns = includedColumns
     End Sub
 
     Sub New(entity As Entity, tableAlias As String, index As Int32, relationship As SqlEntityRelationship)

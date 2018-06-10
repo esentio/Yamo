@@ -12,7 +12,7 @@ Namespace Internal.Query
 
     Public ReadOnly Property ReaderIndex As Int32
 
-    Public ReadOnly Property Reader As Func(Of IDataReader, Int32, BitArray, Object)
+    Public ReadOnly Property Reader As Func(Of IDataReader, Int32, Boolean(), Object)
 
     Public ReadOnly Property ContainsPKReader As Func(Of IDataReader, Int32, Int32(), Boolean)
 

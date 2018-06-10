@@ -8,10 +8,10 @@ Namespace Infrastructure
   Public Class EntityReaderFactory
     Inherits ReaderFactoryBase
 
-    Public Overridable Function CreateReader(model As Model, entityType As Type) As Func(Of IDataReader, Int32, BitArray, Object)
+    Public Overridable Function CreateReader(model As Model, entityType As Type) As Func(Of IDataReader, Int32, Boolean(), Object)
       Dim readerParam = Expression.Parameter(GetType(IDataRecord), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
       Dim indexParam = Expression.Parameter(GetType(Int32), "index")
-      Dim includedColumnsParam = Expression.Parameter(GetType(BitArray), "includedColumns")
+      Dim includedColumnsParam = Expression.Parameter(GetType(Boolean()), "includedColumns")
 
       Dim parameters = {readerParam, indexParam, includedColumnsParam}
 
@@ -20,8 +20,6 @@ Namespace Infrastructure
       Dim expressions = New List(Of Expression)
 
       expressions.Add(Expression.Assign(entityVariable, Expression.[New](entityType)))
-
-      Dim bitArrayItemPropertyInfo = GetType(BitArray).GetProperty("Item")
 
       Dim entity = model.GetEntity(entityType)
       Dim i = 0
@@ -59,7 +57,7 @@ Namespace Infrastructure
 
         includeExpressions.Add(Expression.AddAssign(indexParam, Expression.Constant(1)))
 
-        Dim includedCheck = Expression.MakeIndex(includedColumnsParam, bitArrayItemPropertyInfo, {Expression.Constant(i)})
+        Dim includedCheck = Expression.ArrayIndex(includedColumnsParam, Expression.Constant(i))
         Dim includedCond = Expression.IfThenElse(includedCheck, Expression.Block(includeExpressions), propAssignNull)
         expressions.Add(includedCond)
 
@@ -70,7 +68,7 @@ Namespace Infrastructure
 
       Dim body = Expression.Block({entityVariable}, expressions)
 
-      Dim reader = Expression.Lambda(Of Func(Of IDataReader, Int32, BitArray, Object))(body, parameters)
+      Dim reader = Expression.Lambda(Of Func(Of IDataReader, Int32, Boolean(), Object))(body, parameters)
       Return reader.Compile()
     End Function
 
