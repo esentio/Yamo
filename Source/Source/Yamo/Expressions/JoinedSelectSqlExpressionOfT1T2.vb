@@ -15,10 +15,6 @@ Namespace Expressions
       Return InternalAs(relationship)
     End Function
 
-    Public Function [As](Of TProperty)(relationship As Expression(Of Func(Of Join(Of T1, T2), TProperty))) As SelectSqlExpression(Of T1, T2)
-      Return InternalAs(relationship)
-    End Function
-
     Private Function InternalAs(relationship As Expression) As SelectSqlExpression(Of T1, T2)
       Me.Builder.SetLastJoinRelationship(relationship)
       Return New SelectSqlExpression(Of T1, T2)(Me.Builder, Me.Executor)

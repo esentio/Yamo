@@ -124,7 +124,7 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim result = db.From(Of LinkedItem).
-                        Join(Of LinkedItem)(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(j) j.T1.NextItem).
+                        Join(Of LinkedItem)(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(x) x.NextItem).
                         Join(Of LinkedItem)(Function(j) j.T2.Id = j.T3.PreviousId.Value).As(Function(j) j.T2.NextItem).
                         Join(Of LinkedItem)(Function(j) j.T3.Id = j.T4.PreviousId.Value).As(Function(j) j.T3.NextItem).
                         SelectAll().
@@ -150,7 +150,7 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim result = db.From(Of LinkedItem).
-                        Join(Of LinkedItem)(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(j) j.T1.NextItem).
+                        Join(Of LinkedItem)(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(x) x.NextItem).
                         SelectAll().
                         Exclude(Function(j) j.T2.Description).
                         ToList()
@@ -181,7 +181,7 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim result = db.From(Of LinkedItemWithShuffledProperties).
-                        Join(Of LinkedItemWithShuffledProperties)(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(j) j.T1.NextItem).
+                        Join(Of LinkedItemWithShuffledProperties)(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(x) x.NextItem).
                         Join(Of LinkedItemWithShuffledProperties)(Function(j) j.T2.Id = j.T3.PreviousId.Value).As(Function(j) j.T2.NextItem).
                         SelectAll().
                         Exclude(Function(j) j.T1.Description).

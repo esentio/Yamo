@@ -1,6 +1,7 @@
 ﻿Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
+Imports Yamo.Internal.Query.Metadata
 
 Namespace Expressions
 
@@ -10,6 +11,31 @@ Namespace Expressions
     Friend Sub New(builder As SelectSqlExpressionBuilder, executor As QueryExecutor)
       MyBase.New(builder, executor)
     End Sub
+
+    Public Function Join(Of TJoined)(predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, TJoined), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, TJoined)
+      Return InternalJoin(Of TJoined)(JoinType.Inner, predicate, Nothing)
+    End Function
+
+    Public Function LeftJoin(Of TJoined)(predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, TJoined), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, TJoined)
+      Return InternalJoin(Of TJoined)(JoinType.LeftOuter, predicate, Nothing)
+    End Function
+
+    Public Function RightJoin(Of TJoined)(predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, TJoined), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, TJoined)
+      Return InternalJoin(Of TJoined)(JoinType.RightOuter, predicate, Nothing)
+    End Function
+
+    Public Function FullJoin(Of TJoined)(predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, TJoined), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, TJoined)
+      Return InternalJoin(Of TJoined)(JoinType.FullOuter, predicate, Nothing)
+    End Function
+
+    Public Function CrossJoin(Of TJoined)() As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, TJoined)
+      Return InternalJoin(Of TJoined)(JoinType.CrossJoin, Nothing, Nothing)
+    End Function
+
+    Private Function InternalJoin(Of TJoined)(joinType As JoinType, predicate As Expression, entityIndexHints As Int32()) As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, TJoined)
+      Me.Builder.AddJoin(Of TJoined)(joinType, predicate, entityIndexHints)
+      Return New JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, TJoined)(Me.Builder, Me.Executor)
+    End Function
 
     Public Function Where(predicate As Expression(Of Func(Of T1, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7)
       Return InternalWhere(predicate, {0})

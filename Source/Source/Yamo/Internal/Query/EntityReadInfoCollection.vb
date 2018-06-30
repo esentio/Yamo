@@ -157,6 +157,22 @@ Namespace Internal.Query
           Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4)), pks(chainIndex(5))})
         Case 7
           Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4)), pks(chainIndex(5)), pks(chainIndex(6))})
+        Case 8
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4)), pks(chainIndex(5)), pks(chainIndex(6)), pks(chainIndex(7))})
+        Case 9
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4)), pks(chainIndex(5)), pks(chainIndex(6)), pks(chainIndex(7)), pks(chainIndex(8))})
+        Case 10
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4)), pks(chainIndex(5)), pks(chainIndex(6)), pks(chainIndex(7)), pks(chainIndex(8)), pks(chainIndex(9))})
+        Case 11
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4)), pks(chainIndex(5)), pks(chainIndex(6)), pks(chainIndex(7)), pks(chainIndex(8)), pks(chainIndex(9)), pks(chainIndex(10))})
+        Case 12
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4)), pks(chainIndex(5)), pks(chainIndex(6)), pks(chainIndex(7)), pks(chainIndex(8)), pks(chainIndex(9)), pks(chainIndex(10)), pks(chainIndex(11))})
+        Case 13
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4)), pks(chainIndex(5)), pks(chainIndex(6)), pks(chainIndex(7)), pks(chainIndex(8)), pks(chainIndex(9)), pks(chainIndex(10)), pks(chainIndex(11)), pks(chainIndex(12))})
+        Case 14
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4)), pks(chainIndex(5)), pks(chainIndex(6)), pks(chainIndex(7)), pks(chainIndex(8)), pks(chainIndex(9)), pks(chainIndex(10)), pks(chainIndex(11)), pks(chainIndex(12)), pks(chainIndex(13))})
+        Case 15
+          Return New ChainKey({pks(chainIndex(0)), pks(chainIndex(1)), pks(chainIndex(2)), pks(chainIndex(3)), pks(chainIndex(4)), pks(chainIndex(5)), pks(chainIndex(6)), pks(chainIndex(7)), pks(chainIndex(8)), pks(chainIndex(9)), pks(chainIndex(10)), pks(chainIndex(11)), pks(chainIndex(12)), pks(chainIndex(13)), pks(chainIndex(14))})
         Case Else
           Throw New Exception("Too much joins.")
       End Select

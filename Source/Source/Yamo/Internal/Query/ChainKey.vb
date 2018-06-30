@@ -27,6 +27,22 @@
         Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5)).GetHashCode()
       ElseIf length = 7 Then
         Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6)).GetHashCode()
+      ElseIf length = 8 Then
+        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7)).GetHashCode()
+      ElseIf length = 9 Then
+        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8)).GetHashCode()
+      ElseIf length = 10 Then
+        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8), m_Pks(9)).GetHashCode()
+      ElseIf length = 11 Then
+        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8), m_Pks(9), m_Pks(10)).GetHashCode()
+      ElseIf length = 12 Then
+        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8), m_Pks(9), m_Pks(10), m_Pks(11)).GetHashCode()
+      ElseIf length = 13 Then
+        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8), m_Pks(9), m_Pks(10), m_Pks(11), m_Pks(12)).GetHashCode()
+      ElseIf length = 14 Then
+        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8), m_Pks(9), m_Pks(10), m_Pks(11), m_Pks(12), m_Pks(13)).GetHashCode()
+      ElseIf length = 15 Then
+        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8), m_Pks(9), m_Pks(10), m_Pks(11), m_Pks(12), m_Pks(13), m_Pks(14)).GetHashCode()
       Else
         Throw New NotSupportedException("Too much joins.")
       End If
