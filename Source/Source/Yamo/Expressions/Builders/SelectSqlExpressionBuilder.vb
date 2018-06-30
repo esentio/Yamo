@@ -206,7 +206,8 @@ Namespace Expressions.Builders
         End If
 
       Else
-        Dim possibleDeclaringEntities = m_Model.GetEntities().Where(Function(x) x.Entity.EntityType Is parameterType).ToArray()
+        Dim entities = m_Model.GetEntities()
+        Dim possibleDeclaringEntities = entities.Take(entities.Length - 1).Where(Function(x) x.Entity.EntityType Is parameterType).ToArray()
 
         If possibleDeclaringEntities.Length = 0 Then
           Throw New Exception($"Cannot infer relationship, because there are no joined entities of type '{parameterType}'.")

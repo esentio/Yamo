@@ -35,7 +35,7 @@ Namespace Expressions
       Return InternalExclude(propertyExpression)
     End Function
 
-    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6), TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7)
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7), TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7)
       Return InternalExclude(propertyExpression)
     End Function
 

@@ -413,7 +413,7 @@ namespace Yamo.PlaygroundCS
             {
                 var list = db.From<ArticleSubstitution>()
                              .Join<Article>(j => j.T1.OriginalArticleId == j.T2.Id)
-                             .As(j => j.T1.Original)
+                             .As(s => s.Original)
                              .Join<Article>(j => j.T1.SubstitutionArticleId == j.T3.Id)
                              .As(j => j.T1.Substitution)
                              .SelectAll().ToList();

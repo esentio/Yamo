@@ -100,7 +100,7 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim result = db.From(Of LinkedItem).
-                        Join(Of ItemWithPropertyModifiedTracking)(Function(j) j.T1.Id = j.T2.Id).As(Function(j) j.T1.RelatedItem).
+                        Join(Of ItemWithPropertyModifiedTracking)(Function(j) j.T1.Id = j.T2.Id).As(Function(x) x.RelatedItem).
                         SelectAll().ToList()
         Assert.AreEqual(3, result.Count)
         Assert.IsTrue(result.All(Function(x) Not DirectCast(x.RelatedItem, ItemWithPropertyModifiedTracking).IsAnyPropertyModified()))
