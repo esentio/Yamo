@@ -959,9 +959,9 @@ using (var db = CreateContext())
 {
     var list = db.From<ArticleSubstitution>()
                  .Join<Article>(j => j.T1.OriginalArticleId == j.T2.Id)
-                 .As(j => j.T1.Original)
+                 .As(s => s.Original)
                  .Join<Article>(j => j.T1.SubstitutionArticleId == j.T3.Id)
-                 .As(j => j.T1.Substitution)
+                 .As(s => s.Substitution)
                  .SelectAll().ToList();
 
     foreach (var s in list)
@@ -1046,7 +1046,6 @@ Of course, instances are only created when necessary. From 2 rows containing the
 
 ###### Planned features:
 
-- [#25](https://github.com/esentio/Yamo/issues/25) Allow to join more tables (currently, the limit is 7 tables).
 - [#27](https://github.com/esentio/Yamo/issues/27) Allow nested selects in joins.
 
 #### Select

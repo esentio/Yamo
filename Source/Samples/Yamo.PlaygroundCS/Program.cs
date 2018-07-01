@@ -415,7 +415,7 @@ namespace Yamo.PlaygroundCS
                              .Join<Article>(j => j.T1.OriginalArticleId == j.T2.Id)
                              .As(s => s.Original)
                              .Join<Article>(j => j.T1.SubstitutionArticleId == j.T3.Id)
-                             .As(j => j.T1.Substitution)
+                             .As(s => s.Substitution)
                              .SelectAll().ToList();
 
                 foreach (var s in list)
