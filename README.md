@@ -1224,7 +1224,7 @@ General goal is to make Yamo as fast as possible. For that purpose - like in oth
 
 Initial benchmarks are promising. Still, there is place for improvements once the internal architecture is stabilized and higher priority features are implemented.
 
-Here are some preliminary benchmarks comparing Dapper (baseline), EF Core and Yamo:
+Here are some preliminary benchmarks comparing Dapper (baseline), EF Core and Yamo (full report [here](benchmark.md)):
 
 ``` ini
 BenchmarkDotNet=v0.10.12, OS=Windows 10 Redstone 3 [1709, Fall Creators Update] (10.0.16299.248)
@@ -1233,29 +1233,29 @@ Frequency=2987308 Hz, Resolution=334.7495 ns, Timer=TSC
   [Host]     : .NET Framework 4.7 (CLR 4.0.30319.42000), 32bit LegacyJIT-v4.7.2633.0
   DefaultJob : .NET Framework 4.7 (CLR 4.0.30319.42000), 32bit LegacyJIT-v4.7.2633.0
 ```
-| Type                      | Method                                   |         Mean | Scaled |
-| ------------------------- | ---------------------------------------- | -----------: | -----: |
-| DapperBenchmark           | Select 1 record                          |     126.8 us |   1.00 |
-| YamoBenchmark             | Select 1 record                          |     153.4 us |   1.24 |
-| EFCoreNoTrackingBenchmark | Select 1 record                          |     346.2 us |   2.80 |
-| EFCoreBenchmark           | Select 1 record                          |     442.1 us |   3.58 |
-|                           |                                          |              |        |
-| DapperBenchmark           | Select 500 records one by one            |  56,208.6 us |   1.00 |
-| YamoBenchmark             | Select 500 records one by one            | 146,358.2 us |   2.60 |
-| EFCoreBenchmark           | Select 500 records one by one            | 170,715.5 us |   3.04 |
-| EFCoreNoTrackingBenchmark | Select 500 records one by one            | 188,257.8 us |   3.35 |
-|                           |                                          |              |        |
-| YamoBenchmark             | Select list of 1000 records              |   4,234.6 us |   0.98 |
-| DapperBenchmark           | Select list of 1000 records              |   4,327.7 us |   1.00 |
-| EFCoreNoTrackingBenchmark | Select list of 1000 records              |   4,918.7 us |   1.14 |
-| EFCoreBenchmark           | Select list of 1000 records              |   7,194.8 us |   1.66 |
-|                           |                                          |              |        |
-| DapperBenchmark           | Select list of 1000 records with 1:1 join |   7,976.7 us |   1.00 |
-| YamoBenchmark             | Select list of 1000 records with 1:1 join |   8,234.9 us |   1.03 |
-| EFCoreNoTrackingBenchmark | Select list of 1000 records with 1:1 join |  14,698.4 us |   1.84 |
-| EFCoreBenchmark           | Select list of 1000 records with 1:1 join |  31,944.3 us |   4.00 |
-|                           |                                          |              |        |
-| EFCoreNoTrackingBenchmark | Select list of 1000 records with 1:N join |  50,599.0 us |   0.87 |
-| YamoBenchmark             | Select list of 1000 records with 1:N join |  56,421.0 us |   0.97 |
-| DapperBenchmark           | Select list of 1000 records with 1:N join |  58,439.5 us |   1.00 |
-| EFCoreBenchmark           | Select list of 1000 records with 1:N join | 113,591.7 us |   1.94 |
+| Type                      | Method                                    |         Mean | Scaled |  Allocated |
+| ------------------------- | ----------------------------------------- | -----------: | -----: | ---------: |
+| DapperBenchmark           | Select 1 record                           |     106.9 us |   1.00 |    4.11 KB |
+| YamoBenchmark             | Select 1 record                           |     129.1 us |   1.21 |    5.42 KB |
+| EFCoreNoTrackingBenchmark | Select 1 record                           |     392.8 us |   3.67 |   18.22 KB |
+| EFCoreBenchmark           | Select 1 record                           |     446.9 us |   4.18 |   19.92 KB |
+|                           |                                           |              |        |            |
+| DapperBenchmark           | Select 500 records one by one             |  53,162.3 us |   1.00 |  2058.7 KB |
+| YamoBenchmark             | Select 500 records one by one             |  81,145.8 us |   1.53 | 3217.51 KB |
+| EFCoreNoTrackingBenchmark | Select 500 records one by one             | 147,334.8 us |   2.77 | 4041.07 KB |
+| EFCoreBenchmark           | Select 500 records one by one             | 153,831.1 us |   2.89 |    4389 KB |
+|                           |                                           |              |        |            |
+| YamoBenchmark             | Select list of 1000 records               |   3,775.2 us |   0.98 |  153.34 KB |
+| DapperBenchmark           | Select list of 1000 records               |   3,836.4 us |   1.00 |  222.57 KB |
+| EFCoreNoTrackingBenchmark | Select list of 1000 records               |   3,996.0 us |   1.04 |  368.62 KB |
+| EFCoreBenchmark           | Select list of 1000 records               |   6,492.9 us |   1.69 |     805 KB |
+|                           |                                           |              |        |            |
+| DapperBenchmark           | Select list of 1000 records with 1:1 join |   7,326.7 us |   1.00 |   395.2 KB |
+| YamoBenchmark             | Select list of 1000 records with 1:1 join |   8,092.9 us |   1.11 |  340.94 KB |
+| EFCoreNoTrackingBenchmark | Select list of 1000 records with 1:1 join |  13,989.4 us |   1.92 |  927.11 KB |
+| EFCoreBenchmark           | Select list of 1000 records with 1:1 join |  31,426.6 us |   4.30 | 2406.77 KB |
+|                           |                                           |              |        |            |
+| DapperBenchmark           | Select list of 1000 records with 1:N join |  50,111.2 us |   1.00 | 2105.74 KB |
+| EFCoreNoTrackingBenchmark | Select list of 1000 records with 1:N join |  51,363.0 us |   1.02 |  2998.3 KB |
+| YamoBenchmark             | Select list of 1000 records with 1:N join |  57,411.0 us |   1.15 |  1920.8 KB |
+| EFCoreBenchmark           | Select list of 1000 records with 1:N join | 110,265.0 us |   2.20 |  6608.7 KB |
