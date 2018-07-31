@@ -137,7 +137,7 @@ using (var db = CreateContext())
 }
 ```
 
-More importantly, `Database` facade contains methods for beginn, commit or rollback of transaction. 
+More importantly, `Database` facade contains methods for begin, commit or rollback of transaction. 
 
 ```c#
 using (var db = CreateContext())
