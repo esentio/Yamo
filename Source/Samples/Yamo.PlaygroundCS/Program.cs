@@ -73,8 +73,8 @@ namespace Yamo.PlaygroundCS
         {
             using (var db = CreateContext())
             {
-                var affectedRows = db.ExecuteNonQuery("DELETE FROM [User]");
-                var count = db.ExecuteScalar<int>("SELECT COUNT(*) FROM [User]");
+                var affectedRows = db.Execute("DELETE FROM [User]");
+                var count = db.QueryFirstOrDefault<int>("SELECT COUNT(*) FROM [User]");
             }
         }
 
@@ -83,7 +83,7 @@ namespace Yamo.PlaygroundCS
             using (var db = CreateContext())
             {
                 var login = "foo";
-                var affectedRows = db.ExecuteNonQuery($"DELETE FROM [User] WHERE Login = {login}");
+                var affectedRows = db.Execute($"DELETE FROM [User] WHERE Login = {login}");
             }
         }
 

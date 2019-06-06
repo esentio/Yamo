@@ -97,9 +97,9 @@
     <Compile Include="Tests\DataTests.vb" />
     <Compile Include="Tests\DbContextTests.vb" />
     <Compile Include="Tests\DeleteTests.vb" />
-    <Compile Include="Tests\ExecuteScalarTests.vb" />
+    <Compile Include="Tests\QueryFirstOrDefaultTests.vb" />
     <Compile Include="Tests\InsertTests.vb" />
-    <Compile Include="Tests\ExecuteNonQueryTests.vb" />
+    <Compile Include="Tests\ExecuteTests.vb" />
     <Compile Include="Tests\CustomSelectTests.vb" />
     <Compile Include="Tests\SelectTests.vb" />
     <Compile Include="Tests\SqlHelperAggregateTests.vb" />

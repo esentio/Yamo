@@ -18,13 +18,13 @@ Namespace Internal.Query
       m_DialectProvider = m_DbContext.Options.DialectProvider
     End Sub
 
-    Public Function ExecuteNonQuery(query As Query) As Int32
+    Public Function Execute(query As Query) As Int32
       Using command = CreateCommand(query)
         Return command.ExecuteNonQuery()
       End Using
     End Function
 
-    Public Function ExecuteScalar(Of T)(query As Query) As T
+    Public Function QueryFirstOrDefault(Of T)(query As Query) As T
       Using command = CreateCommand(query)
         ' TODO: SIP - use ValueType reader instead?
         Return m_DialectProvider.DbValueConversion.FromDbValue(Of T)(command.ExecuteScalar())
@@ -35,7 +35,7 @@ Namespace Internal.Query
       If query.ReadDbGeneratedValues Then
         Return ExecuteAndReadDbGeneratedValues(query)
       Else
-        Return ExecuteNonQuery(query)
+        Return Execute(query)
       End If
     End Function
 

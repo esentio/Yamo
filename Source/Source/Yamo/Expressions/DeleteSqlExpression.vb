@@ -30,12 +30,12 @@ Namespace Expressions
 
     Public Function Execute() As Int32
       Dim query = Me.Builder.CreateQuery()
-      Return Me.Executor.ExecuteNonQuery(query)
+      Return Me.Executor.Execute(query)
     End Function
 
     Friend Function Delete(obj As T) As Int32
       Dim query = Me.Builder.CreateDeleteQuery(obj)
-      Return Me.Executor.ExecuteNonQuery(query)
+      Return Me.Executor.Execute(query)
     End Function
 
     Friend Function SoftDelete(obj As T) As Int32
@@ -44,7 +44,7 @@ Namespace Expressions
       setter(obj, Me.DbContext)
 
       Dim query = Me.Builder.CreateSoftDeleteQuery(obj)
-      Return Me.Executor.ExecuteNonQuery(query)
+      Return Me.Executor.Execute(query)
     End Function
 
   End Class

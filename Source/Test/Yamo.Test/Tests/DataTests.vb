@@ -95,7 +95,7 @@ Namespace Tests
       ' Providing correct SqlDbType is not possible, (at least not with current design). Main reason is that we don't know the type when null/Nothing is passed as a parameter.
 
       Using db = CreateDbContext()
-        db.ExecuteNonQuery(sql)
+        db.Execute(sql)
       End Using
     End Sub
 

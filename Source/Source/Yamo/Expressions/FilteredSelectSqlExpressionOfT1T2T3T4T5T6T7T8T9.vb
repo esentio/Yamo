@@ -59,7 +59,7 @@ Namespace Expressions
     Public Function SelectCount() As Int32
       Me.Builder.AddSelectCount()
       Dim query = Me.Builder.CreateQuery()
-      Return Me.Executor.ExecuteScalar(Of Int32)(query)
+      Return Me.Executor.QueryFirstOrDefault(Of Int32)(query)
     End Function
 
     Public Function [Select](Of TResult)(selector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9), TResult))) As CustomSelectSqlExpression(Of TResult)

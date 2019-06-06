@@ -78,7 +78,7 @@ Namespace Tests
       )"
 
       Using db = CreateDbContext()
-        db.ExecuteNonQuery(sql)
+        db.Execute(sql)
       End Using
     End Sub
 

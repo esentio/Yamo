@@ -15,24 +15,24 @@ Namespace Expressions
       Me.Executor = New QueryExecutor(context)
     End Sub
 
-    Public Function ExecuteNonQuery(sql As FormattableString) As Int32
+    Public Function Execute(sql As FormattableString) As Int32
       Dim query = Me.Builder.CreateQuery(sql)
-      Return Me.Executor.ExecuteNonQuery(query)
+      Return Me.Executor.Execute(query)
     End Function
 
-    Public Function ExecuteNonQuery(sql As RawSqlString) As Int32
+    Public Function Execute(sql As RawSqlString) As Int32
       Dim query = Me.Builder.CreateQuery(sql)
-      Return Me.Executor.ExecuteNonQuery(query)
+      Return Me.Executor.Execute(query)
     End Function
 
-    Public Function ExecuteScalar(Of T)(sql As FormattableString) As T
+    Public Function QueryFirstOrDefault(Of T)(sql As FormattableString) As T
       Dim query = Me.Builder.CreateQuery(sql)
-      Return Me.Executor.ExecuteScalar(Of T)(query)
+      Return Me.Executor.QueryFirstOrDefault(Of T)(query)
     End Function
 
-    Public Function ExecuteScalar(Of T)(sql As RawSqlString) As T
+    Public Function QueryFirstOrDefault(Of T)(sql As RawSqlString) As T
       Dim query = Me.Builder.CreateQuery(sql)
-      Return Me.Executor.ExecuteScalar(Of T)(query)
+      Return Me.Executor.QueryFirstOrDefault(Of T)(query)
     End Function
 
   End Class

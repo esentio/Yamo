@@ -57,7 +57,7 @@ Namespace Expressions
       End If
 
       Dim query = Me.Builder.CreateQuery(obj)
-      Dim affectedRows = Me.Executor.ExecuteNonQuery(query)
+      Dim affectedRows = Me.Executor.Execute(query)
       ResetPropertyModifiedTracking(obj)
       Return affectedRows
     End Function

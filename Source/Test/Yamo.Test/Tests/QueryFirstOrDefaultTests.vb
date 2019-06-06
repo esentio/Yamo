@@ -2,11 +2,11 @@
 
 Namespace Tests
 
-  Public MustInherit Class ExecuteScalarTests
+  Public MustInherit Class QueryFirstOrDefaultTests
     Inherits BaseIntegrationTests
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfGuid()
+    Public Overridable Sub QueryFirstOrDefaultOfGuid()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.UniqueidentifierColumn = Guid.Empty
 
@@ -16,16 +16,16 @@ Namespace Tests
       InsertItems(item1, item2)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Guid)($"SELECT UniqueidentifierColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Guid)($"SELECT UniqueidentifierColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.UniqueidentifierColumn, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Guid)($"SELECT UniqueidentifierColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Guid)($"SELECT UniqueidentifierColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.UniqueidentifierColumn, result2)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfNullableGuid()
+    Public Overridable Sub QueryFirstOrDefaultOfNullableGuid()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.UniqueidentifierColumnNull = Nothing
 
@@ -38,19 +38,19 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Guid?)($"SELECT UniqueidentifierColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Guid?)($"SELECT UniqueidentifierColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.UniqueidentifierColumnNull, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Guid?)($"SELECT UniqueidentifierColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Guid?)($"SELECT UniqueidentifierColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.UniqueidentifierColumnNull, result2)
 
-        Dim result3 = db.ExecuteScalar(Of Guid?)($"SELECT UniqueidentifierColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
+        Dim result3 = db.QueryFirstOrDefault(Of Guid?)($"SELECT UniqueidentifierColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
         Assert.AreEqual(item3.UniqueidentifierColumnNull, result3)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfString()
+    Public Overridable Sub QueryFirstOrDefaultOfString()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.Nvarchar50ColumnNull = Nothing
 
@@ -63,19 +63,19 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of String)($"SELECT Nvarchar50ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of String)($"SELECT Nvarchar50ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.Nvarchar50ColumnNull, result1)
 
-        Dim result2 = db.ExecuteScalar(Of String)($"SELECT Nvarchar50ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of String)($"SELECT Nvarchar50ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.Nvarchar50ColumnNull, result2)
 
-        Dim result3 = db.ExecuteScalar(Of String)($"SELECT Nvarchar50ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
+        Dim result3 = db.QueryFirstOrDefault(Of String)($"SELECT Nvarchar50ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
         Assert.AreEqual(item3.Nvarchar50ColumnNull, result3)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfBoolean()
+    Public Overridable Sub QueryFirstOrDefaultOfBoolean()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.BitColumn = False
 
@@ -85,16 +85,16 @@ Namespace Tests
       InsertItems(item1, item2)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Boolean)($"SELECT BitColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Boolean)($"SELECT BitColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.BitColumn, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Boolean)($"SELECT BitColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Boolean)($"SELECT BitColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.BitColumn, result2)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfNullableBoolean()
+    Public Overridable Sub QueryFirstOrDefaultOfNullableBoolean()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.BitColumnNull = Nothing
 
@@ -107,19 +107,19 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Boolean?)($"SELECT BitColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Boolean?)($"SELECT BitColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.BitColumnNull, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Boolean?)($"SELECT BitColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Boolean?)($"SELECT BitColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.BitColumnNull, result2)
 
-        Dim result3 = db.ExecuteScalar(Of Boolean?)($"SELECT BitColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
+        Dim result3 = db.QueryFirstOrDefault(Of Boolean?)($"SELECT BitColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
         Assert.AreEqual(item3.BitColumnNull, result3)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfInt16()
+    Public Overridable Sub QueryFirstOrDefaultOfInt16()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.SmallintColumn = 0
 
@@ -129,16 +129,16 @@ Namespace Tests
       InsertItems(item1, item2)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Int16)($"SELECT SmallintColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Int16)($"SELECT SmallintColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.SmallintColumn, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Int16)($"SELECT SmallintColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Int16)($"SELECT SmallintColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.SmallintColumn, result2)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfNullableInt16()
+    Public Overridable Sub QueryFirstOrDefaultOfNullableInt16()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.SmallintColumnNull = Nothing
 
@@ -151,19 +151,19 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Int16?)($"SELECT SmallintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Int16?)($"SELECT SmallintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.SmallintColumnNull, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Int16?)($"SELECT SmallintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Int16?)($"SELECT SmallintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.SmallintColumnNull, result2)
 
-        Dim result3 = db.ExecuteScalar(Of Int16?)($"SELECT SmallintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
+        Dim result3 = db.QueryFirstOrDefault(Of Int16?)($"SELECT SmallintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
         Assert.AreEqual(item3.SmallintColumnNull, result3)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfInt32()
+    Public Overridable Sub QueryFirstOrDefaultOfInt32()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.IntColumn = 0
 
@@ -173,16 +173,16 @@ Namespace Tests
       InsertItems(item1, item2)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Int32)($"SELECT IntColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Int32)($"SELECT IntColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.IntColumn, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Int32)($"SELECT IntColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Int32)($"SELECT IntColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.IntColumn, result2)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfNullableInt32()
+    Public Overridable Sub QueryFirstOrDefaultOfNullableInt32()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.IntColumnNull = Nothing
 
@@ -195,19 +195,19 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Int32?)($"SELECT IntColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Int32?)($"SELECT IntColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.IntColumnNull, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Int32?)($"SELECT IntColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Int32?)($"SELECT IntColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.IntColumnNull, result2)
 
-        Dim result3 = db.ExecuteScalar(Of Int32?)($"SELECT IntColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
+        Dim result3 = db.QueryFirstOrDefault(Of Int32?)($"SELECT IntColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
         Assert.AreEqual(item3.IntColumnNull, result3)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfInt64()
+    Public Overridable Sub QueryFirstOrDefaultOfInt64()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.BigintColumn = 0
 
@@ -217,16 +217,16 @@ Namespace Tests
       InsertItems(item1, item2)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Int64)($"SELECT BigintColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Int64)($"SELECT BigintColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.BigintColumn, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Int64)($"SELECT BigintColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Int64)($"SELECT BigintColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.BigintColumn, result2)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfNullableInt64()
+    Public Overridable Sub QueryFirstOrDefaultOfNullableInt64()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.BigintColumnNull = Nothing
 
@@ -239,19 +239,19 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Int64?)($"SELECT BigintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Int64?)($"SELECT BigintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.BigintColumnNull, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Int64?)($"SELECT BigintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Int64?)($"SELECT BigintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.BigintColumnNull, result2)
 
-        Dim result3 = db.ExecuteScalar(Of Int64?)($"SELECT BigintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
+        Dim result3 = db.QueryFirstOrDefault(Of Int64?)($"SELECT BigintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
         Assert.AreEqual(item3.BigintColumnNull, result3)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfSingle()
+    Public Overridable Sub QueryFirstOrDefaultOfSingle()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.RealColumn = 0
 
@@ -261,16 +261,16 @@ Namespace Tests
       InsertItems(item1, item2)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Single)($"SELECT RealColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Single)($"SELECT RealColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.RealColumn, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Single)($"SELECT RealColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Single)($"SELECT RealColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.RealColumn, result2)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfNullableSingle()
+    Public Overridable Sub QueryFirstOrDefaultOfNullableSingle()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.RealColumnNull = Nothing
 
@@ -283,19 +283,19 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Single?)($"SELECT RealColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Single?)($"SELECT RealColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.RealColumnNull, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Single?)($"SELECT RealColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Single?)($"SELECT RealColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.RealColumnNull, result2)
 
-        Dim result3 = db.ExecuteScalar(Of Single?)($"SELECT RealColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
+        Dim result3 = db.QueryFirstOrDefault(Of Single?)($"SELECT RealColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
         Assert.AreEqual(item3.RealColumnNull, result3)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfDouble()
+    Public Overridable Sub QueryFirstOrDefaultOfDouble()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.FloatColumn = 0
 
@@ -305,16 +305,16 @@ Namespace Tests
       InsertItems(item1, item2)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Double)($"SELECT FloatColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Double)($"SELECT FloatColumn FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.FloatColumn, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Double)($"SELECT FloatColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Double)($"SELECT FloatColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.FloatColumn, result2)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfNullableDouble()
+    Public Overridable Sub QueryFirstOrDefaultOfNullableDouble()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.FloatColumnNull = Nothing
 
@@ -327,19 +327,19 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Double?)($"SELECT FloatColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Double?)($"SELECT FloatColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.FloatColumnNull, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Double?)($"SELECT FloatColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Double?)($"SELECT FloatColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.FloatColumnNull, result2)
 
-        Dim result3 = db.ExecuteScalar(Of Double?)($"SELECT FloatColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
+        Dim result3 = db.QueryFirstOrDefault(Of Double?)($"SELECT FloatColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
         Assert.AreEqual(item3.FloatColumnNull, result3)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfDecimal()
+    Public Overridable Sub QueryFirstOrDefaultOfDecimal()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.Numeric10and3Column = 0
 
@@ -349,16 +349,16 @@ Namespace Tests
       InsertItems(item1, item2)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Decimal)($"SELECT Numeric10and3Column FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Decimal)($"SELECT Numeric10and3Column FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.Numeric10and3Column, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Decimal)($"SELECT Numeric10and3Column FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Decimal)($"SELECT Numeric10and3Column FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.Numeric10and3Column, result2)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfNullableDecimal()
+    Public Overridable Sub QueryFirstOrDefaultOfNullableDecimal()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.Numeric10and3ColumnNull = Nothing
 
@@ -371,32 +371,32 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Decimal?)($"SELECT Numeric10and3ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Decimal?)($"SELECT Numeric10and3ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.Numeric10and3ColumnNull, result1)
 
-        Dim result2 = db.ExecuteScalar(Of Decimal?)($"SELECT Numeric10and3ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Decimal?)($"SELECT Numeric10and3ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.Numeric10and3ColumnNull, result2)
 
-        Dim result3 = db.ExecuteScalar(Of Decimal?)($"SELECT Numeric10and3ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
+        Dim result3 = db.QueryFirstOrDefault(Of Decimal?)($"SELECT Numeric10and3ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
         Assert.AreEqual(item3.Numeric10and3ColumnNull, result3)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfDateTime()
+    Public Overridable Sub QueryFirstOrDefaultOfDateTime()
       Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item.DatetimeColumn = Helpers.Calendar.Now()
 
       InsertItems(item)
 
       Using db = CreateDbContext()
-        Dim result = db.ExecuteScalar(Of DateTime)($"SELECT DatetimeColumn FROM ItemWithAllSupportedValues WHERE Id = {item.Id}")
+        Dim result = db.QueryFirstOrDefault(Of DateTime)($"SELECT DatetimeColumn FROM ItemWithAllSupportedValues WHERE Id = {item.Id}")
         Assert.AreEqual(item.DatetimeColumn, result)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfNullableDateTime()
+    Public Overridable Sub QueryFirstOrDefaultOfNullableDateTime()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.DatetimeColumnNull = Nothing
 
@@ -406,16 +406,16 @@ Namespace Tests
       InsertItems(item1, item2)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of DateTime?)($"SELECT DatetimeColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of DateTime?)($"SELECT DatetimeColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual(item1.DatetimeColumnNull, result1)
 
-        Dim result2 = db.ExecuteScalar(Of DateTime?)($"SELECT DatetimeColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of DateTime?)($"SELECT DatetimeColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual(item2.DatetimeColumnNull, result2)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteScalarOfByteArray()
+    Public Overridable Sub QueryFirstOrDefaultOfByteArray()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.Varbinary50ColumnNull = Nothing
 
@@ -428,13 +428,13 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result1 = db.ExecuteScalar(Of Byte())($"SELECT Varbinary50ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Dim result1 = db.QueryFirstOrDefault(Of Byte())($"SELECT Varbinary50ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item1.Varbinary50ColumnNull, result1))
 
-        Dim result2 = db.ExecuteScalar(Of Byte())($"SELECT Varbinary50ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Dim result2 = db.QueryFirstOrDefault(Of Byte())($"SELECT Varbinary50ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item2.Varbinary50ColumnNull, result2))
 
-        Dim result3 = db.ExecuteScalar(Of Byte())($"SELECT Varbinary50ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
+        Dim result3 = db.QueryFirstOrDefault(Of Byte())($"SELECT Varbinary50ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
         Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50ColumnNull, result3))
       End Using
     End Sub

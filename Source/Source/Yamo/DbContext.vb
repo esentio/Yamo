@@ -76,20 +76,20 @@ Public Class DbContext
     Return New SelectSqlExpression(Of T)(Me)
   End Function
 
-  Public Function ExecuteNonQuery(sql As FormattableString) As Int32
-    Return (New SqlExpression(Me)).ExecuteNonQuery(sql)
+  Public Function Execute(sql As FormattableString) As Int32
+    Return (New SqlExpression(Me)).Execute(sql)
   End Function
 
-  Public Function ExecuteNonQuery(sql As RawSqlString) As Int32
-    Return (New SqlExpression(Me)).ExecuteNonQuery(sql)
+  Public Function Execute(sql As RawSqlString) As Int32
+    Return (New SqlExpression(Me)).Execute(sql)
   End Function
 
-  Public Function ExecuteScalar(Of T)(sql As FormattableString) As T
-    Return (New SqlExpression(Me)).ExecuteScalar(Of T)(sql)
+  Public Function QueryFirstOrDefault(Of T)(sql As FormattableString) As T
+    Return (New SqlExpression(Me)).QueryFirstOrDefault(Of T)(sql)
   End Function
 
-  Public Function ExecuteScalar(Of T)(sql As RawSqlString) As T
-    Return (New SqlExpression(Me)).ExecuteScalar(Of T)(sql)
+  Public Function QueryFirstOrDefault(Of T)(sql As RawSqlString) As T
+    Return (New SqlExpression(Me)).QueryFirstOrDefault(Of T)(sql)
   End Function
 
   Public Function Insert(Of T)(obj As T, Optional useDbIdentityAndDefaults As Boolean = True, Optional setAutoFields As Boolean = True) As Int32
