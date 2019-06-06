@@ -35,5 +35,15 @@ Namespace Expressions
       Return Me.Executor.QueryFirstOrDefault(Of T)(query)
     End Function
 
+    Public Function Query(Of T)(sql As FormattableString) As List(Of T)
+      Dim q = Me.Builder.CreateQuery(sql)
+      Return Me.Executor.QueryList(Of T)(q)
+    End Function
+
+    Public Function Query(Of T)(sql As RawSqlString) As List(Of T)
+      Dim q = Me.Builder.CreateQuery(sql)
+      Return Me.Executor.QueryList(Of T)(q)
+    End Function
+
   End Class
 End Namespace

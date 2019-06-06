@@ -26,9 +26,25 @@ Namespace Internal.Query
 
     Public Function QueryFirstOrDefault(Of T)(query As Query) As T
       Using command = CreateCommand(query)
-        ' TODO: SIP - use ValueType reader instead?
+        ' TODO: SIP - use ValueType reader instead? (no (un)boxing)?
         Return m_DialectProvider.DbValueConversion.FromDbValue(Of T)(command.ExecuteScalar())
       End Using
+    End Function
+
+    Public Function QueryList(Of T)(query As Query) As List(Of T)
+      Dim values = New List(Of T)
+
+      Using command = CreateCommand(query)
+        Using dataReader = command.ExecuteReader()
+          While dataReader.Read()
+            ' TODO: SIP - use ValueType reader instead? (no (un)boxing)?
+            Dim value = m_DialectProvider.DbValueConversion.FromDbValue(Of T)(dataReader.GetValue(0))
+            values.Add(value)
+          End While
+        End Using
+      End Using
+
+      Return values
     End Function
 
     Public Function ExecuteInsert(query As InsertQuery) As Int32

@@ -92,6 +92,14 @@ Public Class DbContext
     Return (New SqlExpression(Me)).QueryFirstOrDefault(Of T)(sql)
   End Function
 
+  Public Function Query(Of T)(sql As FormattableString) As List(Of T)
+    Return (New SqlExpression(Me)).Query(Of T)(sql)
+  End Function
+
+  Public Function Query(Of T)(sql As RawSqlString) As List(Of T)
+    Return (New SqlExpression(Me)).Query(Of T)(sql)
+  End Function
+
   Public Function Insert(Of T)(obj As T, Optional useDbIdentityAndDefaults As Boolean = True, Optional setAutoFields As Boolean = True) As Int32
     Return (New InsertSqlExpression(Of T)(Me, useDbIdentityAndDefaults, setAutoFields)).Insert(obj)
   End Function

@@ -73,6 +73,7 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tests\QueryTests.vb" />
     <Compile Include="UnitTestDbContextOptionsExtensions.vb" />
     <Compile Include="UnitTestDialectProvider.vb" />
     <Compile Include="UnitTestDbContext.vb" />
