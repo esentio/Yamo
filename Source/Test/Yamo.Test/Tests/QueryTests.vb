@@ -515,5 +515,153 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub QueryOfValueTuple()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 1
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMinValues()
+      item2.IntColumn = 2
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMaxValues()
+      item3.IntColumn = 3
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim result1empty = db.Query(Of (Guid, Guid?))("SELECT UniqueidentifierColumn, UniqueidentifierColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result1empty.Count)
+
+        Dim result1null = db.Query(Of (Guid, Guid?)?)("SELECT UniqueidentifierColumn, UniqueidentifierColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result1null.Count)
+        Assert.AreEqual((item1.UniqueidentifierColumn, item1.UniqueidentifierColumnNull), result1null(0).Value)
+        Assert.AreEqual((item2.UniqueidentifierColumn, item2.UniqueidentifierColumnNull), result1null(1).Value)
+        Assert.AreEqual((item3.UniqueidentifierColumn, item3.UniqueidentifierColumnNull), result1null(2).Value)
+
+        Dim result1 = db.Query(Of (Guid, Guid?))("SELECT UniqueidentifierColumn, UniqueidentifierColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result1.Count)
+        Assert.AreEqual((item1.UniqueidentifierColumn, item1.UniqueidentifierColumnNull), result1(0))
+        Assert.AreEqual((item2.UniqueidentifierColumn, item2.UniqueidentifierColumnNull), result1(1))
+        Assert.AreEqual((item3.UniqueidentifierColumn, item3.UniqueidentifierColumnNull), result1(2))
+
+
+        Dim result2empty = db.Query(Of (String, String, String))("SELECT Nvarchar50Column, Nvarchar50ColumnNull, NvarcharMaxColumn FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result2empty.Count)
+
+        Dim result2null = db.Query(Of (String, String, String)?)("SELECT Nvarchar50Column, Nvarchar50ColumnNull, NvarcharMaxColumn FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result2null.Count)
+        Assert.AreEqual((item1.Nvarchar50Column, item1.Nvarchar50ColumnNull, item1.NvarcharMaxColumn), result2null(0).Value)
+        Assert.AreEqual((item2.Nvarchar50Column, item2.Nvarchar50ColumnNull, item2.NvarcharMaxColumn), result2null(1).Value)
+        Assert.AreEqual((item3.Nvarchar50Column, item3.Nvarchar50ColumnNull, item3.NvarcharMaxColumn), result2null(2).Value)
+
+        Dim result2 = db.Query(Of (String, String, String))("SELECT Nvarchar50Column, Nvarchar50ColumnNull, NvarcharMaxColumn FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result2.Count)
+        Assert.AreEqual((item1.Nvarchar50Column, item1.Nvarchar50ColumnNull, item1.NvarcharMaxColumn), result2(0))
+        Assert.AreEqual((item2.Nvarchar50Column, item2.Nvarchar50ColumnNull, item2.NvarcharMaxColumn), result2(1))
+        Assert.AreEqual((item3.Nvarchar50Column, item3.Nvarchar50ColumnNull, item3.NvarcharMaxColumn), result2(2))
+
+
+        Dim result3empty = db.Query(Of (String, Boolean, Boolean?, Int16))("SELECT NvarcharMaxColumnNull, BitColumn, BitColumnNull, SmallintColumn FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result3empty.Count)
+
+        Dim result3null = db.Query(Of (String, Boolean, Boolean?, Int16)?)("SELECT NvarcharMaxColumnNull, BitColumn, BitColumnNull, SmallintColumn FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result3null.Count)
+        Assert.AreEqual((item1.NvarcharMaxColumnNull, item1.BitColumn, item1.BitColumnNull, item1.SmallintColumn), result3null(0).Value)
+        Assert.AreEqual((item2.NvarcharMaxColumnNull, item2.BitColumn, item2.BitColumnNull, item2.SmallintColumn), result3null(1).Value)
+        Assert.AreEqual((item3.NvarcharMaxColumnNull, item3.BitColumn, item3.BitColumnNull, item3.SmallintColumn), result3null(2).Value)
+
+        Dim result3 = db.Query(Of (String, Boolean, Boolean?, Int16))("SELECT NvarcharMaxColumnNull, BitColumn, BitColumnNull, SmallintColumn FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result3.Count)
+        Assert.AreEqual((item1.NvarcharMaxColumnNull, item1.BitColumn, item1.BitColumnNull, item1.SmallintColumn), result3(0))
+        Assert.AreEqual((item2.NvarcharMaxColumnNull, item2.BitColumn, item2.BitColumnNull, item2.SmallintColumn), result3(1))
+        Assert.AreEqual((item3.NvarcharMaxColumnNull, item3.BitColumn, item3.BitColumnNull, item3.SmallintColumn), result3(2))
+
+
+        Dim result4empty = db.Query(Of (Int16?, Int32, Int32?, Int64, Int64?))("SELECT SmallintColumnNull, IntColumn, IntColumnNull, BigintColumn, BigintColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result4empty.Count)
+
+        Dim result4null = db.Query(Of (Int16?, Int32, Int32?, Int64, Int64?)?)("SELECT SmallintColumnNull, IntColumn, IntColumnNull, BigintColumn, BigintColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result4null.Count)
+        Assert.AreEqual((item1.SmallintColumnNull, item1.IntColumn, item1.IntColumnNull, item1.BigintColumn, item1.BigintColumnNull), result4null(0).Value)
+        Assert.AreEqual((item2.SmallintColumnNull, item2.IntColumn, item2.IntColumnNull, item2.BigintColumn, item2.BigintColumnNull), result4null(1).Value)
+        Assert.AreEqual((item3.SmallintColumnNull, item3.IntColumn, item3.IntColumnNull, item3.BigintColumn, item3.BigintColumnNull), result4null(2).Value)
+
+        Dim result4 = db.Query(Of (Int16?, Int32, Int32?, Int64, Int64?))("SELECT SmallintColumnNull, IntColumn, IntColumnNull, BigintColumn, BigintColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result4.Count)
+        Assert.AreEqual((item1.SmallintColumnNull, item1.IntColumn, item1.IntColumnNull, item1.BigintColumn, item1.BigintColumnNull), result4(0))
+        Assert.AreEqual((item2.SmallintColumnNull, item2.IntColumn, item2.IntColumnNull, item2.BigintColumn, item2.BigintColumnNull), result4(1))
+        Assert.AreEqual((item3.SmallintColumnNull, item3.IntColumn, item3.IntColumnNull, item3.BigintColumn, item3.BigintColumnNull), result4(2))
+
+
+        Dim result5empty = db.Query(Of (Single, Single?, Double, Double?, Decimal, Decimal?))("SELECT RealColumn, RealColumnNull, FloatColumn, FloatColumnNull, Numeric10and3Column, Numeric10and3ColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result5empty.Count)
+
+        Dim result5null = db.Query(Of (Single, Single?, Double, Double?, Decimal, Decimal?)?)("SELECT RealColumn, RealColumnNull, FloatColumn, FloatColumnNull, Numeric10and3Column, Numeric10and3ColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result5null.Count)
+        Assert.AreEqual((item1.RealColumn, item1.RealColumnNull, item1.FloatColumn, item1.FloatColumnNull, item1.Numeric10and3Column, item1.Numeric10and3ColumnNull), result5null(0).Value)
+        Assert.AreEqual((item2.RealColumn, item2.RealColumnNull, item2.FloatColumn, item2.FloatColumnNull, item2.Numeric10and3Column, item2.Numeric10and3ColumnNull), result5null(1).Value)
+        Assert.AreEqual((item3.RealColumn, item3.RealColumnNull, item3.FloatColumn, item3.FloatColumnNull, item3.Numeric10and3Column, item3.Numeric10and3ColumnNull), result5null(2).Value)
+
+        Dim result5 = db.Query(Of (Single, Single?, Double, Double?, Decimal, Decimal?))("SELECT RealColumn, RealColumnNull, FloatColumn, FloatColumnNull, Numeric10and3Column, Numeric10and3ColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result5.Count)
+        Assert.AreEqual((item1.RealColumn, item1.RealColumnNull, item1.FloatColumn, item1.FloatColumnNull, item1.Numeric10and3Column, item1.Numeric10and3ColumnNull), result5(0))
+        Assert.AreEqual((item2.RealColumn, item2.RealColumnNull, item2.FloatColumn, item2.FloatColumnNull, item2.Numeric10and3Column, item2.Numeric10and3ColumnNull), result5(1))
+        Assert.AreEqual((item3.RealColumn, item3.RealColumnNull, item3.FloatColumn, item3.FloatColumnNull, item3.Numeric10and3Column, item3.Numeric10and3ColumnNull), result5(2))
+
+
+        Dim result6empty = db.Query(Of (Decimal, Decimal?, DateTime, DateTime?, Byte(), Byte(), Guid))("SELECT Numeric15and0Column, Numeric15and0ColumnNull, DatetimeColumn, DatetimeColumnNull, Varbinary50Column, Varbinary50ColumnNull, Id FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result6empty.Count)
+
+        Dim result6null = db.Query(Of (Decimal, Decimal?, DateTime, DateTime?, Byte(), Byte(), Guid)?)("SELECT Numeric15and0Column, Numeric15and0ColumnNull, DatetimeColumn, DatetimeColumnNull, Varbinary50Column, Varbinary50ColumnNull, Id FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result6null.Count)
+        Assert.AreEqual(item1.Numeric15and0Column, result6null(0).Value.Item1)
+        Assert.AreEqual(item1.Numeric15and0ColumnNull, result6null(0).Value.Item2)
+        Assert.AreEqual(item1.DatetimeColumn, result6null(0).Value.Item3)
+        Assert.AreEqual(item1.DatetimeColumnNull, result6null(0).Value.Item4)
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item1.Varbinary50Column, result6null(0).Value.Item5))
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item1.Varbinary50ColumnNull, result6null(0).Value.Item6))
+        Assert.AreEqual(item1.Id, result6null(0).Value.Item7)
+        Assert.AreEqual(item2.Numeric15and0Column, result6null(1).Value.Item1)
+        Assert.AreEqual(item2.Numeric15and0ColumnNull, result6null(1).Value.Item2)
+        Assert.AreEqual(item2.DatetimeColumn, result6null(1).Value.Item3)
+        Assert.AreEqual(item2.DatetimeColumnNull, result6null(1).Value.Item4)
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item2.Varbinary50ColumnNull, result6null(1).Value.Item6))
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item2.Varbinary50Column, result6null(1).Value.Item5))
+        Assert.AreEqual(item2.Id, result6null(1).Value.Item7)
+        Assert.AreEqual(item3.Numeric15and0Column, result6null(2).Value.Item1)
+        Assert.AreEqual(item3.Numeric15and0ColumnNull, result6null(2).Value.Item2)
+        Assert.AreEqual(item3.DatetimeColumn, result6null(2).Value.Item3)
+        Assert.AreEqual(item3.DatetimeColumnNull, result6null(2).Value.Item4)
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50Column, result6null(2).Value.Item5))
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50ColumnNull, result6null(2).Value.Item6))
+        Assert.AreEqual(item3.Id, result6null(2).Value.Item7)
+
+
+        Dim result6 = db.Query(Of (Decimal, Decimal?, DateTime, DateTime?, Byte(), Byte(), Guid))("SELECT Numeric15and0Column, Numeric15and0ColumnNull, DatetimeColumn, DatetimeColumnNull, Varbinary50Column, Varbinary50ColumnNull, Id FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result6.Count)
+        Assert.AreEqual(item1.Numeric15and0Column, result6(0).Item1)
+        Assert.AreEqual(item1.Numeric15and0ColumnNull, result6(0).Item2)
+        Assert.AreEqual(item1.DatetimeColumn, result6(0).Item3)
+        Assert.AreEqual(item1.DatetimeColumnNull, result6(0).Item4)
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item1.Varbinary50Column, result6(0).Item5))
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item1.Varbinary50ColumnNull, result6(0).Item6))
+        Assert.AreEqual(item1.Id, result6(0).Item7)
+        Assert.AreEqual(item2.Numeric15and0Column, result6(1).Item1)
+        Assert.AreEqual(item2.Numeric15and0ColumnNull, result6(1).Item2)
+        Assert.AreEqual(item2.DatetimeColumn, result6(1).Item3)
+        Assert.AreEqual(item2.DatetimeColumnNull, result6(1).Item4)
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item2.Varbinary50ColumnNull, result6(1).Item6))
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item2.Varbinary50Column, result6(1).Item5))
+        Assert.AreEqual(item2.Id, result6(1).Item7)
+        Assert.AreEqual(item3.Numeric15and0Column, result6(2).Item1)
+        Assert.AreEqual(item3.Numeric15and0ColumnNull, result6(2).Item2)
+        Assert.AreEqual(item3.DatetimeColumn, result6(2).Item3)
+        Assert.AreEqual(item3.DatetimeColumnNull, result6(2).Item4)
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50Column, result6(2).Item5))
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50ColumnNull, result6(2).Item6))
+        Assert.AreEqual(item3.Id, result6(2).Item7)
+      End Using
+    End Sub
+
   End Class
 End Namespace

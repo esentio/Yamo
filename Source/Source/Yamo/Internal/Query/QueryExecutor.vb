@@ -28,16 +28,14 @@ Namespace Internal.Query
     Public Function QueryFirstOrDefault(Of T)(query As Query) As T
       Dim value As T = Nothing
       Dim resultType = GetType(T)
+      Dim isValueTuple = Types.IsValueTupleOrNullableValueTuple(resultType)
 
       Using command = CreateCommand(query)
-        If Types.IsValueTupleOrNullableValueTuple(resultType) Then
+        If isValueTuple Then
           Using dataReader = command.ExecuteReader()
             If dataReader.Read() Then
               Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
               Dim customEntityInfos = CustomEntityReadInfo.CreateForGenericType(m_DialectProvider, m_DbContext.Model, resultType)
-
-              Dim x = reader(dataReader, customEntityInfos)
-
               value = DirectCast(reader(dataReader, customEntityInfos), T)
             End If
           End Using
@@ -52,13 +50,28 @@ Namespace Internal.Query
 
     Public Function QueryList(Of T)(query As Query) As List(Of T)
       Dim values = New List(Of T)
+      Dim resultType = GetType(T)
+      Dim isValueTuple = Types.IsValueTupleOrNullableValueTuple(resultType)
+
+      Dim reader As Func(Of IDataReader, CustomEntityReadInfo(), T) = Nothing
+      Dim customEntityInfos As CustomEntityReadInfo() = Nothing
+
+      If isValueTuple Then
+        reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
+        customEntityInfos = CustomEntityReadInfo.CreateForGenericType(m_DialectProvider, m_DbContext.Model, resultType)
+      End If
 
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
           While dataReader.Read()
-            ' TODO: SIP - use ValueType reader instead? (no (un)boxing)?
-            Dim value = m_DialectProvider.DbValueConversion.FromDbValue(Of T)(dataReader.GetValue(0))
-            values.Add(value)
+            If isValueTuple Then
+              Dim value = DirectCast(reader(dataReader, customEntityInfos), T)
+              values.Add(value)
+            Else
+              ' TODO: SIP - use ValueType reader instead? (no (un)boxing)?
+              Dim value = m_DialectProvider.DbValueConversion.FromDbValue(Of T)(dataReader.GetValue(0))
+              values.Add(value)
+            End If
           End While
         End Using
       End Using
