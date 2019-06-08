@@ -2,6 +2,7 @@
 Imports System.Data.Common
 Imports Yamo
 Imports Yamo.Infrastructure
+Imports Yamo.Internal.Helpers
 
 ' TODO: SIP - rewrite as static class (one allocation less...)?
 
@@ -25,10 +26,26 @@ Namespace Internal.Query
     End Function
 
     Public Function QueryFirstOrDefault(Of T)(query As Query) As T
+      Dim value As T = Nothing
+      Dim resultType = GetType(T)
+
       Using command = CreateCommand(query)
-        ' TODO: SIP - use ValueType reader instead? (no (un)boxing)?
-        Return m_DialectProvider.DbValueConversion.FromDbValue(Of T)(command.ExecuteScalar())
+        If Types.IsValueTupleOrNullableValueTuple(resultType) Then
+          Using dataReader = command.ExecuteReader()
+            If dataReader.Read() Then
+              Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
+              Dim customEntityInfos = CustomEntityReadInfo.CreateForGenericType(m_DialectProvider, m_DbContext.Model, resultType)
+
+              value = DirectCast(reader(dataReader, customEntityInfos), T)
+            End If
+          End Using
+        Else
+          ' TODO: SIP - use ValueType reader instead? (no (un)boxing)?
+          value = m_DialectProvider.DbValueConversion.FromDbValue(Of T)(command.ExecuteScalar())
+        End If
       End Using
+
+      Return value
     End Function
 
     Public Function QueryList(Of T)(query As Query) As List(Of T)

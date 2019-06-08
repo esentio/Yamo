@@ -43,7 +43,27 @@ Namespace Internal.Query
           result(i) = Create(dialectProvider, model.Model, customEntity.Type, readerIndex)
           readerIndex += 1
         End If
+      Next
 
+      Return result
+    End Function
+
+    Public Shared Function CreateForGenericType(dialectProvider As SqlDialectProvider, model As Model, type As Type) As CustomEntityReadInfo()
+      Dim underlyingNullableType = Nullable.GetUnderlyingType(type)
+
+      If underlyingNullableType IsNot Nothing Then
+        type = underlyingNullableType
+      End If
+
+      If Not type.IsGenericType Then
+        Throw New ArgumentException($"Type '{type}' is not generic type.")
+      End If
+
+      Dim args = type.GetGenericArguments()
+      Dim result = New CustomEntityReadInfo(args.Length - 1) {}
+
+      For i = 0 To args.Length - 1
+        result(i) = Create(dialectProvider, model, args(i), i)
       Next
 
       Return result

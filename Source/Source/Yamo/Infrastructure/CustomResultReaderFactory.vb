@@ -11,6 +11,34 @@ Namespace Infrastructure
     Inherits ReaderFactoryBase
 
     Public Shared Function CreateResultFactory(node As Expression, customEntities As CustomSqlEntity()) As Object
+      If node.NodeType = ExpressionType.New Then
+        ' ValueTuple or anonymous type
+        Return CreateResultFactory(customEntities, DirectCast(node, NewExpression).Constructor)
+      Else
+        ' single value or entity
+        Return CreateResultFactory(customEntities, Nothing)
+      End If
+    End Function
+
+    Public Shared Function CreateResultFactory(resultType As Type) As Object
+      Dim constructorInfo As ConstructorInfo = Nothing
+      Dim customEntities As CustomSqlEntity()
+
+      ' NOTE: right only ValueTuples with basic value-type (non-model-entity) fields are supported (this should only be called from Query/QueryFirstOrDefault)
+      If resultType.IsGenericType Then
+        Dim args = resultType.GetGenericArguments()
+        constructorInfo = resultType.GetConstructor(args)
+        customEntities = args.Select(Function(x, i) New CustomSqlEntity(i, x)).ToArray()
+      Else
+        ' should not happen
+        constructorInfo = resultType.GetConstructor({})
+        customEntities = {}
+      End If
+
+      Return CreateResultFactory(customEntities, constructorInfo)
+    End Function
+
+    Private Shared Function CreateResultFactory(customEntities As CustomSqlEntity(), resultConstructorInfo As ConstructorInfo) As Object
       Dim readerParam = Expression.Parameter(GetType(IDataReader), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
       Dim customEntityInfosParam = Expression.Parameter(GetType(CustomEntityReadInfo()), "customEntityInfos")
       Dim parameters = {readerParam, customEntityInfosParam}
@@ -82,13 +110,13 @@ Namespace Infrastructure
         arguments.Add(valueVar)
       Next
 
-      If node.NodeType = ExpressionType.New Then
-        ' ValueTuple or anonymous type
-        Dim newExp = Expression.[New](DirectCast(node, NewExpression).Constructor, arguments)
-        expressions.Add(newExp)
-      Else
+      If resultConstructorInfo Is Nothing Then
         ' single value or entity
         expressions.Add(variables(0))
+      Else
+        ' ValueTuple or anonymous type
+        Dim newExp = Expression.[New](resultConstructorInfo, arguments)
+        expressions.Add(newExp)
       End If
 
       Dim body = Expression.Block(variables, expressions)
