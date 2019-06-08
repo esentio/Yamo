@@ -36,6 +36,8 @@ Namespace Internal.Query
               Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
               Dim customEntityInfos = CustomEntityReadInfo.CreateForGenericType(m_DialectProvider, m_DbContext.Model, resultType)
 
+              Dim x = reader(dataReader, customEntityInfos)
+
               value = DirectCast(reader(dataReader, customEntityInfos), T)
             End If
           End Using

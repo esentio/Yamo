@@ -21,24 +21,43 @@ Namespace Infrastructure
     End Function
 
     Public Shared Function CreateResultFactory(resultType As Type) As Object
-      Dim constructorInfo As ConstructorInfo = Nothing
+      Dim resultConstructorInfo As ConstructorInfo = Nothing
+      Dim nullableValueConstructorInfo As ConstructorInfo = Nothing
       Dim customEntities As CustomSqlEntity()
 
-      ' NOTE: right only ValueTuples with basic value-type (non-model-entity) fields are supported (this should only be called from Query/QueryFirstOrDefault)
-      If resultType.IsGenericType Then
-        Dim args = resultType.GetGenericArguments()
-        constructorInfo = resultType.GetConstructor(args)
-        customEntities = args.Select(Function(x, i) New CustomSqlEntity(i, x)).ToArray()
+      ' NOTE: right now only (nullable/non-nullable) ValueTuples with basic value-type (non-model-entity) fields are supported (this should only be called from Query/QueryFirstOrDefault)
+
+      Dim underlyingNullableType = Nullable.GetUnderlyingType(resultType)
+
+      If underlyingNullableType Is Nothing Then
+        If resultType.IsGenericType Then
+          Dim args = resultType.GetGenericArguments()
+          resultConstructorInfo = resultType.GetConstructor(args)
+          customEntities = args.Select(Function(x, i) New CustomSqlEntity(i, x)).ToArray()
+        Else
+          ' should not happen
+          resultConstructorInfo = resultType.GetConstructor({})
+          customEntities = {}
+        End If
+
       Else
-        ' should not happen
-        constructorInfo = resultType.GetConstructor({})
-        customEntities = {}
+        resultConstructorInfo = resultType.GetConstructor(resultType.GetGenericArguments())
+
+        If underlyingNullableType.IsGenericType Then
+          Dim args = underlyingNullableType.GetGenericArguments()
+          nullableValueConstructorInfo = underlyingNullableType.GetConstructor(args)
+          customEntities = args.Select(Function(x, i) New CustomSqlEntity(i, x)).ToArray()
+        Else
+          ' should not happen
+          nullableValueConstructorInfo = underlyingNullableType.GetConstructor({})
+          customEntities = {}
+        End If
       End If
 
-      Return CreateResultFactory(customEntities, constructorInfo)
+      Return CreateResultFactory(customEntities, resultConstructorInfo, nullableValueConstructorInfo)
     End Function
 
-    Private Shared Function CreateResultFactory(customEntities As CustomSqlEntity(), resultConstructorInfo As ConstructorInfo) As Object
+    Private Shared Function CreateResultFactory(customEntities As CustomSqlEntity(), Optional resultConstructorInfo As ConstructorInfo = Nothing, Optional nullableValueConstructorInfo As ConstructorInfo = Nothing) As Object
       Dim readerParam = Expression.Parameter(GetType(IDataReader), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
       Dim customEntityInfosParam = Expression.Parameter(GetType(CustomEntityReadInfo()), "customEntityInfos")
       Dim parameters = {readerParam, customEntityInfosParam}
@@ -114,9 +133,15 @@ Namespace Infrastructure
         ' single value or entity
         expressions.Add(variables(0))
       Else
-        ' ValueTuple or anonymous type
-        Dim newExp = Expression.[New](resultConstructorInfo, arguments)
-        expressions.Add(newExp)
+        If nullableValueConstructorInfo Is Nothing Then
+          ' ValueTuple or anonymous type
+          Dim newExp = Expression.[New](resultConstructorInfo, arguments)
+          expressions.Add(newExp)
+        Else
+          ' nullable ValueTuple
+          Dim newExp = Expression.[New](resultConstructorInfo, Expression.[New](nullableValueConstructorInfo, arguments))
+          expressions.Add(newExp)
+        End If
       End If
 
       Dim body = Expression.Block(variables, expressions)

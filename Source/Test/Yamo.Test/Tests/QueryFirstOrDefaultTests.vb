@@ -448,61 +448,85 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result1empty = db.QueryFirstOrDefault(Of (Guid, Guid?))("SELECT UniqueidentifierColumn, UniqueidentifierColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
-        Assert.AreEqual(New ValueTuple(Of Guid, Guid?), result1empty)
-
         Dim result1null = db.QueryFirstOrDefault(Of (Guid, Guid?)?)("SELECT UniqueidentifierColumn, UniqueidentifierColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
         Assert.AreEqual(New ValueTuple(Of Guid, Guid?)?, result1null)
 
+        Dim result1nullWithValue = db.QueryFirstOrDefault(Of (Guid, Guid?)?)($"SELECT UniqueidentifierColumn, UniqueidentifierColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Assert.AreEqual((item1.UniqueidentifierColumn, item1.UniqueidentifierColumnNull), result1nullWithValue.Value)
+
+        Dim result1empty = db.QueryFirstOrDefault(Of (Guid, Guid?))("SELECT UniqueidentifierColumn, UniqueidentifierColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of Guid, Guid?), result1empty)
+
         Dim result1 = db.QueryFirstOrDefault(Of (Guid, Guid?))($"SELECT UniqueidentifierColumn, UniqueidentifierColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
-        Assert.AreEqual((item1.UniqueidentifierColumn, item1.UniqueidentifierColumnNull), result1empty)
+        Assert.AreEqual((item1.UniqueidentifierColumn, item1.UniqueidentifierColumnNull), result1)
 
-
-        Dim result2empty = db.QueryFirstOrDefault(Of (String, String, String))("SELECT Nvarchar50Column, Nvarchar50ColumnNull, NvarcharMaxColumn FROM ItemWithAllSupportedValues WHERE 1 = 2")
-        Assert.AreEqual(New ValueTuple(Of String, String, String), result2empty)
 
         Dim result2null = db.QueryFirstOrDefault(Of (String, String, String)?)("SELECT Nvarchar50Column, Nvarchar50ColumnNull, NvarcharMaxColumn FROM ItemWithAllSupportedValues WHERE 1 = 2")
         Assert.AreEqual(New ValueTuple(Of String, String, String)?, result2null)
+
+        Dim result2nullWithValue = db.QueryFirstOrDefault(Of (String, String, String)?)($"SELECT Nvarchar50Column, Nvarchar50ColumnNull, NvarcharMaxColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Assert.AreEqual((item2.Nvarchar50Column, item2.Nvarchar50ColumnNull, item2.NvarcharMaxColumn), result2nullWithValue.Value)
+
+        Dim result2empty = db.QueryFirstOrDefault(Of (String, String, String))("SELECT Nvarchar50Column, Nvarchar50ColumnNull, NvarcharMaxColumn FROM ItemWithAllSupportedValues WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of String, String, String), result2empty)
 
         Dim result2 = db.QueryFirstOrDefault(Of (String, String, String))($"SELECT Nvarchar50Column, Nvarchar50ColumnNull, NvarcharMaxColumn FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual((item2.Nvarchar50Column, item2.Nvarchar50ColumnNull, item2.NvarcharMaxColumn), result2)
 
 
-        Dim result3empty = db.QueryFirstOrDefault(Of (String, Boolean, Boolean?, Int16))("SELECT NvarcharMaxColumnNull, BitColumn, BitColumnNull, SmallintColumn FROM ItemWithAllSupportedValues WHERE 1 = 2")
-        Assert.AreEqual(New ValueTuple(Of String, Boolean, Boolean?, Int16), result3empty)
-
         Dim result3null = db.QueryFirstOrDefault(Of (String, Boolean, Boolean?, Int16)?)("SELECT NvarcharMaxColumnNull, BitColumn, BitColumnNull, SmallintColumn FROM ItemWithAllSupportedValues WHERE 1 = 2")
         Assert.AreEqual(New ValueTuple(Of String, Boolean, Boolean?, Int16)?, result3null)
+
+        Dim result3nullWithValue = db.QueryFirstOrDefault(Of (String, Boolean, Boolean?, Int16)?)($"SELECT NvarcharMaxColumnNull, BitColumn, BitColumnNull, SmallintColumn FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
+        Assert.AreEqual((item3.NvarcharMaxColumnNull, item3.BitColumn, item3.BitColumnNull, item3.SmallintColumn), result3nullWithValue.Value)
+
+        Dim result3empty = db.QueryFirstOrDefault(Of (String, Boolean, Boolean?, Int16))("SELECT NvarcharMaxColumnNull, BitColumn, BitColumnNull, SmallintColumn FROM ItemWithAllSupportedValues WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of String, Boolean, Boolean?, Int16), result3empty)
 
         Dim result3 = db.QueryFirstOrDefault(Of (String, Boolean, Boolean?, Int16))($"SELECT NvarcharMaxColumnNull, BitColumn, BitColumnNull, SmallintColumn FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
         Assert.AreEqual((item3.NvarcharMaxColumnNull, item3.BitColumn, item3.BitColumnNull, item3.SmallintColumn), result3)
 
 
-        Dim result4empty = db.QueryFirstOrDefault(Of (Int16?, Int32, Int32?, Int64, Int64?))("SELECT SmallintColumnNull, IntColumn, IntColumnNull, BigintColumn, BigintColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
-        Assert.AreEqual(New ValueTuple(Of Int16?, Int32, Int32?, Int64, Int64?), result4empty)
-
         Dim result4null = db.QueryFirstOrDefault(Of (Int16?, Int32, Int32?, Int64, Int64?)?)("SELECT SmallintColumnNull, IntColumn, IntColumnNull, BigintColumn, BigintColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
         Assert.AreEqual(New ValueTuple(Of Int16?, Int32, Int32?, Int64, Int64?)?, result4null)
+
+        Dim result4nullWithValue = db.QueryFirstOrDefault(Of (Int16?, Int32, Int32?, Int64, Int64?)?)($"SELECT SmallintColumnNull, IntColumn, IntColumnNull, BigintColumn, BigintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Assert.AreEqual((item1.SmallintColumnNull, item1.IntColumn, item1.IntColumnNull, item1.BigintColumn, item1.BigintColumnNull), result4nullWithValue.Value)
+
+        Dim result4empty = db.QueryFirstOrDefault(Of (Int16?, Int32, Int32?, Int64, Int64?))("SELECT SmallintColumnNull, IntColumn, IntColumnNull, BigintColumn, BigintColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of Int16?, Int32, Int32?, Int64, Int64?), result4empty)
 
         Dim result4 = db.QueryFirstOrDefault(Of (Int16?, Int32, Int32?, Int64, Int64?))($"SELECT SmallintColumnNull, IntColumn, IntColumnNull, BigintColumn, BigintColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
         Assert.AreEqual((item1.SmallintColumnNull, item1.IntColumn, item1.IntColumnNull, item1.BigintColumn, item1.BigintColumnNull), result4)
 
 
-        Dim result5empty = db.QueryFirstOrDefault(Of (Single, Single?, Double, Double?, Decimal, Decimal?))("SELECT RealColumn, RealColumnNull, FloatColumn, FloatColumnNull, Numeric10and3Column, Numeric10and3ColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
-        Assert.AreEqual(New ValueTuple(Of Single, Single?, Double, Double?, Decimal, Decimal?), result5empty)
-
         Dim result5null = db.QueryFirstOrDefault(Of (Single, Single?, Double, Double?, Decimal, Decimal?)?)("SELECT RealColumn, RealColumnNull, FloatColumn, FloatColumnNull, Numeric10and3Column, Numeric10and3ColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
         Assert.AreEqual(New ValueTuple(Of Single, Single?, Double, Double?, Decimal, Decimal?)?, result5null)
+
+        Dim result5nullWithValue = db.QueryFirstOrDefault(Of (Single, Single?, Double, Double?, Decimal, Decimal?)?)($"SELECT RealColumn, RealColumnNull, FloatColumn, FloatColumnNull, Numeric10and3Column, Numeric10and3ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Assert.AreEqual((item2.RealColumn, item2.RealColumnNull, item2.FloatColumn, item2.FloatColumnNull, item2.Numeric10and3Column, item2.Numeric10and3ColumnNull), result5nullWithValue.Value)
+
+        Dim result5empty = db.QueryFirstOrDefault(Of (Single, Single?, Double, Double?, Decimal, Decimal?))("SELECT RealColumn, RealColumnNull, FloatColumn, FloatColumnNull, Numeric10and3Column, Numeric10and3ColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of Single, Single?, Double, Double?, Decimal, Decimal?), result5empty)
 
         Dim result5 = db.QueryFirstOrDefault(Of (Single, Single?, Double, Double?, Decimal, Decimal?))($"SELECT RealColumn, RealColumnNull, FloatColumn, FloatColumnNull, Numeric10and3Column, Numeric10and3ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
         Assert.AreEqual((item2.RealColumn, item2.RealColumnNull, item2.FloatColumn, item2.FloatColumnNull, item2.Numeric10and3Column, item2.Numeric10and3ColumnNull), result5)
 
 
-        Dim result6empty = db.QueryFirstOrDefault(Of (Decimal, Decimal?, DateTime, DateTime?, Byte(), Byte(), Guid))("SELECT Numeric15and0Column, Numeric15and0ColumnNull, DatetimeColumn, DatetimeColumnNull, Varbinary50Column, Varbinary50ColumnNull, Id FROM ItemWithAllSupportedValues WHERE 1 = 2")
-        Assert.AreEqual(New ValueTuple(Of Decimal, Decimal?, DateTime, DateTime?, Byte(), Byte(), Guid), result6empty)
-
         Dim result6null = db.QueryFirstOrDefault(Of (Decimal, Decimal?, DateTime, DateTime?, Byte(), Byte(), Guid)?)("SELECT Numeric15and0Column, Numeric15and0ColumnNull, DatetimeColumn, DatetimeColumnNull, Varbinary50Column, Varbinary50ColumnNull, Id FROM ItemWithAllSupportedValues WHERE 1 = 2")
         Assert.AreEqual(New ValueTuple(Of Decimal, Decimal?, DateTime, DateTime?, Byte(), Byte(), Guid)?, result6null)
+
+        Dim result6nullWithValue = db.QueryFirstOrDefault(Of (Decimal, Decimal?, DateTime, DateTime?, Byte(), Byte(), Guid)?)($"SELECT Numeric15and0Column, Numeric15and0ColumnNull, DatetimeColumn, DatetimeColumnNull, Varbinary50Column, Varbinary50ColumnNull, Id FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
+        Assert.AreEqual(item3.Numeric15and0Column, result6nullWithValue.Value.Item1)
+        Assert.AreEqual(item3.Numeric15and0ColumnNull, result6nullWithValue.Value.Item2)
+        Assert.AreEqual(item3.DatetimeColumn, result6nullWithValue.Value.Item3)
+        Assert.AreEqual(item3.DatetimeColumnNull, result6nullWithValue.Value.Item4)
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50Column, result6nullWithValue.Value.Item5))
+        Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50ColumnNull, result6nullWithValue.Value.Item6))
+        Assert.AreEqual(item3.Id, result6nullWithValue.Value.Item7)
+
+        Dim result6empty = db.QueryFirstOrDefault(Of (Decimal, Decimal?, DateTime, DateTime?, Byte(), Byte(), Guid))("SELECT Numeric15and0Column, Numeric15and0ColumnNull, DatetimeColumn, DatetimeColumnNull, Varbinary50Column, Varbinary50ColumnNull, Id FROM ItemWithAllSupportedValues WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of Decimal, Decimal?, DateTime, DateTime?, Byte(), Byte(), Guid), result6empty)
 
         Dim result6 = db.QueryFirstOrDefault(Of (Decimal, Decimal?, DateTime, DateTime?, Byte(), Byte(), Guid))($"SELECT Numeric15and0Column, Numeric15and0ColumnNull, DatetimeColumn, DatetimeColumnNull, Varbinary50Column, Varbinary50ColumnNull, Id FROM ItemWithAllSupportedValues WHERE Id = {item3.Id}")
         Assert.AreEqual(item3.Numeric15and0Column, result6.Item1)
