@@ -17,6 +17,10 @@ Namespace Internal.Query.Metadata
 
     Public ReadOnly Property IncludedColumns As Boolean()
 
+    Sub New(entity As Entity)
+      Me.New(entity, "", -1)
+    End Sub
+
     Sub New(entity As Entity, tableAlias As String, index As Int32)
       Me.Entity = entity
       Me.TableAlias = tableAlias

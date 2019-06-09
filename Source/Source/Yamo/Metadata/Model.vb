@@ -29,5 +29,11 @@
       End If
     End Function
 
+    Public Function TryGetEntity(entityType As Type) As Entity
+      Dim entity As Entity = Nothing
+      m_Entities.TryGetValue(entityType, entity)
+      Return entity
+    End Function
+
   End Class
 End Namespace

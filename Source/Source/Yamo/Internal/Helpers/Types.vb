@@ -33,5 +33,13 @@ Namespace Internal.Helpers
              genericType Is GetType(ValueTuple(Of ,,,,,,,)) AndAlso IsValueTupleOrNullableValueTuple(type.GetGenericArguments(7))
     End Function
 
+    Public Shared Function IsProbablyModel(type As Type) As Boolean
+      ' used as a fast way to determine whether type is a model entity or not
+      If type.IsValueType Then Return False
+      If type Is GetType(String) Then Return False
+      If type Is GetType(Byte()) Then Return False
+      Return True
+    End Function
+
   End Class
 End Namespace

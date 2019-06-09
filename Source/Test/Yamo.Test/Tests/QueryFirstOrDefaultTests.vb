@@ -1,9 +1,14 @@
 ﻿Imports Yamo.Test.Model
+Imports Yamo
 
 Namespace Tests
 
   Public MustInherit Class QueryFirstOrDefaultTests
     Inherits BaseIntegrationTests
+
+    Protected Const English As String = "en"
+
+    Protected Const German As String = "ger"
 
     <TestMethod()>
     Public Overridable Sub QueryFirstOrDefaultOfGuid()
@@ -440,6 +445,21 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub QueryFirstOrDefaultOfModel()
+      Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMaxValues()
+
+      InsertItems(item)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.QueryFirstOrDefault(Of ItemWithAllSupportedValues)($"SELECT {Sql.Model.Columns(Of ItemWithAllSupportedValues)} FROM ItemWithAllSupportedValues WHERE 1 = 2")
+        Assert.IsNull(result1)
+
+        Dim result2 = db.QueryFirstOrDefault(Of ItemWithAllSupportedValues)($"SELECT {Sql.Model.Columns(Of ItemWithAllSupportedValues)} FROM ItemWithAllSupportedValues WHERE Id = {item.Id}")
+        Assert.AreEqual(item, result2)
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub QueryFirstOrDefaultOfValueTuple()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMinValues()
@@ -536,6 +556,46 @@ Namespace Tests
         Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50Column, result6.Item5))
         Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50ColumnNull, result6.Item6))
         Assert.AreEqual(item3.Id, result6.Item7)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub QueryFirstOrDefaultOfvalueTupleWithModel()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      Dim article1LabelEn = Me.ModelFactory.CreateLabel(NameOf(Article), 1, English)
+      Dim article3LabelEn = Me.ModelFactory.CreateLabel(NameOf(Article), 3, English)
+      Dim article3LabelGer = Me.ModelFactory.CreateLabel(NameOf(Article), 3, German)
+
+      InsertItems(article1, article2, article3, article1LabelEn, article3LabelEn, article3LabelGer)
+
+      Using db = CreateDbContext()
+        Dim result1null = db.QueryFirstOrDefault(Of (Article, Int32, Label)?)($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("l")} FROM Article AS a LEFT JOIN Label AS l ON a.Id = l.Id WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of Article, Int32, Label)?, result1null)
+
+        Dim result1empty = db.QueryFirstOrDefault(Of (Article, Int32, Label))($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("l")} FROM Article AS a LEFT JOIN Label AS l ON a.Id = l.Id WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of Article, Int32, Label), result1empty)
+
+        Dim result1nullWithValue = db.QueryFirstOrDefault(Of (Article, Int32, Label)?)($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("l")} FROM Article AS a LEFT JOIN Label AS l ON a.Id = l.Id WHERE a.Id = {article1.Id}")
+        Assert.AreEqual((article1, 42, article1LabelEn), result1nullWithValue.Value)
+
+        Dim result1 = db.QueryFirstOrDefault(Of (Article, Int32, Label))($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("l")} FROM Article AS a LEFT JOIN Label AS l ON a.Id = l.Id WHERE a.Id = {article1.Id}")
+        Assert.AreEqual((article1, 42, article1LabelEn), result1)
+
+        Dim result2nullWithValue = db.QueryFirstOrDefault(Of (Article, Int32, Label)?)($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("l")} FROM Article AS a LEFT JOIN Label AS l ON a.Id = l.Id WHERE a.Id = {article2.Id}")
+        Assert.AreEqual((article2, 42, DirectCast(Nothing, Label)), result2nullWithValue.Value)
+
+        Dim result2 = db.QueryFirstOrDefault(Of (Article, Int32, Label))($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("l")} FROM Article AS a LEFT JOIN Label AS l ON a.Id = l.Id WHERE a.Id = {article2.Id}")
+        Assert.AreEqual((article2, 42, DirectCast(Nothing, Label)), result2)
+
+        ' selecting same table twice
+        Dim result3nullWithValue = db.QueryFirstOrDefault(Of (Article, Int32, Label, Label)?)($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("le")}, {Sql.Model.Columns(Of Label)("lg")} FROM Article AS a LEFT JOIN Label AS le ON a.Id = le.Id AND le.Language = {English} LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = {German} WHERE a.Id = {article3.Id}")
+        Assert.AreEqual((article3, 42, article3LabelEn, article3LabelGer), result3nullWithValue.Value)
+
+        Dim result3 = db.QueryFirstOrDefault(Of (Article, Int32, Label, Label))($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("le")}, {Sql.Model.Columns(Of Label)("lg")} FROM Article AS a LEFT JOIN Label AS le ON a.Id = le.Id AND le.Language = {English} LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = {German} WHERE a.Id = {article3.Id}")
+        Assert.AreEqual((article3, 42, article3LabelEn, article3LabelGer), result3)
       End Using
     End Sub
 

@@ -29,18 +29,28 @@ Namespace Internal.Query
       Dim value As T = Nothing
       Dim resultType = GetType(T)
       Dim isValueTuple = Types.IsValueTupleOrNullableValueTuple(resultType)
+      Dim isModel = Not isValueTuple AndAlso Types.IsProbablyModel(resultType)
+
+      Dim reader As Func(Of IDataReader, CustomEntityReadInfo(), T) = Nothing
+      Dim customEntityInfos As CustomEntityReadInfo() = Nothing
 
       Using command = CreateCommand(query)
-        If isValueTuple Then
+        If isValueTuple OrElse isModel Then
           Using dataReader = command.ExecuteReader()
             If dataReader.Read() Then
-              Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
-              Dim customEntityInfos = CustomEntityReadInfo.CreateForGenericType(m_DialectProvider, m_DbContext.Model, resultType)
+              reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
+
+              If isValueTuple Then
+                customEntityInfos = CustomEntityReadInfo.CreateForGenericType(m_DialectProvider, m_DbContext.Model, resultType)
+              Else
+                customEntityInfos = CustomEntityReadInfo.CreateForModelType(m_DialectProvider, m_DbContext.Model, resultType)
+              End If
+
               value = DirectCast(reader(dataReader, customEntityInfos), T)
             End If
           End Using
         Else
-          ' TODO: SIP - use ValueType reader instead? (no (un)boxing)?
+          ' we could use ValueType reader to avoid (un)boxing, but creating it might take more time/resources
           value = m_DialectProvider.DbValueConversion.FromDbValue(Of T)(command.ExecuteScalar())
         End If
       End Using
@@ -68,7 +78,7 @@ Namespace Internal.Query
               Dim value = DirectCast(reader(dataReader, customEntityInfos), T)
               values.Add(value)
             Else
-              ' TODO: SIP - use ValueType reader instead? (no (un)boxing)?
+              ' we could use ValueType reader to avoid (un)boxing, but creating it might take more time/resources
               Dim value = m_DialectProvider.DbValueConversion.FromDbValue(Of T)(dataReader.GetValue(0))
               values.Add(value)
             End If

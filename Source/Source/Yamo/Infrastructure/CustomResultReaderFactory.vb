@@ -1,6 +1,7 @@
 ﻿Imports System.Data
 Imports System.Linq.Expressions
 Imports System.Reflection
+Imports Yamo.Internal
 Imports Yamo.Internal.Query
 Imports Yamo.Internal.Query.Metadata
 Imports Yamo.Metadata
@@ -25,36 +26,49 @@ Namespace Infrastructure
       Dim nullableValueConstructorInfo As ConstructorInfo = Nothing
       Dim customEntities As CustomSqlEntity()
 
-      ' NOTE: right now only (nullable/non-nullable) ValueTuples with basic value-type (non-model-entity) fields are supported (this should only be called from Query/QueryFirstOrDefault)
+      ' NOTE: right now this should only be called from Query/QueryFirstOrDefault and only following types are supported:
+      ' - nullable and non-nullable ValueTuples: with basic value-types or model entities as a field value
+      ' - model entities
 
       Dim underlyingNullableType = Nullable.GetUnderlyingType(resultType)
 
       If underlyingNullableType Is Nothing Then
         If resultType.IsGenericType Then
+          ' ValueTuple
           Dim args = resultType.GetGenericArguments()
           resultConstructorInfo = resultType.GetConstructor(args)
-          customEntities = args.Select(Function(x, i) New CustomSqlEntity(i, x)).ToArray()
+          customEntities = args.Select(AddressOf CreateCustomSqlEntity).ToArray()
         Else
-          ' should not happen
-          resultConstructorInfo = resultType.GetConstructor({})
-          customEntities = {}
+          ' entity model
+          customEntities = {CreateCustomSqlEntity(resultType, 0)}
         End If
 
       Else
         resultConstructorInfo = resultType.GetConstructor(resultType.GetGenericArguments())
 
         If underlyingNullableType.IsGenericType Then
+          ' nullable ValueTuple
           Dim args = underlyingNullableType.GetGenericArguments()
           nullableValueConstructorInfo = underlyingNullableType.GetConstructor(args)
-          customEntities = args.Select(Function(x, i) New CustomSqlEntity(i, x)).ToArray()
+          customEntities = args.Select(AddressOf CreateCustomSqlEntity).ToArray()
         Else
-          ' should not happen
-          nullableValueConstructorInfo = underlyingNullableType.GetConstructor({})
-          customEntities = {}
+          Throw New NotSupportedException($"Type '{resultType}' is not supported.")
         End If
       End If
 
       Return CreateResultFactory(customEntities, resultConstructorInfo, nullableValueConstructorInfo)
+    End Function
+
+    Private Shared Function CreateCustomSqlEntity(type As Type, index As Int32) As CustomSqlEntity
+      If Helpers.Types.IsProbablyModel(type) Then
+        ' If type is not defined in model, there will be an exception thrown later from
+        ' CustomEntityReadInfo.CreateForGenericType() or CustomEntityReadInfo.CreateForModelType().
+        ' We could check it also here, but it would be slower ;)
+        ' Also, we don't need (and don't know) entityIndex, so it's set to -1 in this scenario.
+        Return New CustomSqlEntity(index, -1, type)
+      Else
+        Return New CustomSqlEntity(index, type)
+      End If
     End Function
 
     Private Shared Function CreateResultFactory(customEntities As CustomSqlEntity(), Optional resultConstructorInfo As ConstructorInfo = Nothing, Optional nullableValueConstructorInfo As ConstructorInfo = Nothing) As Object
