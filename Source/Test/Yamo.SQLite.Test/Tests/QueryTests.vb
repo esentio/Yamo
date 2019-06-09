@@ -3,11 +3,11 @@
 Namespace Tests
 
   <TestClass()>
-  Public Class ExecuteNonQueryTests
-    Inherits Yamo.Test.Tests.ExecuteNonQueryTests
+  Public Class QueryTests
+    Inherits Yamo.Test.Tests.QueryTests
 
     Protected Overrides Function CreateTestEnvironment() As ITestEnvironment
-      Return SqlServerTestEnvironment.Create()
+      Return SQLiteTestEnvironment.Create()
     End Function
 
   End Class

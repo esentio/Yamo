@@ -12,7 +12,7 @@ Namespace Expressions
 
     Public Function Execute() As Int32
       Dim query = Me.Builder.CreateQuery()
-      Return Me.Executor.ExecuteNonQuery(query)
+      Return Me.Executor.Execute(query)
     End Function
 
   End Class

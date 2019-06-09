@@ -43,10 +43,56 @@ Namespace Internal.Query
           result(i) = Create(dialectProvider, model.Model, customEntity.Type, readerIndex)
           readerIndex += 1
         End If
-
       Next
 
       Return result
+    End Function
+
+    Public Shared Function CreateForGenericType(dialectProvider As SqlDialectProvider, model As Model, type As Type) As CustomEntityReadInfo()
+      Dim underlyingNullableType = Nullable.GetUnderlyingType(type)
+
+      If underlyingNullableType IsNot Nothing Then
+        type = underlyingNullableType
+      End If
+
+      If Not type.IsGenericType Then
+        Throw New ArgumentException($"Type '{type}' is not generic type.")
+      End If
+
+      Dim args = type.GetGenericArguments()
+      Dim result = New CustomEntityReadInfo(args.Length - 1) {}
+      Dim readerIndex = 0
+
+      For i = 0 To args.Length - 1
+        Dim argType = args(i)
+
+        If Helpers.Types.IsProbablyModel(argType) Then
+          Dim entity = model.TryGetEntity(argType)
+
+          If entity Is Nothing Then
+            Throw New NotSupportedException($"Type '{argType}' is not supported. Only reference types defined in model are supported.")
+          End If
+
+          Dim sqlEntity = New SqlEntity(entity)
+          result(i) = Create(dialectProvider, model, sqlEntity, readerIndex)
+          readerIndex += sqlEntity.GetColumnCount()
+        Else
+          result(i) = Create(dialectProvider, model, argType, readerIndex)
+          readerIndex += 1
+        End If
+      Next
+
+      Return result
+    End Function
+
+    Public Shared Function CreateForModelType(dialectProvider As SqlDialectProvider, model As Model, type As Type) As CustomEntityReadInfo()
+      Dim entity = model.TryGetEntity(type)
+
+      If entity Is Nothing Then
+        Throw New NotSupportedException($"Type '{type}' is not supported. Only reference types defined in model are supported.")
+      End If
+
+      Return {Create(dialectProvider, model, New SqlEntity(entity), 0)}
     End Function
 
     Private Shared Function Create(dialectProvider As SqlDialectProvider, model As Model, entity As SqlEntity, readerIndex As Int32) As CustomEntityReadInfo

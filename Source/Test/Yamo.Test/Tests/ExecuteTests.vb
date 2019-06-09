@@ -2,7 +2,7 @@
 
 Namespace Tests
 
-  Public MustInherit Class ExecuteNonQueryTests
+  Public MustInherit Class ExecuteTests
     Inherits BaseIntegrationTests
 
     Protected Const English As String = "en"
@@ -10,14 +10,14 @@ Namespace Tests
     Protected Const German As String = "ger"
 
     <TestMethod()>
-    Public Overridable Sub ExecuteNonQueryUsingString()
+    Public Overridable Sub ExecuteUsingString()
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
       Dim label2En = Me.ModelFactory.CreateLabel("", 2, English)
 
       InsertItems(label1En, label2En)
 
       Using db = CreateDbContext()
-        Dim result = db.ExecuteNonQuery("UPDATE Label SET Language = 'ger'")
+        Dim result = db.Execute("UPDATE Label SET Language = 'ger'")
         Assert.AreEqual(2, result)
 
         result = db.From(Of Label).Where(Function(o) o.Language = German).SelectCount()
@@ -26,14 +26,14 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub ExecuteNonQueryUsingFormattableString()
+    Public Overridable Sub ExecuteUsingFormattableString()
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
       Dim label2En = Me.ModelFactory.CreateLabel("", 2, English)
 
       InsertItems(label1En, label2En)
 
       Using db = CreateDbContext()
-        Dim result = db.ExecuteNonQuery($"UPDATE Label SET Language = {German}")
+        Dim result = db.Execute($"UPDATE Label SET Language = {German}")
         Assert.AreEqual(2, result)
 
         result = db.From(Of Label).Where(Function(o) o.Language = German).SelectCount()

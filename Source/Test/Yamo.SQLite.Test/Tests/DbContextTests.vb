@@ -19,7 +19,7 @@ Namespace Tests
         Using db = New DbContextWithProvidedConnection(conn)
           Assert.AreEqual(conn, db.Database.Connection)
 
-          Dim result = db.ExecuteScalar(Of Int32)("SELECT 1")
+          Dim result = db.QueryFirstOrDefault(Of Int32)("SELECT 1")
           Assert.AreEqual(1, result)
         End Using
 
@@ -28,7 +28,7 @@ Namespace Tests
         Using db = New DbContextWithProvidedConnection(conn)
           Assert.AreEqual(conn, db.Database.Connection)
 
-          Dim result = db.ExecuteScalar(Of Int32)("SELECT 1")
+          Dim result = db.QueryFirstOrDefault(Of Int32)("SELECT 1")
           Assert.AreEqual(1, result)
         End Using
       End Using
@@ -39,7 +39,7 @@ Namespace Tests
       Dim cs = Configuration.ConfigurationManager.ConnectionStrings("TestDb").ConnectionString
 
       Using db = New DbContextWithProvidedConnectionFactory(cs)
-        Dim result = db.ExecuteScalar(Of Int32)("SELECT 1")
+        Dim result = db.QueryFirstOrDefault(Of Int32)("SELECT 1")
         Assert.AreEqual(1, result)
       End Using
     End Sub

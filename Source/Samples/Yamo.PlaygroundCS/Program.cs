@@ -52,6 +52,7 @@ namespace Yamo.PlaygroundCS
             //Test31();
             //Test32();
             //Test33();
+            //Test34();
         }
 
         public static MyContext CreateContext()
@@ -73,8 +74,18 @@ namespace Yamo.PlaygroundCS
         {
             using (var db = CreateContext())
             {
-                var affectedRows = db.ExecuteNonQuery("DELETE FROM [User]");
-                var count = db.ExecuteScalar<int>("SELECT COUNT(*) FROM [User]");
+                int count = db.QueryFirstOrDefault<int>("SELECT COUNT(*) FROM [User]");
+                List<string> logins = db.Query<string>("SELECT Login FROM [User]");
+                int affectedRows = db.Execute("DELETE FROM [User]");
+            }
+        }
+
+        public static void Test2()
+        {
+            using (var db = CreateContext())
+            {
+                var login = "foo";
+                var affectedRows = db.Execute($"DELETE FROM [User] WHERE Login = {login}");
             }
         }
 
@@ -83,7 +94,8 @@ namespace Yamo.PlaygroundCS
             using (var db = CreateContext())
             {
                 var login = "foo";
-                var affectedRows = db.ExecuteNonQuery($"DELETE FROM [User] WHERE Login = {login}");
+                var data = db.QueryFirstOrDefault<(int, string)?>($"SELECT Id, Email FROM [User] WHERE Login = {login}");
+                var list = db.Query<(int Login, int Email)>("SELECT Login, Email FROM [User]");
             }
         }
 
@@ -618,6 +630,23 @@ namespace Yamo.PlaygroundCS
                                .Having(l => 10 < Yamo.Sql.Aggregate.Count())
                                .Select(l => l.TableId)
                                .ToList();
+            }
+        }
+
+        public static void Test34()
+        {
+            using (var db = CreateContext())
+            {
+                var articles = db.Query<Article>($"SELECT {Yamo.Sql.Model.Columns<Article>()} FROM Article");
+
+                var data = db.QueryFirstOrDefault<(decimal, Label, Label)?>($@"
+                    SELECT a.Price,
+                    {Yamo.Sql.Model.Columns<Label>("le")},
+                    {Yamo.Sql.Model.Columns<Label>("lg")}
+                    FROM Article AS a
+                    LEFT JOIN Label AS le ON a.Id = le.Id AND le.Language = 'en'
+                    LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = 'ger'
+                    WHERE a.Id = 1");
             }
         }
 

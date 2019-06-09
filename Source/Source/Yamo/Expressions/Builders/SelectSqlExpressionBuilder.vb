@@ -408,6 +408,5 @@ Namespace Expressions.Builders
       Next
     End Sub
 
-
   End Class
 End Namespace

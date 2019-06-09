@@ -3,8 +3,8 @@
 Namespace Tests
 
   <TestClass()>
-  Public Class ExecuteScalarTests
-    Inherits Yamo.Test.Tests.ExecuteScalarTests
+  Public Class QueryFirstOrDefaultTests
+    Inherits Yamo.Test.Tests.QueryFirstOrDefaultTests
 
     Protected Overrides Function CreateTestEnvironment() As ITestEnvironment
       Return SQLiteTestEnvironment.Create()

@@ -42,8 +42,8 @@ Namespace Infrastructure
         'expressions.Add(propAssign)
         ' NOTE: we perform IsDBNull check on non-nullable types anyway and return default value. This behavior is
         ' probably more convenient in custom selects than throwing an exception, especially when called from FirstOrDefault.
-        ' Also, ExecuteScalar behaves the same way. If this should change/be optional in the future (probably with
-        ' introducing First method), it would be good to change also behavior of ExecuteScalar to make it consistent.
+        ' Also, QueryFirstOrDefault behaves the same way. If this behavior should change/be optional in the future (probably
+        ' with introducing First/QueryFirst methods), make sure it is constistent across all use cases.
         Dim propAssign = Expression.Assign(variable, readValueCall)
         Dim isDBNullCall = Expression.Call(readerParam, "IsDBNull", Nothing, indexParam)
         Dim cond = Expression.IfThenElse(isDBNullCall, propAssignNull, propAssign)

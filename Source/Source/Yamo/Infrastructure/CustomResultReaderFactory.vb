@@ -1,6 +1,7 @@
 ﻿Imports System.Data
 Imports System.Linq.Expressions
 Imports System.Reflection
+Imports Yamo.Internal
 Imports Yamo.Internal.Query
 Imports Yamo.Internal.Query.Metadata
 Imports Yamo.Metadata
@@ -11,6 +12,66 @@ Namespace Infrastructure
     Inherits ReaderFactoryBase
 
     Public Shared Function CreateResultFactory(node As Expression, customEntities As CustomSqlEntity()) As Object
+      If node.NodeType = ExpressionType.New Then
+        ' ValueTuple or anonymous type
+        Return CreateResultFactory(customEntities, DirectCast(node, NewExpression).Constructor)
+      Else
+        ' single value or entity
+        Return CreateResultFactory(customEntities, Nothing)
+      End If
+    End Function
+
+    Public Shared Function CreateResultFactory(resultType As Type) As Object
+      Dim resultConstructorInfo As ConstructorInfo = Nothing
+      Dim nullableValueConstructorInfo As ConstructorInfo = Nothing
+      Dim customEntities As CustomSqlEntity()
+
+      ' NOTE: right now this should only be called from Query/QueryFirstOrDefault and only following types are supported:
+      ' - nullable and non-nullable ValueTuples: with basic value-types or model entities as a field value
+      ' - model entities
+
+      Dim underlyingNullableType = Nullable.GetUnderlyingType(resultType)
+
+      If underlyingNullableType Is Nothing Then
+        If resultType.IsGenericType Then
+          ' ValueTuple
+          Dim args = resultType.GetGenericArguments()
+          resultConstructorInfo = resultType.GetConstructor(args)
+          customEntities = args.Select(AddressOf CreateCustomSqlEntity).ToArray()
+        Else
+          ' entity model
+          customEntities = {CreateCustomSqlEntity(resultType, 0)}
+        End If
+
+      Else
+        resultConstructorInfo = resultType.GetConstructor(resultType.GetGenericArguments())
+
+        If underlyingNullableType.IsGenericType Then
+          ' nullable ValueTuple
+          Dim args = underlyingNullableType.GetGenericArguments()
+          nullableValueConstructorInfo = underlyingNullableType.GetConstructor(args)
+          customEntities = args.Select(AddressOf CreateCustomSqlEntity).ToArray()
+        Else
+          Throw New NotSupportedException($"Type '{resultType}' is not supported.")
+        End If
+      End If
+
+      Return CreateResultFactory(customEntities, resultConstructorInfo, nullableValueConstructorInfo)
+    End Function
+
+    Private Shared Function CreateCustomSqlEntity(type As Type, index As Int32) As CustomSqlEntity
+      If Helpers.Types.IsProbablyModel(type) Then
+        ' If type is not defined in model, there will be an exception thrown later from
+        ' CustomEntityReadInfo.CreateForGenericType() or CustomEntityReadInfo.CreateForModelType().
+        ' We could check it also here, but it would be slower ;)
+        ' Also, we don't need (and don't know) entityIndex, so it's set to -1 in this scenario.
+        Return New CustomSqlEntity(index, -1, type)
+      Else
+        Return New CustomSqlEntity(index, type)
+      End If
+    End Function
+
+    Private Shared Function CreateResultFactory(customEntities As CustomSqlEntity(), Optional resultConstructorInfo As ConstructorInfo = Nothing, Optional nullableValueConstructorInfo As ConstructorInfo = Nothing) As Object
       Dim readerParam = Expression.Parameter(GetType(IDataReader), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
       Dim customEntityInfosParam = Expression.Parameter(GetType(CustomEntityReadInfo()), "customEntityInfos")
       Dim parameters = {readerParam, customEntityInfosParam}
@@ -82,13 +143,19 @@ Namespace Infrastructure
         arguments.Add(valueVar)
       Next
 
-      If node.NodeType = ExpressionType.New Then
-        ' ValueTuple or anonymous type
-        Dim newExp = Expression.[New](DirectCast(node, NewExpression).Constructor, arguments)
-        expressions.Add(newExp)
-      Else
+      If resultConstructorInfo Is Nothing Then
         ' single value or entity
         expressions.Add(variables(0))
+      Else
+        If nullableValueConstructorInfo Is Nothing Then
+          ' ValueTuple or anonymous type
+          Dim newExp = Expression.[New](resultConstructorInfo, arguments)
+          expressions.Add(newExp)
+        Else
+          ' nullable ValueTuple
+          Dim newExp = Expression.[New](resultConstructorInfo, Expression.[New](nullableValueConstructorInfo, arguments))
+          expressions.Add(newExp)
+        End If
       End If
 
       Dim body = Expression.Block(variables, expressions)

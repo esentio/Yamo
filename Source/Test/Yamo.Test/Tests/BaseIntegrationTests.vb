@@ -16,14 +16,14 @@ Namespace Tests
     Protected Overridable Sub InitializeDatabase()
       Using db = CreateDbContext()
         Dim sql = File.ReadAllText("Sql\DbInitialize.sql")
-        db.ExecuteNonQuery(sql)
+        db.Execute(sql)
       End Using
     End Sub
 
     Protected Overridable Sub UninitializeDatabase()
       Using db = CreateDbContext()
         Dim sql = File.ReadAllText("Sql\DbUninitialize.sql")
-        db.ExecuteNonQuery(sql)
+        db.Execute(sql)
       End Using
     End Sub
 

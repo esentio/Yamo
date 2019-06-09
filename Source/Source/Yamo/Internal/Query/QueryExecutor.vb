@@ -2,6 +2,7 @@
 Imports System.Data.Common
 Imports Yamo
 Imports Yamo.Infrastructure
+Imports Yamo.Internal.Helpers
 
 ' TODO: SIP - rewrite as static class (one allocation less...)?
 
@@ -18,24 +19,85 @@ Namespace Internal.Query
       m_DialectProvider = m_DbContext.Options.DialectProvider
     End Sub
 
-    Public Function ExecuteNonQuery(query As Query) As Int32
+    Public Function Execute(query As Query) As Int32
       Using command = CreateCommand(query)
         Return command.ExecuteNonQuery()
       End Using
     End Function
 
-    Public Function ExecuteScalar(Of T)(query As Query) As T
+    Public Function QueryFirstOrDefault(Of T)(query As Query) As T
+      Dim value As T = Nothing
+      Dim resultType = GetType(T)
+      Dim isValueTuple = Types.IsValueTupleOrNullableValueTuple(resultType)
+      Dim isModel = Not isValueTuple AndAlso Types.IsProbablyModel(resultType)
+
+      Dim reader As Func(Of IDataReader, CustomEntityReadInfo(), T) = Nothing
+      Dim customEntityInfos As CustomEntityReadInfo() = Nothing
+
       Using command = CreateCommand(query)
-        ' TODO: SIP - use ValueType reader instead?
-        Return m_DialectProvider.DbValueConversion.FromDbValue(Of T)(command.ExecuteScalar())
+        If isValueTuple OrElse isModel Then
+          Using dataReader = command.ExecuteReader()
+            If dataReader.Read() Then
+              reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
+
+              If isValueTuple Then
+                customEntityInfos = CustomEntityReadInfo.CreateForGenericType(m_DialectProvider, m_DbContext.Model, resultType)
+              Else
+                customEntityInfos = CustomEntityReadInfo.CreateForModelType(m_DialectProvider, m_DbContext.Model, resultType)
+              End If
+
+              value = DirectCast(reader(dataReader, customEntityInfos), T)
+            End If
+          End Using
+        Else
+          ' we could use ValueType reader to avoid (un)boxing, but creating it might take more time/resources
+          value = m_DialectProvider.DbValueConversion.FromDbValue(Of T)(command.ExecuteScalar())
+        End If
       End Using
+
+      Return value
+    End Function
+
+    Public Function QueryList(Of T)(query As Query) As List(Of T)
+      Dim values = New List(Of T)
+      Dim resultType = GetType(T)
+      Dim isValueTuple = Types.IsValueTupleOrNullableValueTuple(resultType)
+      Dim isModel = Not isValueTuple AndAlso Types.IsProbablyModel(resultType)
+
+      Dim reader As Func(Of IDataReader, CustomEntityReadInfo(), T) = Nothing
+      Dim customEntityInfos As CustomEntityReadInfo() = Nothing
+
+      If isValueTuple Then
+        reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
+        customEntityInfos = CustomEntityReadInfo.CreateForGenericType(m_DialectProvider, m_DbContext.Model, resultType)
+      ElseIf isModel Then
+        reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
+        customEntityInfos = CustomEntityReadInfo.CreateForModelType(m_DialectProvider, m_DbContext.Model, resultType)
+      End If
+
+      Using command = CreateCommand(query)
+        Using dataReader = command.ExecuteReader()
+          While dataReader.Read()
+            If isValueTuple OrElse isModel Then
+              Dim value = DirectCast(reader(dataReader, customEntityInfos), T)
+              values.Add(value)
+            Else
+              ' we could use ValueType reader to avoid (un)boxing, but creating it might take more time/resources
+              Dim value = m_DialectProvider.DbValueConversion.FromDbValue(Of T)(dataReader.GetValue(0))
+              values.Add(value)
+            End If
+          End While
+        End Using
+      End Using
+
+      Return values
     End Function
 
     Public Function ExecuteInsert(query As InsertQuery) As Int32
       If query.ReadDbGeneratedValues Then
         Return ExecuteAndReadDbGeneratedValues(query)
       Else
-        Return ExecuteNonQuery(query)
+        Return Execute(query)
       End If
     End Function
 

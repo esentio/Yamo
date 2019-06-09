@@ -23,7 +23,7 @@ Namespace Internal
     End Sub
 
     Public Shared Function GetResultFactory(Of T)(model As Model, resultType As Type) As Func(Of IDataReader, CustomEntityReadInfo(), T)
-      Return GetInstance(model).GetResultFactoryOrThrow(Of T)(model, resultType)
+      Return GetInstance(model).GetOrCreateResultFactory(Of T)(model, resultType)
     End Function
 
     Public Shared Sub CreateResultFactoryIfNotExists(model As Model, node As Expression, customEntities As CustomSqlEntity())
@@ -43,7 +43,7 @@ Namespace Internal
       Return instance
     End Function
 
-    Private Function GetResultFactoryOrThrow(Of T)(model As Model, resultType As Type) As Func(Of IDataReader, CustomEntityReadInfo(), T)
+    Private Function GetOrCreateResultFactory(Of T)(model As Model, resultType As Type) As Func(Of IDataReader, CustomEntityReadInfo(), T)
       Dim resultFactory As Func(Of IDataReader, CustomEntityReadInfo(), T) = Nothing
 
       SyncLock m_ResultFactories
@@ -55,8 +55,14 @@ Namespace Internal
       End SyncLock
 
       If resultFactory Is Nothing Then
-        Throw New Exception($"Missing result factory method for type '{resultType}'.")
+        resultFactory = DirectCast(CustomResultReaderFactory.CreateResultFactory(resultType), Func(Of IDataReader, CustomEntityReadInfo(), T))
+      Else
+        Return resultFactory
       End If
+
+      SyncLock m_ResultFactories
+        m_ResultFactories(resultType) = resultFactory
+      End SyncLock
 
       Return resultFactory
     End Function
