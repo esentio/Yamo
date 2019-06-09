@@ -5,6 +5,10 @@ Namespace Tests
   Public MustInherit Class QueryTests
     Inherits BaseIntegrationTests
 
+    Protected Const English As String = "en"
+
+    Protected Const German As String = "ger"
+
     <TestMethod()>
     Public Overridable Sub QueryOfGuid()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
@@ -516,6 +520,31 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub QueryOfModel()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 1
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMinValues()
+      item2.IntColumn = 2
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMaxValues()
+      item3.IntColumn = 3
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.Query(Of ItemWithAllSupportedValues)($"SELECT {Sql.Model.Columns(Of ItemWithAllSupportedValues)} FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result1.Count)
+
+        Dim result2 = db.Query(Of ItemWithAllSupportedValues)($"SELECT {Sql.Model.Columns(Of ItemWithAllSupportedValues)} FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result2.Count)
+        Assert.AreEqual(item1, result2(0))
+        Assert.AreEqual(item2, result2(1))
+        Assert.AreEqual(item3, result2(2))
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub QueryOfValueTuple()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.IntColumn = 1
@@ -660,6 +689,38 @@ Namespace Tests
         Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50Column, result6(2).Item5))
         Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50ColumnNull, result6(2).Item6))
         Assert.AreEqual(item3.Id, result6(2).Item7)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub QueryOfValueTupleWithModel()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      Dim article1LabelEn = Me.ModelFactory.CreateLabel(NameOf(Article), 1, English)
+      Dim article3LabelEn = Me.ModelFactory.CreateLabel(NameOf(Article), 3, English)
+      Dim article3LabelGer = Me.ModelFactory.CreateLabel(NameOf(Article), 3, German)
+
+      InsertItems(article1, article2, article3, article1LabelEn, article3LabelEn, article3LabelGer)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.Query(Of (Article, Int32, Label)?)($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("l")} FROM Article AS a LEFT JOIN Label AS l ON a.Id = l.Id WHERE 1 = 2 ORDER BY a.Id, l.Language")
+        Assert.AreEqual(0, result1.Count)
+
+        Dim result2 = db.Query(Of (Article, Int32, Label))($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("l")} FROM Article AS a LEFT JOIN Label AS l ON a.Id = l.Id ORDER BY a.Id, l.Language")
+        Assert.AreEqual(4, result2.Count)
+        Assert.AreEqual((article1, 42, article1LabelEn), result2(0))
+        Assert.AreEqual((article2, 42, DirectCast(Nothing, Label)), result2(1))
+        Assert.AreEqual((article3, 42, article3LabelEn), result2(2))
+        Assert.AreEqual((article3, 42, article3LabelGer), result2(3))
+
+        ' selecting same table twice
+        Dim result3 = db.Query(Of (Article, Int32, Label, Label))($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("le")}, {Sql.Model.Columns(Of Label)("lg")} FROM Article AS a LEFT JOIN Label AS le ON a.Id = le.Id AND le.Language = {English} LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = {German} ORDER BY a.Id")
+        Assert.AreEqual(3, result3.Count)
+        Assert.AreEqual((article1, 42, article1LabelEn, DirectCast(Nothing, Label)), result3(0))
+        Assert.AreEqual((article2, 42, DirectCast(Nothing, Label), DirectCast(Nothing, Label)), result3(1))
+        Assert.AreEqual((article3, 42, article3LabelEn, article3LabelGer), result3(2))
       End Using
     End Sub
 

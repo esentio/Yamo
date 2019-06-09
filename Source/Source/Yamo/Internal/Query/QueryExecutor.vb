@@ -62,6 +62,7 @@ Namespace Internal.Query
       Dim values = New List(Of T)
       Dim resultType = GetType(T)
       Dim isValueTuple = Types.IsValueTupleOrNullableValueTuple(resultType)
+      Dim isModel = Not isValueTuple AndAlso Types.IsProbablyModel(resultType)
 
       Dim reader As Func(Of IDataReader, CustomEntityReadInfo(), T) = Nothing
       Dim customEntityInfos As CustomEntityReadInfo() = Nothing
@@ -69,12 +70,15 @@ Namespace Internal.Query
       If isValueTuple Then
         reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
         customEntityInfos = CustomEntityReadInfo.CreateForGenericType(m_DialectProvider, m_DbContext.Model, resultType)
+      ElseIf isModel Then
+        reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
+        customEntityInfos = CustomEntityReadInfo.CreateForModelType(m_DialectProvider, m_DbContext.Model, resultType)
       End If
 
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
           While dataReader.Read()
-            If isValueTuple Then
+            If isValueTuple OrElse isModel Then
               Dim value = DirectCast(reader(dataReader, customEntityInfos), T)
               values.Add(value)
             Else

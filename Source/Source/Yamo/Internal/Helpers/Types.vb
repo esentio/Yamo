@@ -35,6 +35,7 @@ Namespace Internal.Helpers
 
     Public Shared Function IsProbablyModel(type As Type) As Boolean
       ' used as a fast way to determine whether type is a model entity or not
+      ' TODO: SIP - this won't work if model entity is a structure!
       If type.IsValueType Then Return False
       If type Is GetType(String) Then Return False
       If type Is GetType(Byte()) Then Return False
