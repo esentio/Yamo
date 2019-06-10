@@ -117,9 +117,9 @@ Namespace Infrastructure
 
           Dim valueAssignBlock As Expression
 
-          Dim ihpmtType = GetType(IHasPropertyModifiedTracking)
+          Dim ihpmtType = GetType(IHasDbPropertyModifiedTracking)
           If ihpmtType.IsAssignableFrom(type) Then
-            Dim rpmtMethodInfo = ihpmtType.GetMethod(NameOf(IHasPropertyModifiedTracking.ResetPropertyModifiedTracking))
+            Dim rpmtMethodInfo = ihpmtType.GetMethod(NameOf(IHasDbPropertyModifiedTracking.ResetDbPropertyModifiedTracking))
             Dim rpmtCast = Expression.Convert(valueVar, ihpmtType)
             Dim rpmtCall = Expression.Call(rpmtCast, rpmtMethodInfo)
 

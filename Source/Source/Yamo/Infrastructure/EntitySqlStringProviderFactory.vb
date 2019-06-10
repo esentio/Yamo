@@ -143,7 +143,7 @@ SET IDENTITY_INSERT {tableName} OFF"
     End Function
 
     Public Overridable Function CreateUpdateProvider(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, SqlString)
-      If GetType(IHasPropertyModifiedTracking).IsAssignableFrom(entityType) Then
+      If GetType(IHasDbPropertyModifiedTracking).IsAssignableFrom(entityType) Then
         Return CreateUpdateProviderForPropertyModifiedTrackingObject(builder, entityType)
       Else
         Return CreateUpdateProviderForSimpleObjects(builder, entityType)
@@ -226,8 +226,8 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim entityVariable = Expression.Variable(entityType, "entityObj")
       expressions.Add(Expression.Assign(entityVariable, Expression.Convert(entityParam, entityType)))
 
-      Dim trackingVariable = Expression.Variable(GetType(IHasPropertyModifiedTracking), "trackingValue")
-      expressions.Add(Expression.Assign(trackingVariable, Expression.Convert(entityParam, GetType(IHasPropertyModifiedTracking))))
+      Dim trackingVariable = Expression.Variable(GetType(IHasDbPropertyModifiedTracking), "trackingValue")
+      expressions.Add(Expression.Assign(trackingVariable, Expression.Convert(entityParam, GetType(IHasDbPropertyModifiedTracking))))
 
       Dim sqlVariableType = GetType(StringBuilder)
       Dim sqlVariable = Expression.Variable(GetType(StringBuilder), "sql")
@@ -261,7 +261,7 @@ SET IDENTITY_INSERT {tableName} OFF"
 
         modifiedExpressions.Add(parameterAddCall)
 
-        Dim modifiedTest = Expression.Call(trackingVariable, "IsPropertyModified", {}, Expression.Constant(prop.Name, GetType(String)))
+        Dim modifiedTest = Expression.Call(trackingVariable, NameOf(IHasDbPropertyModifiedTracking.IsDbPropertyModified), {}, Expression.Constant(prop.Name, GetType(String)))
         Dim modifiedCond = Expression.IfThen(modifiedTest, Expression.Block(modifiedExpressions))
 
         expressions.Add(modifiedCond)

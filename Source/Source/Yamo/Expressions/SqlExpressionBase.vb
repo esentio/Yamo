@@ -5,9 +5,9 @@
     ' TODO: SIP - move here from children?
     'Protected Property Executor As QueryExecutor
 
-    Protected Sub ResetPropertyModifiedTracking(obj As Object)
-      If TypeOf obj Is IHasPropertyModifiedTracking Then
-        DirectCast(obj, IHasPropertyModifiedTracking).ResetPropertyModifiedTracking()
+    Protected Sub ResetDbPropertyModifiedTracking(obj As Object)
+      If TypeOf obj Is IHasDbPropertyModifiedTracking Then
+        DirectCast(obj, IHasDbPropertyModifiedTracking).ResetDbPropertyModifiedTracking()
       End If
     End Sub
 

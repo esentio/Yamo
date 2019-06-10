@@ -9,12 +9,12 @@ Namespace Tests
     Public Overridable Sub InsertRecordWithPropertyModifiedTracking()
       Dim item = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
 
-      Assert.IsTrue(item.IsAnyPropertyModified())
+      Assert.IsTrue(item.IsAnyDbPropertyModified())
 
       Using db = CreateDbContext()
         Dim affectedRows = db.Insert(item)
         Assert.AreEqual(1, affectedRows)
-        Assert.IsFalse(item.IsAnyPropertyModified())
+        Assert.IsFalse(item.IsAnyDbPropertyModified())
       End Using
     End Sub
 
@@ -29,25 +29,25 @@ Namespace Tests
         Assert.AreEqual(1, affectedRows)
       End Using
 
-      Assert.IsFalse(item.IsAnyPropertyModified())
+      Assert.IsFalse(item.IsAnyDbPropertyModified())
 
       ' don't change any property and try to update
 
       Using db = CreateDbContext()
         Dim affectedRows = db.Update(item)
         Assert.AreEqual(0, affectedRows)
-        Assert.IsFalse(item.IsAnyPropertyModified())
+        Assert.IsFalse(item.IsAnyDbPropertyModified())
       End Using
 
       ' now change one property, reset tracking, change another property and check, if only that property is updated
       item.Description = "boo"
-      item.ResetPropertyModifiedTracking()
+      item.ResetDbPropertyModifiedTracking()
       item.IntValue = 642
 
       Using db = CreateDbContext()
         Dim affectedRows = db.Update(item)
         Assert.AreEqual(1, affectedRows)
-        Assert.IsFalse(item.IsAnyPropertyModified())
+        Assert.IsFalse(item.IsAnyDbPropertyModified())
       End Using
 
       item.Description = "foo"
@@ -73,7 +73,7 @@ Namespace Tests
       Using db = CreateDbContext()
         Dim result = db.From(Of ItemWithPropertyModifiedTracking).SelectAll().ToList()
         Assert.AreEqual(3, result.Count)
-        Assert.IsTrue(result.All(Function(x) Not x.IsAnyPropertyModified()))
+        Assert.IsTrue(result.All(Function(x) Not x.IsAnyDbPropertyModified()))
       End Using
     End Sub
 
@@ -103,7 +103,7 @@ Namespace Tests
                         Join(Of ItemWithPropertyModifiedTracking)(Function(j) j.T1.Id = j.T2.Id).As(Function(x) x.RelatedItem).
                         SelectAll().ToList()
         Assert.AreEqual(3, result.Count)
-        Assert.IsTrue(result.All(Function(x) Not DirectCast(x.RelatedItem, ItemWithPropertyModifiedTracking).IsAnyPropertyModified()))
+        Assert.IsTrue(result.All(Function(x) Not DirectCast(x.RelatedItem, ItemWithPropertyModifiedTracking).IsAnyDbPropertyModified()))
       End Using
     End Sub
 
@@ -124,19 +124,19 @@ Namespace Tests
                         Select(Function(x) x).
                         ToList()
         Assert.AreEqual(3, result1.Count)
-        Assert.IsTrue(result1.All(Function(x) Not x.IsAnyPropertyModified()))
+        Assert.IsTrue(result1.All(Function(x) Not x.IsAnyDbPropertyModified()))
 
         Dim result2 = db.From(Of ItemWithPropertyModifiedTracking).
                         Select(Function(x) (x.Id, Entity:=x)).
                         ToList()
         Assert.AreEqual(3, result2.Count)
-        Assert.IsTrue(result2.All(Function(x) Not x.Entity.IsAnyPropertyModified()))
+        Assert.IsTrue(result2.All(Function(x) Not x.Entity.IsAnyDbPropertyModified()))
 
         Dim result3 = db.From(Of ItemWithPropertyModifiedTracking).
                          Select(Function(x) New With {x.Id, .Entity = x}).
                          ToList()
         Assert.AreEqual(3, result3.Count)
-        Assert.IsTrue(result3.All(Function(x) Not x.Entity.IsAnyPropertyModified()))
+        Assert.IsTrue(result3.All(Function(x) Not x.Entity.IsAnyDbPropertyModified()))
       End Using
     End Sub
 

@@ -177,7 +177,7 @@ Namespace Internal.Query
         Using dataReader = command.ExecuteReader()
           If dataReader.Read() Then
             value = DirectCast(reader(dataReader, customEntityInfos), T)
-            ' NOTE - ResetPropertyModifiedTracking is called in reader
+            ' NOTE - ResetDbPropertyModifiedTracking is called in reader
           End If
         End Using
       End Using
@@ -195,7 +195,7 @@ Namespace Internal.Query
         Using dataReader = command.ExecuteReader()
           If dataReader.Read() Then
             value = DirectCast(reader(dataReader, 0, includedColumns), T)
-            ResetPropertyModifiedTracking(value)
+            ResetDbPropertyModifiedTracking(value)
           End If
         End Using
       End Using
@@ -213,7 +213,7 @@ Namespace Internal.Query
         Using dataReader = command.ExecuteReader()
           While dataReader.Read()
             Dim value = DirectCast(reader(dataReader, customEntityInfos), T)
-            ' NOTE - ResetPropertyModifiedTracking is called in reader
+            ' NOTE - ResetDbPropertyModifiedTracking is called in reader
             values.Add(value)
           End While
         End Using
@@ -232,7 +232,7 @@ Namespace Internal.Query
         Using dataReader = command.ExecuteReader()
           While dataReader.Read()
             Dim value = DirectCast(reader(dataReader, 0, includedColumns), T)
-            ResetPropertyModifiedTracking(value)
+            ResetDbPropertyModifiedTracking(value)
             values.Add(value)
           End While
         End Using
@@ -291,7 +291,7 @@ Namespace Internal.Query
         Next
       End If
 
-      ResetPropertyModifiedTracking(value)
+      ResetDbPropertyModifiedTracking(value)
 
       Return value
     End Function
@@ -352,14 +352,14 @@ Namespace Internal.Query
       If valueFromCache Then
         Return Nothing
       Else
-        ResetPropertyModifiedTracking(value)
+        ResetDbPropertyModifiedTracking(value)
         Return value
       End If
     End Function
 
-    Private Sub ResetPropertyModifiedTracking(obj As Object)
-      If TypeOf obj Is IHasPropertyModifiedTracking Then
-        DirectCast(obj, IHasPropertyModifiedTracking).ResetPropertyModifiedTracking()
+    Private Sub ResetDbPropertyModifiedTracking(obj As Object)
+      If TypeOf obj Is IHasDbPropertyModifiedTracking Then
+        DirectCast(obj, IHasDbPropertyModifiedTracking).ResetDbPropertyModifiedTracking()
       End If
     End Sub
 
