@@ -58,13 +58,13 @@ Namespace Expressions
 
       Dim query = Me.Builder.CreateQuery(obj)
       Dim affectedRows = Me.Executor.Execute(query)
-      ResetPropertyModifiedTracking(obj)
+      ResetDbPropertyModifiedTracking(obj)
       Return affectedRows
     End Function
 
     Private Function SkipUpdate(obj As Object) As Boolean
-      If TypeOf obj Is IHasPropertyModifiedTracking Then
-        Return Not DirectCast(obj, IHasPropertyModifiedTracking).IsAnyPropertyModified()
+      If TypeOf obj Is IHasDbPropertyModifiedTracking Then
+        Return Not DirectCast(obj, IHasDbPropertyModifiedTracking).IsAnyDbPropertyModified()
       End If
 
       Return False

@@ -30,7 +30,7 @@ Namespace Expressions
 
       Dim query = Me.Builder.CreateQuery(obj)
       Dim affectedRows = Me.Executor.ExecuteInsert(query)
-      ResetPropertyModifiedTracking(obj)
+      ResetDbPropertyModifiedTracking(obj)
       Return affectedRows
     End Function
 

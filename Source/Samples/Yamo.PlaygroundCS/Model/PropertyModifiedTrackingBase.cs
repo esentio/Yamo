@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Yamo.PlaygroundCS.Model
 {
-    public abstract class PropertyModifiedTrackingBase : IHasPropertyModifiedTracking
+    public abstract class PropertyModifiedTrackingBase : IHasDbPropertyModifiedTracking
     {
 
-        //  NOTE: this is very naive and memory consuming implementation of IHasPropertyModifiedTracking
+        //  NOTE: this is very naive and memory consuming implementation of IHasDbPropertyModifiedTracking
         private HashSet<string> m_Modified = new HashSet<string>();
 
         protected void MarkPropertyAsModified(string propertyName)
@@ -17,17 +17,17 @@ namespace Yamo.PlaygroundCS.Model
             m_Modified.Add(propertyName);
         }
 
-        public bool IsAnyPropertyModified()
+        public bool IsAnyDbPropertyModified()
         {
             return m_Modified.Any();
         }
 
-        public bool IsPropertyModified(string propertyName)
+        public bool IsDbPropertyModified(string propertyName)
         {
             return m_Modified.Contains(propertyName);
         }
 
-        public void ResetPropertyModifiedTracking()
+        public void ResetDbPropertyModifiedTracking()
         {
             m_Modified.Clear();
         }
