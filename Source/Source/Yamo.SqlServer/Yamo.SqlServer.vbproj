@@ -21,8 +21,8 @@
     <Authors>Peter Šimno</Authors>
     <Description>Microsoft SQL Server database provider for Yamo.</Description>
     <PackageProjectUrl>https://github.com/esentio/Yamo</PackageProjectUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/esentio/Yamo/master/LICENSE</PackageLicenseUrl>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <PropertyGroup>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
