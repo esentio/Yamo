@@ -4,17 +4,12 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
-  Public Class CustomSelectSqlExpression(Of T)
+  Public Class CustomDistinctSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
 
     Friend Sub New(builder As SelectSqlExpressionBuilder, executor As QueryExecutor)
       MyBase.New(builder, executor)
     End Sub
-
-    Public Function Distinct() As CustomDistinctSqlExpression(Of T)
-      Me.Builder.AddDistinct()
-      Return New CustomDistinctSqlExpression(Of T)(Me.Builder, Me.Executor)
-    End Function
 
     Public Function ToList() As List(Of T)
       Dim query = Me.Builder.CreateQuery()

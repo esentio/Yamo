@@ -26,6 +26,8 @@ Namespace Expressions.Builders
 
     Private m_SelectExpression As String
 
+    Private m_UseDistinct As Boolean
+
     Private m_Parameters As List(Of SqlParameter)
 
     Public Sub New(context As DbContext)
@@ -39,6 +41,7 @@ Namespace Expressions.Builders
       m_HavingExpressions = Nothing
       m_OrderByExpressions = Nothing
       m_SelectExpression = Nothing
+      m_UseDistinct = False
       m_Parameters = New List(Of SqlParameter)
     End Sub
 
@@ -48,6 +51,12 @@ Namespace Expressions.Builders
       If m_SelectExpression Is Nothing Then
         BuildAndAppendSelectExpression(sql)
       Else
+        sql.Append("SELECT ")
+
+        If m_UseDistinct Then
+          sql.Append("DISTINCT ")
+        End If
+
         sql.Append(m_SelectExpression)
       End If
 
@@ -368,19 +377,27 @@ Namespace Expressions.Builders
     End Sub
 
     Public Sub AddSelectCount()
-      m_SelectExpression = "SELECT COUNT(*)"
+      m_SelectExpression = "COUNT(*)"
     End Sub
 
     Public Sub AddSelect(selector As Expression, entityIndexHints As Int32())
       Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
       Dim result = m_Visitor.TranslateCustomSelect(selector, parametersType, entityIndexHints, m_Parameters.Count)
-      m_SelectExpression = "SELECT " & result.SqlString.Sql
+      m_SelectExpression = result.SqlString.Sql
       m_Parameters.AddRange(result.SqlString.Parameters)
       m_Model.SetCustomEntities(result.CustomEntities)
     End Sub
 
+    Public Sub AddDistinct()
+      m_UseDistinct = True
+    End Sub
+
     Private Sub BuildAndAppendSelectExpression(sql As StringBuilder)
       sql.Append("SELECT ")
+
+      If m_UseDistinct Then
+        sql.Append("DISTINCT ")
+      End If
 
       Dim first = True
 

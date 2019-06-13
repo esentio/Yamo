@@ -20,6 +20,11 @@ Namespace Expressions
       Return Me
     End Function
 
+    Public Function Distinct() As DistinctSqlExpression(Of T)
+      Me.Builder.AddDistinct()
+      Return New DistinctSqlExpression(Of T)(Me.Builder, Me.Executor)
+    End Function
+
     Public Function ToList() As List(Of T)
       Dim query = Me.Builder.CreateQuery()
       Return Me.Executor.ReadList(Of T)(query)
