@@ -160,10 +160,6 @@ Namespace Expressions
       Return InternalOrderBy(Of TKey)(keySelector, {1}, True)
     End Function
 
-    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T1, T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
-      Return InternalOrderBy(Of TKey)(keySelector, {0, 1}, True)
-    End Function
-
     Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(Of TKey)(keySelector, Nothing, True)
     End Function
@@ -174,10 +170,6 @@ Namespace Expressions
 
     Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(Of TKey)(keySelector, {1}, False)
-    End Function
-
-    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T1, T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
-      Return InternalOrderBy(Of TKey)(keySelector, {0, 1}, False)
     End Function
 
     Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As OrderedSelectSqlExpression(Of T1, T2)
