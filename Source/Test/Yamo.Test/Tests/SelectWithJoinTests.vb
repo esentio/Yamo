@@ -322,7 +322,7 @@ Namespace Tests
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).
                         LeftJoin(Of ArticlePart)(Function(a, p) a.Id = p.ArticleId).
-                        OrderBy(Function(a, p) p.Price).
+                        OrderBy(Function(p As ArticlePart) p.Price).
                         SelectAll().ToList()
         Assert.AreEqual(4, result.Count)
 

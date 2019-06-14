@@ -119,6 +119,22 @@ Namespace Tests
                          ToList()
 
         CollectionAssert.AreEquivalent({article1, article2, article3}, result3)
+
+        Dim result4 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         GroupBy(Function(j) New With {j.T1, j.T2}).
+                         Select(Function(a, l) (a, l)).
+                         ToList()
+
+        CollectionAssert.AreEquivalent({(article1, label1En), (article2, DirectCast(Nothing, Label)), (article3, label3En), (article3, label3Ger)}, result4)
+
+        Dim result5 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         GroupBy(Function(a, l) New With {a, l}).
+                         Select(Function(a, l) (a, l)).
+                         ToList()
+
+        CollectionAssert.AreEquivalent({(article1, label1En), (article2, DirectCast(Nothing, Label)), (article3, label3En), (article3, label3Ger)}, result5)
       End Using
     End Sub
 
