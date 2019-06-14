@@ -65,6 +65,10 @@ Namespace Expressions
       Return InternalGroupBy(Of TKey)(keySelector, {2})
     End Function
 
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T1, T2, T3, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3)
+      Return InternalGroupBy(Of TKey)(keySelector, {0, 1, 2})
+    End Function
+
     Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2, T3), TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3)
       Return InternalGroupBy(Of TKey)(keySelector, Nothing)
     End Function
