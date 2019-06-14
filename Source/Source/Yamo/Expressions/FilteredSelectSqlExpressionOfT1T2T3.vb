@@ -35,6 +35,14 @@ Namespace Expressions
       Return InternalWhere(predicate, {2})
     End Function
 
+    Public Function [And](predicate As Expression(Of Func(Of T1, T2, T3, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3)
+      Return InternalWhere(predicate, {0, 1, 2})
+    End Function
+
+    Public Function [And](predicate As Expression(Of Func(Of T1, T2, T3, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3)
+      Return InternalWhere(predicate, {0, 1, 2})
+    End Function
+
     Public Function [And](predicate As Expression(Of Func(Of Join(Of T1, T2, T3), Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3)
       Return InternalWhere(predicate, Nothing)
     End Function
