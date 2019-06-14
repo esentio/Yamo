@@ -35,6 +35,14 @@ Namespace Expressions
       Return InternalHaving(predicate, {2})
     End Function
 
+    Public Function [And](predicate As Expression(Of Func(Of T1, T2, T3, Boolean))) As HavingSelectSqlExpression(Of T1, T2, T3)
+      Return InternalHaving(predicate, {0, 1, 2})
+    End Function
+
+    Public Function [And](predicate As Expression(Of Func(Of T1, T2, T3, FormattableString))) As HavingSelectSqlExpression(Of T1, T2, T3)
+      Return InternalHaving(predicate, {0, 1, 2})
+    End Function
+
     Public Function [And](predicate As Expression(Of Func(Of Join(Of T1, T2, T3), Boolean))) As HavingSelectSqlExpression(Of T1, T2, T3)
       Return InternalHaving(predicate, Nothing)
     End Function
