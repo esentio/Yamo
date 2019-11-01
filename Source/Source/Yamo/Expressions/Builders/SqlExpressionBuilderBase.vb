@@ -5,6 +5,7 @@ Imports Yamo.Sql
 
 Namespace Expressions.Builders
 
+  ' TODO: SIP - add documentation to this class.
   Public MustInherit Class SqlExpressionBuilderBase
 
     Public ReadOnly DialectProvider As SqlDialectProvider

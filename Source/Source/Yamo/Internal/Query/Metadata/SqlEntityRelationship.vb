@@ -2,6 +2,7 @@
 
 Namespace Internal.Query.Metadata
 
+  ' TODO: SIP - add documentation to this class.
   Public Class SqlEntityRelationship
     ' TODO: SIP - structure instead?
 

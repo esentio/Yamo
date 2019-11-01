@@ -3,15 +3,30 @@ Imports Yamo.Sql
 
 Namespace Sql
 
+  ''' <summary>
+  ''' Date related SQL helper methods.<br/>
+  ''' Platform specific for MS SQL Server.
+  ''' </summary>
   Public Class InternalDateDiff
     Implements IInternalSqlHelper
 
+    ''' <summary>
+    ''' Type of SQL helper that uses this internal SQL helper class.
+    ''' Returns <see cref="DateDiff"/> type.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property SqlHelperType As Type Implements IInternalSqlHelper.SqlHelperType
       Get
         Return GetType(DateDiff)
       End Get
     End Property
 
+    ''' <summary>
+    ''' Returns SQL format string that is appended to final SQL statement.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="method"></param>
+    ''' <returns></returns>
     Public Function GetSqlFormat(method As MethodInfo) As String Implements IInternalSqlHelper.GetSqlFormat
       Select Case method.Name
         Case NameOf(DateDiff.SameYear)
@@ -34,5 +49,6 @@ Namespace Sql
           Throw New NotSupportedException($"Method '{method.Name}' is not supported.")
       End Select
     End Function
+
   End Class
 End Namespace

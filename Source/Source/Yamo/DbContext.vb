@@ -96,8 +96,8 @@ Public Class DbContext
   End Sub
 
   ''' <summary>
-  ''' Override this method to configure the database for this context.
-  ''' This method is called once for each instance of the context that is created.
+  ''' Override this method to configure the database for this context.<br/>
+  ''' This method is called once for each instance of the context that is created.<br/>
   ''' The base implementation does nothing.
   ''' </summary>
   ''' <param name="optionsBuilder"></param>
@@ -105,8 +105,8 @@ Public Class DbContext
   End Sub
 
   ''' <summary>
-  ''' Override this method to configure the model for this context.
-  ''' This method is called once and the model is than cached for all <see cref="DbContext"/> instances of a particular SQL dialect.
+  ''' Override this method to configure the model for this context.<br/>
+  ''' This method is called once and the model is than cached for all <see cref="DbContext"/> instances of a particular SQL dialect.<br/>
   ''' The base implementation does nothing.
   ''' </summary>
   ''' <param name="modelBuilder"></param>
@@ -114,15 +114,15 @@ Public Class DbContext
   End Sub
 
   ''' <summary>
-  ''' Override this method to intercept <see cref="DbCommand"/> executing.
-  ''' Can be used e.g. to implement custom logging.
+  ''' Override this method to intercept <see cref="DbCommand"/> executing.<br/>
+  ''' Can be used e.g. to implement custom logging.<br/>
   ''' The base implementation does nothing.
   ''' </summary>
   ''' <param name="command"></param>
   Protected Overridable Sub OnCommandExecuting(command As DbCommand)
   End Sub
 
-  ' TODO: doc.
+  ' TODO: SIP - add documentation.
   Public Function From(Of T)() As SelectSqlExpression(Of T)
     Return New SelectSqlExpression(Of T)(Me)
   End Function

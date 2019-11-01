@@ -1,5 +1,6 @@
 ﻿Namespace Internal.Query
 
+  ' TODO: SIP - add documentation to this class.
   Public Structure ChainKey
 
     Private ReadOnly m_Pks As Object()

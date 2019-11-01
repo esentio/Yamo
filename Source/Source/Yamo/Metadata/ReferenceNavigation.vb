@@ -1,5 +1,6 @@
 ﻿Namespace Metadata
 
+  ' TODO: SIP - add documentation to this class.
   Public Class ReferenceNavigation
     Inherits RelationshipNavigation
 

@@ -9,6 +9,7 @@ Imports Yamo.Metadata
 
 Namespace Infrastructure
 
+  ' TODO: SIP - add documentation to this class.
   Public Class EntitySqlStringProviderFactory
 
     Public Overridable Function CreateInsertProvider(builder As InsertSqlExpressionBuilder, useDbIdentityAndDefaults As Boolean, entityType As Type) As Func(Of Object, Boolean, CreateInsertSqlStringResult)

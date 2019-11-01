@@ -1,5 +1,6 @@
 ﻿Namespace Metadata
 
+  ' TODO: SIP - add documentation to this class.
   Public Class Entity
 
     Private m_PropertiesDictionary As Dictionary(Of String, [Property])

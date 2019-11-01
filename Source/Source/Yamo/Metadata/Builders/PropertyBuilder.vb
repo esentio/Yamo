@@ -1,5 +1,6 @@
 ﻿Namespace Metadata.Builders
 
+  ' TODO: SIP - add documentation to this class.
   Public Class PropertyBuilder(Of TProperty)
 
     Private m_Entity As Entity

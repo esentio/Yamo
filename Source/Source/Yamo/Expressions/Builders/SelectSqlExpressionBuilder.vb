@@ -7,6 +7,7 @@ Imports Yamo.Metadata
 
 Namespace Expressions.Builders
 
+  ' TODO: SIP - add documentation to this class.
   Public Class SelectSqlExpressionBuilder
     Inherits SqlExpressionBuilderBase
 

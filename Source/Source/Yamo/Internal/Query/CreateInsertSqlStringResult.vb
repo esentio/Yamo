@@ -1,5 +1,6 @@
 ﻿Namespace Internal.Query
 
+  ' TODO: SIP - add documentation to this class.
   Public Structure CreateInsertSqlStringResult
 
     Public ReadOnly Property SqlString As SqlString

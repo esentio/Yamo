@@ -2,6 +2,7 @@
 
 Namespace Internal.Query.Metadata
 
+  ' TODO: SIP - add documentation to this class.
   Public Class CustomSqlEntity
     ' TODO: SIP - structure instead?
 

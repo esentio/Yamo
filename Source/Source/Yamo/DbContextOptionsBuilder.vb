@@ -1,5 +1,5 @@
 ﻿''' <summary>
-'''  Provides an API for configuring <see cref="DbContextOptions"/>.
+'''  Provides an API for configuring <see cref="DbContextOptions"/>.<br/>
 '''  Define extension methods on this object to configure options for particular database dialects.
 ''' </summary>
 Public Class DbContextOptionsBuilder

@@ -8,6 +8,7 @@ Imports Yamo.Internal.Helpers
 
 Namespace Internal.Query
 
+  ' TODO: SIP - add documentation to this class.
   Public Class QueryExecutor
 
     Private m_DbContext As DbContext

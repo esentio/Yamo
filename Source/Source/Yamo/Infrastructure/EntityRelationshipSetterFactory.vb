@@ -4,6 +4,7 @@ Imports Yamo.Metadata
 
 Namespace Infrastructure
 
+  ' TODO: SIP - add documentation to this class.
   Public Class EntityRelationshipSetterFactory
 
     Public Shared Function CreateSetter(model As Model, entityType As Type, relationshipNavigation As RelationshipNavigation) As Action(Of Object, Object)

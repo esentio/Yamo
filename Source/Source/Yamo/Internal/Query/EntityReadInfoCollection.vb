@@ -4,6 +4,7 @@ Imports Yamo.Internal.Query.Metadata
 
 Namespace Internal.Query
 
+  ' TODO: SIP - add documentation to this class.
   Public Class EntityReadInfoCollection
 
     Public ReadOnly Property Items As EntityReadInfo()

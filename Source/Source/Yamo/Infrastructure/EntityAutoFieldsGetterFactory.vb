@@ -5,6 +5,7 @@ Imports Yamo.Metadata
 
 Namespace Infrastructure
 
+  ' TODO: SIP - add documentation to this class.
   Public Class EntityAutoFieldsGetterFactory
 
     Public Shared Function CreateOnUpdateGetter(model As Model, entityType As Type) As Func(Of DbContext, Object())

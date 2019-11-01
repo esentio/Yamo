@@ -1,5 +1,6 @@
 ﻿Namespace Internal.Query
 
+  ' TODO: SIP - add documentation to this class.
   Public Class Query
 
     Private m_Sql As String

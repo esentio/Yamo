@@ -3,6 +3,7 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
+  ' TODO: SIP - add documentation to this class.
   Public Class FilteredUpdateSqlExpression(Of T)
     Inherits UpdateSqlExpressionBase
 

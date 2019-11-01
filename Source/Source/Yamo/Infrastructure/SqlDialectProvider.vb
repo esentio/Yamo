@@ -2,6 +2,7 @@
 
 Namespace Infrastructure
 
+  ' TODO: SIP - add documentation to this class.
   Public MustInherit Class SqlDialectProvider
 
     Private m_Formatter As SqlFormatter

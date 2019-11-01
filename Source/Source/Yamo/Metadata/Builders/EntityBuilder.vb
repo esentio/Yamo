@@ -3,6 +3,7 @@ Imports Yamo.Internal.Extensions
 
 Namespace Metadata.Builders
 
+  ' TODO: SIP - add documentation to this class.
   Public Class EntityBuilder(Of TEntity As Class)
 
     Private m_Model As Model

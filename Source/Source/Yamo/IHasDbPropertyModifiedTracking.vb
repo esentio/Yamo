@@ -1,5 +1,5 @@
 ﻿''' <summary>
-''' Interface for model entities that defines change tracking of properties mapped to the database.
+''' Interface for model entities that defines change tracking of properties mapped to the database.<br/>
 ''' Implement this interface to turn off updating of all mapped properties/columns during UPDATE statements.
 ''' </summary>
 Public Interface IHasDbPropertyModifiedTracking

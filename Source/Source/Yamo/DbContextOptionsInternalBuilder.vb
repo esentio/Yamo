@@ -2,7 +2,7 @@
 Imports Yamo.Infrastructure
 
 ''' <summary>
-''' Provides an API for configuring <see cref="DbContextOptions"/>.
+''' Provides an API for configuring <see cref="DbContextOptions"/>.<br/>
 ''' This class is supposed to be used in particular database dialect extension methods to do the configuration.
 ''' </summary>
 Public Class DbContextOptionsInternalBuilder

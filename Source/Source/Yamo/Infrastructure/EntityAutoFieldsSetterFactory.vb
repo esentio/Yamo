@@ -5,6 +5,7 @@ Imports Yamo.Metadata
 
 Namespace Infrastructure
 
+  ' TODO: SIP - add documentation to this class.
   Public Class EntityAutoFieldsSetterFactory
 
     Public Shared Function CreateOnInsertSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)

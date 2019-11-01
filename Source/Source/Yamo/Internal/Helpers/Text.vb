@@ -2,6 +2,7 @@
 
 Namespace Internal.Helpers
 
+  ' TODO: SIP - add documentation to this class.
   Public Class Text
 
     Private Sub New()

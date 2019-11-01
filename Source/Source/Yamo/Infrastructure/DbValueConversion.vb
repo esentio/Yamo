@@ -1,5 +1,6 @@
 ﻿Namespace Infrastructure
 
+  ' TODO: SIP - add documentation to this class.
   Public Class DbValueConversion
 
     Public Overridable Function FromDbValue(Of T)(value As Object) As T

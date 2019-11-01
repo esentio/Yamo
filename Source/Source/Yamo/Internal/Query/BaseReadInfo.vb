@@ -5,6 +5,7 @@ Imports Yamo.Metadata
 
 Namespace Internal.Query
 
+  ' TODO: SIP - add documentation to this class.
   Public MustInherit Class BaseReadInfo
 
     Protected Shared Function GetPKOffsets(entity As SqlEntity) As Int32()

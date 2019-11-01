@@ -1,5 +1,6 @@
 ﻿Namespace Infrastructure
 
+  ' TODO: SIP - add documentation to this class.
   Public MustInherit Class ReaderFactoryBase
 
     Protected Shared Function GetReadMethodForType(type As Type) As (Method As String, Convert As Boolean)

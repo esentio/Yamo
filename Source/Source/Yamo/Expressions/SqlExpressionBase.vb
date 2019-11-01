@@ -1,5 +1,6 @@
 ﻿Namespace Expressions
 
+  ' TODO: SIP - add documentation to this class.
   Public MustInherit Class SqlExpressionBase
 
     ' TODO: SIP - move here from children?

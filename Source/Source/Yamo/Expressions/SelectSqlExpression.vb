@@ -5,6 +5,7 @@ Imports Yamo.Internal.Query.Metadata
 
 Namespace Expressions
 
+  ' TODO: SIP - add documentation to this class.
   Public Class SelectSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
 

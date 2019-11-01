@@ -4,6 +4,7 @@ Imports Yamo.SQLite.Infrastructure
 
 Namespace Global.Yamo
 
+  ' TODO: SIP - add documentation to this class.
   Public Module SQLiteDbContextOptionsExtensions
 
     <Extension>

@@ -4,6 +4,7 @@ Imports System.Reflection
 
 Namespace Infrastructure
 
+  ' TODO: SIP - add documentation to this class.
   Public Class ValueTypeReaderFactory
     Inherits ReaderFactoryBase
 

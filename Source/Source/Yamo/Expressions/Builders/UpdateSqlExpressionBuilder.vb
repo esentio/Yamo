@@ -6,6 +6,7 @@ Imports Yamo.Internal.Query.Metadata
 
 Namespace Expressions.Builders
 
+  ' TODO: SIP - add documentation to this class.
   Public Class UpdateSqlExpressionBuilder
     Inherits SqlExpressionBuilderBase
 

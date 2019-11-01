@@ -5,6 +5,7 @@ Imports Yamo.Metadata
 
 Namespace Internal.Query
 
+  ' TODO: SIP - add documentation to this class.
   Public Class CustomEntityReadInfo
     Inherits BaseReadInfo
 

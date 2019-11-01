@@ -3,6 +3,7 @@ Imports System.Data.Common
 
 Namespace Infrastructure
 
+  ' TODO: SIP - add documentation to this class.
   Public Class DatabaseFacade
     Implements IDisposable
 

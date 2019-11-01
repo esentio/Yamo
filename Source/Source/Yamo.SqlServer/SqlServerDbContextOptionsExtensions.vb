@@ -4,6 +4,7 @@ Imports Yamo.SqlServer.Infrastructure
 
 Namespace Global.Yamo
 
+  ' TODO: SIP - add documentation to this class.
   Public Module SqlServerDbContextOptionsExtensions
 
     <Extension>

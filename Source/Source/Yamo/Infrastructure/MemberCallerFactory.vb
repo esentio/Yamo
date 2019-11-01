@@ -3,6 +3,7 @@ Imports System.Reflection
 
 Namespace Infrastructure
 
+  ' TODO: SIP - add documentation to this class.
   Public Class MemberCallerFactory
 
     ' NOTE: for properties and methods, [Delegate].CreateDelegate seems a bit faster than compiled lambda, but we cannot use generics.

@@ -2,6 +2,7 @@
 
 Namespace Expressions.Builders
 
+  ' TODO: SIP - add documentation to this class.
   Public Class SqlExpressionBuilder
     Inherits SqlExpressionBuilderBase
 

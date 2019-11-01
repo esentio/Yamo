@@ -1,5 +1,6 @@
 ﻿Namespace Metadata.Builders
 
+  ' TODO: SIP - add documentation to this class.
   Public Class ReferenceNavigationBuilder(Of TEntity, TRelatedEntity)
 
     Private m_DeclaringEntity As Entity

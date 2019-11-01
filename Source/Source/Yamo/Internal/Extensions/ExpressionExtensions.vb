@@ -3,6 +3,7 @@ Imports System.Runtime.CompilerServices
 
 Namespace Internal.Extensions
 
+  ' TODO: SIP - add documentation to this class.
   <Extension()>
   Public Module ExpressionExtensions
 

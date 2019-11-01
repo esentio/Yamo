@@ -2,6 +2,7 @@
 
 Namespace Infrastructure
 
+  ' TODO: SIP - add documentation to this class.
   Public Class SQLiteDialectProvider
     Inherits SqlDialectProvider
 

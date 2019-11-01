@@ -1,5 +1,6 @@
 ﻿Namespace Metadata
 
+  ' TODO: SIP - add documentation to this class.
   Public MustInherit Class RelationshipNavigation
 
     Public ReadOnly Property PropertyName As String

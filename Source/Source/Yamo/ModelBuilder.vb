@@ -22,7 +22,7 @@ Public Class ModelBuilder
   End Sub
 
   ''' <summary>
-  ''' Returns an object that can be used to configure an entity of a given type in the model.
+  ''' Returns an object that can be used to configure an entity of a given type in the model.<br/>
   ''' If entity of this type doesn't already exist in the model definition, it will be added.
   ''' </summary>
   ''' <typeparam name="TEntity"></typeparam>
@@ -32,7 +32,7 @@ Public Class ModelBuilder
   End Function
 
   ''' <summary>
-  ''' Configures entity of a given type in the model.
+  ''' Configures entity of a given type in the model.<br/>
   ''' If entity of this type doesn't already exist in the model definition, it will be added.
   ''' </summary>
   ''' <typeparam name="TEntity"></typeparam>

@@ -8,6 +8,7 @@ Imports Yamo.Metadata
 
 Namespace Infrastructure
 
+  ' TODO: SIP - add documentation to this class.
   Public Class CustomResultReaderFactory
     Inherits ReaderFactoryBase
 
