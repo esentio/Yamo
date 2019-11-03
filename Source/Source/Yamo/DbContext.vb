@@ -5,7 +5,7 @@ Imports Yamo.Internal
 Imports Yamo.Metadata
 
 ''' <summary>
-''' A DbContext instance represents a session with the database and is used to execute queries against it.
+''' A <see cref="DbContext"/> instance represents a session with the database and is used to execute queries against it.
 ''' </summary>
 Public Class DbContext
   Implements IDisposable

@@ -5,35 +5,103 @@ Imports Yamo.Metadata
 
 Namespace Internal.Query
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Represents info used to read entity from SQL result.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class EntityReadInfo
     Inherits BaseReadInfo
 
+    ''' <summary>
+    ''' Gets SQL entity.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property Entity As SqlEntity
 
+    ''' <summary>
+    ''' Gets index of the reader.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property ReaderIndex As Int32
 
+    ''' <summary>
+    ''' Gets reader.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property Reader As Func(Of IDataReader, Int32, Boolean(), Object)
 
+    ''' <summary>
+    ''' Gets contains primary key reader.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property ContainsPKReader As Func(Of IDataReader, Int32, Int32(), Boolean)
 
+    ''' <summary>
+    ''' Gets primary key reader.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property PKReader As Func(Of IDataReader, Int32, Int32(), Object)
 
+    ''' <summary>
+    ''' Gets primary key offsets.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property PKOffsets As Int32()
 
-    Public ReadOnly Property HasRelatedEntities As Boolean ' if there are other entities to which this entity is declaring entity
+    ''' <summary>
+    ''' Gets whether there are other entities to which this entity is declaring entity.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property HasRelatedEntities As Boolean
 
-    Public ReadOnly Property RelatedEntities As IReadOnlyList(Of Int32) ' indexes of all entities to which this entity is declaring entity
+    ''' <summary>
+    ''' Gets indexes of all entities to which this entity is declaring entity.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property RelatedEntities As IReadOnlyList(Of Int32)
 
-    Public ReadOnly Property HasCollectionNavigation As Boolean ' if there are other entities to which this entity is declaring entity and it is 1:N relationship
+    ''' <summary>
+    ''' Gets whether there are other entities to which this entity is declaring entity and it is 1:N relationship.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property HasCollectionNavigation As Boolean
 
+    ''' <summary>
+    ''' Gets collection initializers (might be <see langword="Nothing"/>).<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property CollectionInitializers As IReadOnlyList(Of Action(Of Object)) ' might be nul!!! (it is wise? (allocation reasons))
 
+    ''' <summary>
+    ''' Gets relationship setter.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property RelationshipSetter As Action(Of Object, Object) ' declaring entity, related entity (this one)
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="EntityReadInfo"/>.
+    ''' </summary>
     Private Sub New()
     End Sub
 
+    ''' <summary>
+    ''' Creates new instances of <see cref="EntityReadInfo"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="dialectProvider"></param>
+    ''' <param name="model"></param>
+    ''' <returns></returns>
     Public Shared Function Create(dialectProvider As SqlDialectProvider, model As SqlModel) As EntityReadInfo()
       Dim entities = model.GetEntities()
       Dim relationships = New(RelatedEntities As List(Of Int32), CollectionNavigations As List(Of CollectionNavigation))(entities.Length - 1) {}
@@ -74,6 +142,16 @@ Namespace Internal.Query
       Return result
     End Function
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="EntityReadInfo"/>.
+    ''' </summary>
+    ''' <param name="dialectProvider"></param>
+    ''' <param name="model"></param>
+    ''' <param name="entity"></param>
+    ''' <param name="readerIndex"></param>
+    ''' <param name="relatedEntities"></param>
+    ''' <param name="collectionNavigations"></param>
+    ''' <returns></returns>
     Private Shared Function Create(dialectProvider As SqlDialectProvider, model As Model, entity As SqlEntity, readerIndex As Int32, relatedEntities As List(Of Int32), collectionNavigations As List(Of CollectionNavigation)) As EntityReadInfo
       Dim readInfo = New EntityReadInfo
 

@@ -4,10 +4,19 @@ Imports System.Reflection
 
 Namespace Infrastructure
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Value type reader factory.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class ValueTypeReaderFactory
     Inherits ReaderFactoryBase
 
+    ''' <summary>
+    ''' Creates reader.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
     Public Overridable Function CreateReader(type As Type) As Object
       Dim readerParam = Expression.Parameter(GetType(IDataRecord), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
       Dim indexParam = Expression.Parameter(GetType(Int32), "index")

@@ -9,9 +9,20 @@ Imports Yamo.Metadata
 
 Namespace Infrastructure
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Entity SQL string provider factory.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class EntitySqlStringProviderFactory
 
+    ''' <summary>
+    ''' Creates insert provider.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="useDbIdentityAndDefaults"></param>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Public Overridable Function CreateInsertProvider(builder As InsertSqlExpressionBuilder, useDbIdentityAndDefaults As Boolean, entityType As Type) As Func(Of Object, Boolean, CreateInsertSqlStringResult)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim useDbIdentityAndDefaultsParam = Expression.Parameter(GetType(Boolean), "useDbIdentityAndDefaults")
@@ -121,12 +132,31 @@ Namespace Infrastructure
       Return reader.Compile()
     End Function
 
+    ''' <summary>
+    ''' Gets insert statement when using database identity and defaults.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="tableName"></param>
+    ''' <param name="declareColumns"></param>
+    ''' <param name="outputColumnNames"></param>
+    ''' <param name="columnNames"></param>
+    ''' <param name="parameterNames"></param>
+    ''' <returns></returns>
     Protected Overridable Function GetInsertWhenUseDbIdentityAndDefaults(tableName As String, declareColumns As List(Of String), outputColumnNames As List(Of String), columnNames As List(Of String), parameterNames As List(Of String)) As String
       Return $"DECLARE @InsertedValues TABLE ({String.Join(", ", declareColumns)})
 INSERT INTO {tableName} ({String.Join(", ", columnNames)}) OUTPUT {String.Join(", ", outputColumnNames)} INTO @InsertedValues VALUES ({String.Join(", ", parameterNames)})
 SELECT * FROM @InsertedValues"
     End Function
 
+    ''' <summary>
+    ''' Gets insert statement when nor using database identity and defaults.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="tableName"></param>
+    ''' <param name="hasIdentityColumn"></param>
+    ''' <param name="columnNames"></param>
+    ''' <param name="parameterNames"></param>
+    ''' <returns></returns>
     Protected Overridable Function GetInsertWhenNotUseDbIdentityAndDefaults(tableName As String, hasIdentityColumn As Boolean, columnNames As List(Of String), parameterNames As List(Of String)) As String
       Dim sql = $"INSERT INTO {tableName} ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)})"
 
@@ -139,18 +169,37 @@ SET IDENTITY_INSERT {tableName} OFF"
       Return sql
     End Function
 
+    ''' <summary>
+    ''' Gets whether insert is supported when using defaults.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Protected Overridable Function IsInsertWhenUseDefaultsSupported() As Boolean
       Return True
     End Function
 
+    ''' <summary>
+    ''' Creates update provider.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Public Overridable Function CreateUpdateProvider(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, SqlString)
       If GetType(IHasDbPropertyModifiedTracking).IsAssignableFrom(entityType) Then
-        Return CreateUpdateProviderForPropertyModifiedTrackingObject(builder, entityType)
+        Return CreateUpdateProviderForDbPropertyModifiedTrackingObject(builder, entityType)
       Else
         Return CreateUpdateProviderForSimpleObjects(builder, entityType)
       End If
     End Function
 
+    ''' <summary>
+    ''' Creates update provider for simple objects.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Protected Overridable Function CreateUpdateProviderForSimpleObjects(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim parameters = {entityParam}
@@ -218,7 +267,14 @@ SET IDENTITY_INSERT {tableName} OFF"
       Return reader.Compile()
     End Function
 
-    Protected Overridable Function CreateUpdateProviderForPropertyModifiedTrackingObject(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, SqlString)
+    ''' <summary>
+    ''' Create update provider for objects with database property modified tracking.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
+    Protected Overridable Function CreateUpdateProviderForDbPropertyModifiedTrackingObject(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim parameters = {entityParam}
 
@@ -304,6 +360,13 @@ SET IDENTITY_INSERT {tableName} OFF"
       Return reader.Compile()
     End Function
 
+    ''' <summary>
+    ''' Creates delete provider.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Public Overridable Function CreateDeleteProvider(builder As DeleteSqlExpressionBuilder, entityType As Type) As Func(Of Object, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim parameters = {entityParam}
@@ -356,6 +419,13 @@ SET IDENTITY_INSERT {tableName} OFF"
       Return reader.Compile()
     End Function
 
+    ''' <summary>
+    ''' Creates soft delete provider.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Public Overridable Function CreateSoftDeleteProvider(builder As DeleteSqlExpressionBuilder, entityType As Type) As Func(Of Object, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim parameters = {entityParam}
@@ -423,6 +493,13 @@ SET IDENTITY_INSERT {tableName} OFF"
       Return reader.Compile()
     End Function
 
+    ''' <summary>
+    ''' Creates soft delete provider without condition.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Public Overridable Function CreateSoftDeleteWithoutConditionProvider(builder As DeleteSqlExpressionBuilder, entityType As Type) As Func(Of Object(), SqlString)
       Dim valuesParam = Expression.Parameter(GetType(Object()), "values")
       Dim parameters = {valuesParam}
@@ -472,12 +549,32 @@ SET IDENTITY_INSERT {tableName} OFF"
       Return reader.Compile()
     End Function
 
+    ''' <summary>
+    ''' Creates parameter from property.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="parametersVariable"></param>
+    ''' <param name="entityVariable"></param>
+    ''' <param name="prop"></param>
+    ''' <param name="index"></param>
+    ''' <param name="builder"></param>
+    ''' <returns></returns>
     Protected Function CreateParameterFromProperty(parametersVariable As Expression, entityVariable As Expression, prop As [Property], index As Int32, builder As SqlExpressionBuilderBase) As (ParameterName As String, ParameterAddCall As Expression)
       Dim parameterValue = Expression.Property(entityVariable, prop.Name)
 
       Return CreateParameter(parametersVariable, parameterValue, prop, index, builder)
     End Function
 
+    ''' <summary>
+    ''' Creates parameter.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="parametersVariable"></param>
+    ''' <param name="value"></param>
+    ''' <param name="prop"></param>
+    ''' <param name="index"></param>
+    ''' <param name="builder"></param>
+    ''' <returns></returns>
     Protected Function CreateParameter(parametersVariable As Expression, value As Expression, prop As [Property], index As Int32, builder As SqlExpressionBuilderBase) As (ParameterName As String, ParameterAddCall As Expression)
       Dim parameterNameValue = builder.CreateParameter(index)
       Dim parameterName = Expression.Constant(parameterNameValue, GetType(String))
@@ -500,6 +597,12 @@ SET IDENTITY_INSERT {tableName} OFF"
       Return (parameterNameValue, parameterAddCall)
     End Function
 
+    ''' <summary>
+    ''' Gets database type.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
     Protected Overridable Function GetDbType(type As Type) As DbType?
       If type Is GetType(Byte()) Then
         Return DbType.Binary
@@ -508,6 +611,12 @@ SET IDENTITY_INSERT {tableName} OFF"
       End If
     End Function
 
+    ''' <summary>
+    ''' Gets database type definition.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
     Protected Overridable Function GetDbTypeDefinition(type As Type) As String
       Select Case type
         Case GetType(Guid), GetType(Guid?)

@@ -3,7 +3,7 @@ Imports System.Data.Common
 Imports Yamo.Infrastructure
 
 ''' <summary>
-''' Configuration options used by a <see cref="DbContext" />.
+''' Configuration options used by a <see cref="DbContext"/>.
 ''' </summary>
 Public Class DbContextOptions
 

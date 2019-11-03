@@ -1,6 +1,9 @@
 ﻿Namespace Internal.Query.Metadata
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Join type.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Enum JoinType
     Inner = 0
     LeftOuter = 1

@@ -2,15 +2,31 @@
 
 Namespace Internal
 
+  ''' <summary>
+  ''' SQL expression entities visitor.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class SqlExpressionEntitiesVisitor
     Inherits ExpressionVisitor
 
+    ''' <summary>
+    ''' Stores used entity indexes.
+    ''' </summary>
     Private m_UsedEntityIndexes As HashSet(Of Int32)
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="SqlExpressionEntitiesVisitor"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
     Public Sub New()
-
     End Sub
 
+    ''' <summary>
+    ''' Get indexes of referenced entities.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="expression"></param>
+    ''' <returns></returns>
     Public Function GetIndexesOfReferencedEntities(expression As Expression) As Int32()
       m_UsedEntityIndexes = New HashSet(Of Int32)
 
@@ -19,6 +35,12 @@ Namespace Internal
       Return m_UsedEntityIndexes.OrderBy(Function(x) x).ToArray()
     End Function
 
+    ''' <summary>
+    ''' Visits member.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Protected Overrides Function VisitMember(node As MemberExpression) As Expression
       If node.Expression IsNot Nothing AndAlso node.Expression.NodeType = ExpressionType.MemberAccess Then
         Dim node2 = DirectCast(node.Expression, MemberExpression)

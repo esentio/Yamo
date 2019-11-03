@@ -3,7 +3,10 @@ Imports System.Reflection
 
 Namespace Infrastructure
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Member caller factory.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class MemberCallerFactory
 
     ' NOTE: for properties and methods, [Delegate].CreateDelegate seems a bit faster than compiled lambda, but we cannot use generics.
@@ -12,6 +15,13 @@ Namespace Infrastructure
     ' https://www.codeproject.com/Articles/14560/Fast-Dynamic-Property-Field-Accessors
     ' https://stackoverflow.com/questions/724143/how-do-i-create-a-delegate-for-a-net-property
 
+    ''' <summary>
+    ''' Creates caller.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="valueType"></param>
+    ''' <param name="fieldInfo"></param>
+    ''' <returns></returns>
     Public Shared Function CreateCaller(valueType As Type, fieldInfo As FieldInfo) As Func(Of Object, Object)
       Dim valueParam = Expression.Parameter(GetType(Object), "value")
       Dim resultExpression = Expression.Convert(Expression.Field(Expression.Convert(valueParam, valueType), fieldInfo), GetType(Object))
@@ -19,12 +29,26 @@ Namespace Infrastructure
       Return getter.Compile()
     End Function
 
+    ''' <summary>
+    ''' Creates static caller.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="valueType"></param>
+    ''' <param name="fieldInfo"></param>
+    ''' <returns></returns>
     Public Shared Function CreateStaticCaller(valueType As Type, fieldInfo As FieldInfo) As Func(Of Object)
       Dim resultExpression = Expression.Convert(Expression.Field(Nothing, fieldInfo), GetType(Object))
       Dim getter = Expression.Lambda(Of Func(Of Object))(resultExpression)
       Return getter.Compile()
     End Function
 
+    ''' <summary>
+    ''' Creates caller.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="valueType"></param>
+    ''' <param name="propertyInfo"></param>
+    ''' <returns></returns>
     Public Shared Function CreateCaller(valueType As Type, propertyInfo As PropertyInfo) As Func(Of Object, Object)
       Dim valueParam = Expression.Parameter(GetType(Object), "value")
       Dim resultExpression = Expression.Convert(Expression.Property(Expression.Convert(valueParam, valueType), propertyInfo), GetType(Object))
@@ -32,12 +56,26 @@ Namespace Infrastructure
       Return getter.Compile()
     End Function
 
+    ''' <summary>
+    ''' Creates static caller.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="valueType"></param>
+    ''' <param name="propertyInfo"></param>
+    ''' <returns></returns>
     Public Shared Function CreateStaticCaller(valueType As Type, propertyInfo As PropertyInfo) As Func(Of Object)
       Dim resultExpression = Expression.Convert(Expression.Property(Nothing, propertyInfo), GetType(Object))
       Dim getter = Expression.Lambda(Of Func(Of Object))(resultExpression)
       Return getter.Compile()
     End Function
 
+    ''' <summary>
+    ''' Creates caller.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="valueType"></param>
+    ''' <param name="methodInfo"></param>
+    ''' <returns></returns>
     Public Shared Function CreateCaller(valueType As Type, methodInfo As MethodInfo) As Func(Of Object, Object)
       Dim valueParam = Expression.Parameter(GetType(Object), "value")
       Dim resultExpression = Expression.Convert(Expression.Call(Expression.Convert(valueParam, valueType), methodInfo), GetType(Object))
@@ -45,6 +83,13 @@ Namespace Infrastructure
       Return getter.Compile()
     End Function
 
+    ''' <summary>
+    ''' Creates static caller.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="valueType"></param>
+    ''' <param name="methodInfo"></param>
+    ''' <returns></returns>
     Public Shared Function CreateStaticCaller(valueType As Type, methodInfo As MethodInfo) As Func(Of Object)
       Dim resultExpression = Expression.Convert(Expression.Call(methodInfo), GetType(Object))
       Dim getter = Expression.Lambda(Of Func(Of Object))(resultExpression)

@@ -1,8 +1,17 @@
 ﻿Namespace Infrastructure
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Base class for reader factories.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public MustInherit Class ReaderFactoryBase
 
+    ''' <summary>
+    ''' Gets reader method for specified type.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
     Protected Shared Function GetReadMethodForType(type As Type) As (Method As String, Convert As Boolean)
       Select Case type
         Case GetType(Boolean), GetType(Boolean?)

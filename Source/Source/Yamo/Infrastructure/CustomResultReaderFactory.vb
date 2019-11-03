@@ -8,10 +8,20 @@ Imports Yamo.Metadata
 
 Namespace Infrastructure
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Custom result reader factory.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class CustomResultReaderFactory
     Inherits ReaderFactoryBase
 
+    ''' <summary>
+    ''' Creates result factory.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <param name="customEntities"></param>
+    ''' <returns></returns>
     Public Shared Function CreateResultFactory(node As Expression, customEntities As CustomSqlEntity()) As Object
       If node.NodeType = ExpressionType.New Then
         ' ValueTuple or anonymous type
@@ -22,6 +32,12 @@ Namespace Infrastructure
       End If
     End Function
 
+    ''' <summary>
+    ''' Creates result factory.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="resultType"></param>
+    ''' <returns></returns>
     Public Shared Function CreateResultFactory(resultType As Type) As Object
       Dim resultConstructorInfo As ConstructorInfo = Nothing
       Dim nullableValueConstructorInfo As ConstructorInfo = Nothing
@@ -60,6 +76,12 @@ Namespace Infrastructure
       Return CreateResultFactory(customEntities, resultConstructorInfo, nullableValueConstructorInfo)
     End Function
 
+    ''' <summary>
+    ''' Creates instance of <see cref="CustomSqlEntity"/>.
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
     Private Shared Function CreateCustomSqlEntity(type As Type, index As Int32) As CustomSqlEntity
       If Helpers.Types.IsProbablyModel(type) Then
         ' If type is not defined in model, there will be an exception thrown later from
@@ -72,6 +94,13 @@ Namespace Infrastructure
       End If
     End Function
 
+    ''' <summary>
+    ''' Creates result factory.
+    ''' </summary>
+    ''' <param name="customEntities"></param>
+    ''' <param name="resultConstructorInfo"></param>
+    ''' <param name="nullableValueConstructorInfo"></param>
+    ''' <returns></returns>
     Private Shared Function CreateResultFactory(customEntities As CustomSqlEntity(), Optional resultConstructorInfo As ConstructorInfo = Nothing, Optional nullableValueConstructorInfo As ConstructorInfo = Nothing) As Object
       Dim readerParam = Expression.Parameter(GetType(IDataReader), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
       Dim customEntityInfosParam = Expression.Parameter(GetType(CustomEntityReadInfo()), "customEntityInfos")
