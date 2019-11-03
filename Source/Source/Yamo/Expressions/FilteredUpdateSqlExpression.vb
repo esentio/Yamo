@@ -7,6 +7,12 @@ Namespace Expressions
   Public Class FilteredUpdateSqlExpression(Of T)
     Inherits UpdateSqlExpressionBase
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="FilteredUpdateSqlExpression(Of T)"/>.
+    ''' </summary>
+    ''' <param name="context"></param>
+    ''' <param name="builder"></param>
+    ''' <param name="executor"></param>
     Friend Sub New(context As DbContext, builder As UpdateSqlExpressionBuilder, executor As QueryExecutor)
       MyBase.New(context, builder, executor)
     End Sub

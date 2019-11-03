@@ -11,6 +11,11 @@ Namespace Expressions
 
     Protected Property Executor As QueryExecutor
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="SelectSqlExpressionBase"/>.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="executor"></param>
     Friend Sub New(builder As SelectSqlExpressionBuilder, executor As QueryExecutor)
       Me.Builder = builder
       Me.Executor = executor

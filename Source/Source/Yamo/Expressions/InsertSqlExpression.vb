@@ -16,6 +16,12 @@ Namespace Expressions
 
     Private m_SetAutoFields As Boolean
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="InsertSqlExpression(Of T)"/>.
+    ''' </summary>
+    ''' <param name="context"></param>
+    ''' <param name="useDbIdentityAndDefaults"></param>
+    ''' <param name="setAutoFields"></param>
     Friend Sub New(context As DbContext, useDbIdentityAndDefaults As Boolean, setAutoFields As Boolean)
       Me.DbContext = context
       Me.Builder = New InsertSqlExpressionBuilder(context, useDbIdentityAndDefaults)

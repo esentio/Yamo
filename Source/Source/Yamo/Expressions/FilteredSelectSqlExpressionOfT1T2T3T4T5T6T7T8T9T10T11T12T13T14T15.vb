@@ -8,6 +8,11 @@ Namespace Expressions
   Public Class FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)
     Inherits SelectSqlExpressionBase
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)"/>.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="executor"></param>
     Friend Sub New(builder As SelectSqlExpressionBuilder, executor As QueryExecutor)
       MyBase.New(builder, executor)
     End Sub

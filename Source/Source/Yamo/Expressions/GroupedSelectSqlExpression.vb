@@ -9,6 +9,11 @@ Namespace Expressions
   Public Class GroupedSelectSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="GroupedSelectSqlExpression(Of T)"/>.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="executor"></param>
     Friend Sub New(builder As SelectSqlExpressionBuilder, executor As QueryExecutor)
       MyBase.New(builder, executor)
     End Sub

@@ -9,6 +9,10 @@ Namespace Expressions
   Public Class SelectSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="SelectSqlExpression(Of T)"/>.
+    ''' </summary>
+    ''' <param name="context"></param>
     Friend Sub New(context As DbContext)
       MyBase.New(New SelectSqlExpressionBuilder(context), New QueryExecutor(context))
       Me.Builder.SetMainTable(Of T)()

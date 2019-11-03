@@ -8,6 +8,11 @@ Namespace Expressions
   Public Class FilteredSelectSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="FilteredSelectSqlExpression(Of T)"/>.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="executor"></param>
     Friend Sub New(builder As SelectSqlExpressionBuilder, executor As QueryExecutor)
       MyBase.New(builder, executor)
     End Sub
@@ -63,6 +68,10 @@ Namespace Expressions
       Return Me.Executor.QueryFirstOrDefault(Of Int32)(query)
     End Function
 
+    ''' <summary>
+    ''' Executes SQL query and returns first record or default.
+    ''' </summary>
+    ''' <returns></returns>
     Public Function FirstOrDefault() As T
       Dim query = Me.Builder.CreateQuery()
       Return Me.Executor.ReadFirstOrDefault(Of T)(query)

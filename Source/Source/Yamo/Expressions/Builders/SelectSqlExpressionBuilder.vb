@@ -7,30 +7,68 @@ Imports Yamo.Metadata
 
 Namespace Expressions.Builders
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Represents select SQL expression builder.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class SelectSqlExpressionBuilder
     Inherits SqlExpressionBuilderBase
 
+    ''' <summary>
+    ''' Stores SQL model.
+    ''' </summary>
     Private m_Model As SqlModel
 
+    ''' <summary>
+    ''' Stores SQL expression visitor.
+    ''' </summary>
     Private m_Visitor As SqlExpressionVisitor
 
+    ''' <summary>
+    ''' Stores join expressions.
+    ''' </summary>
     Private m_JoinExpressions As List(Of String)
 
+    ''' <summary>
+    ''' Stores where expressions.
+    ''' </summary>
     Private m_WhereExpressions As List(Of String)
 
+    ''' <summary>
+    ''' Stores group by expressions.
+    ''' </summary>
     Private m_GroupByExpressions As List(Of String) ' couldn't be just string?
 
+    ''' <summary>
+    ''' Stores having expressions.
+    ''' </summary>
     Private m_HavingExpressions As List(Of String)
 
+    ''' <summary>
+    ''' Stores order by expressions.
+    ''' </summary>
     Private m_OrderByExpressions As List(Of String)
 
+    ''' <summary>
+    ''' Stores select expressions.
+    ''' </summary>
     Private m_SelectExpression As String
 
+    ''' <summary>
+    ''' Stores whether distincs is used.
+    ''' </summary>
     Private m_UseDistinct As Boolean
 
+    ''' <summary>
+    ''' Stores paarmeters.
+    ''' </summary>
     Private m_Parameters As List(Of SqlParameter)
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="SelectSqlExpressionBuilder"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="context"></param>
     Public Sub New(context As DbContext)
       MyBase.New(context)
       m_Model = New SqlModel(Me.DbContext.Model)
@@ -46,6 +84,11 @@ Namespace Expressions.Builders
       m_Parameters = New List(Of SqlParameter)
     End Sub
 
+    ''' <summary>
+    ''' Creates query.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public Function CreateQuery() As SelectQuery
       Dim sql = New StringBuilder
 
@@ -96,10 +139,20 @@ Namespace Expressions.Builders
       Return New SelectQuery(sql.ToString(), m_Parameters.ToList(), m_Model)
     End Function
 
+    ''' <summary>
+    ''' Sets main table.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
     Public Sub SetMainTable(Of T)()
       m_Model.SetMainTable(Of T)()
     End Sub
 
+    ''' <summary>
+    ''' Tries to get entity index hints.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
     Private Function TryGetEntityIndexHints(predicate As Expression) As Int32()
       If predicate.NodeType = ExpressionType.Lambda Then
         Dim lambda = DirectCast(predicate, LambdaExpression)
@@ -119,6 +172,13 @@ Namespace Expressions.Builders
       Return Nothing
     End Function
 
+    ''' <summary>
+    ''' Tries to get relationship.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="predicate"></param>
+    ''' <param name="entityIndexHints"></param>
+    ''' <returns></returns>
     Private Function TryGetRelationship(Of TJoined)(predicate As Expression, entityIndexHints As Int32()) As SqlEntityRelationship
       Dim declaringEntityIndexHint = entityIndexHints?(0)
 
@@ -150,6 +210,14 @@ Namespace Expressions.Builders
       Return Nothing
     End Function
 
+    ''' <summary>
+    ''' Adds join.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="joinType"></param>
+    ''' <param name="predicate"></param>
+    ''' <param name="entityIndexHints"></param>
     Public Sub AddJoin(Of TJoined)(joinType As JoinType, predicate As Expression, entityIndexHints As Int32())
       If m_JoinExpressions Is Nothing Then
         m_JoinExpressions = New List(Of String)
@@ -196,6 +264,11 @@ Namespace Expressions.Builders
       End If
     End Sub
 
+    ''' <summary>
+    ''' Sets last join relationship.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="relationship"></param>
     Public Sub SetLastJoinRelationship(relationship As Expression)
       ' we expect lambda expression with one parameter
 
@@ -253,6 +326,12 @@ Namespace Expressions.Builders
       End If
     End Sub
 
+    ''' <summary>
+    ''' Adds where.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="entityIndexHints"></param>
     Public Sub AddWhere(predicate As Expression, entityIndexHints As Int32())
       If m_WhereExpressions Is Nothing Then
         m_WhereExpressions = New List(Of String)
@@ -264,6 +343,11 @@ Namespace Expressions.Builders
       m_Parameters.AddRange(result.Parameters)
     End Sub
 
+    ''' <summary>
+    ''' Adds where.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="predicate"></param>
     Public Sub AddWhere(predicate As String)
       If m_WhereExpressions Is Nothing Then
         m_WhereExpressions = New List(Of String)
@@ -272,6 +356,12 @@ Namespace Expressions.Builders
       m_WhereExpressions.Add(predicate)
     End Sub
 
+    ''' <summary>
+    ''' Adds group by.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <param name="entityIndexHints"></param>
     Public Sub AddGroupBy(keySelector As Expression, entityIndexHints As Int32())
       If m_GroupByExpressions Is Nothing Then
         m_GroupByExpressions = New List(Of String)
@@ -283,6 +373,12 @@ Namespace Expressions.Builders
       m_Parameters.AddRange(result.Parameters)
     End Sub
 
+    ''' <summary>
+    ''' Adds having.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="entityIndexHints"></param>
     Public Sub AddHaving(predicate As Expression, entityIndexHints As Int32())
       If m_HavingExpressions Is Nothing Then
         m_HavingExpressions = New List(Of String)
@@ -294,6 +390,11 @@ Namespace Expressions.Builders
       m_Parameters.AddRange(result.Parameters)
     End Sub
 
+    ''' <summary>
+    ''' Adds having.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="predicate"></param>
     Public Sub AddHaving(predicate As String)
       If m_HavingExpressions Is Nothing Then
         m_HavingExpressions = New List(Of String)
@@ -302,6 +403,13 @@ Namespace Expressions.Builders
       m_HavingExpressions.Add(predicate)
     End Sub
 
+    ''' <summary>
+    ''' Adds order by.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <param name="entityIndexHints"></param>
+    ''' <param name="ascending"></param>
     Public Sub AddOrderBy(keySelector As Expression, entityIndexHints As Int32(), ascending As Boolean)
       If m_OrderByExpressions Is Nothing Then
         m_OrderByExpressions = New List(Of String)
@@ -319,10 +427,20 @@ Namespace Expressions.Builders
       m_Parameters.AddRange(result.Parameters)
     End Sub
 
+    ''' <summary>
+    ''' Adds select all columns.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="entityTypes"></param>
     Public Sub AddSelectAll(ParamArray entityTypes As Type())
       ' right now this does nothing; refactor?
     End Sub
 
+    ''' <summary>
+    ''' Excludes selected property.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="propertyExpression"></param>
     Public Sub ExcludeSelected(propertyExpression As Expression)
       ' TODO: SIP - refactor and combine with SetLastJoinRelationship
       ' we expect lambda expression with one parameter
@@ -373,14 +491,29 @@ Namespace Expressions.Builders
       entity.IncludedColumns(prop.Index) = False
     End Sub
 
+    ''' <summary>
+    ''' Excludes selected entity.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="entityIndex"></param>
     Public Sub ExcludeSelected(entityIndex As Int32)
       m_Model.GetEntity(entityIndex).Exclude()
     End Sub
 
+    ''' <summary>
+    ''' Adds select count.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
     Public Sub AddSelectCount()
       m_SelectExpression = "COUNT(*)"
     End Sub
 
+    ''' <summary>
+    ''' Adds select.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="selector"></param>
+    ''' <param name="entityIndexHints"></param>
     Public Sub AddSelect(selector As Expression, entityIndexHints As Int32())
       Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
       Dim result = m_Visitor.TranslateCustomSelect(selector, parametersType, entityIndexHints, m_Parameters.Count)
@@ -389,10 +522,18 @@ Namespace Expressions.Builders
       m_Model.SetCustomEntities(result.CustomEntities)
     End Sub
 
+    ''' <summary>
+    ''' Adds distinct.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
     Public Sub AddDistinct()
       m_UseDistinct = True
     End Sub
 
+    ''' <summary>
+    ''' Build and append select expression to <see cref="StringBuilder"/>.
+    ''' </summary>
+    ''' <param name="sql"></param>
     Private Sub BuildAndAppendSelectExpression(sql As StringBuilder)
       sql.Append("SELECT ")
 

@@ -7,6 +7,12 @@ Namespace Expressions
   Public Class FilteredDeleteSqlExpression(Of T)
     Inherits DeleteSqlExpressionBase
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="FilteredDeleteSqlExpression(Of T)"/>.
+    ''' </summary>
+    ''' <param name="context"></param>
+    ''' <param name="builder"></param>
+    ''' <param name="executor"></param>
     Friend Sub New(context As DbContext, builder As DeleteSqlExpressionBuilder, executor As QueryExecutor)
       MyBase.New(context, builder, executor)
     End Sub

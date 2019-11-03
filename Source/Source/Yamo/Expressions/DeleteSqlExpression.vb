@@ -9,6 +9,11 @@ Namespace Expressions
   Public Class DeleteSqlExpression(Of T)
     Inherits DeleteSqlExpressionBase
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="DeleteSqlExpression(Of T)"/>.
+    ''' </summary>
+    ''' <param name="context"></param>
+    ''' <param name="softDelete"></param>
     Friend Sub New(context As DbContext, softDelete As Boolean)
       MyBase.New(context, New DeleteSqlExpressionBuilder(context, softDelete), New QueryExecutor(context))
       Me.Builder.SetMainTable(Of T)()

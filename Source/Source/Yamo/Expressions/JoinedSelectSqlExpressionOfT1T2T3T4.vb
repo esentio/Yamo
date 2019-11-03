@@ -8,6 +8,11 @@ Namespace Expressions
   Public Class JoinedSelectSqlExpression(Of T1, T2, T3, T4)
     Inherits SelectSqlExpression(Of T1, T2, T3, T4)
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="JoinedSelectSqlExpression(Of T1, T2, T3, T4)"/>.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="executor"></param>
     Friend Sub New(builder As SelectSqlExpressionBuilder, executor As QueryExecutor)
       MyBase.New(builder, executor)
     End Sub

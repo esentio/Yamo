@@ -4,7 +4,7 @@ Imports Yamo.Internal.Query
 Namespace Expressions
 
   ' TODO: SIP - add documentation to this class.
-  Public Class DeleteSqlExpressionBase
+  Public MustInherit Class DeleteSqlExpressionBase
     Inherits SqlExpressionBase
 
     Protected ReadOnly DbContext As DbContext
