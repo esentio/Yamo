@@ -1,14 +1,27 @@
 ﻿Namespace Metadata
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Metadata about entities, relationships between them and their mapping to the database.
+  ''' </summary>
   Public Class Model
 
+    ''' <summary>
+    ''' Stores entities by their type.
+    ''' </summary>
     Private m_Entities As Dictionary(Of Type, Entity)
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="Model"/>.
+    ''' </summary>
     Sub New()
       m_Entities = New Dictionary(Of Type, Entity)
     End Sub
 
+    ''' <summary>
+    ''' Adds entity to the model.
+    ''' </summary>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Friend Function AddEntity(entityType As Type) As Entity
       Dim entity As Entity = Nothing
 
@@ -20,6 +33,11 @@
       Return entity
     End Function
 
+    ''' <summary>
+    ''' Returns an entity of defined type.
+    ''' </summary>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Public Function GetEntity(entityType As Type) As Entity
       Dim entity As Entity = Nothing
 
@@ -30,6 +48,11 @@
       End If
     End Function
 
+    ''' <summary>
+    ''' Returns an entity of defined type or <see langword="Nothing"/>.
+    ''' </summary>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Public Function TryGetEntity(entityType As Type) As Entity
       Dim entity As Entity = Nothing
       m_Entities.TryGetValue(entityType, entity)
