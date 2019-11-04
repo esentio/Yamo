@@ -17,10 +17,21 @@ Namespace Expressions
       MyBase.New(builder, executor)
     End Sub
 
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
     Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T, TProperty))) As SelectedSelectSqlExpression(Of T)
       Return InternalExclude(propertyExpression)
     End Function
 
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' </summary>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
     Private Function InternalExclude(propertyExpression As Expression) As SelectedSelectSqlExpression(Of T)
       Me.Builder.ExcludeSelected(propertyExpression)
       Return Me

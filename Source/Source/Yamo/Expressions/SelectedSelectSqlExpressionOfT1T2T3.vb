@@ -17,35 +17,77 @@ Namespace Expressions
       MyBase.New(builder, executor)
     End Sub
 
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
     Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3)
       Return InternalExclude(propertyExpression)
     End Function
 
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
     Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3)
       Return InternalExclude(propertyExpression)
     End Function
 
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
     Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3)
       Return InternalExclude(propertyExpression)
     End Function
 
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
     Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of Join(Of T1, T2, T3), TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3)
       Return InternalExclude(propertyExpression)
     End Function
 
+    ''' <summary>
+    ''' Excludes all columns of 2nd table (entity) from SELECT statement.
+    ''' </summary>
+    ''' <returns></returns>
     Public Function ExcludeT2() As SelectedSelectSqlExpression(Of T1, T2, T3)
       Return InternalExclude(1)
     End Function
 
+    ''' <summary>
+    ''' Excludes all columns of 3rd table (entity) from SELECT statement.
+    ''' </summary>
+    ''' <returns></returns>
     Public Function ExcludeT3() As SelectedSelectSqlExpression(Of T1, T2, T3)
       Return InternalExclude(2)
     End Function
 
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' </summary>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
     Private Function InternalExclude(propertyExpression As Expression) As SelectedSelectSqlExpression(Of T1, T2, T3)
       Me.Builder.ExcludeSelected(propertyExpression)
       Return Me
     End Function
 
+    ''' <summary>
+    ''' Excludes all columns of the table (entity) from SELECT statement.
+    ''' </summary>
+    ''' <param name="entityIndex"></param>
+    ''' <returns></returns>
     Private Function InternalExclude(entityIndex As Int32) As SelectedSelectSqlExpression(Of T1, T2, T3)
       Me.Builder.ExcludeSelected(entityIndex)
       Return Me

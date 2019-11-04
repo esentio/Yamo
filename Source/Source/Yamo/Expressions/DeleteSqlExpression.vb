@@ -19,16 +19,31 @@ Namespace Expressions
       Me.Builder.SetMainTable(Of T)()
     End Sub
 
+    ''' <summary>
+    ''' Adds WHERE statement.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
     Public Function Where(predicate As Expression(Of Func(Of T, Boolean))) As FilteredDeleteSqlExpression(Of T)
       Me.Builder.AddWhere(predicate)
       Return New FilteredDeleteSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
 
+    ''' <summary>
+    ''' Adds WHERE statement.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
     Public Function Where(predicate As Expression(Of Func(Of T, FormattableString))) As FilteredDeleteSqlExpression(Of T)
       Me.Builder.AddWhere(predicate)
       Return New FilteredDeleteSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
 
+    ''' <summary>
+    ''' Adds WHERE statement.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
     Public Function Where(predicate As String) As FilteredDeleteSqlExpression(Of T)
       Me.Builder.AddWhere(predicate)
       Return New FilteredDeleteSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
