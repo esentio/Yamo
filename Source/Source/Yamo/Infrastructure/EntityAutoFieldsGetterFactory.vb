@@ -5,8 +5,19 @@ Imports Yamo.Metadata
 
 Namespace Infrastructure
 
+  ''' <summary>
+  ''' Entity auto fields getter factory.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class EntityAutoFieldsGetterFactory
 
+    ''' <summary>
+    ''' Creates on update getter.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Public Shared Function CreateOnUpdateGetter(model As Model, entityType As Type) As Func(Of DbContext, Object())
       Dim factories = model.GetEntity(entityType).GetProperties().Where(Function(p) p.SetOnUpdate).Select(Function(p) p.GetOnUpdateFactory()).ToArray()
 
@@ -17,6 +28,13 @@ Namespace Infrastructure
       Return CreateGetter(model, entityType, factories)
     End Function
 
+    ''' <summary>
+    ''' Creates on soft delete getter.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Public Shared Function CreateOnDeleteGetter(model As Model, entityType As Type) As Func(Of DbContext, Object())
       Dim factories = model.GetEntity(entityType).GetProperties().Where(Function(p) p.SetOnDelete).Select(Function(p) p.GetOnDeleteFactory()).ToArray()
 
@@ -27,6 +45,13 @@ Namespace Infrastructure
       Return CreateGetter(model, entityType, factories)
     End Function
 
+    ''' <summary>
+    ''' Creates getter.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="entityType"></param>
+    ''' <param name="factories"></param>
+    ''' <returns></returns>
     Private Shared Function CreateGetter(model As Model, entityType As Type, factories As Object()) As Func(Of DbContext, Object())
       Dim contextParam = Expression.Parameter(GetType(DbContext), "context")
       Dim parameters = {contextParam}

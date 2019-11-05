@@ -6,23 +6,54 @@ Imports Yamo.Internal.Query.Metadata
 
 Namespace Expressions.Builders
 
+  ''' <summary>
+  ''' Represents update SQL expression builder.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class UpdateSqlExpressionBuilder
     Inherits SqlExpressionBuilderBase
 
+    ''' <summary>
+    ''' Stores whether auto fields should be set.
+    ''' </summary>
     Private m_SetAutoFields As Boolean
 
+    ''' <summary>
+    ''' Stores SQL model.
+    ''' </summary>
     Private m_Model As SqlModel
 
+    ''' <summary>
+    ''' Stores SQL expression visitor.
+    ''' </summary>
     Private m_Visitor As SqlExpressionVisitor
 
+    ''' <summary>
+    ''' Stores set expressions.
+    ''' </summary>
     Private m_SetExpressions As List(Of String)
 
+    ''' <summary>
+    ''' Stores where expressions.
+    ''' </summary>
     Private m_WhereExpressions As List(Of String)
 
+    ''' <summary>
+    ''' Stores parameters.
+    ''' </summary>
     Private m_Parameters As List(Of SqlParameter)
 
+    ''' <summary>
+    ''' Stores auto fields parameters info.
+    ''' </summary>
     Private m_AutoFieldsParametersInfo As (Index As Int32, Columns As String())?
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="UpdateSqlExpressionBuilder"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="context"></param>
+    ''' <param name="setAutoFields"></param>
     Public Sub New(context As DbContext, setAutoFields As Boolean)
       MyBase.New(context)
       m_SetAutoFields = setAutoFields
@@ -34,16 +65,32 @@ Namespace Expressions.Builders
       m_AutoFieldsParametersInfo = Nothing ' lazy assigned
     End Sub
 
+    ''' <summary>
+    ''' Sets main table.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
     Public Sub SetMainTable(Of T)()
       m_Model.SetMainTable(Of T)()
     End Sub
 
+    ''' <summary>
+    ''' Adds set.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="predicate"></param>
     Public Sub AddSet(predicate As Expression)
       Dim result = m_Visitor.Translate(predicate, ExpressionParametersType.Entities, {0}, m_Parameters.Count, False, False)
       m_SetExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
 
+    ''' <summary>
+    ''' Adds set.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="value"></param>
     Public Sub AddSet(predicate As Expression, value As Object)
       Dim result = m_Visitor.Translate(predicate, ExpressionParametersType.Entities, {0}, m_Parameters.Count, False, False)
       m_Parameters.AddRange(result.Parameters)
@@ -52,6 +99,12 @@ Namespace Expressions.Builders
       m_Parameters.Add(New SqlParameter(parameterName, value))
     End Sub
 
+    ''' <summary>
+    ''' Adds set.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="valueSelector"></param>
     Public Sub AddSet(predicate As Expression, valueSelector As Expression)
       Dim result1 = m_Visitor.Translate(predicate, ExpressionParametersType.Entities, {0}, m_Parameters.Count, False, False)
       m_Parameters.AddRange(result1.Parameters)
@@ -60,10 +113,20 @@ Namespace Expressions.Builders
       m_SetExpressions.Add($"{result1.Sql} = {result2.Sql}")
     End Sub
 
+    ''' <summary>
+    ''' Adds set.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="predicate"></param>
     Public Sub AddSet(predicate As String)
       m_SetExpressions.Add(predicate)
     End Sub
 
+    ''' <summary>
+    ''' Adds where.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="predicate"></param>
     Public Sub AddWhere(predicate As Expression)
       If Not m_AutoFieldsParametersInfo.HasValue Then
         AddAutoFieldSetters()
@@ -74,10 +137,18 @@ Namespace Expressions.Builders
       m_Parameters.AddRange(result.Parameters)
     End Sub
 
+    ''' <summary>
+    ''' Adds where.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="predicate"></param>
     Public Sub AddWhere(predicate As String)
       m_WhereExpressions.Add(predicate)
     End Sub
 
+    ''' <summary>
+    ''' Adds auto field setters.
+    ''' </summary>
     Private Sub AddAutoFieldSetters()
       If m_SetAutoFields Then
         Dim index = m_Parameters.Count
@@ -94,6 +165,11 @@ Namespace Expressions.Builders
       End If
     End Sub
 
+    ''' <summary>
+    ''' Creates query.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public Function CreateQuery() As Query
       Dim entity = m_Model.GetFirstEntity().Entity
 
@@ -131,6 +207,12 @@ Namespace Expressions.Builders
       Return New Query(sql.ToString(), m_Parameters.ToList())
     End Function
 
+    ''' <summary>
+    ''' Creates query.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="obj"></param>
+    ''' <returns></returns>
     Public Function CreateQuery(obj As Object) As Query
       Dim provider = EntitySqlStringProviderCache.GetUpdateProvider(Me, obj.GetType())
       Dim sqlString = provider(obj)

@@ -1,10 +1,23 @@
 ﻿Namespace Internal.Helpers
 
+  ''' <summary>
+  ''' Miscellaneous helpers.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class Common
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="Common"/>.
+    ''' </summary>
     Private Sub New()
     End Sub
 
+    ''' <summary>
+    ''' Gets entity index from join member name.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="name"></param>
+    ''' <returns></returns>
     Public Shared Function GetEntityIndexFromJoinMemberName(name As String) As Int32
       Select Case name
         Case "T1"

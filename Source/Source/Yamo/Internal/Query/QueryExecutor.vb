@@ -4,27 +4,55 @@ Imports Yamo
 Imports Yamo.Infrastructure
 Imports Yamo.Internal.Helpers
 
-' TODO: SIP - rewrite as static class (one allocation less...)?
-
 Namespace Internal.Query
 
+  ''' <summary>
+  ''' Executes SQL query/statement.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class QueryExecutor
 
+    ' TODO: SIP - rewrite as static class (one allocation less...)?
+
+    ''' <summary>
+    ''' Stores context.
+    ''' </summary>
     Private m_DbContext As DbContext
 
+    ''' <summary>
+    ''' Stores dialect provider.
+    ''' </summary>
     Private m_DialectProvider As SqlDialectProvider
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="QueryExecutor"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="context"></param>
     Sub New(context As DbContext)
       m_DbContext = context
       m_DialectProvider = m_DbContext.Options.DialectProvider
     End Sub
 
+    ''' <summary>
+    ''' Executes query and returns the number of affected rows.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Public Function Execute(query As Query) As Int32
       Using command = CreateCommand(query)
         Return command.ExecuteNonQuery()
       End Using
     End Function
 
+    ''' <summary>
+    ''' Executes query and returns first record or a default value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Public Function QueryFirstOrDefault(Of T)(query As Query) As T
       Dim value As T = Nothing
       Dim resultType = GetType(T)
@@ -58,6 +86,13 @@ Namespace Internal.Query
       Return value
     End Function
 
+    ''' <summary>
+    ''' Executes query and returns list of records.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Public Function QueryList(Of T)(query As Query) As List(Of T)
       Dim values = New List(Of T)
       Dim resultType = GetType(T)
@@ -93,6 +128,12 @@ Namespace Internal.Query
       Return values
     End Function
 
+    ''' <summary>
+    ''' Executes insert statement and returns the number of affected rows.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Public Function ExecuteInsert(query As InsertQuery) As Int32
       If query.ReadDbGeneratedValues Then
         Return ExecuteAndReadDbGeneratedValues(query)
@@ -101,6 +142,13 @@ Namespace Internal.Query
       End If
     End Function
 
+    ''' <summary>
+    ''' Executes query and returns first record or a default value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Public Function ReadFirstOrDefault(Of T)(query As SelectQuery) As T
       If query.Model.ContainsJoins() Then
         ' TODO: SIP - implement
@@ -111,6 +159,13 @@ Namespace Internal.Query
       End If
     End Function
 
+    ''' <summary>
+    ''' Executes query and returns list of records.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Public Function ReadList(Of T)(query As SelectQuery) As List(Of T)
       If query.Model.ContainsJoins() Then
         Return ReadJoinedList(Of T)(query)
@@ -119,6 +174,11 @@ Namespace Internal.Query
       End If
     End Function
 
+    ''' <summary>
+    ''' Creates database command.
+    ''' </summary>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Private Function CreateCommand(query As Query) As DbCommand
       Dim command = m_DbContext.Database.Connection.CreateCommand()
       command.CommandText = query.Sql
@@ -151,6 +211,11 @@ Namespace Internal.Query
       Return command
     End Function
 
+    ''' <summary>
+    ''' Executes query and reads database generated values. Returns the number of affected rows.
+    ''' </summary>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Private Function ExecuteAndReadDbGeneratedValues(query As InsertQuery) As Int32
       Dim reader = EntityReaderCache.GetDbGeneratedValuesReader(m_DialectProvider, m_DbContext.Model, query.Entity.GetType())
 
@@ -167,6 +232,13 @@ Namespace Internal.Query
       Return 1
     End Function
 
+    ''' <summary>
+    ''' Executes query and returns first custom entity record or default.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Public Function ReadCustomFirstOrDefault(Of T)(query As SelectQuery) As T
       Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, GetType(T))
       Dim customEntityInfos = CustomEntityReadInfo.Create(m_DialectProvider, query.Model)
@@ -185,6 +257,12 @@ Namespace Internal.Query
       Return value
     End Function
 
+    ''' <summary>
+    ''' Executes query and returns first record or a default value. No joins are present in the query.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Private Function ReadSimpleFirstOrDefault(Of T)(query As SelectQuery) As T
       Dim reader = EntityReaderCache.GetReader(m_DialectProvider, m_DbContext.Model, GetType(T))
       Dim includedColumns = query.Model.GetFirstEntity().IncludedColumns
@@ -203,6 +281,13 @@ Namespace Internal.Query
       Return value
     End Function
 
+    ''' <summary>
+    ''' Executes query and returns list of records.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Public Function ReadCustomList(Of T)(query As SelectQuery) As List(Of T)
       Dim reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, GetType(T))
       Dim customEntityInfos = CustomEntityReadInfo.Create(m_DialectProvider, query.Model)
@@ -222,6 +307,12 @@ Namespace Internal.Query
       Return values
     End Function
 
+    ''' <summary>
+    ''' Executes query and returns list of records. No joins are present in the query.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Private Function ReadSimpleList(Of T)(query As SelectQuery) As List(Of T)
       Dim reader = EntityReaderCache.GetReader(m_DialectProvider, m_DbContext.Model, GetType(T))
       Dim includedColumns = query.Model.GetFirstEntity().IncludedColumns
@@ -241,6 +332,12 @@ Namespace Internal.Query
       Return values
     End Function
 
+    ''' <summary>
+    ''' Executes query and returns lists of records. Joins are present in the query.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
     Private Function ReadJoinedList(Of T)(query As SelectQuery) As List(Of T)
       Dim entityInfos = EntityReadInfoCollection.Create(m_DialectProvider, query.Model)
 
@@ -251,6 +348,13 @@ Namespace Internal.Query
       End If
     End Function
 
+    ''' <summary>
+    ''' Executes query and returns lists of records. Only 1:1 joins are present in the query.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="query"></param>
+    ''' <param name="entityInfos"></param>
+    ''' <returns></returns>
     Private Function ReadJoinedListWithoutCollectionNavigation(Of T)(query As SelectQuery, entityInfos As EntityReadInfoCollection) As List(Of T)
       Dim values = New List(Of T)
 
@@ -269,6 +373,14 @@ Namespace Internal.Query
       Return values
     End Function
 
+    ''' <summary>
+    ''' Reads entity record.
+    ''' </summary>
+    ''' <param name="entityInfos"></param>
+    ''' <param name="entityInfo"></param>
+    ''' <param name="dataReader"></param>
+    ''' <param name="declaringValue"></param>
+    ''' <returns></returns>
     Private Function Read(entityInfos As EntityReadInfoCollection, entityInfo As EntityReadInfo, dataReader As IDataReader, declaringValue As Object) As Object
       Dim value As Object
       Dim entityIndex = entityInfo.Entity.Index
@@ -296,6 +408,13 @@ Namespace Internal.Query
       Return value
     End Function
 
+    ''' <summary>
+    ''' Executes query and returns lists of records. 1:N joins are present in the query.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="query"></param>
+    ''' <param name="entityInfos"></param>
+    ''' <returns></returns>
     Private Function ReadJoinedListWithCollectionNavigation(Of T)(query As SelectQuery, entityInfos As EntityReadInfoCollection) As List(Of T)
       Dim cache = New ReaderEntityValueCache(entityInfos.Count)
       Dim pks = New Object(entityInfos.Count - 1) {}
@@ -319,6 +438,16 @@ Namespace Internal.Query
       Return values
     End Function
 
+    ''' <summary>
+    ''' Reads entity record.
+    ''' </summary>
+    ''' <param name="entityInfos"></param>
+    ''' <param name="entityInfo"></param>
+    ''' <param name="cache"></param>
+    ''' <param name="pks"></param>
+    ''' <param name="dataReader"></param>
+    ''' <param name="declaringValue"></param>
+    ''' <returns></returns>
     Private Function Read(entityInfos As EntityReadInfoCollection, entityInfo As EntityReadInfo, cache As ReaderEntityValueCache, pks As Object(), dataReader As IDataReader, declaringValue As Object) As Object
       Dim value As Object = Nothing
       Dim entityIndex = entityInfo.Entity.Index
@@ -357,12 +486,22 @@ Namespace Internal.Query
       End If
     End Function
 
+    ''' <summary>
+    ''' Resets database property modified tracking on an entity if it implements <see cref="IHasDbPropertyModifiedTracking"/>.
+    ''' </summary>
+    ''' <param name="obj"></param>
     Private Sub ResetDbPropertyModifiedTracking(obj As Object)
       If TypeOf obj Is IHasDbPropertyModifiedTracking Then
         DirectCast(obj, IHasDbPropertyModifiedTracking).ResetDbPropertyModifiedTracking()
       End If
     End Sub
 
+    ''' <summary>
+    ''' Fills relationhip properties with instances of related entities.
+    ''' </summary>
+    ''' <param name="entityReadInfo"></param>
+    ''' <param name="value"></param>
+    ''' <param name="declaringValue"></param>
     Private Sub FillRelationships(entityReadInfo As EntityReadInfo, value As Object, declaringValue As Object)
       If entityReadInfo.HasCollectionNavigation Then
         For Each collectionInitializer In entityReadInfo.CollectionInitializers

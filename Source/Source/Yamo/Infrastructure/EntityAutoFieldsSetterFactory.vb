@@ -5,18 +5,43 @@ Imports Yamo.Metadata
 
 Namespace Infrastructure
 
+  ''' <summary>
+  ''' Entity auto fields setter factory.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class EntityAutoFieldsSetterFactory
 
+    ''' <summary>
+    ''' Creates on insert setter.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Public Shared Function CreateOnInsertSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)
       Dim properties = model.GetEntity(entityType).GetProperties().Where(Function(p) p.SetOnInsert).Select(Function(p) (p, p.GetOnInsertFactory())).ToArray()
       Return CreateSetter(model, entityType, properties)
     End Function
 
+    ''' <summary>
+    ''' Creates on update setter.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Public Shared Function CreateOnUpdateSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)
       Dim properties = model.GetEntity(entityType).GetProperties().Where(Function(p) p.SetOnUpdate).Select(Function(p) (p, p.GetOnUpdateFactory())).ToArray()
       Return CreateSetter(model, entityType, properties)
     End Function
 
+    ''' <summary>
+    ''' Creates on soft delete setter.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="entityType"></param>
+    ''' <returns></returns>
     Public Shared Function CreateOnDeleteSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)
       Dim properties = model.GetEntity(entityType).GetProperties().Where(Function(p) p.SetOnDelete).Select(Function(p) (p, p.GetOnDeleteFactory())).ToArray()
 
@@ -27,7 +52,14 @@ Namespace Infrastructure
       Return CreateSetter(model, entityType, properties)
     End Function
 
-    Public Shared Function CreateSetter(model As Model, entityType As Type, properties As (Prop As [Property], Factory As Object)()) As Action(Of Object, DbContext)
+    ''' <summary>
+    ''' Creates setter.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="entityType"></param>
+    ''' <param name="properties"></param>
+    ''' <returns></returns>
+    Private Shared Function CreateSetter(model As Model, entityType As Type, properties As (Prop As [Property], Factory As Object)()) As Action(Of Object, DbContext)
       If properties.Length = 0 Then
         Return Sub(entity As Object, context As DbContext)
                End Sub

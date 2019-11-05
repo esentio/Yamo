@@ -2,9 +2,20 @@
 
 Namespace Infrastructure
 
+  ''' <summary>
+  ''' Database value conversion.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class SQLiteDbValueConversion
     Inherits DbValueConversion
 
+    ''' <summary>
+    ''' Converts value from database value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="value"></param>
+    ''' <returns></returns>
     Public Overrides Function FromDbValue(Of T)(value As Object) As T
       If value Is DBNull.Value Then
         Return Nothing

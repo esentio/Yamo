@@ -3,14 +3,27 @@ Imports System.Data.Common
 
 Namespace Infrastructure
 
+  ''' <summary>
+  ''' Provides access to database connection and transaction.
+  ''' </summary>
   Public Class DatabaseFacade
     Implements IDisposable
 
+    ''' <summary>
+    ''' Stores associated context.
+    ''' </summary>
     Private m_Context As DbContext
 
+    ''' <summary>
+    ''' Stores info whether associated context is database connection owner or not.
+    ''' </summary>
     Private m_IsConnectionOwner As Boolean
 
     Private m_Connection As DbConnection
+    ''' <summary>
+    ''' Gets database connection.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property Connection As DbConnection
       Get
         Return m_Connection
@@ -18,12 +31,21 @@ Namespace Infrastructure
     End Property
 
     Private m_Transaction As DbTransaction
+    ''' <summary>
+    ''' Gets database transaction.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property Transaction As DbTransaction
       Get
         Return m_Transaction
       End Get
     End Property
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="DatabaseFacade"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="context"></param>
     Sub New(context As DbContext)
       m_Context = context
       m_Connection = context.Options.Connection
@@ -44,6 +66,11 @@ Namespace Infrastructure
       End If
     End Sub
 
+    ''' <summary>
+    ''' Begins transaction.
+    ''' </summary>
+    ''' <param name="isolationLevel"></param>
+    ''' <returns></returns>
     Public Function BeginTransaction(Optional isolationLevel As IsolationLevel? = Nothing) As DbTransaction
       If Me.Transaction IsNot Nothing Then
         Throw New InvalidOperationException("Cannot begin another transaction.")
@@ -54,6 +81,9 @@ Namespace Infrastructure
       Return m_Transaction
     End Function
 
+    ''' <summary>
+    ''' Commits transaction.
+    ''' </summary>
     Public Sub CommitTransaction()
       If Me.Transaction Is Nothing Then
         Throw New InvalidOperationException("Transaction not started.")
@@ -63,6 +93,9 @@ Namespace Infrastructure
       m_Transaction = Nothing
     End Sub
 
+    ''' <summary>
+    ''' Rollbacks transaction.
+    ''' </summary>
     Public Sub RollbackTransaction()
       If Me.Transaction Is Nothing Then
         Throw New InvalidOperationException("Transaction not started.")
@@ -75,6 +108,10 @@ Namespace Infrastructure
 #Region "IDisposable Support"
     Private m_DisposedValue As Boolean
 
+    ''' <summary>
+    ''' Releases all resources used by the <see cref="DatabaseFacade"/> class.
+    ''' </summary>
+    ''' <param name="disposing"></param>
     Protected Overridable Sub Dispose(disposing As Boolean)
       If Not m_DisposedValue Then
         If disposing Then
@@ -92,6 +129,9 @@ Namespace Infrastructure
       m_DisposedValue = True
     End Sub
 
+    ''' <summary>
+    ''' Releases all resources used by the <see cref="DatabaseFacade"/> class.
+    ''' </summary>
     Public Sub Dispose() Implements IDisposable.Dispose
       Dispose(True)
     End Sub

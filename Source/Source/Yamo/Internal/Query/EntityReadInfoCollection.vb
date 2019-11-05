@@ -4,20 +4,51 @@ Imports Yamo.Internal.Query.Metadata
 
 Namespace Internal.Query
 
+  ''' <summary>
+  ''' Represents info used to read multiple entities from SQL result.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class EntityReadInfoCollection
 
+    ''' <summary>
+    ''' Gets entity read info items.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property Items As EntityReadInfo()
 
+    ''' <summary>
+    ''' Gets count of entity read infos.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property Count As Int32
 
+    ''' <summary>
+    ''' Gets whether collection navigation is used.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property HasCollectionNavigation As Boolean
 
-    ' probably change to something like Boolean() in the future (list is used just for convenience in GetChainKey method - once better hashing API is avaliable, refactor this!)
-    Private m_ChainIndexes As List(Of Int32)()
+    ''' <summary>
+    ''' Stores chain indexes
+    ''' </summary>
+    Private m_ChainIndexes As List(Of Int32)() ' probably change to something like Boolean() in the future (list is used just for convenience in GetChainKey method - once better hashing API is avaliable, refactor this!)
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="EntityReadInfoCollection"/>.
+    ''' </summary>
     Private Sub New()
     End Sub
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="EntityReadInfoCollection"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="dialectProvider"></param>
+    ''' <param name="model"></param>
+    ''' <returns></returns>
     Public Shared Function Create(dialectProvider As SqlDialectProvider, model As SqlModel) As EntityReadInfoCollection
       Dim entityInfos = EntityReadInfo.Create(dialectProvider, model)
       Dim hasCollectionNavigation = entityInfos.Any(Function(o) o.HasCollectionNavigation)
@@ -34,43 +65,43 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Set chain indexes for all entities for later computation of chain key.
-    ''' 
-    ''' Chain index is list of entity indexes of primary keys (hashes of pks) that should be used to build chain key (which is again hash).
-    ''' We need following entities (more precisely their indexes) to be part of the chain:
-    ''' - Current entity + all entities that are in the path to the root of the query tree (to the first entity). These are marked with MarkMainPath method.
-    ''' - All entities that are on a following path: from current entity to any entity on the main path, there are only 1:1 relationships. These are marked with Mark1To1Paths method.
-    ''' 
-    ''' For example, let's have following tree of entities and their relationships:
-    ''' 
-    '''          T5
-    '''         /
-    '''        / 1:1
-    '''       /
-    '''      T2--1:N--T6
-    '''     /
-    '''    / 1:1
-    '''   / 
-    ''' T1--1:N--T3--1:1--T7
-    '''   \
-    '''    \ 1:N
-    '''     \
-    '''      T4
-    ''' 
-    ''' Entity indexes: T1 = 0, T1 = 1, ..., T7 = 6
-    ''' 
-    ''' Chain indexes will be:
-    ''' T1 = {0}
-    ''' T2 = {0, 1, 4}
-    ''' T3 = {0, 1, 2, 4}
-    ''' T4 = {0, 1, 3, 4}
-    ''' T5 = {0, 1, 4}
-    ''' T6 = {0, 1, 4, 5}
-    ''' T7 = {0, 1, 2, 4, 6}
-    ''' 
-    ''' This is necessary to properly group 1:N records.
+    ''' Sets chain indexes for all entities for later computation of chain key.
     ''' </summary>
     Private Sub SetChainIndexes()
+      ' Chain index is list of entity indexes of primary keys (hashes of pks) that should be used to build chain key (which is again hash).
+      ' We need following entities (more precisely their indexes) to be part of the chain:
+      ' - Current entity + all entities that are in the path to the root of the query tree (to the first entity). These are marked with MarkMainPath method.
+      ' - All entities that are on a following path: from current entity to any entity on the main path, there are only 1:1 relationships. These are marked with Mark1To1Paths method.
+      ' 
+      ' For example, let's have following tree of entities and their relationships:
+      ' 
+      '          T5
+      '         /
+      '        / 1:1
+      '       /
+      '      T2--1:N--T6
+      '     /
+      '    / 1:1
+      '   / 
+      ' T1--1:N--T3--1:1--T7
+      '   \
+      '    \ 1:N
+      '     \
+      '      T4
+      ' 
+      ' Entity indexes: T1 = 0, T1 = 1, ..., T7 = 6
+      ' 
+      ' Chain indexes will be:
+      ' T1 = {0}
+      ' T2 = {0, 1, 4}
+      ' T3 = {0, 1, 2, 4}
+      ' T4 = {0, 1, 3, 4}
+      ' T5 = {0, 1, 4}
+      ' T6 = {0, 1, 4, 5}
+      ' T7 = {0, 1, 2, 4, 6}
+      ' 
+      ' This is necessary to properly group 1:N records.
+
       m_ChainIndexes = New List(Of Integer)(Me.Count - 1) {}
 
       For i = 0 To Me.Count - 1
@@ -94,6 +125,11 @@ Namespace Internal.Query
       Next
     End Sub
 
+    ''' <summary>
+    ''' Marsk main path.
+    ''' </summary>
+    ''' <param name="flags"></param>
+    ''' <param name="entityIndex"></param>
     Private Sub MarkMainPath(flags As Boolean(), entityIndex As Int32)
       flags(entityIndex) = True
 
@@ -102,6 +138,12 @@ Namespace Internal.Query
       End If
     End Sub
 
+    ''' <summary>
+    ''' Marks 1:1 paths.
+    ''' </summary>
+    ''' <param name="flags"></param>
+    ''' <param name="entityIndex"></param>
+    ''' <returns></returns>
     Private Function Mark1To1Paths(flags As Boolean(), entityIndex As Int32) As Boolean
       If entityIndex = 0 Then
         flags(0) = True ' should be already true anyway
@@ -125,6 +167,12 @@ Namespace Internal.Query
       Return False
     End Function
 
+    ''' <summary>
+    ''' Fill primary keys.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="dataReader"></param>
+    ''' <param name="pks"></param>
     Public Sub FillPks(dataReader As DbDataReader, pks As Object())
       For i = 0 To Me.Count - 1
         Dim entityInfo = Me.Items(i)
@@ -139,6 +187,13 @@ Namespace Internal.Query
       Next
     End Sub
 
+    ''' <summary>
+    ''' Get chain key.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="entityIndex"></param>
+    ''' <param name="pks"></param>
+    ''' <returns></returns>
     Public Function GetChainKey(entityIndex As Int32, pks As Object()) As ChainKey
       Dim chainIndex = m_ChainIndexes(entityIndex)
 

@@ -5,21 +5,51 @@ Imports Yamo.Sql
 
 Namespace Expressions.Builders
 
+  ''' <summary>
+  ''' Base class for SQL expression builders.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public MustInherit Class SqlExpressionBuilderBase
 
+    ''' <summary>
+    ''' Gets dialect provider.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
     Public ReadOnly DialectProvider As SqlDialectProvider
 
+    ''' <summary>
+    ''' Gets context.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
     Public ReadOnly DbContext As DbContext
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="SqlExpressionBuilderBase"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="context"></param>
     Public Sub New(context As DbContext)
       Me.DialectProvider = context.Options.DialectProvider
       Me.DbContext = context
     End Sub
 
+    ''' <summary>
+    ''' Creates SQL parameter.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
     Public Function CreateParameter(index As Int32) As String
       Return Me.DialectProvider.Formatter.CreateParameter("p" & index.ToString(Globalization.CultureInfo.InvariantCulture))
     End Function
 
+    ''' <summary>
+    ''' Converts <see cref="FormattableString"/> to <see cref="SqlString"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="sql"></param>
+    ''' <param name="parameterIndex"></param>
+    ''' <returns></returns>
     Public Function ConvertToSqlString(sql As FormattableString, parameterIndex As Int32) As SqlString
       Dim args = sql.GetArguments()
 
@@ -44,6 +74,13 @@ Namespace Expressions.Builders
       Return New SqlString(sqlString, parameters)
     End Function
 
+    ''' <summary>
+    ''' Creates string containing list of columns.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="tableAlias"></param>
+    ''' <returns></returns>
     Private Function CreateColumnsString(model As Type, tableAlias As String) As String
       Dim entity = Me.DbContext.Model.GetEntity(model)
       Dim properties = entity.GetProperties()

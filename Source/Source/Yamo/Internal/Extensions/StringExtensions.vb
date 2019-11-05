@@ -3,11 +3,16 @@ Imports System.Runtime.CompilerServices
 
 Namespace Internal.Extensions
 
+  ''' <summary>
+  ''' <see cref="String"/> related extension methods.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   <Extension()>
   Public Module StringExtensions
 
     ''' <summary>
-    ''' Retrieves the value of the current string object, or empty string.
+    ''' Retrieves the value of the current string object, or empty string.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="source"></param>
     ''' <returns>The value of the string if it is not null; otherwise, an empty string.</returns>
@@ -21,7 +26,8 @@ Namespace Internal.Extensions
     End Function
 
     ''' <summary>
-    ''' Retrieves the value of the current string object, or the specified default value.
+    ''' Retrieves the value of the current string object, or the specified default value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="source"></param>
     ''' <param name="defaultValue"></param>
@@ -36,7 +42,8 @@ Namespace Internal.Extensions
     End Function
 
     ''' <summary>
-    ''' Retrieves the value of the current string object, or the specified default value.
+    ''' Retrieves the value of the current string object, or the specified default value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="source"></param>
     ''' <param name="defaultValue"></param>
@@ -51,7 +58,8 @@ Namespace Internal.Extensions
     End Function
 
     ''' <summary>
-    ''' Retrieves the value of the current string object, or the specified default value.
+    ''' Retrieves the value of the current string object, or the specified default value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="source"></param>
     ''' <param name="defaultValue"></param>

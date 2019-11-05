@@ -10,45 +10,110 @@ Imports Yamo.Sql
 
 Namespace Internal
 
+  ''' <summary>
+  ''' SQL expression visitor.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public Class SqlExpressionVisitor
     Inherits ExpressionVisitor
 
+    ''' <summary>
+    ''' Stores SQL expression builder.
+    ''' </summary>
     Private m_Builder As SqlExpressionBuilderBase
 
+    ''' <summary>
+    ''' Stores SQL model.
+    ''' </summary>
     Private m_Model As SqlModel
 
+    ''' <summary>
+    ''' Stores expression parameters.
+    ''' </summary>
     Private m_ExpressionParameters As ReadOnlyCollection(Of ParameterExpression)
 
+    ''' <summary>
+    ''' Stores expression parameters type.
+    ''' </summary>
     Private m_ExpressionParametersType As ExpressionParametersType
 
+    ''' <summary>
+    ''' Stores entity index hints.
+    ''' </summary>
     Private m_EntityIndexHints As Int32()
 
+    ''' <summary>
+    ''' Stores output SQL string.
+    ''' </summary>
     Private m_Sql As StringBuilder
 
+    ''' <summary>
+    ''' Stores output SQL parameters.
+    ''' </summary>
     Private m_Parameters As List(Of SqlParameter)
 
+    ''' <summary>
+    ''' Stores parameter index.
+    ''' </summary>
     Private m_ParameterIndex As Int32
 
+    ''' <summary>
+    ''' Stores wheter aliases should be used.
+    ''' </summary>
     Private m_UseAliases As Boolean
 
+    ''' <summary>
+    ''' Shores whether table names or aliases should be used.
+    ''' </summary>
     Private m_UseTableNamesOrAliases As Boolean
 
+    ''' <summary>
+    ''' Stores whether compensation for ignored negation should be performed.
+    ''' </summary>
     Private m_CompensateForIgnoredNegation As Boolean
 
+    ''' <summary>
+    ''' Stores current like parameter format.
+    ''' </summary>
     Private m_CurrentLikeParameterFormat As String
 
+    ''' <summary>
+    ''' Stores whether visitor is in custom select mode.
+    ''' </summary>
     Private m_InCustomSelectMode As Boolean
 
+    ''' <summary>
+    ''' Stores custom entities.
+    ''' </summary>
     Private m_CustomEntities As CustomSqlEntity()
 
+    ''' <summary>
+    ''' Store custom entity index.
+    ''' </summary>
     Private m_CustomEntityIndex As Int32
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="SqlExpressionVisitor"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="builder"></param>
+    ''' <param name="model"></param>
     Public Sub New(builder As SqlExpressionBuilderBase, model As SqlModel)
       m_Builder = builder
       m_Model = model
     End Sub
 
-    ' entityIndexHints is null when expressionParametersType is not ExpressionParametersType.Entities
+    ''' <summary>
+    ''' Translates expression to SQL string.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="expression"></param>
+    ''' <param name="expressionParametersType"></param>
+    ''' <param name="entityIndexHints">entityIndexHints is null when expressionParametersType is not ExpressionParametersType.Entities</param>
+    ''' <param name="parameterIndex"></param>
+    ''' <param name="useAliases"></param>
+    ''' <param name="useTableNamesOrAliases"></param>
+    ''' <returns></returns>
     Public Function Translate(expression As Expression, expressionParametersType As ExpressionParametersType, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
@@ -77,7 +142,15 @@ Namespace Internal
       Return New SqlString(m_Sql.ToString(), m_Parameters)
     End Function
 
-    ' entityIndexHints is null when expressionParametersType is not ExpressionParametersType.Entities
+    ''' <summary>
+    ''' Translates custom select.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="expression"></param>
+    ''' <param name="expressionParametersType"></param>
+    ''' <param name="entityIndexHints">entityIndexHints is null when expressionParametersType is not ExpressionParametersType.Entities</param>
+    ''' <param name="parameterIndex"></param>
+    ''' <returns></returns>
     Public Function TranslateCustomSelect(expression As Expression, expressionParametersType As ExpressionParametersType, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSqlEntity())
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
@@ -108,10 +181,22 @@ Namespace Internal
       Return (New SqlString(m_Sql.ToString(), m_Parameters), m_CustomEntities)
     End Function
 
+    ''' <summary>
+    ''' Visits expression.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Public Overrides Function Visit(node As Expression) As Expression
       Return MyBase.Visit(node)
     End Function
 
+    ''' <summary>
+    ''' Visits method call.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Protected Overrides Function VisitMethodCall(node As MethodCallExpression) As Expression
       If node.Method.DeclaringType Is GetType(String) Then
         Select Case node.Method.Name
@@ -162,7 +247,12 @@ Namespace Internal
       Return VisitAndEvaluate(node)
     End Function
 
-    Protected Function VisitStartsWithMethodCall(node As MethodCallExpression) As Expression
+    ''' <summary>
+    ''' Visits starts with method call.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function VisitStartsWithMethodCall(node As MethodCallExpression) As Expression
       Me.Visit(node.Object)
 
       m_Sql.Append(" LIKE ")
@@ -182,7 +272,12 @@ Namespace Internal
       Return node
     End Function
 
-    Protected Function VisitEndsWithMethodCall(node As MethodCallExpression) As Expression
+    ''' <summary>
+    ''' Visits end with method call.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function VisitEndsWithMethodCall(node As MethodCallExpression) As Expression
       Me.Visit(node.Object)
 
       If m_Builder.DialectProvider.Formatter.LikeWildcardsInParameter Then
@@ -202,7 +297,12 @@ Namespace Internal
       Return node
     End Function
 
-    Protected Function VisitContainsMethodCall(node As MethodCallExpression) As Expression
+    ''' <summary>
+    ''' Visits contains method call.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function VisitContainsMethodCall(node As MethodCallExpression) As Expression
       Me.Visit(node.Object)
 
       If m_Builder.DialectProvider.Formatter.LikeWildcardsInParameter Then
@@ -223,7 +323,12 @@ Namespace Internal
       Return node
     End Function
 
-    Protected Function VisitConcatMethodCall(node As MethodCallExpression) As Expression
+    ''' <summary>
+    ''' Visits concat method call.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function VisitConcatMethodCall(node As MethodCallExpression) As Expression
       Dim expressions = node.Arguments
       Dim count = node.Arguments.Count
 
@@ -248,7 +353,12 @@ Namespace Internal
       Return node
     End Function
 
-    Protected Function VisitCreateFormattableStringMethodCall(node As MethodCallExpression) As Expression
+    ''' <summary>
+    ''' Visits create <see cref="FormattableString"/> method call.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function VisitCreateFormattableStringMethodCall(node As MethodCallExpression) As Expression
       Dim format = DirectCast(DirectCast(node.Arguments(0), ConstantExpression).Value, String)
       Dim argsExpression = DirectCast(node.Arguments(1), NewArrayExpression)
 
@@ -268,6 +378,11 @@ Namespace Internal
       Return node
     End Function
 
+    ''' <summary>
+    ''' Visits SQL helper method call.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Private Function VisitSqlHelperMethodCall(node As MethodCallExpression) As Expression
       Dim getSqlFormatMethod = node.Method.DeclaringType.GetMethod(NameOf(SqlHelper.GetSqlFormat), BindingFlags.Public Or BindingFlags.Static)
       Dim format = DirectCast(getSqlFormatMethod.Invoke(Nothing, {node.Method, m_Builder.DialectProvider}), String)
@@ -288,6 +403,11 @@ Namespace Internal
       Return node
     End Function
 
+    ''' <summary>
+    ''' Visits array enumerable contains method call.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Private Function VisitArrayEnumerableContainsMethodCall(node As MethodCallExpression) As Expression
       Dim valueExpression = node.Arguments(1)
 
@@ -346,6 +466,11 @@ Namespace Internal
       Return node
     End Function
 
+    ''' <summary>
+    ''' Visits enumerable contains method call.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Private Function VisitEnumerableContainsMethodCall(node As MethodCallExpression) As Expression
       Dim valueExpression = node.Arguments(0)
 
@@ -372,6 +497,11 @@ Namespace Internal
       Return node
     End Function
 
+    ''' <summary>
+    ''' Visits entity property setter.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Private Function VisitEntityPropertySetter(node As MethodCallExpression) As Expression
       Dim propertyName = node.Method.Name.Substring(4) ' trim "set_"
       Dim entityIndex = 0 ' should be always 0 in so far allowed scenarios (UPDATE SET) and m_EntityIndexHints should always be set
@@ -385,6 +515,12 @@ Namespace Internal
       Return node
     End Function
 
+    ''' <summary>
+    ''' Visits unary.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Protected Overrides Function VisitUnary(node As UnaryExpression) As Expression
       Select Case node.NodeType
         Case ExpressionType.[Not]
@@ -422,6 +558,12 @@ Namespace Internal
       Return node
     End Function
 
+    ''' <summary>
+    ''' Visits binary.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Protected Overrides Function VisitBinary(node As BinaryExpression) As Expression
       Dim left = node.Left
       Dim right = node.Right
@@ -501,6 +643,12 @@ Namespace Internal
       Return node
     End Function
 
+    ''' <summary>
+    ''' Visits constant.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Protected Overrides Function VisitConstant(node As ConstantExpression) As Expression
       If node.Value Is Nothing Then
         m_Sql.Append("NULL")
@@ -554,6 +702,12 @@ Namespace Internal
       Return node
     End Function
 
+    ''' <summary>
+    ''' Visits parameter.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Protected Overrides Function VisitParameter(node As ParameterExpression) As Expression
       Dim index = m_ExpressionParameters.IndexOf(node)
 
@@ -573,6 +727,12 @@ Namespace Internal
       Return node
     End Function
 
+    ''' <summary>
+    ''' Visits member.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Protected Overrides Function VisitMember(node As MemberExpression) As Expression
       ' special handling for: entityParameter.Property, entityParameter.Property.Value, entityParameter.Property.HasValue, joinParameter.T1.Property, joinParameter.T1.Property.Value, joinParameter.T1.Property.HasValue, ...
       ' other expressions are evaluated
@@ -652,6 +812,12 @@ Namespace Internal
       End If
     End Function
 
+    ''' <summary>
+    ''' Visits new.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Protected Overrides Function VisitNew(node As NewExpression) As Expression
       If IsValueTuple(node.Type) Then
         ' TODO: SIP - does it make sense to support nullable ValueTuples as well?
@@ -663,15 +829,32 @@ Namespace Internal
       End If
     End Function
 
+    ''' <summary>
+    ''' Visits new array.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Protected Overrides Function VisitNewArray(node As NewArrayExpression) As Expression
       Return VisitAndEvaluate(node)
     End Function
 
-    Protected Function VisitAndEvaluate(node As Expression) As Expression
+    ''' <summary>
+    ''' Visits and evaluate.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function VisitAndEvaluate(node As Expression) As Expression
       AppendNewParameter(Evaluate(node))
       Return node
     End Function
 
+    ''' <summary>
+    ''' Visits ValueTuple or anonymous type.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <param name="isValueTuple"></param>
+    ''' <returns></returns>
     Private Function VisitValueTupleOrAnonymousType(node As NewExpression, isValueTuple As Boolean) As Expression
       Dim count = node.Arguments.Count
 
@@ -712,6 +895,11 @@ Namespace Internal
       Return node
     End Function
 
+    ''' <summary>
+    ''' Visits in custom select mode.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Private Function VisitInCustomSelectMode(node As Expression) As Expression
       If node.NodeType = ExpressionType.New Then
         Return Visit(node)
@@ -741,7 +929,12 @@ Namespace Internal
       End If
     End Function
 
-    Protected Function Evaluate(node As Expression) As Object
+    ''' <summary>
+    ''' Evaluates an expression.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function Evaluate(node As Expression) As Object
       ' We try to use optimized evaluation for these expressions:
       ' - field access (captured closure variables are fields too)
       ' - static field access
@@ -858,6 +1051,11 @@ Namespace Internal
       Return value
     End Function
 
+    ''' <summary>
+    ''' Checks whether type is ValueTuple.
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
     Private Function IsValueTuple(type As Type) As Boolean
       If Not type.IsGenericType Then
         Return False
@@ -888,6 +1086,11 @@ Namespace Internal
       Return False
     End Function
 
+    ''' <summary>
+    ''' Checks wheter type is an anonymous type.
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
     Private Function IsAnonymousType(type As Type) As Boolean
       ' via https://stackoverflow.com/questions/2483023/how-to-test-if-a-type-is-anonymous
       ' and https://elegantcode.com/2011/06/24/detecting-anonymous-types-on-mono/
@@ -898,10 +1101,20 @@ Namespace Internal
              (type.Attributes And TypeAttributes.NotPublic) = TypeAttributes.NotPublic
     End Function
 
-    Protected Function IsNullConstant(node As Expression) As Boolean
+    ''' <summary>
+    ''' Checks whether expression is a null constant.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function IsNullConstant(node As Expression) As Boolean
       Return node.NodeType = ExpressionType.Constant AndAlso DirectCast(node, ConstantExpression).Value Is Nothing
     End Function
 
+    ''' <summary>
+    ''' Strips quotes.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
     Private Function StripQuotes(node As Expression) As Expression
       While node.NodeType = ExpressionType.Quote
         node = DirectCast(node, UnaryExpression).Operand
@@ -910,14 +1123,29 @@ Namespace Internal
       Return node
     End Function
 
+    ''' <summary>
+    ''' Creates column alias.
+    ''' </summary>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
     Private Function CreateColumnAlias(index As Int32) As String
       Return "C" & index.ToString(Globalization.CultureInfo.InvariantCulture)
     End Function
 
+    ''' <summary>
+    ''' Creates column alias.
+    ''' </summary>
+    ''' <param name="index1"></param>
+    ''' <param name="index2"></param>
+    ''' <returns></returns>
     Private Function CreateColumnAlias(index1 As Int32, index2 As Int32) As String
       Return "C" & index1.ToString(Globalization.CultureInfo.InvariantCulture) & "_" & index2.ToString(Globalization.CultureInfo.InvariantCulture)
     End Function
 
+    ''' <summary>
+    ''' Appends new parameter.
+    ''' </summary>
+    ''' <param name="value"></param>
     Private Sub AppendNewParameter(value As Object)
       Dim parameterName = m_Builder.CreateParameter(m_ParameterIndex + m_Parameters.Count)
 
@@ -925,6 +1153,11 @@ Namespace Internal
       m_Parameters.Add(New SqlParameter(parameterName, value))
     End Sub
 
+    ''' <summary>
+    ''' Appends entity member access.
+    ''' </summary>
+    ''' <param name="propertyName"></param>
+    ''' <param name="entityIndex"></param>
     Private Sub AppendEntityMemberAccess(propertyName As String, entityIndex As Int32)
       Dim entity = m_Model.GetEntity(entityIndex)
       Dim prop = entity.Entity.GetProperty(propertyName)
@@ -944,6 +1177,10 @@ Namespace Internal
       End If
     End Sub
 
+    ''' <summary>
+    ''' Appends entity member access.
+    ''' </summary>
+    ''' <param name="entityIndex"></param>
     Private Sub AppendEntityMembersAccess(entityIndex As Int32)
       Dim entity = m_Model.GetEntity(entityIndex)
 
