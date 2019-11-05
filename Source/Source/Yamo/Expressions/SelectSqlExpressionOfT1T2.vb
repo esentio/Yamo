@@ -5,7 +5,11 @@ Imports Yamo.Internal.Query.Metadata
 
 Namespace Expressions
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Represents SQL SELECT statement from 2 tables (entities).
+  ''' </summary>
+  ''' <typeparam name="T1"></typeparam>
+  ''' <typeparam name="T2"></typeparam>
   Public Class SelectSqlExpression(Of T1, T2)
     Inherits SelectSqlExpressionBase
 
@@ -19,7 +23,7 @@ Namespace Expressions
     End Sub
 
     ''' <summary>
-    ''' Adds INNER JOIN statement.
+    ''' Adds INNER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -29,7 +33,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds INNER JOIN statement.
+    ''' Adds INNER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -39,7 +43,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds INNER JOIN statement.
+    ''' Adds INNER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -49,7 +53,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds INNER JOIN statement.
+    ''' Adds INNER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -59,7 +63,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds LEFT OUTER JOIN statement.
+    ''' Adds LEFT OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -69,7 +73,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds LEFT OUTER JOIN statement.
+    ''' Adds LEFT OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -79,7 +83,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds LEFT OUTER JOIN statement.
+    ''' Adds LEFT OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -89,7 +93,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds LEFT OUTER JOIN statement.
+    ''' Adds LEFT OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -99,7 +103,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds RIGHT OUTER JOIN statement.
+    ''' Adds RIGHT OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -109,7 +113,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds RIGHT OUTER JOIN statement.
+    ''' Adds RIGHT OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -119,7 +123,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds RIGHT OUTER JOIN statement.
+    ''' Adds RIGHT OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -129,7 +133,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds RIGHT OUTER JOIN statement.
+    ''' Adds RIGHT OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -139,7 +143,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds FULL OUTER JOIN statement.
+    ''' Adds FULL OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -149,7 +153,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds FULL OUTER JOIN statement.
+    ''' Adds FULL OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -159,7 +163,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds FULL OUTER JOIN statement.
+    ''' Adds FULL OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -169,7 +173,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds FULL OUTER JOIN statement.
+    ''' Adds FULL OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
@@ -179,7 +183,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds CROSS JOIN statement.
+    ''' Adds CROSS JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <returns></returns>
@@ -188,7 +192,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds JOIN statement.
+    ''' Adds JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="joinType"></param>
@@ -201,7 +205,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -210,7 +214,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -219,7 +223,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -228,7 +232,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -237,7 +241,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -246,7 +250,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -255,7 +259,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -264,7 +268,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -273,7 +277,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -283,7 +287,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <returns></returns>
     Public Function Where() As FilteredSelectSqlExpression(Of T1, T2)
@@ -291,7 +295,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="entityIndexHints"></param>
@@ -302,7 +306,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds GROUP BY statement.
+    ''' Adds GROUP BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -312,7 +316,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds GROUP BY statement.
+    ''' Adds GROUP BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -322,7 +326,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds GROUP BY statement.
+    ''' Adds GROUP BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -332,7 +336,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds GROUP BY statement.
+    ''' Adds GROUP BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -342,7 +346,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds GROUP BY statement.
+    ''' Adds GROUP BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -354,7 +358,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY statement.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -364,7 +368,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY statement.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -374,7 +378,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY statement.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -384,7 +388,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY DESC statement.
+    ''' Adds ORDER BY DESC clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -394,7 +398,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY DESC statement.
+    ''' Adds ORDER BY DESC clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -404,7 +408,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY DESC statement.
+    ''' Adds ORDER BY DESC clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -414,7 +418,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY statement.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -427,7 +431,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with all columns of all tables (entities).
+    ''' Adds SELECT clause with all columns of all tables (entities).
     ''' </summary>
     ''' <returns></returns>
     Public Function SelectAll() As SelectedSelectSqlExpression(Of T1, T2)
@@ -436,7 +440,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT COUNT(*) statement, executes SQL query and returns the result.
+    ''' Adds SELECT COUNT(*) clause, executes SQL query and returns the result.
     ''' </summary>
     ''' <returns></returns>
     Public Function SelectCount() As Int32
@@ -446,7 +450,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
@@ -456,7 +460,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
@@ -466,7 +470,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
@@ -476,7 +480,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
@@ -486,7 +490,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>

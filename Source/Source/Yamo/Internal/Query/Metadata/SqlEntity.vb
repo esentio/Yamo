@@ -39,7 +39,7 @@ Namespace Internal.Query.Metadata
     Public ReadOnly Property Relationship As SqlEntityRelationship
 
     ''' <summary>
-    ''' Gets whether entity is excluded from select statement.
+    ''' Gets whether entity is excluded from select clause.
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property IsExcluded As Boolean
@@ -107,7 +107,7 @@ Namespace Internal.Query.Metadata
     End Sub
 
     ''' <summary>
-    ''' Excludes this entity from select statement.<br/>
+    ''' Excludes this entity from select clause.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     Public Sub Exclude()

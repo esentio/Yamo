@@ -4,7 +4,12 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Represents SQL SELECT statement from 3 tables (entities).
+  ''' </summary>
+  ''' <typeparam name="T1"></typeparam>
+  ''' <typeparam name="T2"></typeparam>
+  ''' <typeparam name="T3"></typeparam>
   Public Class JoinedSelectSqlExpression(Of T1, T2, T3)
     Inherits SelectSqlExpression(Of T1, T2, T3)
 

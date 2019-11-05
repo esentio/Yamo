@@ -9,25 +9,25 @@ Public Class Join(Of TTable1, TTable2, TTable3, TTable4)
   Implements IJoin
 
   ''' <summary>
-  ''' 1st entity.
+  ''' Gets 1st entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T1 As TTable1
 
   ''' <summary>
-  ''' 2nd entity.
+  ''' Gets 2nd entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T2 As TTable2
 
   ''' <summary>
-  ''' 3rd entity.
+  ''' Gets 3rd entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T3 As TTable3
 
   ''' <summary>
-  ''' 4th entity.
+  ''' Gets 4th entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T4 As TTable4

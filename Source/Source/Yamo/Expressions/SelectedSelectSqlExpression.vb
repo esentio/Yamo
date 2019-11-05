@@ -4,7 +4,10 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Represents SELECT clause in SQL SELECT statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
   Public Class SelectedSelectSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
 
@@ -18,7 +21,7 @@ Namespace Expressions
     End Sub
 
     ''' <summary>
-    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' Excludes &lt;column&gt; from SELECT clause.
     ''' </summary>
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
@@ -28,7 +31,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' Excludes &lt;column&gt; from SELECT clause.
     ''' </summary>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
@@ -38,7 +41,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds DISTINCT statement.
+    ''' Adds DISTINCT clause.
     ''' </summary>
     ''' <returns></returns>
     Public Function Distinct() As DistinctSqlExpression(Of T)
@@ -56,7 +59,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Executes SQL query and returns first record or default.
+    ''' Executes SQL query and returns first record or a default value.
     ''' </summary>
     ''' <returns></returns>
     Public Function FirstOrDefault() As T

@@ -3,7 +3,10 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Represents WHERE clause in SQL UPDATE statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
   Public Class FilteredUpdateSqlExpression(Of T)
     Inherits UpdateSqlExpressionBase
 
@@ -17,6 +20,10 @@ Namespace Expressions
       MyBase.New(context, builder, executor)
     End Sub
 
+    ''' <summary>
+    ''' Executes UPDATE statement and returns the number of affected rows.
+    ''' </summary>
+    ''' <returns></returns>
     Public Function Execute() As Int32
       Dim query = Me.Builder.CreateQuery()
       Return Me.Executor.Execute(query)

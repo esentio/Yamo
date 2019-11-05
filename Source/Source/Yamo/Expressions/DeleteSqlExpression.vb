@@ -5,7 +5,10 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Represents SQL DELETE statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
   Public Class DeleteSqlExpression(Of T)
     Inherits DeleteSqlExpressionBase
 
@@ -20,7 +23,7 @@ Namespace Expressions
     End Sub
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -30,7 +33,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -40,7 +43,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -49,16 +52,30 @@ Namespace Expressions
       Return New FilteredDeleteSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
 
+    ''' <summary>
+    ''' Executes DELETE statement or UPDATE statement that marks record(s) as (soft) deleted if expression was created with <see cref="DbContext.SoftDelete(Of T)"/> call. Returns the number of affected rows.
+    ''' </summary>
+    ''' <returns></returns>
     Public Function Execute() As Int32
       Dim query = Me.Builder.CreateQuery()
       Return Me.Executor.Execute(query)
     End Function
 
+    ''' <summary>
+    ''' Executes DELETE statement and returns the number of affected rows.
+    ''' </summary>
+    ''' <param name="obj"></param>
+    ''' <returns></returns>
     Friend Function Delete(obj As T) As Int32
       Dim query = Me.Builder.CreateDeleteQuery(obj)
       Return Me.Executor.Execute(query)
     End Function
 
+    ''' <summary>
+    ''' Executes UPDATE statement that marks record as (soft) deleted and returns the number of affected rows.
+    ''' </summary>
+    ''' <param name="obj"></param>
+    ''' <returns></returns>
     Friend Function SoftDelete(obj As T) As Int32
       ' NOTE: this doesn't reset property modified tracking!
       Dim setter = EntityAutoFieldsSetterCache.GetOnDeleteSetter(Me.DbContext.Model, GetEntityType(obj))

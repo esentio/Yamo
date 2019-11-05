@@ -7,13 +7,13 @@ Public Class Join(Of TTable1, TTable2)
   Implements IJoin
 
   ''' <summary>
-  ''' 1st entity.
+  ''' Gets 1st entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T1 As TTable1
 
   ''' <summary>
-  ''' 2nd entity.
+  ''' Gets 2nd entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T2 As TTable2

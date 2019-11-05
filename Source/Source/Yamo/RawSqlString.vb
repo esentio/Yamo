@@ -1,5 +1,5 @@
 ﻿''' <summary>
-''' Helper class that enables to pass raw SQL string to SQL expression builder methods.
+''' Helper structure that enables to pass raw SQL string to SQL expression builder methods.
 ''' </summary>
 Public Structure RawSqlString
 

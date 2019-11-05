@@ -4,7 +4,7 @@ Imports Yamo.Internal.Query
 Namespace Expressions
 
   ''' <summary>
-  ''' Base class for UPDATE SQL expressions.<br/>
+  ''' Base class for SQL UPDATE statements.<br/>
   ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
   ''' </summary>
   Public MustInherit Class UpdateSqlExpressionBase

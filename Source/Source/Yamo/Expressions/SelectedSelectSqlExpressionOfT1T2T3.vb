@@ -4,7 +4,12 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Represents SELECT clause in SQL SELECT statement.
+  ''' </summary>
+  ''' <typeparam name="T1"></typeparam>
+  ''' <typeparam name="T2"></typeparam>
+  ''' <typeparam name="T3"></typeparam>
   Public Class SelectedSelectSqlExpression(Of T1, T2, T3)
     Inherits SelectSqlExpressionBase
 
@@ -18,7 +23,7 @@ Namespace Expressions
     End Sub
 
     ''' <summary>
-    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' Excludes &lt;column&gt; from SELECT clause.
     ''' </summary>
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
@@ -28,7 +33,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' Excludes &lt;column&gt; from SELECT clause.
     ''' </summary>
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
@@ -38,7 +43,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' Excludes &lt;column&gt; from SELECT clause.
     ''' </summary>
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
@@ -48,7 +53,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' Excludes &lt;column&gt; from SELECT clause.
     ''' </summary>
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
@@ -58,7 +63,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Excludes all columns of 2nd table (entity) from SELECT statement.
+    ''' Excludes all columns of 2nd table (entity) from SELECT clause.
     ''' </summary>
     ''' <returns></returns>
     Public Function ExcludeT2() As SelectedSelectSqlExpression(Of T1, T2, T3)
@@ -66,7 +71,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Excludes all columns of 3rd table (entity) from SELECT statement.
+    ''' Excludes all columns of 3rd table (entity) from SELECT clause.
     ''' </summary>
     ''' <returns></returns>
     Public Function ExcludeT3() As SelectedSelectSqlExpression(Of T1, T2, T3)
@@ -74,7 +79,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Excludes &lt;column&gt; from SELECT statement.
+    ''' Excludes &lt;column&gt; from SELECT clause.
     ''' </summary>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
@@ -84,7 +89,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Excludes all columns of the table (entity) from SELECT statement.
+    ''' Excludes all columns of the table (entity) from SELECT clause.
     ''' </summary>
     ''' <param name="entityIndex"></param>
     ''' <returns></returns>
@@ -94,7 +99,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds DISTINCT statement.
+    ''' Adds DISTINCT clause.
     ''' </summary>
     ''' <returns></returns>
     Public Function Distinct() As DistinctSqlExpression(Of T1)
@@ -112,7 +117,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Executes SQL query and returns first record or default.
+    ''' Executes SQL query and returns first record or a default value.
     ''' </summary>
     ''' <returns></returns>
     Public Function FirstOrDefault() As T1

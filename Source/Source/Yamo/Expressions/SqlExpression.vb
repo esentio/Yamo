@@ -4,7 +4,7 @@ Imports Yamo.Internal.Query
 Namespace Expressions
 
   ''' <summary>
-  ''' Represents SQL expression.
+  ''' Represents SQL statement.
   ''' </summary>
   Public Class SqlExpression
     Inherits SqlExpressionBase
@@ -33,7 +33,8 @@ Namespace Expressions
     End Sub
 
     ''' <summary>
-    ''' Executes SQL statement.
+    ''' Executes SQL query and returns the number of affected rows.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="sql"></param>
     ''' <returns></returns>
@@ -43,7 +44,8 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Executes SQL statement.
+    ''' Executes SQL query and returns the number of affected rows.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="sql"></param>
     ''' <returns></returns>
@@ -53,7 +55,8 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Executes SQL query and returns first record or default.
+    ''' Executes SQL query and returns first record or a default value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="sql"></param>
@@ -64,7 +67,8 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Executes SQL query and returns first record or default.
+    ''' Executes SQL query and returns first record or a default value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="sql"></param>
@@ -75,7 +79,8 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Executes SQL query and returns list of records.
+    ''' Executes SQL query and returns list of records.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="sql"></param>
@@ -86,7 +91,8 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Executes SQL query and returns list of records.
+    ''' Executes SQL query and returns list of records.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="sql"></param>

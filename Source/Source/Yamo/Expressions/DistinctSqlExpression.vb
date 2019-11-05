@@ -4,7 +4,10 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Represents DISTINCT clause in SQL SELECT statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
   Public Class DistinctSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
 
@@ -27,7 +30,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Executes SQL query and returns first record or default.
+    ''' Executes SQL query and returns first record or a default value.
     ''' </summary>
     ''' <returns></returns>
     Public Function FirstOrDefault() As T

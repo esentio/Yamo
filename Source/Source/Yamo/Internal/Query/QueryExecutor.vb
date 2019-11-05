@@ -35,7 +35,7 @@ Namespace Internal.Query
     End Sub
 
     ''' <summary>
-    ''' Executes query.<br/>
+    ''' Executes query and returns the number of affected rows.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="query"></param>
@@ -47,7 +47,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and gets first record or default.<br/>
+    ''' Executes query and returns first record or a default value.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
@@ -87,7 +87,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and gets list of records.<br/>
+    ''' Executes query and returns list of records.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
@@ -129,7 +129,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes insert statement.<br/>
+    ''' Executes insert statement and returns the number of affected rows.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="query"></param>
@@ -143,7 +143,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and gets first record or default.<br/>
+    ''' Executes query and returns first record or a default value.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
@@ -160,7 +160,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and gets list of records.<br/>
+    ''' Executes query and returns list of records.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
@@ -212,7 +212,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and reads database generated values.
+    ''' Executes query and reads database generated values. Returns the number of affected rows.
     ''' </summary>
     ''' <param name="query"></param>
     ''' <returns></returns>
@@ -233,7 +233,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and gets first custom entity record or default.<br/>
+    ''' Executes query and returns first custom entity record or default.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
@@ -258,7 +258,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and gets first record or default. No joins are present in the query.
+    ''' Executes query and returns first record or a default value. No joins are present in the query.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="query"></param>
@@ -282,7 +282,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and gets list of records.<br/>
+    ''' Executes query and returns list of records.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
@@ -308,7 +308,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and gets list of records. No joins are present in the query.
+    ''' Executes query and returns list of records. No joins are present in the query.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="query"></param>
@@ -333,7 +333,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and gets lists of records. Joins are present in the query.
+    ''' Executes query and returns lists of records. Joins are present in the query.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="query"></param>
@@ -349,7 +349,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and gets lists of records. Only 1:1 joins are present in the query.
+    ''' Executes query and returns lists of records. Only 1:1 joins are present in the query.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="query"></param>
@@ -409,7 +409,7 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and gets lists of records. 1:N joins are present in the query.
+    ''' Executes query and returns lists of records. 1:N joins are present in the query.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="query"></param>

@@ -5,7 +5,7 @@ Imports Yamo.Internal.Query
 Namespace Expressions
 
   ''' <summary>
-  ''' Represents SET statement in UPDATE SQL expression.
+  ''' Represents SET clause in SQL UPDATE statement.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
   Public Class SetUpdateSqlExpression(Of T)
@@ -22,7 +22,7 @@ Namespace Expressions
     End Sub
 
     ''' <summary>
-    ''' Adds SET statement.
+    ''' Adds SET clause.
     ''' </summary>
     ''' <param name="action"></param>
     ''' <returns></returns>
@@ -32,7 +32,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SET statement.
+    ''' Adds SET clause.
     ''' </summary>
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
@@ -44,7 +44,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SET statement.
+    ''' Adds SET clause.
     ''' </summary>
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
@@ -56,7 +56,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SET statement.
+    ''' Adds SET clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -66,7 +66,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SET statement.
+    ''' Adds SET clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -76,7 +76,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SET null statement.
+    ''' Adds SET clause where value is set to null.
     ''' </summary>
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
@@ -87,7 +87,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -97,7 +97,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -107,7 +107,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds WHERE statement.
+    ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -117,7 +117,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Executes an UPDATE statement.
+    ''' Executes UPDATE statement and returns the number of affected rows.
     ''' </summary>
     ''' <returns></returns>
     Public Function Execute() As Int32

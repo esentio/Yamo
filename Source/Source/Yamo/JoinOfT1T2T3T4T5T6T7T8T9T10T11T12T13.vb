@@ -18,79 +18,79 @@ Public Class Join(Of TTable1, TTable2, TTable3, TTable4, TTable5, TTable6, TTabl
   Implements IJoin
 
   ''' <summary>
-  ''' 1st entity.
+  ''' Gets 1st entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T1 As TTable1
 
   ''' <summary>
-  ''' 2nd entity.
+  ''' Gets 2nd entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T2 As TTable2
 
   ''' <summary>
-  ''' 3rd entity.
+  ''' Gets 3rd entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T3 As TTable3
 
   ''' <summary>
-  ''' 4th entity.
+  ''' Gets 4th entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T4 As TTable4
 
   ''' <summary>
-  ''' 5th entity.
+  ''' Gets 5th entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T5 As TTable5
 
   ''' <summary>
-  ''' 6th entity.
+  ''' Gets 6th entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T6 As TTable6
 
   ''' <summary>
-  ''' 7th entity.
+  ''' Gets 7th entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T7 As TTable7
 
   ''' <summary>
-  ''' 8th entity.
+  ''' Gets 8th entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T8 As TTable8
 
   ''' <summary>
-  ''' 9th entity.
+  ''' Gets 9th entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T9 As TTable9
 
   ''' <summary>
-  ''' 10th entity.
+  ''' Gets 10th entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T10 As TTable10
 
   ''' <summary>
-  ''' 11th entity.
+  ''' Gets 11th entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T11 As TTable11
 
   ''' <summary>
-  ''' 12th entity.
+  ''' Gets 12th entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T12 As TTable12
 
   ''' <summary>
-  ''' 13th entity.
+  ''' Gets 13th entity.
   ''' </summary>
   ''' <returns></returns>
   Public ReadOnly Property T13 As TTable13

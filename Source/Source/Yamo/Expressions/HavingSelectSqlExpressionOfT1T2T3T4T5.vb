@@ -4,7 +4,14 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Represents HAVING clause in SQL SELECT statement.
+  ''' </summary>
+  ''' <typeparam name="T1"></typeparam>
+  ''' <typeparam name="T2"></typeparam>
+  ''' <typeparam name="T3"></typeparam>
+  ''' <typeparam name="T4"></typeparam>
+  ''' <typeparam name="T5"></typeparam>
   Public Class HavingSelectSqlExpression(Of T1, T2, T3, T4, T5)
     Inherits SelectSqlExpressionBase
 
@@ -18,7 +25,7 @@ Namespace Expressions
     End Sub
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -27,7 +34,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -36,7 +43,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -45,7 +52,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -54,7 +61,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -63,7 +70,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -72,7 +79,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -81,7 +88,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -90,7 +97,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -99,7 +106,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -108,7 +115,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -117,7 +124,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -126,7 +133,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds AND condition to HAVING statement.
+    ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
@@ -136,7 +143,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds HAVING statement.
+    ''' Adds HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="entityIndexHints"></param>
@@ -147,7 +154,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY statement.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -157,7 +164,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY statement.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -167,7 +174,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY statement.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -177,7 +184,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY statement.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -187,7 +194,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY statement.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -197,7 +204,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY statement.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -207,7 +214,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY DESC statement.
+    ''' Adds ORDER BY DESC clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -217,7 +224,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY DESC statement.
+    ''' Adds ORDER BY DESC clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -227,7 +234,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY DESC statement.
+    ''' Adds ORDER BY DESC clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -237,7 +244,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY DESC statement.
+    ''' Adds ORDER BY DESC clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -247,7 +254,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY DESC statement.
+    ''' Adds ORDER BY DESC clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -257,7 +264,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY DESC statement.
+    ''' Adds ORDER BY DESC clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -267,7 +274,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY statement.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
@@ -280,7 +287,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with all columns of all tables (entities).
+    ''' Adds SELECT clause with all columns of all tables (entities).
     ''' </summary>
     ''' <returns></returns>
     Public Function SelectAll() As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5)
@@ -289,7 +296,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT COUNT(*) statement, executes SQL query and returns the result.
+    ''' Adds SELECT COUNT(*) clause, executes SQL query and returns the result.
     ''' </summary>
     ''' <returns></returns>
     Public Function SelectCount() As Int32
@@ -299,7 +306,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
@@ -309,7 +316,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
@@ -319,7 +326,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
@@ -329,7 +336,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
@@ -339,7 +346,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
@@ -349,7 +356,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
@@ -359,7 +366,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
@@ -369,7 +376,7 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT statement with custom columns selection.
+    ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>

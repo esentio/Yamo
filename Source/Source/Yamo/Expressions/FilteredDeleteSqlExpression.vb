@@ -3,7 +3,10 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Represents WHERE clause in SQL DELETE statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
   Public Class FilteredDeleteSqlExpression(Of T)
     Inherits DeleteSqlExpressionBase
 
@@ -17,6 +20,10 @@ Namespace Expressions
       MyBase.New(context, builder, executor)
     End Sub
 
+    ''' <summary>
+    ''' Executes DELETE statement or UPDATE statement that marks record(s) as (soft) deleted if expression was created with <see cref="DbContext.SoftDelete(Of T)"/> call. Returns the number of affected rows.
+    ''' </summary>
+    ''' <returns></returns>
     Public Function Execute() As Int32
       Dim query = Me.Builder.CreateQuery()
       Return Me.Executor.Execute(query)

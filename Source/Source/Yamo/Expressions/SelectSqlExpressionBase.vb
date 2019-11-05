@@ -3,12 +3,25 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Base class for SQL SELECT statements.<br/>
+  ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+  ''' </summary>
   Public MustInherit Class SelectSqlExpressionBase
     Inherits SqlExpressionBase
 
+    ''' <summary>
+    ''' Gets builder.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Protected Property Builder As SelectSqlExpressionBuilder
 
+    ''' <summary>
+    ''' Gets query executor.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
     Protected Property Executor As QueryExecutor
 
     ''' <summary>

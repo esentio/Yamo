@@ -4,7 +4,23 @@ Imports Yamo.Internal.Query
 
 Namespace Expressions
 
-  ' TODO: SIP - add documentation to this class.
+  ''' <summary>
+  ''' Represents SQL SELECT statement from 14 tables (entities).
+  ''' </summary>
+  ''' <typeparam name="T1"></typeparam>
+  ''' <typeparam name="T2"></typeparam>
+  ''' <typeparam name="T3"></typeparam>
+  ''' <typeparam name="T4"></typeparam>
+  ''' <typeparam name="T5"></typeparam>
+  ''' <typeparam name="T6"></typeparam>
+  ''' <typeparam name="T7"></typeparam>
+  ''' <typeparam name="T8"></typeparam>
+  ''' <typeparam name="T9"></typeparam>
+  ''' <typeparam name="T10"></typeparam>
+  ''' <typeparam name="T11"></typeparam>
+  ''' <typeparam name="T12"></typeparam>
+  ''' <typeparam name="T13"></typeparam>
+  ''' <typeparam name="T14"></typeparam>
   Public Class JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14)
     Inherits SelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14)
 

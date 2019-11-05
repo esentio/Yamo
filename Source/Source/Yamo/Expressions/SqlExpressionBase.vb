@@ -1,7 +1,7 @@
 ﻿Namespace Expressions
 
   ''' <summary>
-  ''' Base class for SQL expressions.<br/>
+  ''' Base class for SQL statements.<br/>
   ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
   ''' </summary>
   Public MustInherit Class SqlExpressionBase
