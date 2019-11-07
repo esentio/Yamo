@@ -129,14 +129,11 @@ Namespace Tests
 
     <TestMethod()>
     Public Overridable Sub SelectWithOrderByColumnsFromMultipleTables()
-      Dim article1 = Me.ModelFactory.CreateArticle(1)
-      article1.Price = 30
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 30)
 
-      Dim article2 = Me.ModelFactory.CreateArticle(2)
-      article2.Price = 10
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 10)
 
-      Dim article3 = Me.ModelFactory.CreateArticle(3)
-      article3.Price = 20
+      Dim article3 = Me.ModelFactory.CreateArticle(3, 20)
 
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "a")
       Dim label1Ger = Me.ModelFactory.CreateLabel("", 1, German, "b")

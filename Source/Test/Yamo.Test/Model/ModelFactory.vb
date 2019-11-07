@@ -9,6 +9,13 @@
       }
     End Function
 
+    Public Overridable Function CreateArticle(id As Int32, price As Decimal) As Article
+      Return New Article With {
+        .Id = id,
+        .Price = price
+      }
+    End Function
+
     Public Overridable Function CreateArticleCategory(articleId As Int32, categoryId As Int32) As ArticleCategory
       Return New ArticleCategory With {
         .ArticleId = articleId,
