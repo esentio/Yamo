@@ -656,18 +656,18 @@ namespace Yamo.PlaygroundCS
             using (var db = CreateContext())
             {
                 // get 3 most expensive articles
-                var articles = db.From<Article>()
+                var articles1 = db.From<Article>()
                                  .OrderByDescending(a => a.Price)
                                  .Limit(3)
                                  .SelectAll()
                                  .ToList();
 
                 // get second and third cheapest article
-                var article = db.From<Article>()
-                                .OrderBy(a => a.Price)
-                                .Limit(1, 2)
-                                .SelectAll()
-                                .ToList();
+                var articles2 = db.From<Article>()
+                                  .OrderBy(a => a.Price)
+                                  .Limit(1, 2)
+                                  .SelectAll()
+                                  .ToList();
             }
         }
 
