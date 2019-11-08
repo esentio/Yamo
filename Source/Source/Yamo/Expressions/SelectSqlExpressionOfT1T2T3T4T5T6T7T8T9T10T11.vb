@@ -196,6 +196,36 @@ Namespace Expressions
     End Function
 
     ''' <summary>
+    ''' Adds clause to limit rows returned by the query. Depending on the database, LIMIT, TOP or OFFSET FETCH clause is used.
+    ''' </summary>
+    ''' <param name="count"></param>
+    ''' <returns></returns>
+    Public Function Limit(count As Int32) As LimitedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)
+      Return InternalLimit(Nothing, count)
+    End Function
+
+    ''' <summary>
+    ''' Adds clause to limit rows returned by the query. Depending on the database, LIMIT, TOP or OFFSET FETCH clause is used.
+    ''' </summary>
+    ''' <param name="offset"></param>
+    ''' <param name="count"></param>
+    ''' <returns></returns>
+    Public Function Limit(offset As Int32, count As Int32) As LimitedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)
+      Return InternalLimit(offset, count)
+    End Function
+
+    ''' <summary>
+    ''' Adds clause to limit rows returned by the query. Depending on the database, LIMIT, TOP or OFFSET FETCH clause is used.
+    ''' </summary>
+    ''' <param name="offset"></param>
+    ''' <param name="count"></param>
+    ''' <returns></returns>
+    Private Function InternalLimit(offset As Int32?, count As Int32) As LimitedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)
+      Me.Builder.AddLimit(offset, count)
+      Return New LimitedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)(Me.Builder, Me.Executor)
+    End Function
+
+    ''' <summary>
     ''' Adds SELECT clause with all columns of all tables (entities).
     ''' </summary>
     ''' <returns></returns>

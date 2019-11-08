@@ -83,6 +83,20 @@ Namespace Infrastructure
       End Set
     End Property
 
+    Private m_SupportedLimitType As LimitType
+    ''' <summary>
+    ''' Gets or sets supported limit clause type
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property SupportedLimitType() As LimitType
+      Get
+        Return m_SupportedLimitType
+      End Get
+      Protected Set(ByVal value As LimitType)
+        m_SupportedLimitType = value
+      End Set
+    End Property
+
     ''' <summary>
     ''' Stores internal SQL helpers.
     ''' </summary>

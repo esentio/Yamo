@@ -53,6 +53,7 @@ namespace Yamo.PlaygroundCS
             //Test32();
             //Test33();
             //Test34();
+            //Test35();
         }
 
         public static MyContext CreateContext()
@@ -647,6 +648,26 @@ namespace Yamo.PlaygroundCS
                     LEFT JOIN Label AS le ON a.Id = le.Id AND le.Language = 'en'
                     LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = 'ger'
                     WHERE a.Id = 1");
+            }
+        }
+
+        public static void Test35()
+        {
+            using (var db = CreateContext())
+            {
+                // get 3 most expensive articles
+                var articles1 = db.From<Article>()
+                                 .OrderByDescending(a => a.Price)
+                                 .Limit(3)
+                                 .SelectAll()
+                                 .ToList();
+
+                // get second and third cheapest article
+                var articles2 = db.From<Article>()
+                                  .OrderBy(a => a.Price)
+                                  .Limit(1, 2)
+                                  .SelectAll()
+                                  .ToList();
             }
         }
 

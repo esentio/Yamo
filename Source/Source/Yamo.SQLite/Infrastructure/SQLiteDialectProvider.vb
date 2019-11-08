@@ -25,6 +25,7 @@ Namespace Infrastructure
       Me.ValueTypeReaderFactory = New ValueTypeReaderFactory
       Me.EntityReaderFactory = New EntityReaderFactory
       Me.DbValueConversion = New SQLiteDbValueConversion
+      Me.SupportedLimitType = LimitType.Limit
       RegisterInternalSqlHelper(New Sql.InternalDateDiff)
     End Sub
 

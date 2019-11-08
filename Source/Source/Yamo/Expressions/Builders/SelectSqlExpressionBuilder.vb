@@ -1,5 +1,6 @@
 ﻿Imports System.Linq.Expressions
 Imports System.Text
+Imports Yamo.Infrastructure
 Imports Yamo.Internal
 Imports Yamo.Internal.Query
 Imports Yamo.Internal.Query.Metadata
@@ -50,6 +51,16 @@ Namespace Expressions.Builders
     Private m_OrderByExpressions As List(Of String)
 
     ''' <summary>
+    ''' Stores limit expression
+    ''' </summary>
+    Private m_LimitExpression As String
+
+    ''' <summary>
+    ''' Stores whether top should be used for limit
+    ''' </summary>
+    Private m_UseTopForLimit As Boolean
+
+    ''' <summary>
     ''' Stores select expressions.
     ''' </summary>
     Private m_SelectExpression As String
@@ -79,6 +90,8 @@ Namespace Expressions.Builders
       m_GroupByExpressions = Nothing
       m_HavingExpressions = Nothing
       m_OrderByExpressions = Nothing
+      m_LimitExpression = Nothing
+      m_UseTopForLimit = False
       m_SelectExpression = Nothing
       m_UseDistinct = False
       m_Parameters = New List(Of SqlParameter)
@@ -99,6 +112,10 @@ Namespace Expressions.Builders
 
         If m_UseDistinct Then
           sql.Append("DISTINCT ")
+        End If
+
+        If m_LimitExpression IsNot Nothing AndAlso m_UseTopForLimit Then
+          sql.Append(m_LimitExpression)
         End If
 
         sql.Append(m_SelectExpression)
@@ -134,6 +151,10 @@ Namespace Expressions.Builders
       If m_OrderByExpressions IsNot Nothing Then
         sql.Append(" ORDER BY ")
         Helpers.Text.AppendJoin(sql, ", ", m_OrderByExpressions)
+      End If
+
+      If m_LimitExpression IsNot Nothing AndAlso Not m_UseTopForLimit Then
+        sql.Append(m_LimitExpression)
       End If
 
       Return New SelectQuery(sql.ToString(), m_Parameters.ToList(), m_Model)
@@ -428,6 +449,40 @@ Namespace Expressions.Builders
     End Sub
 
     ''' <summary>
+    ''' Adds clause to limit rows returned by the query.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="offset"></param>
+    ''' <param name="count"></param>
+    Public Sub AddLimit(offset As Int32?, count As Int32)
+      Dim limitType = Me.DialectProvider.SupportedLimitType
+
+      m_UseTopForLimit = False
+
+      If offset.HasValue Then
+        If limitType.HasFlag(LimitType.Limit) Then
+          m_LimitExpression = " LIMIT " & offset.Value.ToString(Globalization.CultureInfo.InvariantCulture) & ", " & count.ToString(Globalization.CultureInfo.InvariantCulture)
+        ElseIf limitType.HasFlag(LimitType.OffsetFetch) Then
+          m_LimitExpression = " OFFSET " & offset.Value.ToString(Globalization.CultureInfo.InvariantCulture) & " ROWS FETCH FIRST " & count.ToString(Globalization.CultureInfo.InvariantCulture) & " ROWS ONLY"
+        Else
+          Throw New NotSupportedException("Limit is not supported with current SQL dialect provider.")
+        End If
+      Else
+        ' NOTE: prefer TOP over OFFSET FETCH, because it can be used in more scenarios (TOP doesn't require ORDER BY clause)
+        If limitType.HasFlag(LimitType.Limit) Then
+          m_LimitExpression = " LIMIT " & count.ToString(Globalization.CultureInfo.InvariantCulture)
+        ElseIf limitType.HasFlag(LimitType.Top) Then
+          m_LimitExpression = "TOP(" & count.ToString(Globalization.CultureInfo.InvariantCulture) & ") "
+          m_UseTopForLimit = True
+        ElseIf limitType.HasFlag(LimitType.OffsetFetch) Then
+          m_LimitExpression = " OFFSET 0 ROWS FETCH FIRST " & count.ToString(Globalization.CultureInfo.InvariantCulture) & " ROWS ONLY"
+        Else
+          Throw New NotSupportedException("Limit is not supported with current SQL dialect provider.")
+        End If
+      End If
+    End Sub
+
+    ''' <summary>
     ''' Adds select all columns.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -539,6 +594,10 @@ Namespace Expressions.Builders
 
       If m_UseDistinct Then
         sql.Append("DISTINCT ")
+      End If
+
+      If m_LimitExpression IsNot Nothing AndAlso m_UseTopForLimit Then
+        sql.Append(m_LimitExpression)
       End If
 
       Dim first = True
