@@ -1252,7 +1252,7 @@ using (var db = CreateContext())
 
 This will translate to appropriate `LIMIT`, `TOP` or `OFFSET FETCH` clauses depending on the database.
 
-**Important note:** it is generally recommended to use `ORDER BY` together with `LIMIT` or `TOP` clauses. But databases allow to use them without ordering and so does Yamo. In MS SQL Server, `Limit(count)` is translated to `TOP`. But `Limit(offset, count)` is translated to `OFFSET FETCH` , which forces you to use `ORDER BY` clause. Expect an exception, when you forget to use it.
+**Important note:** it is generally recommended to use `ORDER BY` together with `LIMIT` or `TOP` clauses. But databases allow to use them without ordering and so does Yamo. In MS SQL Server, `Limit(count)` is translated to `TOP`. But `Limit(offset, count)` is translated to `OFFSET FETCH`, which forces you to use `ORDER BY` clause. Expect an exception, when you forget to use it.
 
 **Important note:** `Limit` translates directly to SQL and affects the number of rows in the resultset. Keep that in mind when you use it together with 1:N joins. Not all joined entities which actually belong to last main entity from the output might be present in its relationship property list. Also, number or main entities might be lower that you specify in `count` parameter, because of join multiplications.
 
