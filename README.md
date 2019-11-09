@@ -12,6 +12,10 @@ There are 3 NuGet packages available:
 
 Yamo has no external dependencies.
 
+## What's new
+
+You can find [release notes here](https://github.com/esentio/Yamo/releases).
+
 ## License
 
 This library is under the MIT License.
@@ -38,9 +42,9 @@ You should be able to use any ADO.NET SQLite provider, but I tested it only with
 
 **It's not yet in version 1.0. Can I use it already?** 
 
-It is a work in progress, but it is pretty stable now and can do a lot of things already. Public API shouldn't change much except adding new features. See mentions about planned features below. Internals will certainly change, because of refactoring/code cleaning.
+It is a work in progress, but it is pretty stable now and can do a lot of things already. It has been used in couple of commercial projects by now. Public API shouldn't change much except adding new features. See mentions about planned features below. Internals will certainly change, because of refactoring/code cleaning.
 
-Most of the public API is covered by tests (executed agains real databases - both MS SQL Server and SQLite).
+Most of the public API is covered by tests (executed against real databases - both MS SQL Server and SQLite).
 
 This documentation is being updated to always match latest released version.
 
@@ -101,12 +105,13 @@ We can now run simple SQL queries:
 ```c#
 using (var db = CreateContext())
 {
-    var affectedRows = db.ExecuteNonQuery("DELETE FROM [User]");
-    var count = db.ExecuteScalar<int>("SELECT COUNT(*) FROM [User]");
+    int count = db.QueryFirstOrDefault<int>("SELECT COUNT(*) FROM [User]");
+    List<string> logins = db.Query<string>("SELECT Login FROM [User]");
+    int affectedRows = db.Execute("DELETE FROM [User]");
 }
 ```
 
-Ok, that's nothing special. `DbCommand` can do the same. But it is dangerous to build your queries from user entered values.
+Ok, that's nothing special. `DbCommand` can do almost the same. But it is dangerous to build your queries from user entered values.
 
 So instead of passing `string`, we can pass `FormattableString` with parameters:
 
@@ -114,7 +119,7 @@ So instead of passing `string`, we can pass `FormattableString` with parameters:
 using (var db = CreateContext())
 {
     var login = "foo";
-    var affectedRows = db.ExecuteNonQuery($"DELETE FROM [User] WHERE Login = {login}");
+    var affectedRows = db.Execute($"DELETE FROM [User] WHERE Login = {login}");
 }
 ```
 
@@ -329,17 +334,17 @@ WHERE
 
 Note that values of all columns are updated, even if only value of single column has been changed. Unlike some "big" ORM frameworks, Yamo doesn't track objects and their inner state. That's not its job. After you call select, insert or update, Yamo doesn't hold the reference to your POCOs.
 
-Sometimes updating of all database fields is exactly what you want. Sometimes it's not necessary and might even lead to performance issues. Yamo solves this dilemma in a way that object itself could track its state. All you need to do is implement `IHasPropertyModifiedTracking` interface in your model objects.
+Sometimes updating of all database fields is exactly what you want. Sometimes it's not necessary and might even lead to performance issues. Yamo solves this dilemma in a way that object itself could track its state. All you need to do is implement `IHasDbPropertyModifiedTracking` interface in your model objects.
 
 ```c#
-public interface IHasPropertyModifiedTracking {
-    bool IsAnyPropertyModified();
-    bool IsPropertyModified(string propertyName);
-    void ResetPropertyModifiedTracking();
+public interface IHasDbPropertyModifiedTracking {
+    bool IsAnyDbPropertyModified();
+    bool IsDbPropertyModified(string propertyName);
+    void ResetDbPropertyModifiedTracking();
 }
 ```
 
-If we modify `User` class to implement `IHasPropertyModifiedTracking`,  following update statement will be generated instead:
+If we modify `User` class to implement `IHasDbPropertyModifiedTracking`,  following update statement will be generated instead:
 
 ```sql
 UPDATE [User] SET
@@ -348,9 +353,9 @@ WHERE
 [Id] = @p4
 ```
 
-After operatios like insert, update or select, `ResetPropertyModifiedTracking` is called automatically, so you don't need to worry about that.
+After operations like insert, update or select, `ResetDbPropertyModifiedTracking` is called automatically, so you don't need to worry about that.
 
-Note that if  `IsAnyPropertyModified` call returns `false`, no SQL `UPDATE` statement is executed.
+Note that if  `IsAnyDbPropertyModified` call returns `false`, no SQL `UPDATE` statement is executed.
 
 Parameterless `Update` method returns an instance of `UpdateSqlExpression`, which allows you to build `UPDATE` command and update more than one object at once. Just don't forget to call `Execute` method at the end.
 
@@ -377,7 +382,7 @@ You can use complex expressions in `Set` or `Where` clauses. Details are discuss
 
 ###### Planned features:
 
-- [#18](https://github.com/esentio/Yamo/issues/18) Support for optional force update of all fields in IHasPropertyModifiedTracking objects.
+- [#18](https://github.com/esentio/Yamo/issues/18) Support for optional force update of all fields in `IHasDbPropertyModifiedTracking` objects.
 - [#16](https://github.com/esentio/Yamo/issues/16) Batch updates.
 - [#19](https://github.com/esentio/Yamo/issues/19) Support for upsert.
 
@@ -537,7 +542,7 @@ If we for some reason don't want to set values to audit fields (or set them manu
 
 Soft deletes are basically updates that mark the record as deleted instead of performing real delete operation. Make sure you explicitly filter these records using condition when you perform select queries (unless you want to include them as well). Yamo doesn't filter them for you (yet)!
 
-Note that when `IHasPropertyModifiedTracking` record is being updated, Yamo first checks whether at least one property is changed. If not, no `UPDATE` statement is executed and therefore no audit field are updated. If there is a change, all changed fields + (update) audit fields are updated in the database. This isn't true for parameterless `Update` and `SoftDelete` methods, where `UPDATE` command is always executed.
+Note that when `IHasDbPropertyModifiedTracking` record is being updated, Yamo first checks whether at least one property is changed. If not, no `UPDATE` statement is executed and therefore no audit field are updated. If there is a change, all changed fields + (update) audit fields are updated in the database. This isn't true for parameterless `Update` and `SoftDelete` methods, where `UPDATE` command is always executed.
 
 ###### Planned features:
 
@@ -1142,6 +1147,21 @@ End Using
 
 **Important note:** when custom select is used, Yamo doesn't set any relationship properties. You can return multiple entities with anonymous type (or `ValueTuple`), but you have to build entity hierarchy by yourself in postprocessing (only if you need that). Number of returned objects matches number of rows in resultset. So be aware that any 1:N relationship join will result to copies of parent entity.
 
+#### Distinct
+
+To retrieve the only distinct records, use `Distinct` method:
+
+````c#
+using (var db = CreateContext())
+{
+    // get all unique languages
+    var languages = db.From<Label>()
+                      .Select(l => l.Language)
+                      .Distinct()
+                      .ToList();
+}
+````
+
 #### Group by and having
 
 To define `GROUP BY` clause, use `GroupBy` method. You can group by single column:
@@ -1206,6 +1226,70 @@ using (var db = CreateContext())
                    .ToList();
 }
 ````
+
+#### Limiting number of returned rows
+
+You can constrain the number of rows returned by a query with a `Limit` method. You can specify number of returned rows as well as offset.
+
+````c#
+using (var db = CreateContext())
+{
+    // get 3 most expensive articles
+    var articles1 = db.From<Article>()
+                      .OrderByDescending(a => a.Price)
+                      .Limit(3)
+                      .SelectAll()
+                      .ToList();
+
+    // get second and third cheapest article
+    var articles2 = db.From<Article>()
+                      .OrderBy(a => a.Price)
+                      .Limit(1, 2)
+                      .SelectAll()
+                      .ToList();
+}
+````
+
+This will translate to appropriate `LIMIT`, `TOP` or `OFFSET FETCH` clauses depending on the database.
+
+**Important note:** it is generally recommended to use `ORDER BY` together with `LIMIT` or `TOP` clauses. But databases allow to use them without ordering and so does Yamo. In MS SQL Server, `Limit(count)` is translated to `TOP`. But `Limit(offset, count)` is translated to `OFFSET FETCH` , which forces you to use `ORDER BY` clause. Expect an exception, when you forget to use it.
+
+**Important note:** `Limit` translates directly to SQL and affects the number of rows in the resultset. Keep that in mind when you use it together with 1:N joins. Not all joined entities which actually belong to last main entity from the output might be present in its relationship property list. Also, number or main entities might be lower that you specify in `count` parameter, because of join multiplications.
+
+#### Advanced queries
+
+Sometimes, you really need to write your query manually. How to get simple value via raw SQL was already described [above](#simple-queries). But `Query` and `QueryFirstOrDefault` methods can do more than that.
+
+You can return multiple values as a `ValueTuple` or nullable `ValueTuple`:
+
+```c#
+using (var db = CreateContext())
+{
+    var login = "foo";
+    var data = db.QueryFirstOrDefault<(int, string)?>($"SELECT Id, Email FROM [User] WHERE Login = {login}");
+    var list = db.Query<(int Login, int Email)>("SELECT Login, Email FROM [User]");
+}
+```
+
+You can even get whole model entity object! To simplify writing all columns to the query (they need to be stated in correct order) just use `Yamo.Sql.Model.Columns` helper:
+
+```c#
+using (var db = CreateContext())
+{
+    var articles = db.Query<Article>($"SELECT {Sql.Model.Columns<Article>()} FROM Article");
+
+    var data = db.QueryFirstOrDefault<(decimal, Label, Label)?>($@"
+        SELECT a.Price,
+        {Sql.Model.Columns<Label>("le")},
+        {Sql.Model.Columns<Label>("lg")}
+        FROM Article AS a
+        LEFT JOIN Label AS le ON a.Id = le.Id AND le.Language = 'en'
+        LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = 'ger'
+        WHERE a.Id = 1");
+}
+```
+
+**Important note:** similarly to `Select` method,  `Query` and `QueryFirstOrDefault` don't set any relationship properties and you have to do it by yourself in postprocessing (if you need to).
 
 ### Logging
 

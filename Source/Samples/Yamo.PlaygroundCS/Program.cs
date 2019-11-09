@@ -54,6 +54,7 @@ namespace Yamo.PlaygroundCS
             //Test33();
             //Test34();
             //Test35();
+            //Test36();
         }
 
         public static MyContext CreateContext()
@@ -657,10 +658,10 @@ namespace Yamo.PlaygroundCS
             {
                 // get 3 most expensive articles
                 var articles1 = db.From<Article>()
-                                 .OrderByDescending(a => a.Price)
-                                 .Limit(3)
-                                 .SelectAll()
-                                 .ToList();
+                                  .OrderByDescending(a => a.Price)
+                                  .Limit(3)
+                                  .SelectAll()
+                                  .ToList();
 
                 // get second and third cheapest article
                 var articles2 = db.From<Article>()
@@ -671,5 +672,16 @@ namespace Yamo.PlaygroundCS
             }
         }
 
+        public static void Test36()
+        {
+            using (var db = CreateContext())
+            {
+                // get all unique languages
+                var languages = db.From<Label>()
+                                  .Select(l => l.Language)
+                                  .Distinct()
+                                  .ToList();
+            }
+        }
     }
 }
