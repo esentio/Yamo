@@ -30,6 +30,10 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Yamo.Benchmarks", "Benchmarks\Yamo.Benchmarks\Yamo.Benchmarks.vbproj", "{589A8829-5C72-4D0A-80F5-6B390DAC0D1E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{EA24AD48-C298-400B-98A7-BD9C7227EF70}"
+	ProjectSection(SolutionItems) = preProject
+		Nuget\pack.bat = Nuget\pack.bat
+		Nuget\push.bat = Nuget\push.bat
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
