@@ -1,7 +1,6 @@
 ﻿Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
-Imports Yamo.Internal.Query.Metadata
 
 Namespace Expressions
 
@@ -75,7 +74,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
-      Return InternalOrderBy(keySelector, True)
+      Return InternalOrderBy(Of TKey)(keySelector, True)
     End Function
 
     ''' <summary>
@@ -85,7 +84,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
-      Return InternalOrderBy(keySelector, False)
+      Return InternalOrderBy(Of TKey)(keySelector, False)
     End Function
 
     ''' <summary>

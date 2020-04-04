@@ -40,15 +40,6 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Executes SQL query and returns first record or a default value.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function FirstOrDefault() As T
-      Dim query = Me.Builder.CreateQuery()
-      Return Me.Executor.ReadFirstOrDefault(Of T)(query)
-    End Function
-
-    ''' <summary>
     ''' Adds SELECT clause with custom columns selection.
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>

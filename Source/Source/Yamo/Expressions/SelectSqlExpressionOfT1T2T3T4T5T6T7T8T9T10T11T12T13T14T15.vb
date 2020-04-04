@@ -1,6 +1,7 @@
 ﻿Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
+Imports Yamo.Internal.Query.Metadata
 
 Namespace Expressions
 

@@ -92,6 +92,16 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
     Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7), TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7)
       Return InternalExclude(propertyExpression)
     End Function

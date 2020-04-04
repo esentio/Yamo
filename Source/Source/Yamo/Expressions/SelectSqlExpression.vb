@@ -107,7 +107,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <returns></returns>
     Public Function CrossJoin(Of TJoined)() As JoinedSelectSqlExpression(Of T, TJoined)
-      Return InternalJoin(Of TJoined)(JoinType.CrossJoin, Nothing, {0, 1})
+      Return InternalJoin(Of TJoined)(JoinType.CrossJoin, Nothing, Nothing)
     End Function
 
     ''' <summary>
@@ -199,7 +199,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
-      Return InternalOrderBy(keySelector, True)
+      Return InternalOrderBy(Of TKey)(keySelector, True)
     End Function
 
     ''' <summary>
@@ -209,7 +209,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
-      Return InternalOrderBy(keySelector, False)
+      Return InternalOrderBy(Of TKey)(keySelector, False)
     End Function
 
     ''' <summary>
