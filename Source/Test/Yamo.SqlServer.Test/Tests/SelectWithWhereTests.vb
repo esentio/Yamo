@@ -3,11 +3,11 @@
 Namespace Tests
 
   <TestClass()>
-  Public Class SelectWithSqlStringConditionTests
-    Inherits Yamo.Test.Tests.SelectWithSqlStringConditionTests
+  Public Class SelectWithWhereTests
+    Inherits Yamo.Test.Tests.SelectWithWhereTests
 
     Protected Overrides Function CreateTestEnvironment() As ITestEnvironment
-      Return SQLiteTestEnvironment.Create()
+      Return SqlServerTestEnvironment.Create()
     End Function
 
   End Class

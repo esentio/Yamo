@@ -108,12 +108,12 @@
     <Compile Include="Tests\SelectCountTests.vb" />
     <Compile Include="Tests\SqlHelperAggregateTests.vb" />
     <Compile Include="Tests\SqlHelperDateDiffTests.vb" />
-    <Compile Include="Tests\SelectWithSqlStringConditionTests.vb" />
+    <Compile Include="Tests\SelectWithSqlStringWhereTests.vb" />
     <Compile Include="Tests\SelectWithSortTests.vb" />
     <Compile Include="Tests\DbContextTests.vb" />
     <Compile Include="Tests\TransactionTests.vb" />
     <Compile Include="Tests\SelectWithJoinTests.vb" />
-    <Compile Include="Tests\SelectWithConditionTests.vb" />
+    <Compile Include="Tests\SelectWithWhereTests.vb" />
     <Compile Include="Tests\DeleteTests.vb" />
     <Compile Include="Tests\UpdateTests.vb" />
     <Compile Include="Tests\InsertTests.vb" />

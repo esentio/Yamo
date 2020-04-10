@@ -2,7 +2,7 @@
 
 Namespace Tests
 
-  Public MustInherit Class SelectWithSqlStringConditionTests
+  Public MustInherit Class SelectWithSqlStringWhereTests
     Inherits BaseIntegrationTests
 
     <TestMethod()>

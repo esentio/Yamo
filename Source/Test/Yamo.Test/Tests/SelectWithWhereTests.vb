@@ -2,7 +2,7 @@
 
 Namespace Tests
 
-  Public MustInherit Class SelectWithConditionTests
+  Public MustInherit Class SelectWithWhereTests
     Inherits BaseIntegrationTests
 
     <TestMethod()>
