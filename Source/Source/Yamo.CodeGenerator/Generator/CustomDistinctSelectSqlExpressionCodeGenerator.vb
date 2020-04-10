@@ -1,16 +1,14 @@
 ﻿Namespace Generator
 
-  Public Class CustomDistinctSqlExpressionCodeGenerator
+  Public Class CustomDistinctSelectSqlExpressionCodeGenerator
     Inherits CodeGenerator
-
-    ' TODO: rename CustomDistinctSqlExpression to CustomDistinctSelectSqlExpression
 
     Public Sub New(indentation As String, outputFolder As String)
       MyBase.New(indentation, 1, outputFolder)
     End Sub
 
     Protected Overrides Function GetFilename(entityCount As Int32) As String
-      Return $"CustomDistinctSqlExpression{GetGenericsSuffixForFilename(entityCount)}.vb"
+      Return $"CustomDistinctSelectSqlExpression{GetGenericsSuffixForFilename(entityCount)}.vb"
     End Function
 
     Protected Overrides Sub Generate(builder As CodeBuilder, entityCount As Int32)
@@ -25,7 +23,7 @@
       Dim typeParams = GetGenericNames(entityCount)
       AddComment(builder, comment, typeParams:=typeParams)
 
-      builder.Indent().AppendLine($"Public Class CustomDistinctSqlExpression{GetGenericOfDefinition(entityCount)}").PushIndent()
+      builder.Indent().AppendLine($"Public Class CustomDistinctSelectSqlExpression{GetGenericOfDefinition(entityCount)}").PushIndent()
       builder.Indent().AppendLine("Inherits SelectSqlExpressionBase")
       builder.AppendLine()
       GenerateConstructor(builder, entityCount)
@@ -43,7 +41,7 @@
     End Sub
 
     Private Sub GenerateConstructor(builder As CodeBuilder, entityCount As Int32)
-      Dim comment = $"Creates new instance of <see cref=""CustomDistinctSqlExpression{GetGenericOfDefinition(entityCount)}""/>."
+      Dim comment = $"Creates new instance of <see cref=""CustomDistinctSelectSqlExpression{GetGenericOfDefinition(entityCount)}""/>."
       Dim params = {"builder", "executor"}
       AddComment(builder, comment, params:=params)
 

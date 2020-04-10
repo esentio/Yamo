@@ -12,14 +12,14 @@ Module Program
 
     ' generate code
 
-    Dim customDistinctSqlExpressionCodeGenerator = New CustomDistinctSqlExpressionCodeGenerator(indentation, outputFolder)
-    customDistinctSqlExpressionCodeGenerator.Generate()
+    Dim customDistinctSelectSqlExpressionCodeGenerator = New CustomDistinctSelectSqlExpressionCodeGenerator(indentation, outputFolder)
+    customDistinctSelectSqlExpressionCodeGenerator.Generate()
 
     Dim customSelectSqlExpressionCodeGenerator = New CustomSelectSqlExpressionCodeGenerator(indentation, outputFolder)
     customSelectSqlExpressionCodeGenerator.Generate()
 
-    Dim distinctSqlExpressionCodeGenerator = New DistinctSqlExpressionCodeGenerator(indentation, outputFolder)
-    distinctSqlExpressionCodeGenerator.Generate()
+    Dim distinctSelectSqlExpressionCodeGenerator = New DistinctSelectSqlExpressionCodeGenerator(indentation, outputFolder)
+    distinctSelectSqlExpressionCodeGenerator.Generate()
 
     Dim filteredSelectSqlExpressionCodeGenerator = New FilteredSelectSqlExpressionCodeGenerator(indentation, maxEntityCount, outputFolder)
     filteredSelectSqlExpressionCodeGenerator.Generate()

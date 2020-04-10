@@ -8,11 +8,11 @@ Namespace Expressions
   ''' Represents DISTINCT clause in SQL SELECT statement.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
-  Public Class CustomDistinctSqlExpression(Of T)
+  Public Class CustomDistinctSelectSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
 
     ''' <summary>
-    ''' Creates new instance of <see cref="CustomDistinctSqlExpression(Of T)"/>.
+    ''' Creates new instance of <see cref="CustomDistinctSelectSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="builder"></param>
     ''' <param name="executor"></param>
