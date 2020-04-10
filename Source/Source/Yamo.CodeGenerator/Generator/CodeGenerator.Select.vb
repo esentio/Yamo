@@ -50,7 +50,6 @@
 
       builder.Indent().AppendLine("Public Function SelectCount() As Int32").PushIndent()
       builder.Indent().AppendLine("Me.Builder.AddSelectCount()")
-      ' TODO: inline variable
       builder.Indent().AppendLine("Dim query = Me.Builder.CreateQuery()")
       builder.Indent().AppendLine("Return Me.Executor.QueryFirstOrDefault(Of Int32)(query)").PopIndent()
       builder.Indent().AppendLine("End Function")

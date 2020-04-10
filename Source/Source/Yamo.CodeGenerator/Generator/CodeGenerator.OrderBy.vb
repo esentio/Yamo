@@ -99,7 +99,6 @@
     End Sub
 
     Protected Sub GenerateInternalOrderBy(builder As CodeBuilder, entityCount As Int32)
-      ' TODO: SIP - simplify?
       If entityCount = 1 Then
         Dim comment = "Adds ORDER BY clause."
         Dim typeParams = {"TKey"}

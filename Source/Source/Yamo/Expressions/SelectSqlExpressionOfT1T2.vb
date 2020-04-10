@@ -49,7 +49,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <returns></returns>
     Public Function Join(Of TJoined)(predicate As Expression(Of Func(Of T1, T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
-      Return InternalJoin(Of TJoined)(JoinType.Inner, predicate, Nothing)
+      Return InternalJoin(Of TJoined)(JoinType.Inner, predicate, {0, 1, 2})
     End Function
 
     ''' <summary>
@@ -89,7 +89,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <returns></returns>
     Public Function LeftJoin(Of TJoined)(predicate As Expression(Of Func(Of T1, T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
-      Return InternalJoin(Of TJoined)(JoinType.LeftOuter, predicate, Nothing)
+      Return InternalJoin(Of TJoined)(JoinType.LeftOuter, predicate, {0, 1, 2})
     End Function
 
     ''' <summary>
@@ -129,7 +129,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <returns></returns>
     Public Function RightJoin(Of TJoined)(predicate As Expression(Of Func(Of T1, T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
-      Return InternalJoin(Of TJoined)(JoinType.RightOuter, predicate, Nothing)
+      Return InternalJoin(Of TJoined)(JoinType.RightOuter, predicate, {0, 1, 2})
     End Function
 
     ''' <summary>
@@ -169,7 +169,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <returns></returns>
     Public Function FullJoin(Of TJoined)(predicate As Expression(Of Func(Of T1, T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
-      Return InternalJoin(Of TJoined)(JoinType.FullOuter, predicate, Nothing)
+      Return InternalJoin(Of TJoined)(JoinType.FullOuter, predicate, {0, 1, 2})
     End Function
 
     ''' <summary>
