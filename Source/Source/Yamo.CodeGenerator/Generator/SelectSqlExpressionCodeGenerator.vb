@@ -7,8 +7,8 @@
       MyBase.New(indentation, maxEntityCount, outputFolder)
     End Sub
 
-    Protected Overrides Function GetFilename(entityCount As Int32) As String
-      Return $"SelectSqlExpression{GetGenericsSuffixForFilename(entityCount)}.vb"
+    Protected Overrides Function GetClassName() As String
+      Return "SelectSqlExpression"
     End Function
 
     Protected Overrides Sub Generate(builder As CodeBuilder, entityCount As Int32)
@@ -33,7 +33,7 @@
       End If
       AddComment(builder, comment, typeParams:=typeParams)
 
-      builder.Indent().AppendLine($"Public Class SelectSqlExpression{GetGenericOfDefinition(entityCount)}").PushIndent()
+      builder.Indent().AppendLine($"Public Class {GetFullClassName(entityCount)}").PushIndent()
       builder.Indent().AppendLine("Inherits SelectSqlExpressionBase")
       builder.AppendLine()
       GenerateConstructor(builder, entityCount)
@@ -66,7 +66,7 @@
 
     Private Sub GenerateConstructor(builder As CodeBuilder, entityCount As Int32)
       If entityCount = 1 Then
-        Dim comment = "Creates new instance of <see cref=""SelectSqlExpression(Of T)""/>."
+        Dim comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
         Dim params = {"context"}
         AddComment(builder, comment, params:=params)
 
@@ -75,7 +75,7 @@
         builder.Indent().AppendLine("Me.Builder.SetMainTable(Of T)()").PopIndent()
         builder.Indent().AppendLine("End Sub")
       Else
-        Dim comment = $"Creates new instance of <see cref=""SelectSqlExpression{GetGenericOfDefinition(entityCount)}""/>."
+        Dim comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
         Dim params = {"builder", "executor"}
         AddComment(builder, comment, params:=params)
 

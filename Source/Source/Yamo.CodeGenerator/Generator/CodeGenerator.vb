@@ -39,7 +39,15 @@ Namespace Generator
       CreateFile(filename, builder.ToString())
     End Sub
 
-    Protected MustOverride Function GetFilename(entityCount As Int32) As String
+    Protected MustOverride Function GetClassName() As String
+
+    Protected Overridable Function GetFullClassName(entityCount As Int32) As String
+      Return GetClassName() & GetGenericOfDefinition(entityCount)
+    End Function
+
+    Protected Overridable Function GetFilename(entityCount As Int32) As String
+      Return GetClassName() & GetGenericsSuffixForFilename(entityCount) & ".vb"
+    End Function
 
     Protected MustOverride Sub Generate(builder As CodeBuilder, entityCount As Int32)
 

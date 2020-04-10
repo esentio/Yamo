@@ -7,8 +7,8 @@
       MyBase.New(indentation, maxEntityCount, outputFolder)
     End Sub
 
-    Protected Overrides Function GetFilename(entityCount As Int32) As String
-      Return $"HavingSelectSqlExpression{GetGenericsSuffixForFilename(entityCount)}.vb"
+    Protected Overrides Function GetClassName() As String
+      Return "HavingSelectSqlExpression"
     End Function
 
     Protected Overrides Sub Generate(builder As CodeBuilder, entityCount As Int32)
@@ -23,7 +23,7 @@
       Dim typeParams = GetGenericNames(entityCount)
       AddComment(builder, comment, typeParams:=typeParams)
 
-      builder.Indent().AppendLine($"Public Class HavingSelectSqlExpression{GetGenericOfDefinition(entityCount)}").PushIndent()
+      builder.Indent().AppendLine($"Public Class {GetFullClassName(entityCount)}").PushIndent()
       builder.Indent().AppendLine("Inherits SelectSqlExpressionBase")
       builder.AppendLine()
       GenerateConstructor(builder, entityCount)
@@ -49,7 +49,7 @@
     Private Sub GenerateConstructor(builder As CodeBuilder, entityCount As Int32)
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      Dim comment = $"Creates new instance of <see cref=""HavingSelectSqlExpression(Of {generics})""/>."
+      Dim comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
       Dim params = {"builder", "executor"}
       AddComment(builder, comment, params:=params)
 
