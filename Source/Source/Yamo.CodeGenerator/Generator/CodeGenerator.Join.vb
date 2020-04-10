@@ -240,7 +240,7 @@
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
       builder.Indent().AppendLine($"Public Function CrossJoin(Of TJoined)() As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
-      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.CrossJoin, Nothing, Nothing)").PopIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.CrossJoin, Nothing, {0, 1})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
 

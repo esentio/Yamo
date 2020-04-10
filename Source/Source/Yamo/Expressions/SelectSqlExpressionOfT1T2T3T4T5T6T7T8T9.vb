@@ -75,7 +75,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <returns></returns>
     Public Function CrossJoin(Of TJoined)() As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, TJoined)
-      Return InternalJoin(Of TJoined)(JoinType.CrossJoin, Nothing, Nothing)
+      Return InternalJoin(Of TJoined)(JoinType.CrossJoin, Nothing, {0, 1})
     End Function
 
     ''' <summary>
