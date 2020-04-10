@@ -24,9 +24,9 @@ Namespace Expressions
     ''' Adds DISTINCT clause.
     ''' </summary>
     ''' <returns></returns>
-    Public Function Distinct() As CustomDistinctSqlExpression(Of T)
+    Public Function Distinct() As CustomDistinctSelectSqlExpression(Of T)
       Me.Builder.AddDistinct()
-      Return New CustomDistinctSqlExpression(Of T)(Me.Builder, Me.Executor)
+      Return New CustomDistinctSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
     End Function
 
     ''' <summary>

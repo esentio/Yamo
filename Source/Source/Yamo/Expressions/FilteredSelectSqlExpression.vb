@@ -88,7 +88,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
-      Return InternalOrderBy(keySelector, True)
+      Return InternalOrderBy(Of TKey)(keySelector, True)
     End Function
 
     ''' <summary>
@@ -98,7 +98,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
-      Return InternalOrderBy(keySelector, False)
+      Return InternalOrderBy(Of TKey)(keySelector, False)
     End Function
 
     ''' <summary>
@@ -160,15 +160,6 @@ Namespace Expressions
       Me.Builder.AddSelectCount()
       Dim query = Me.Builder.CreateQuery()
       Return Me.Executor.QueryFirstOrDefault(Of Int32)(query)
-    End Function
-
-    ''' <summary>
-    ''' Executes SQL query and returns first record or a default value.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function FirstOrDefault() As T
-      Dim query = Me.Builder.CreateQuery()
-      Return Me.Executor.ReadFirstOrDefault(Of T)(query)
     End Function
 
     ''' <summary>

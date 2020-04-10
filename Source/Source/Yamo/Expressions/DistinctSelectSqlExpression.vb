@@ -8,11 +8,11 @@ Namespace Expressions
   ''' Represents DISTINCT clause in SQL SELECT statement.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
-  Public Class CustomDistinctSqlExpression(Of T)
+  Public Class DistinctSelectSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
 
     ''' <summary>
-    ''' Creates new instance of <see cref="CustomDistinctSqlExpression(Of T)"/>.
+    ''' Creates new instance of <see cref="DistinctSelectSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="builder"></param>
     ''' <param name="executor"></param>
@@ -26,7 +26,7 @@ Namespace Expressions
     ''' <returns></returns>
     Public Function ToList() As List(Of T)
       Dim query = Me.Builder.CreateQuery()
-      Return Me.Executor.ReadCustomList(Of T)(query)
+      Return Me.Executor.ReadList(Of T)(query)
     End Function
 
     ''' <summary>
@@ -35,7 +35,7 @@ Namespace Expressions
     ''' <returns></returns>
     Public Function FirstOrDefault() As T
       Dim query = Me.Builder.CreateQuery()
-      Return Me.Executor.ReadCustomFirstOrDefault(Of T)(query)
+      Return Me.Executor.ReadFirstOrDefault(Of T)(query)
     End Function
 
   End Class
