@@ -35,6 +35,9 @@
       GenerateDistinct(builder, entityCount)
       builder.AppendLine()
 
+      GenerateIf(builder, entityCount)
+      builder.AppendLine()
+
       GenerateToList(builder, entityCount)
       builder.AppendLine()
 

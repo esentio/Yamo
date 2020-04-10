@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Tests\QueryTests.vb" />
     <Compile Include="Tests\SelectDistinctTests.vb" />
+    <Compile Include="Tests\SelectWithConditionTests.vb" />
     <Compile Include="Tests\SelectWithLimitTests.vb" />
     <Compile Include="UnitTestDbContextOptionsExtensions.vb" />
     <Compile Include="UnitTestDialectProvider.vb" />

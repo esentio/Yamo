@@ -626,5 +626,13 @@ Namespace Expressions.Builders
       Next
     End Sub
 
+    Public Sub StartConditionalMode()
+      ' TODO: SIP - implement
+    End Sub
+
+    Public Sub EndConditionalMode()
+      ' TODO: SIP - implement
+    End Sub
+
   End Class
 End Namespace

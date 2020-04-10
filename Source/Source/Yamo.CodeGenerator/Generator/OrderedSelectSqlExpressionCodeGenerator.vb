@@ -38,6 +38,9 @@
       GenerateSelect(builder, entityCount)
       builder.AppendLine()
 
+      GenerateIf(builder, entityCount)
+      builder.AppendLine()
+
       builder.PopIndent()
       builder.Indent().AppendLine($"End Class").PopIndent()
       builder.Indent().AppendLine("End Namespace")

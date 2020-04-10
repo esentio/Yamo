@@ -165,6 +165,30 @@ Namespace Expressions
     End Function
 
     ''' <summary>
+    ''' Conditionally builds the expression.
+    ''' </summary>
+    ''' <typeparam name="TResult"></typeparam>
+    ''' <param name="condition"></param>
+    ''' <param name="[then]"></param>
+    ''' <param name="otherwise"></param>
+    ''' <returns></returns>
+    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6), TResult), Optional otherwise As Func(Of SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6), TResult) = Nothing) As TResult
+      Dim result As TResult
+
+      If condition Then
+        result = [then].Invoke(Me)
+      ElseIf otherwise Is Nothing Then
+        Me.Builder.StartConditionalMode()
+        result = [then].Invoke(Me)
+        Me.Builder.EndConditionalMode()
+      Else
+        result = otherwise.Invoke(Me)
+      End If
+
+      Return result
+    End Function
+
+    ''' <summary>
     ''' Executes SQL query and returns list of records.
     ''' </summary>
     ''' <returns></returns>
