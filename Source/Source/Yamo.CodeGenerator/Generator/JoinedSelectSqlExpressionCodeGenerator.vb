@@ -32,7 +32,7 @@
       GenerateAs(builder, entityCount)
       builder.AppendLine()
 
-      GenerateIf(builder, entityCount)
+      GenerateIf(builder, entityCount, True)
       builder.AppendLine()
 
       builder.PopIndent()

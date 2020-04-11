@@ -55,7 +55,7 @@ Namespace Expressions
     ''' <param name="[then]"></param>
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
-    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8), TResult), Optional otherwise As Func(Of JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8), TResult) = Nothing) As TResult
+    Public Overloads Function [If](Of TResult)(condition As Boolean, [then] As Func(Of JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8), TResult), Optional otherwise As Func(Of JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8), TResult) = Nothing) As TResult
       Dim result As TResult
 
       If condition Then
