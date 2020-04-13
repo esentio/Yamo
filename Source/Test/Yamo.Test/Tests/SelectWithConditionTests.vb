@@ -5,28 +5,17 @@ Namespace Tests
   Public MustInherit Class SelectWithConditionTests
     Inherits BaseIntegrationTests
 
-    ' TODO: SIP - implement tests for:
-    ' ! Join (also with usage of affected entity in select, where, etc.)
-    ' × As
-    ' × Where
-    ' × And (after where)
-    ' × GroupBy
-    ' × Having
-    ' × And (after having)
-    ' × OrderBy
-    ' × OrderByDescending
-    ' × ThenBy
-    ' × ThenByDescending
-    ' × Limit
-    ' × Custom select
-    ' × Exclude column
-    ' × Exclude table
-    ' × Chained expressions
-    ' - Nested ifs
-
     Protected Const English As String = "en"
 
-    Protected Const German As String = "ger"
+    Protected Const German As String = "de"
+
+    Protected Const French As String = "fr"
+
+    Protected Const Italian As String = "it"
+
+    Protected Const Spanish As String = "es"
+
+    Protected Const Norwegian As String = "no"
 
     <TestMethod()>
     Public Overridable Sub SelectWithConditionalInnerJoin()
@@ -38,11 +27,11 @@ Namespace Tests
       Dim label2En = Me.ModelFactory.CreateLabel("", 2, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
 
-      Dim label1Ger = Me.ModelFactory.CreateLabel("", 1, German)
-      Dim label2Ger = Me.ModelFactory.CreateLabel("", 2, German)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label1De = Me.ModelFactory.CreateLabel("", 1, German)
+      Dim label2De = Me.ModelFactory.CreateLabel("", 2, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1Ger, label2Ger, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1De, label2De, label3De)
 
       ' condition is true, apply true part
       Using db = CreateDbContext()
@@ -97,9 +86,9 @@ Namespace Tests
                         SelectAll().ToList()
 
         CollectionAssert.AreEqual({article1, article2, article3}, result)
-        Assert.AreEqual(label1Ger, result(0).Label)
-        Assert.AreEqual(label2Ger, result(1).Label)
-        Assert.AreEqual(label3Ger, result(2).Label)
+        Assert.AreEqual(label1De, result(0).Label)
+        Assert.AreEqual(label2De, result(1).Label)
+        Assert.AreEqual(label3De, result(2).Label)
       End Using
     End Sub
 
@@ -113,11 +102,11 @@ Namespace Tests
       Dim label2En = Me.ModelFactory.CreateLabel("", 2, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
 
-      Dim label1Ger = Me.ModelFactory.CreateLabel("", 1, German)
-      Dim label2Ger = Me.ModelFactory.CreateLabel("", 2, German)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label1De = Me.ModelFactory.CreateLabel("", 1, German)
+      Dim label2De = Me.ModelFactory.CreateLabel("", 2, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1Ger, label2Ger, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1De, label2De, label3De)
 
       ' condition is true, apply true part
       Using db = CreateDbContext()
@@ -172,9 +161,9 @@ Namespace Tests
                         SelectAll().ToList()
 
         CollectionAssert.AreEqual({article1, article2, article3}, result)
-        Assert.AreEqual(label1Ger, result(0).Label)
-        Assert.AreEqual(label2Ger, result(1).Label)
-        Assert.AreEqual(label3Ger, result(2).Label)
+        Assert.AreEqual(label1De, result(0).Label)
+        Assert.AreEqual(label2De, result(1).Label)
+        Assert.AreEqual(label3De, result(2).Label)
       End Using
     End Sub
 
@@ -188,11 +177,11 @@ Namespace Tests
       Dim label2En = Me.ModelFactory.CreateLabel("", 2, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
 
-      Dim label1Ger = Me.ModelFactory.CreateLabel("", 1, German)
-      Dim label2Ger = Me.ModelFactory.CreateLabel("", 2, German)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label1De = Me.ModelFactory.CreateLabel("", 1, German)
+      Dim label2De = Me.ModelFactory.CreateLabel("", 2, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1Ger, label2Ger, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1De, label2De, label3De)
 
       ' condition is true, apply true part
       Using db = CreateDbContext()
@@ -247,9 +236,9 @@ Namespace Tests
                         SelectAll().ToList()
 
         CollectionAssert.AreEqual({article1, article2, article3}, result)
-        Assert.AreEqual(label1Ger, result(0).Label)
-        Assert.AreEqual(label2Ger, result(1).Label)
-        Assert.AreEqual(label3Ger, result(2).Label)
+        Assert.AreEqual(label1De, result(0).Label)
+        Assert.AreEqual(label2De, result(1).Label)
+        Assert.AreEqual(label3De, result(2).Label)
       End Using
     End Sub
 
@@ -263,11 +252,11 @@ Namespace Tests
       Dim label2En = Me.ModelFactory.CreateLabel("", 2, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
 
-      Dim label1Ger = Me.ModelFactory.CreateLabel("", 1, German)
-      Dim label2Ger = Me.ModelFactory.CreateLabel("", 2, German)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label1De = Me.ModelFactory.CreateLabel("", 1, German)
+      Dim label2De = Me.ModelFactory.CreateLabel("", 2, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1Ger, label2Ger, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1De, label2De, label3De)
 
       ' condition is true, apply true part
       Using db = CreateDbContext()
@@ -322,9 +311,9 @@ Namespace Tests
                         SelectAll().ToList()
 
         CollectionAssert.AreEqual({article1, article2, article3}, result)
-        Assert.AreEqual(label1Ger, result(0).Label)
-        Assert.AreEqual(label2Ger, result(1).Label)
-        Assert.AreEqual(label3Ger, result(2).Label)
+        Assert.AreEqual(label1De, result(0).Label)
+        Assert.AreEqual(label2De, result(1).Label)
+        Assert.AreEqual(label3De, result(2).Label)
       End Using
     End Sub
 
@@ -480,11 +469,11 @@ Namespace Tests
       Dim label2En = Me.ModelFactory.CreateLabel("", 2, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
 
-      Dim label1Ger = Me.ModelFactory.CreateLabel("", 1, German)
-      Dim label2Ger = Me.ModelFactory.CreateLabel("", 2, German)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label1De = Me.ModelFactory.CreateLabel("", 1, German)
+      Dim label2De = Me.ModelFactory.CreateLabel("", 2, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1Ger, label2Ger, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1De, label2De, label3De)
 
       ' condition is true, apply true part
       Using db = CreateDbContext()
@@ -495,11 +484,11 @@ Namespace Tests
                         SelectAll().ToList()
 
         CollectionAssert.AreEqual({article1, article1, article2, article2, article3, article3}, result)
-        Assert.AreEqual(label1Ger, result(0).Label)
+        Assert.AreEqual(label1De, result(0).Label)
         Assert.AreEqual(label1En, result(1).Label)
-        Assert.AreEqual(label2Ger, result(2).Label)
+        Assert.AreEqual(label2De, result(2).Label)
         Assert.AreEqual(label2En, result(3).Label)
-        Assert.AreEqual(label3Ger, result(4).Label)
+        Assert.AreEqual(label3De, result(4).Label)
         Assert.AreEqual(label3En, result(5).Label)
       End Using
 
@@ -559,9 +548,9 @@ Namespace Tests
                         SelectAll().ToList()
 
         CollectionAssert.AreEqual({article3, article2, article1}, result)
-        Assert.AreEqual(label3Ger, result(0).Label)
-        Assert.AreEqual(label2Ger, result(1).Label)
-        Assert.AreEqual(label1Ger, result(2).Label)
+        Assert.AreEqual(label3De, result(0).Label)
+        Assert.AreEqual(label2De, result(1).Label)
+        Assert.AreEqual(label1De, result(2).Label)
       End Using
     End Sub
 
@@ -575,11 +564,11 @@ Namespace Tests
       Dim label2En = Me.ModelFactory.CreateLabel("", 2, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
 
-      Dim label1Ger = Me.ModelFactory.CreateLabel("", 1, German)
-      Dim label2Ger = Me.ModelFactory.CreateLabel("", 2, German)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label1De = Me.ModelFactory.CreateLabel("", 1, German)
+      Dim label2De = Me.ModelFactory.CreateLabel("", 2, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1Ger, label2Ger, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1De, label2De, label3De)
 
       ' condition is true, apply true part
       Using db = CreateDbContext()
@@ -658,14 +647,14 @@ Namespace Tests
 
         Assert.AreEqual(3, result.Count)
         Assert.AreEqual(article1, result(0).Article)
-        Assert.AreEqual(label1Ger, result(0).Label)
-        Assert.AreEqual(label1Ger.Description, result(0).Description)
+        Assert.AreEqual(label1De, result(0).Label)
+        Assert.AreEqual(label1De.Description, result(0).Description)
         Assert.AreEqual(article2, result(1).Article)
-        Assert.AreEqual(label2Ger, result(1).Label)
-        Assert.AreEqual(label2Ger.Description, result(1).Description)
+        Assert.AreEqual(label2De, result(1).Label)
+        Assert.AreEqual(label2De.Description, result(1).Description)
         Assert.AreEqual(article3, result(2).Article)
-        Assert.AreEqual(label3Ger, result(2).Label)
-        Assert.AreEqual(label3Ger.Description, result(2).Description)
+        Assert.AreEqual(label3De, result(2).Label)
+        Assert.AreEqual(label3De.Description, result(2).Description)
       End Using
     End Sub
 
@@ -1733,11 +1722,11 @@ Namespace Tests
       Dim label2En = Me.ModelFactory.CreateLabel("", 2, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
 
-      Dim label1Ger = Me.ModelFactory.CreateLabel("", 1, German)
-      Dim label2Ger = Me.ModelFactory.CreateLabel("", 2, German)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label1De = Me.ModelFactory.CreateLabel("", 1, German)
+      Dim label2De = Me.ModelFactory.CreateLabel("", 2, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1Ger, label2Ger, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1De, label2De, label3De)
 
       ' condition is true, apply true part
       Using db = CreateDbContext()
@@ -1816,9 +1805,829 @@ Namespace Tests
                         SelectAll().ToList()
 
         CollectionAssert.AreEqual({article3, article2, article1}, result)
-        Assert.AreEqual(label3Ger, result(0).Label)
-        Assert.AreEqual(label2Ger, result(1).Label)
-        Assert.AreEqual(label1Ger, result(2).Label)
+        Assert.AreEqual(label3De, result(0).Label)
+        Assert.AreEqual(label2De, result(1).Label)
+        Assert.AreEqual(label1De, result(2).Label)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithNestedConditionalParts()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 0
+      items(1).IntColumn = 1
+      items(2).IntColumn = 2
+      items(3).IntColumn = 3
+      items(4).IntColumn = 4
+
+      InsertItems(items)
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(True, Function(exp2) exp2.And(Function(x) 2 < x.IntColumn))
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True,
+                           Function(exp)
+                             ' condition is false, apply nothing
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(False, Function(exp2) exp2.And(Function(x) 2 < x.IntColumn))
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(True,
+                                           Function(exp2) exp2.And(Function(x) 2 < x.IntColumn),
+                                           Function(exp2) exp2.And(Function(x) 3 < x.IntColumn)
+                                        )
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True,
+                           Function(exp)
+                             ' condition is false, apply false part
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(False,
+                                           Function(exp2) exp2.And(Function(x) 2 < x.IntColumn),
+                                           Function(exp2) exp2.And(Function(x) 3 < x.IntColumn)
+                                        )
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(4)}, result)
+      End Using
+
+      ' condition is false, apply nothing
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(False,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(True, Function(exp2) exp2.And(Function(x) 2 < x.IntColumn))
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(False,
+                           Function(exp)
+                             ' condition is false, apply nothing
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(False, Function(exp2) exp2.And(Function(x) 2 < x.IntColumn))
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(False,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(True,
+                                           Function(exp2) exp2.And(Function(x) 2 < x.IntColumn),
+                                           Function(exp2) exp2.And(Function(x) 3 < x.IntColumn)
+                                        )
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(False,
+                           Function(exp)
+                             ' condition is false, apply false part
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(False,
+                                           Function(exp2) exp2.And(Function(x) 2 < x.IntColumn),
+                                           Function(exp2) exp2.And(Function(x) 3 < x.IntColumn)
+                                        )
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2), items(3), items(4)}, result)
+      End Using
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                       If(True, Function(exp2) exp2.And(Function(x) 2 < x.IntColumn))
+                           End Function,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Where(Function(x) x.IntColumn < 4).
+                                        If(True, Function(exp2) exp2.And(Function(x) x.IntColumn < 3))
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True,
+                           Function(exp)
+                             ' condition is false, apply nothing
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(False, Function(exp2) exp2.And(Function(x) 2 < x.IntColumn))
+                           End Function,
+                           Function(exp)
+                             ' condition is false, apply nothing
+                             Return exp.Where(Function(x) x.IntColumn < 4).
+                                        If(False, Function(exp2) exp2.And(Function(x) x.IntColumn < 3))
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(True,
+                                           Function(exp2) exp2.And(Function(x) 2 < x.IntColumn),
+                                           Function(exp2) exp2.And(Function(x) 3 < x.IntColumn)
+                                        )
+                           End Function,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Where(Function(x) x.IntColumn < 4).
+                                        If(True,
+                                           Function(exp2) exp2.And(Function(x) x.IntColumn < 3),
+                                           Function(exp2) exp2.And(Function(x) x.IntColumn < 2)
+                                        )
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True,
+                           Function(exp)
+                             ' condition is false, apply false part
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(False,
+                                           Function(exp2) exp2.And(Function(x) 2 < x.IntColumn),
+                                           Function(exp2) exp2.And(Function(x) 3 < x.IntColumn)
+                                        )
+                           End Function,
+                           Function(exp)
+                             ' condition is false, apply false part
+                             Return exp.Where(Function(x) x.IntColumn < 4).
+                                        If(False,
+                                           Function(exp2) exp2.And(Function(x) x.IntColumn < 3),
+                                           Function(exp2) exp2.And(Function(x) x.IntColumn < 2)
+                                        )
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(4)}, result)
+      End Using
+
+      ' condition is false, apply false part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(False,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                       If(True, Function(exp2) exp2.And(Function(x) 2 < x.IntColumn))
+                           End Function,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Where(Function(x) x.IntColumn < 4).
+                                        If(True, Function(exp2) exp2.And(Function(x) x.IntColumn < 3))
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(False,
+                           Function(exp)
+                             ' condition is false, apply nothing
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(False, Function(exp2) exp2.And(Function(x) 2 < x.IntColumn))
+                           End Function,
+                           Function(exp)
+                             ' condition is false, apply nothing
+                             Return exp.Where(Function(x) x.IntColumn < 4).
+                                        If(False, Function(exp2) exp2.And(Function(x) x.IntColumn < 3))
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2), items(3)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(False,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(True,
+                                           Function(exp2) exp2.And(Function(x) 2 < x.IntColumn),
+                                           Function(exp2) exp2.And(Function(x) 3 < x.IntColumn)
+                                        )
+                           End Function,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Where(Function(x) x.IntColumn < 4).
+                                        If(True,
+                                           Function(exp2) exp2.And(Function(x) x.IntColumn < 3),
+                                           Function(exp2) exp2.And(Function(x) x.IntColumn < 2)
+                                        )
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(False,
+                           Function(exp)
+                             ' condition is false, apply false part
+                             Return exp.Where(Function(x) 1 < x.IntColumn).
+                                        If(False,
+                                           Function(exp2) exp2.And(Function(x) 2 < x.IntColumn),
+                                           Function(exp2) exp2.And(Function(x) 3 < x.IntColumn)
+                                        )
+                           End Function,
+                           Function(exp)
+                             ' condition is false, apply false part
+                             Return exp.Where(Function(x) x.IntColumn < 4).
+                                        If(False,
+                                           Function(exp2) exp2.And(Function(x) x.IntColumn < 3),
+                                           Function(exp2) exp2.And(Function(x) x.IntColumn < 2)
+                                        )
+                           End Function
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent({items(0), items(1)}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithNestedJoinConditionalParts()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
+      Dim label2En = Me.ModelFactory.CreateLabel("", 2, English)
+      Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
+
+      Dim label1De = Me.ModelFactory.CreateLabel("", 1, German)
+      Dim label2De = Me.ModelFactory.CreateLabel("", 2, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
+
+      Dim label1Fr = Me.ModelFactory.CreateLabel("", 1, French)
+      Dim label2Fr = Me.ModelFactory.CreateLabel("", 2, French)
+      Dim label3Fr = Me.ModelFactory.CreateLabel("", 3, French)
+
+      Dim label1It = Me.ModelFactory.CreateLabel("", 1, Italian)
+      Dim label2It = Me.ModelFactory.CreateLabel("", 2, Italian)
+      Dim label3It = Me.ModelFactory.CreateLabel("", 3, Italian)
+
+      Dim label1Es = Me.ModelFactory.CreateLabel("", 1, Spanish)
+      Dim label2Es = Me.ModelFactory.CreateLabel("", 2, Spanish)
+      Dim label3Es = Me.ModelFactory.CreateLabel("", 3, Spanish)
+
+      Dim label1No = Me.ModelFactory.CreateLabel("", 1, Norwegian)
+      Dim label2No = Me.ModelFactory.CreateLabel("", 2, Norwegian)
+      Dim label3No = Me.ModelFactory.CreateLabel("", 3, Norwegian)
+
+      InsertItems(article1, article2, article3)
+      InsertItems(label1En, label2En, label3En)
+      InsertItems(label1De, label2De, label3De)
+      InsertItems(label1Fr, label2Fr, label3Fr)
+      InsertItems(label1It, label2It, label3It)
+      InsertItems(label1Es, label2Es, label3Es)
+      InsertItems(label1No, label2No, label3No)
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(True,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(True, Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1))
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label2En, result(1).Label)
+        Assert.AreEqual(label3En, result(2).Label)
+        Assert.AreEqual(label1De, result(0).AlternativeLabel1)
+        Assert.AreEqual(label2De, result(1).AlternativeLabel1)
+        Assert.AreEqual(label3De, result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(True,
+                           Function(exp)
+                             ' condition is false, apply nothing
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(False, Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1))
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label2En, result(1).Label)
+        Assert.AreEqual(label3En, result(2).Label)
+        Assert.IsNull(result(0).AlternativeLabel1)
+        Assert.IsNull(result(1).AlternativeLabel1)
+        Assert.IsNull(result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(True,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(True,
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1),
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = French).As(Function(j) j.T1.AlternativeLabel2)
+                                        )
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label2En, result(1).Label)
+        Assert.AreEqual(label3En, result(2).Label)
+        Assert.AreEqual(label1De, result(0).AlternativeLabel1)
+        Assert.AreEqual(label2De, result(1).AlternativeLabel1)
+        Assert.AreEqual(label3De, result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(True,
+                           Function(exp)
+                             ' condition is false, apply false part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(False,
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1),
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = French).As(Function(j) j.T1.AlternativeLabel2)
+                                        )
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label2En, result(1).Label)
+        Assert.AreEqual(label3En, result(2).Label)
+        Assert.IsNull(result(0).AlternativeLabel1)
+        Assert.IsNull(result(1).AlternativeLabel1)
+        Assert.IsNull(result(2).AlternativeLabel1)
+        Assert.AreEqual(label1Fr, result(0).AlternativeLabel2)
+        Assert.AreEqual(label2Fr, result(1).AlternativeLabel2)
+        Assert.AreEqual(label3Fr, result(2).AlternativeLabel2)
+      End Using
+
+      ' condition is false, apply nothing
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(False,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(True, Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1))
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.IsNull(result(0).Label)
+        Assert.IsNull(result(1).Label)
+        Assert.IsNull(result(2).Label)
+        Assert.IsNull(result(0).AlternativeLabel1)
+        Assert.IsNull(result(1).AlternativeLabel1)
+        Assert.IsNull(result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(False,
+                           Function(exp)
+                             ' condition is false, apply nothing
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(False, Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1))
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.IsNull(result(0).Label)
+        Assert.IsNull(result(1).Label)
+        Assert.IsNull(result(2).Label)
+        Assert.IsNull(result(0).AlternativeLabel1)
+        Assert.IsNull(result(1).AlternativeLabel1)
+        Assert.IsNull(result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(False,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(True,
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1),
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = French).As(Function(j) j.T1.AlternativeLabel2)
+                                        )
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.IsNull(result(0).Label)
+        Assert.IsNull(result(1).Label)
+        Assert.IsNull(result(2).Label)
+        Assert.IsNull(result(0).AlternativeLabel1)
+        Assert.IsNull(result(1).AlternativeLabel1)
+        Assert.IsNull(result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(False,
+                           Function(exp)
+                             ' condition is false, apply false part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(False,
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1),
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = French).As(Function(j) j.T1.AlternativeLabel2)
+                                        )
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.IsNull(result(0).Label)
+        Assert.IsNull(result(1).Label)
+        Assert.IsNull(result(2).Label)
+        Assert.IsNull(result(0).AlternativeLabel1)
+        Assert.IsNull(result(1).AlternativeLabel1)
+        Assert.IsNull(result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(True,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(True, Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1))
+                           End Function,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = Italian).
+                                        If(True, Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = Spanish).As(Function(j) j.T1.AlternativeLabel1))
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label2En, result(1).Label)
+        Assert.AreEqual(label3En, result(2).Label)
+        Assert.AreEqual(label1De, result(0).AlternativeLabel1)
+        Assert.AreEqual(label2De, result(1).AlternativeLabel1)
+        Assert.AreEqual(label3De, result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(True,
+                           Function(exp)
+                             ' condition is false, apply nothing
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(False, Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1))
+                           End Function,
+                           Function(exp)
+                             ' condition is false, apply nothing
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = Italian).
+                                        If(False, Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = Spanish).As(Function(j) j.T1.AlternativeLabel1))
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label2En, result(1).Label)
+        Assert.AreEqual(label3En, result(2).Label)
+        Assert.IsNull(result(0).AlternativeLabel1)
+        Assert.IsNull(result(1).AlternativeLabel1)
+        Assert.IsNull(result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(True,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(True,
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1),
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = French).As(Function(j) j.T1.AlternativeLabel2)
+                                        )
+                           End Function,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = Italian).
+                                        If(True,
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = Spanish).As(Function(j) j.T1.AlternativeLabel1),
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = Norwegian).As(Function(j) j.T1.AlternativeLabel2)
+                                        )
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label2En, result(1).Label)
+        Assert.AreEqual(label3En, result(2).Label)
+        Assert.AreEqual(label1De, result(0).AlternativeLabel1)
+        Assert.AreEqual(label2De, result(1).AlternativeLabel1)
+        Assert.AreEqual(label3De, result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(True,
+                           Function(exp)
+                             ' condition is false, apply false part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(False,
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1),
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = French).As(Function(j) j.T1.AlternativeLabel2)
+                                        )
+                           End Function,
+                           Function(exp)
+                             ' condition is false, apply false part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = Italian).
+                                        If(False,
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = Spanish).As(Function(j) j.T1.AlternativeLabel1),
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = Norwegian).As(Function(j) j.T1.AlternativeLabel2)
+                                        )
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label2En, result(1).Label)
+        Assert.AreEqual(label3En, result(2).Label)
+        Assert.IsNull(result(0).AlternativeLabel1)
+        Assert.IsNull(result(1).AlternativeLabel1)
+        Assert.IsNull(result(2).AlternativeLabel1)
+        Assert.AreEqual(label1Fr, result(0).AlternativeLabel2)
+        Assert.AreEqual(label2Fr, result(1).AlternativeLabel2)
+        Assert.AreEqual(label3Fr, result(2).AlternativeLabel2)
+      End Using
+
+      ' condition is false, apply false part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(False,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(True, Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1))
+                           End Function,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = Italian).
+                                        If(True, Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = Spanish).As(Function(j) j.T1.AlternativeLabel1))
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1It, result(0).Label)
+        Assert.AreEqual(label2It, result(1).Label)
+        Assert.AreEqual(label3It, result(2).Label)
+        Assert.AreEqual(label1Es, result(0).AlternativeLabel1)
+        Assert.AreEqual(label2Es, result(1).AlternativeLabel1)
+        Assert.AreEqual(label3Es, result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(False,
+                           Function(exp)
+                             ' condition is false, apply nothing
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(False, Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1))
+                           End Function,
+                           Function(exp)
+                             ' condition is false, apply nothing
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = Italian).
+                                        If(False, Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = Spanish).As(Function(j) j.T1.AlternativeLabel1))
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1It, result(0).Label)
+        Assert.AreEqual(label2It, result(1).Label)
+        Assert.AreEqual(label3It, result(2).Label)
+        Assert.IsNull(result(0).AlternativeLabel1)
+        Assert.IsNull(result(1).AlternativeLabel1)
+        Assert.IsNull(result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(False,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(True,
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1),
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = French).As(Function(j) j.T1.AlternativeLabel2)
+                                        )
+                           End Function,
+                           Function(exp)
+                             ' condition is true, apply true part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = Italian).
+                                        If(True,
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = Spanish).As(Function(j) j.T1.AlternativeLabel1),
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = Norwegian).As(Function(j) j.T1.AlternativeLabel2)
+                                        )
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1It, result(0).Label)
+        Assert.AreEqual(label2It, result(1).Label)
+        Assert.AreEqual(label3It, result(2).Label)
+        Assert.AreEqual(label1Es, result(0).AlternativeLabel1)
+        Assert.AreEqual(label2Es, result(1).AlternativeLabel1)
+        Assert.AreEqual(label3Es, result(2).AlternativeLabel1)
+        Assert.IsNull(result(0).AlternativeLabel2)
+        Assert.IsNull(result(1).AlternativeLabel2)
+        Assert.IsNull(result(2).AlternativeLabel2)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        If(False,
+                           Function(exp)
+                             ' condition is false, apply false part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                                        If(False,
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = German).As(Function(j) j.T1.AlternativeLabel1),
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = French).As(Function(j) j.T1.AlternativeLabel2)
+                                        )
+                           End Function,
+                           Function(exp)
+                             ' condition is false, apply false part
+                             Return exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = Italian).
+                                        If(False,
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = Spanish).As(Function(j) j.T1.AlternativeLabel1),
+                                           Function(exp2) exp2.Join(Of Label)(Function(j) j.T1.Id = j.T3.Id AndAlso j.T3.Language = Norwegian).As(Function(j) j.T1.AlternativeLabel2)
+                                        )
+                           End Function
+                        ).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1It, result(0).Label)
+        Assert.AreEqual(label2It, result(1).Label)
+        Assert.AreEqual(label3It, result(2).Label)
+        Assert.IsNull(result(0).AlternativeLabel1)
+        Assert.IsNull(result(1).AlternativeLabel1)
+        Assert.IsNull(result(2).AlternativeLabel1)
+        Assert.AreEqual(label1No, result(0).AlternativeLabel2)
+        Assert.AreEqual(label2No, result(1).AlternativeLabel2)
+        Assert.AreEqual(label3No, result(2).AlternativeLabel2)
       End Using
     End Sub
 
