@@ -7,7 +7,7 @@ Namespace Tests
 
     Protected Const English As String = "en"
 
-    Protected Const German As String = "ger"
+    Protected Const German As String = "de"
 
     <TestMethod()>
     Public Overridable Sub SelectWithDistinct()
@@ -16,12 +16,12 @@ Namespace Tests
       Dim article3 = Me.ModelFactory.CreateArticle(3)
 
       Dim label1En = Me.ModelFactory.CreateLabel(NameOf(Article), 1, English)
-      Dim label1Ger = Me.ModelFactory.CreateLabel(NameOf(Article), 1, German)
+      Dim label1De = Me.ModelFactory.CreateLabel(NameOf(Article), 1, German)
       Dim label2En = Me.ModelFactory.CreateLabel(NameOf(Article), 2, English)
-      Dim label2Ger = Me.ModelFactory.CreateLabel(NameOf(Article), 2, German)
+      Dim label2De = Me.ModelFactory.CreateLabel(NameOf(Article), 2, German)
       Dim label3En = Me.ModelFactory.CreateLabel(NameOf(Article), 3, English)
 
-      InsertItems(article1, article2, article3, label1En, label1Ger, label2En, label2Ger, label3En)
+      InsertItems(article1, article2, article3, label1En, label1De, label2En, label2De, label3En)
 
       ' distinct doesn't make difference here
       Using db = CreateDbContext()
@@ -93,12 +93,12 @@ Namespace Tests
       Dim article3 = Me.ModelFactory.CreateArticle(3)
 
       Dim label1En = Me.ModelFactory.CreateLabel(NameOf(Article), 1, English)
-      Dim label1Ger = Me.ModelFactory.CreateLabel(NameOf(Article), 1, German)
+      Dim label1De = Me.ModelFactory.CreateLabel(NameOf(Article), 1, German)
       Dim label2En = Me.ModelFactory.CreateLabel(NameOf(Article), 2, English)
-      Dim label2Ger = Me.ModelFactory.CreateLabel(NameOf(Article), 2, German)
+      Dim label2De = Me.ModelFactory.CreateLabel(NameOf(Article), 2, German)
       Dim label3En = Me.ModelFactory.CreateLabel(NameOf(Article), 3, English)
 
-      InsertItems(article1, article2, article3, label1En, label1Ger, label2En, label2Ger, label3En)
+      InsertItems(article1, article2, article3, label1En, label1De, label2En, label2De, label3En)
 
       ' distinct doesn't make difference here
       Using db = CreateDbContext()

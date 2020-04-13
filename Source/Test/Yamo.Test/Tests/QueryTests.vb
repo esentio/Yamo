@@ -7,7 +7,7 @@ Namespace Tests
 
     Protected Const English As String = "en"
 
-    Protected Const German As String = "ger"
+    Protected Const German As String = "de"
 
     <TestMethod()>
     Public Overridable Sub QueryOfGuid()
@@ -700,9 +700,9 @@ Namespace Tests
 
       Dim article1LabelEn = Me.ModelFactory.CreateLabel(NameOf(Article), 1, English)
       Dim article3LabelEn = Me.ModelFactory.CreateLabel(NameOf(Article), 3, English)
-      Dim article3LabelGer = Me.ModelFactory.CreateLabel(NameOf(Article), 3, German)
+      Dim article3LabelDe = Me.ModelFactory.CreateLabel(NameOf(Article), 3, German)
 
-      InsertItems(article1, article2, article3, article1LabelEn, article3LabelEn, article3LabelGer)
+      InsertItems(article1, article2, article3, article1LabelEn, article3LabelEn, article3LabelDe)
 
       Using db = CreateDbContext()
         Dim result1 = db.Query(Of (Article, Int32, Label)?)($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("l")} FROM Article AS a LEFT JOIN Label AS l ON a.Id = l.Id WHERE 1 = 2 ORDER BY a.Id, l.Language")
@@ -713,14 +713,14 @@ Namespace Tests
         Assert.AreEqual((article1, 42, article1LabelEn), result2(0))
         Assert.AreEqual((article2, 42, DirectCast(Nothing, Label)), result2(1))
         Assert.AreEqual((article3, 42, article3LabelEn), result2(2))
-        Assert.AreEqual((article3, 42, article3LabelGer), result2(3))
+        Assert.AreEqual((article3, 42, article3LabelDe), result2(3))
 
         ' selecting same table twice
         Dim result3 = db.Query(Of (Article, Int32, Label, Label))($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("le")}, {Sql.Model.Columns(Of Label)("lg")} FROM Article AS a LEFT JOIN Label AS le ON a.Id = le.Id AND le.Language = {English} LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = {German} ORDER BY a.Id")
         Assert.AreEqual(3, result3.Count)
         Assert.AreEqual((article1, 42, article1LabelEn, DirectCast(Nothing, Label)), result3(0))
         Assert.AreEqual((article2, 42, DirectCast(Nothing, Label), DirectCast(Nothing, Label)), result3(1))
-        Assert.AreEqual((article3, 42, article3LabelEn, article3LabelGer), result3(2))
+        Assert.AreEqual((article3, 42, article3LabelEn, article3LabelDe), result3(2))
       End Using
     End Sub
 

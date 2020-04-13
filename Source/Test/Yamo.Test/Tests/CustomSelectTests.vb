@@ -7,7 +7,7 @@ Namespace Tests
 
     Protected Const English As String = "en"
 
-    Protected Const German As String = "ger"
+    Protected Const German As String = "de"
 
     <TestMethod()>
     Public Overridable Sub CustomSelectOfGuid()
@@ -995,9 +995,9 @@ Namespace Tests
 
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
         ' select entity
@@ -1030,7 +1030,7 @@ Namespace Tests
                          Where(Function(a, l) a.Id = article3.Id).
                          Select(Function(a, l) l).
                          ToList()
-        CollectionAssert.AreEquivalent({label3En, label3Ger}, result4)
+        CollectionAssert.AreEquivalent({label3En, label3De}, result4)
 
         ' select entities, but no row is returned
         Dim result5 = db.From(Of Article).
@@ -1124,9 +1124,9 @@ Namespace Tests
 
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
         Dim result1 = db.From(Of Article).
@@ -1154,13 +1154,13 @@ Namespace Tests
                          LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
                          Select(Function(a, l) l.Id).
                          ToList()
-        CollectionAssert.AreEquivalent({label1En.Id, 0, label3En.Id, label3Ger.Id}, result4)
+        CollectionAssert.AreEquivalent({label1En.Id, 0, label3En.Id, label3De.Id}, result4)
 
         Dim result5 = db.From(Of Article).
                          LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
                          Select(Function(a, l) CType(l.Id, Int32?)).
                          ToList()
-        CollectionAssert.AreEquivalent({New Int32?(label1En.Id), New Int32?(), New Int32?(label3En.Id), New Int32?(label3Ger.Id)}, result5)
+        CollectionAssert.AreEquivalent({New Int32?(label1En.Id), New Int32?(), New Int32?(label3En.Id), New Int32?(label3De.Id)}, result5)
 
         Dim result6 = db.From(Of Article).
                          Where(Function(a) a.Id = -1).
@@ -1260,9 +1260,9 @@ Namespace Tests
 
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
         ' select ValueTuple with 2 entities
@@ -1411,9 +1411,9 @@ Namespace Tests
 
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
         ' select anonymous type with 2 entities
