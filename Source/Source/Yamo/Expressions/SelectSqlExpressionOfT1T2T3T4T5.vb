@@ -784,9 +784,9 @@ Namespace Expressions
       If condition Then
         result = [then].Invoke(Me)
       ElseIf otherwise Is Nothing Then
-        Me.Builder.StartConditionalMode()
+        Me.Builder.StartConditionalIgnoreMode()
         result = [then].Invoke(Me)
-        Me.Builder.EndConditionalMode()
+        Me.Builder.EndConditionalIgnoreMode()
       Else
         result = otherwise.Invoke(Me)
       End If

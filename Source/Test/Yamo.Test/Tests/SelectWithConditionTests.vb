@@ -805,17 +805,12 @@ Namespace Tests
 
       ' condition is false, apply nothing
       Using db = CreateDbContext()
-        Try
-          Dim result = db.From(Of ItemWithAllSupportedValues).
+        Dim result = db.From(Of ItemWithAllSupportedValues).
                         If(False, Function(exp) exp.GroupBy(Function(x) x.Nvarchar50Column)).
                         Select(Function(x) x.Nvarchar50Column).
                         ToList()
 
-          Assert.Fail()
-        Catch ex As NotSupportedException
-        Catch ex As Exception
-          Assert.Fail(ex.Message)
-        End Try
+        CollectionAssert.AreEquivalent({"a", "b", "a", "a", "b"}, result)
       End Using
 
       ' condition is true, apply true part
@@ -1449,6 +1444,86 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub SelectWithConditionalSelectAll()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 1
+      items(1).IntColumn = 2
+      items(2).IntColumn = 3
+      items(3).IntColumn = 4
+      items(4).IntColumn = 5
+
+      InsertItems(items)
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        ' maybe this should be forbidden as well
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        OrderBy(Function(x) x.IntColumn).
+                        If(True, Function(exp) exp.SelectAll()).
+                        ToList()
+
+        CollectionAssert.AreEqual(items, result)
+      End Using
+
+      ' condition is false, apply nothing
+      Using db = CreateDbContext()
+        Try
+          Dim result = db.From(Of ItemWithAllSupportedValues).
+                          OrderBy(Function(x) x.IntColumn).
+                          If(False, Function(exp) exp.SelectAll()).
+                          ToList()
+
+          Assert.Fail()
+        Catch ex As InvalidOperationException
+        Catch ex As Exception
+          Assert.Fail(ex.Message)
+        End Try
+      End Using
+
+      ' condition is true, apply true part
+      ' doesn't make sense for select (unless multiple clauses are chained inside a condition)
+
+      ' condition is false, apply false part
+      ' doesn't make sense for select (unless multiple clauses are chained inside a condition)
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithConditionalSelectCount()
+      Dim items = CreateItems()
+
+      InsertItems(items)
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        ' maybe this should be forbidden as well
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True, Function(exp) exp.SelectCount())
+
+        Assert.AreEqual(5, result)
+      End Using
+
+      ' condition is false, apply nothing
+      Using db = CreateDbContext()
+        Try
+          Dim result = db.From(Of ItemWithAllSupportedValues).
+                          If(False, Function(exp) exp.SelectCount())
+
+          Assert.Fail()
+        Catch ex As InvalidOperationException
+        Catch ex As Exception
+          Assert.Fail(ex.Message)
+        End Try
+      End Using
+
+      ' condition is true, apply true part
+      ' doesn't make sense for select count (unless multiple clauses are chained inside a condition)
+
+      ' condition is false, apply false part
+      ' doesn't make sense for select count (unless multiple clauses are chained inside a condition)
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub SelectWithConditionalCustomSelect()
       Dim items = CreateItems()
 
@@ -1476,6 +1551,7 @@ Namespace Tests
 
       ' condition is true, apply true part
       Using db = CreateDbContext()
+        ' maybe this should be forbidden as well
         Dim result = db.From(Of ItemWithAllSupportedValues).
                         OrderBy(Function(x) x.IntColumn).
                         If(True, Function(exp) exp.Select(Function(x) x.Nvarchar50Column)).
@@ -1488,12 +1564,12 @@ Namespace Tests
       Using db = CreateDbContext()
         Try
           Dim result = db.From(Of ItemWithAllSupportedValues).
-                        OrderBy(Function(x) x.IntColumn).
-                        If(False, Function(exp) exp.Select(Function(x) x.Nvarchar50Column)).
-                        ToList()
+                          OrderBy(Function(x) x.IntColumn).
+                          If(False, Function(exp) exp.Select(Function(x) x.Nvarchar50Column)).
+                          ToList()
 
           Assert.Fail()
-        Catch ex As NotSupportedException
+        Catch ex As InvalidOperationException
         Catch ex As Exception
           Assert.Fail(ex.Message)
         End Try
@@ -1659,7 +1735,7 @@ Namespace Tests
                         LeftJoin(Of ArticlePart)(Function(j) j.T1.Id = j.T3.ArticleId).
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
-                        If(True, Function(exp) exp.ExcludeT2()).
+                        If(False, Function(exp) exp.ExcludeT2()).
                         ToList()
 
         CollectionAssert.AreEqual({article1, article2, article3}, result)
@@ -1710,6 +1786,145 @@ Namespace Tests
         Assert.AreEqual(label3, result(2).Label)
         Assert.IsTrue(result.All(Function(x) x.Parts.Count = 0))
       End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithConditionalDistinct()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
+      Dim label2En = Me.ModelFactory.CreateLabel("", 2, English)
+      Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
+
+      Dim label1De = Me.ModelFactory.CreateLabel("", 1, German)
+      Dim label2De = Me.ModelFactory.CreateLabel("", 2, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
+
+      InsertItems(article1, article2, article3, label1En, label2En, label3En, label1De, label2De, label3De)
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        If(True, Function(exp) exp.Distinct()).
+                        ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+      End Using
+
+      ' condition is false, apply nothing
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        If(False, Function(exp) exp.Distinct()).
+                        ToList()
+
+        CollectionAssert.AreEqual({article1, article1, article2, article2, article3, article3}, result)
+      End Using
+
+      ' condition is true, apply true part
+      ' doesn't make sense for distinct (unless multiple clauses are chained inside a condition)
+
+      ' condition is false, apply false part
+      ' doesn't make sense for distinct (unless multiple clauses are chained inside a condition)
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithConditionalToList()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 1
+      items(1).IntColumn = 2
+      items(2).IntColumn = 3
+      items(3).IntColumn = 4
+      items(4).IntColumn = 5
+
+      InsertItems(items)
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        ' maybe this should be forbidden as well
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        OrderBy(Function(x) x.IntColumn).
+                        SelectAll().
+                        If(True, Function(exp) exp.ToList())
+
+        CollectionAssert.AreEqual(items, result)
+      End Using
+
+      ' condition is false, apply nothing
+      Using db = CreateDbContext()
+        Try
+          Dim result = db.From(Of ItemWithAllSupportedValues).
+                          OrderBy(Function(x) x.IntColumn).
+                          SelectAll().
+                          If(False, Function(exp) exp.ToList())
+
+          Assert.Fail()
+        Catch ex As InvalidOperationException
+        Catch ex As Exception
+          Assert.Fail(ex.Message)
+        End Try
+      End Using
+
+      ' condition is true, apply true part
+      ' doesn't make sense for ToList (unless multiple clauses are chained inside a condition)
+
+      ' condition is false, apply false part
+      ' doesn't make sense for ToList (unless multiple clauses are chained inside a condition)
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithConditionalFirstOrDefault()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 1
+      items(1).IntColumn = 2
+      items(2).IntColumn = 3
+      items(3).IntColumn = 4
+      items(4).IntColumn = 5
+
+      InsertItems(items)
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        ' maybe this should be forbidden as well
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        OrderBy(Function(x) x.IntColumn).
+                        SelectAll().
+                        If(True, Function(exp) exp.FirstOrDefault())
+
+        Assert.AreEqual(items(0), result)
+      End Using
+
+      ' condition is false, apply nothing
+      Using db = CreateDbContext()
+        Try
+          Dim result = db.From(Of ItemWithAllSupportedValues).
+                          OrderBy(Function(x) x.IntColumn).
+                          SelectAll().
+                          If(False, Function(exp) exp.FirstOrDefault())
+
+          Assert.Fail()
+        Catch ex As InvalidOperationException
+        Catch ex As Exception
+          Assert.Fail(ex.Message)
+        End Try
+      End Using
+
+      ' condition is true, apply true part
+      ' doesn't make sense for FirstOrDefault (unless multiple clauses are chained inside a condition)
+
+      ' condition is false, apply false part
+      ' doesn't make sense for FirstOrDefault (unless multiple clauses are chained inside a condition)
     End Sub
 
     <TestMethod()>

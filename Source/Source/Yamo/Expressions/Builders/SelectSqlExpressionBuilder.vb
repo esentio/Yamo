@@ -103,6 +103,8 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <returns></returns>
     Public Function CreateQuery() As SelectQuery
+      ThrowIfInConditionalIgnoreMode()
+
       Dim sql = New StringBuilder
 
       If m_SelectExpression Is Nothing Then
@@ -289,9 +291,11 @@ Namespace Expressions.Builders
     ''' Sets last join relationship.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="relationship"></param>
+    ''' <param name="relationship">Lambda expression with one parameter is expected.</param>
     Public Sub SetLastJoinRelationship(relationship As Expression)
-      ' we expect lambda expression with one parameter
+      If IsInConditionalIgnoreMode() Then
+        Exit Sub
+      End If
 
       Dim lambda = DirectCast(relationship, LambdaExpression)
       Dim parameterType = lambda.Parameters(0).Type
@@ -354,6 +358,10 @@ Namespace Expressions.Builders
     ''' <param name="predicate"></param>
     ''' <param name="entityIndexHints"></param>
     Public Sub AddWhere(predicate As Expression, entityIndexHints As Int32())
+      If IsInConditionalIgnoreMode() Then
+        Exit Sub
+      End If
+
       If m_WhereExpressions Is Nothing Then
         m_WhereExpressions = New List(Of String)
       End If
@@ -370,6 +378,10 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     Public Sub AddWhere(predicate As String)
+      If IsInConditionalIgnoreMode() Then
+        Exit Sub
+      End If
+
       If m_WhereExpressions Is Nothing Then
         m_WhereExpressions = New List(Of String)
       End If
@@ -384,6 +396,10 @@ Namespace Expressions.Builders
     ''' <param name="keySelector"></param>
     ''' <param name="entityIndexHints"></param>
     Public Sub AddGroupBy(keySelector As Expression, entityIndexHints As Int32())
+      If IsInConditionalIgnoreMode() Then
+        Exit Sub
+      End If
+
       If m_GroupByExpressions Is Nothing Then
         m_GroupByExpressions = New List(Of String)
       End If
@@ -401,6 +417,10 @@ Namespace Expressions.Builders
     ''' <param name="predicate"></param>
     ''' <param name="entityIndexHints"></param>
     Public Sub AddHaving(predicate As Expression, entityIndexHints As Int32())
+      If IsInConditionalIgnoreMode() Then
+        Exit Sub
+      End If
+
       If m_HavingExpressions Is Nothing Then
         m_HavingExpressions = New List(Of String)
       End If
@@ -417,6 +437,10 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     Public Sub AddHaving(predicate As String)
+      If IsInConditionalIgnoreMode() Then
+        Exit Sub
+      End If
+
       If m_HavingExpressions Is Nothing Then
         m_HavingExpressions = New List(Of String)
       End If
@@ -432,6 +456,10 @@ Namespace Expressions.Builders
     ''' <param name="entityIndexHints"></param>
     ''' <param name="ascending"></param>
     Public Sub AddOrderBy(keySelector As Expression, entityIndexHints As Int32(), ascending As Boolean)
+      If IsInConditionalIgnoreMode() Then
+        Exit Sub
+      End If
+
       If m_OrderByExpressions Is Nothing Then
         m_OrderByExpressions = New List(Of String)
       End If
@@ -455,6 +483,10 @@ Namespace Expressions.Builders
     ''' <param name="offset"></param>
     ''' <param name="count"></param>
     Public Sub AddLimit(offset As Int32?, count As Int32)
+      If IsInConditionalIgnoreMode() Then
+        Exit Sub
+      End If
+
       Dim limitType = Me.DialectProvider.SupportedLimitType
 
       m_UseTopForLimit = False
@@ -488,6 +520,8 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="entityTypes"></param>
     Public Sub AddSelectAll(ParamArray entityTypes As Type())
+      ThrowIfInConditionalIgnoreMode()
+
       ' right now this does nothing; refactor?
     End Sub
 
@@ -495,10 +529,13 @@ Namespace Expressions.Builders
     ''' Excludes selected property.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="propertyExpression"></param>
+    ''' <param name="propertyExpression">Lambda expression with one parameter is expected.</param>
     Public Sub ExcludeSelected(propertyExpression As Expression)
+      If IsInConditionalIgnoreMode() Then
+        Exit Sub
+      End If
+
       ' TODO: SIP - refactor and combine with SetLastJoinRelationship
-      ' we expect lambda expression with one parameter
 
       Dim lambda = DirectCast(propertyExpression, LambdaExpression)
       Dim parameterType = lambda.Parameters(0).Type
@@ -552,6 +589,10 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="entityIndex"></param>
     Public Sub ExcludeSelected(entityIndex As Int32)
+      If IsInConditionalIgnoreMode() Then
+        Exit Sub
+      End If
+
       m_Model.GetEntity(entityIndex).Exclude()
     End Sub
 
@@ -560,6 +601,8 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     Public Sub AddSelectCount()
+      ThrowIfInConditionalIgnoreMode()
+
       m_SelectExpression = "COUNT(*)"
     End Sub
 
@@ -570,6 +613,8 @@ Namespace Expressions.Builders
     ''' <param name="selector"></param>
     ''' <param name="entityIndexHints"></param>
     Public Sub AddSelect(selector As Expression, entityIndexHints As Int32())
+      ThrowIfInConditionalIgnoreMode()
+
       Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
       Dim result = m_Visitor.TranslateCustomSelect(selector, parametersType, entityIndexHints, m_Parameters.Count)
       m_SelectExpression = result.SqlString.Sql
@@ -582,6 +627,10 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     Public Sub AddDistinct()
+      If IsInConditionalIgnoreMode() Then
+        Exit Sub
+      End If
+
       m_UseDistinct = True
     End Sub
 
@@ -626,12 +675,25 @@ Namespace Expressions.Builders
       Next
     End Sub
 
-    Public Sub StartConditionalMode()
-      ' TODO: SIP - implement
+    ' TODO: SIP - once implemented, add comments
+    Private m_ConditionalIgnoreModeCounter As Int32 = 0
+
+    Private Function IsInConditionalIgnoreMode() As Boolean
+      Return 0 < m_ConditionalIgnoreModeCounter
+    End Function
+
+    Private Sub ThrowIfInConditionalIgnoreMode()
+      If IsInConditionalIgnoreMode() Then
+        Throw New InvalidOperationException("Parameter 'otherwise' in If() method is required due to SelectAll(), SelectCount(), Select(), ToList() or FirstOrDefault() call.")
+      End If
     End Sub
 
-    Public Sub EndConditionalMode()
-      ' TODO: SIP - implement
+    Public Sub StartConditionalIgnoreMode()
+      m_ConditionalIgnoreModeCounter += 1
+    End Sub
+
+    Public Sub EndConditionalIgnoreMode()
+      m_ConditionalIgnoreModeCounter -= 1
     End Sub
 
   End Class
