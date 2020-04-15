@@ -385,7 +385,7 @@ Namespace Internal.Query
       Dim value As Object
       Dim entityIndex = entityInfo.Entity.Index
 
-      If entityInfo.Entity.IsExcluded Then
+      If entityInfo.Entity.IsExcludedOrIgnored Then
         Return Nothing
       End If
 
@@ -453,7 +453,7 @@ Namespace Internal.Query
       Dim entityIndex = entityInfo.Entity.Index
       Dim valueFromCache = False
 
-      If entityInfo.Entity.IsExcluded Then
+      If entityInfo.Entity.IsExcludedOrIgnored Then
         Return Nothing
       End If
 

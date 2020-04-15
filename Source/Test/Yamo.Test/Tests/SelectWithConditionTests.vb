@@ -484,12 +484,12 @@ Namespace Tests
                         SelectAll().ToList()
 
         CollectionAssert.AreEqual({article1, article1, article2, article2, article3, article3}, result)
-        Assert.AreEqual(label1De, result(0).Label)
-        Assert.AreEqual(label1En, result(1).Label)
-        Assert.AreEqual(label2De, result(2).Label)
-        Assert.AreEqual(label2En, result(3).Label)
-        Assert.AreEqual(label3De, result(4).Label)
-        Assert.AreEqual(label3En, result(5).Label)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label1De, result(1).Label)
+        Assert.AreEqual(label2En, result(2).Label)
+        Assert.AreEqual(label2De, result(3).Label)
+        Assert.AreEqual(label3En, result(4).Label)
+        Assert.AreEqual(label3De, result(5).Label)
       End Using
 
       ' condition is false, apply nothing

@@ -252,38 +252,42 @@ Namespace Expressions.Builders
 
       Dim relationship = TryGetRelationship(Of TJoined)(predicate, entityIndexHints)
 
-      m_Model.AddJoinedTable(Of TJoined)(relationship)
-
-      Dim sql As String
-      Dim joinTypeString As String
-
-      Select Case joinType
-        Case JoinType.Inner
-          joinTypeString = "INNER JOIN"
-        Case JoinType.LeftOuter
-          joinTypeString = "LEFT OUTER JOIN"
-        Case JoinType.RightOuter
-          joinTypeString = "RIGHT OUTER JOIN"
-        Case JoinType.FullOuter
-          joinTypeString = "FULL OUTER JOIN"
-        Case JoinType.CrossJoin
-          joinTypeString = "CROSS JOIN"
-        Case Else
-          Throw New NotSupportedException($"Unsupported join type '{joinType}'.")
-      End Select
-
-      Dim entity = m_Model.Model.GetEntity(GetType(TJoined))
-      Dim tableAlias = m_Model.GetLastTableAlias()
-
-      If predicate Is Nothing Then
-        sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)
-        m_JoinExpressions.Add(sql)
+      If IsInConditionalIgnoreMode() Then
+        m_Model.AddJoinedTable(Of TJoined)(relationship, True)
       Else
-        Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
-        Dim result = m_Visitor.Translate(predicate, parametersType, entityIndexHints, m_Parameters.Count, True, True)
-        sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & " ON " & result.Sql
-        m_JoinExpressions.Add(sql)
-        m_Parameters.AddRange(result.Parameters)
+        m_Model.AddJoinedTable(Of TJoined)(relationship)
+
+        Dim sql As String
+        Dim joinTypeString As String
+
+        Select Case joinType
+          Case JoinType.Inner
+            joinTypeString = "INNER JOIN"
+          Case JoinType.LeftOuter
+            joinTypeString = "LEFT OUTER JOIN"
+          Case JoinType.RightOuter
+            joinTypeString = "RIGHT OUTER JOIN"
+          Case JoinType.FullOuter
+            joinTypeString = "FULL OUTER JOIN"
+          Case JoinType.CrossJoin
+            joinTypeString = "CROSS JOIN"
+          Case Else
+            Throw New NotSupportedException($"Unsupported join type '{joinType}'.")
+        End Select
+
+        Dim entity = m_Model.Model.GetEntity(GetType(TJoined))
+        Dim tableAlias = m_Model.GetLastTableAlias()
+
+        If predicate Is Nothing Then
+          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)
+          m_JoinExpressions.Add(sql)
+        Else
+          Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
+          Dim result = m_Visitor.Translate(predicate, parametersType, entityIndexHints, m_Parameters.Count, True, True)
+          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & " ON " & result.Sql
+          m_JoinExpressions.Add(sql)
+          m_Parameters.AddRange(result.Parameters)
+        End If
       End If
     End Sub
 
@@ -654,7 +658,7 @@ Namespace Expressions.Builders
       For i = 0 To m_Model.GetEntityCount() - 1
         Dim entity = m_Model.GetEntity(i)
 
-        If Not entity.IsExcluded Then
+        If Not entity.IsExcludedOrIgnored Then
           Dim formattedTableAlias = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)
           Dim properties = entity.Entity.GetProperties()
 

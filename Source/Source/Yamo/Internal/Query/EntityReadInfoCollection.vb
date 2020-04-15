@@ -177,7 +177,7 @@ Namespace Internal.Query
       For i = 0 To Me.Count - 1
         Dim entityInfo = Me.Items(i)
 
-        If entityInfo.Entity.IsExcluded Then
+        If entityInfo.Entity.IsExcludedOrIgnored Then
           pks(i) = Nothing
         ElseIf entityInfo.ContainsPKReader(dataReader, entityInfo.ReaderIndex, entityInfo.PKOffsets) Then
           pks(i) = entityInfo.PKReader(dataReader, entityInfo.ReaderIndex, entityInfo.PKOffsets)

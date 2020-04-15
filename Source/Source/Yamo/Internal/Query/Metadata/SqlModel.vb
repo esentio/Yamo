@@ -57,7 +57,8 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="relationship"></param>
-    Public Sub AddJoinedTable(Of T)(Optional relationship As SqlEntityRelationship = Nothing)
+    ''' <param name="isIgnored"></param>
+    Public Sub AddJoinedTable(Of T)(Optional relationship As SqlEntityRelationship = Nothing, Optional isIgnored As Boolean = False)
       If Not m_Entities.Any() Then
         Throw New InvalidOperationException("Main table isn't set yet.")
       End If
@@ -66,7 +67,7 @@ Namespace Internal.Query.Metadata
       Dim index = m_Entities.Count
       Dim tableAlias = "T" & index.ToString(Globalization.CultureInfo.InvariantCulture)
 
-      m_Entities.Add(New SqlEntity(entity, tableAlias, index, relationship))
+      m_Entities.Add(New SqlEntity(entity, tableAlias, index, relationship, isIgnored))
     End Sub
 
     ''' <summary>
