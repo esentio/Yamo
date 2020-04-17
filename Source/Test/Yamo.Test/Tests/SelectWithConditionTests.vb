@@ -494,21 +494,6 @@ Namespace Tests
 
       ' condition is false, apply nothing
       Using db = CreateDbContext()
-        Try
-          Dim result = db.From(Of Article).
-                        If(False, Function(exp) exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id)).
-                        OrderBy(Function(j) j.T1.Id).
-                        ThenByDescending(Function(j) j.T2.Language).
-                        SelectAll().ToList()
-
-          Assert.Fail()
-        Catch ex As AssertFailedException
-          Assert.Fail()
-        Catch ex As Exception
-        End Try
-      End Using
-
-      Using db = CreateDbContext()
         Dim result = db.From(Of Article).
                         If(False, Function(exp) exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id)).
                         OrderBy(Function(j) j.T1.Id).
@@ -520,6 +505,24 @@ Namespace Tests
         Assert.IsNull(result(1).Label)
         Assert.IsNull(result(2).Label)
       End Using
+
+      ' Following commented test is valid for MS SQL Server, because it does not allow to order by NULL.
+      ' But it'll work in SQLite. SQLite allows using NULL in clauses like ORDER BY or GROUP BY.
+      ' So, let's consider this case as a valid scenario.
+      'Using db = CreateDbContext()
+      '  Try
+      '    Dim result = db.From(Of Article).
+      '                  If(False, Function(exp) exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id)).
+      '                  OrderBy(Function(j) j.T1.Id).
+      '                  ThenByDescending(Function(j) j.T2.Language).
+      '                  SelectAll().ToList()
+      '
+      '    Assert.Fail()
+      '  Catch ex As AssertFailedException
+      '    Assert.Fail()
+      '  Catch ex As Exception
+      '  End Try
+      'End Using
 
       ' condition is true, apply true part
       Using db = CreateDbContext()
