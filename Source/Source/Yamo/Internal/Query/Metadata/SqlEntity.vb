@@ -134,12 +134,12 @@ Namespace Internal.Query.Metadata
     End Sub
 
     ''' <summary>
-    ''' Gets count of included columns.<br/>
+    ''' Gets count of included columns. This returns non-zero count, even if table is ignored (unless the whole table is excluded).<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
     Public Function GetColumnCount() As Int32
-      If Me.IsExcludedOrIgnored Then
+      If Me.IsExcluded Then
         Return 0
       End If
 

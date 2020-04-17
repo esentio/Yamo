@@ -592,7 +592,7 @@ Namespace Tests
 
       ' condition is false, apply nothing
       Using db = CreateDbContext()
-        ' TODO: SIP - what about using SQL helper here? Write test also for this! 
+        ' TODO: SIP - what about using SQL helper here? Write test also for this!
         Dim result = db.From(Of Article).
                         If(False, Function(exp) exp.Join(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English)).
                         OrderBy(Function(j) j.T1.Id).

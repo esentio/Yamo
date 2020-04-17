@@ -71,9 +71,14 @@ Namespace Expressions.Builders
     Private m_UseDistinct As Boolean
 
     ''' <summary>
-    ''' Stores paarmeters.
+    ''' Stores parameters.
     ''' </summary>
     Private m_Parameters As List(Of SqlParameter)
+
+    ''' <summary>
+    ''' Counter of nested conditional ignore modes.
+    ''' </summary>
+    Private m_ConditionalIgnoreModeCounter As Int32
 
     ''' <summary>
     ''' Creates new instance of <see cref="SelectSqlExpressionBuilder"/>.<br/>
@@ -95,6 +100,7 @@ Namespace Expressions.Builders
       m_SelectExpression = Nothing
       m_UseDistinct = False
       m_Parameters = New List(Of SqlParameter)
+      m_ConditionalIgnoreModeCounter = 0
     End Sub
 
     ''' <summary>
@@ -107,19 +113,19 @@ Namespace Expressions.Builders
 
       Dim sql = New StringBuilder
 
+      sql.Append("SELECT ")
+
+      If m_UseDistinct Then
+        sql.Append("DISTINCT ")
+      End If
+
+      If m_LimitExpression IsNot Nothing AndAlso m_UseTopForLimit Then
+        sql.Append(m_LimitExpression)
+      End If
+
       If m_SelectExpression Is Nothing Then
         BuildAndAppendSelectExpression(sql)
       Else
-        sql.Append("SELECT ")
-
-        If m_UseDistinct Then
-          sql.Append("DISTINCT ")
-        End If
-
-        If m_LimitExpression IsNot Nothing AndAlso m_UseTopForLimit Then
-          sql.Append(m_LimitExpression)
-        End If
-
         sql.Append(m_SelectExpression)
       End If
 
@@ -643,16 +649,6 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="sql"></param>
     Private Sub BuildAndAppendSelectExpression(sql As StringBuilder)
-      sql.Append("SELECT ")
-
-      If m_UseDistinct Then
-        sql.Append("DISTINCT ")
-      End If
-
-      If m_LimitExpression IsNot Nothing AndAlso m_UseTopForLimit Then
-        sql.Append(m_LimitExpression)
-      End If
-
       Dim first = True
 
       For i = 0 To m_Model.GetEntityCount() - 1
@@ -679,23 +675,35 @@ Namespace Expressions.Builders
       Next
     End Sub
 
-    ' TODO: SIP - once implemented, add comments
-    Private m_ConditionalIgnoreModeCounter As Int32 = 0
-
+    ''' <summary>
+    ''' Gets whether we are in conditional ignore mode.
+    ''' </summary>
+    ''' <returns></returns>
     Private Function IsInConditionalIgnoreMode() As Boolean
       Return 0 < m_ConditionalIgnoreModeCounter
     End Function
 
+    ''' <summary>
+    ''' Throws <see cref="InvalidOperationException"/> if we are in conditional ignore mode.
+    ''' </summary>
     Private Sub ThrowIfInConditionalIgnoreMode()
       If IsInConditionalIgnoreMode() Then
         Throw New InvalidOperationException("Parameter 'otherwise' in If() method is required due to SelectAll(), SelectCount(), Select(), ToList() or FirstOrDefault() call.")
       End If
     End Sub
 
+    ''' <summary>
+    ''' Starts conditional ignore mode.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
     Public Sub StartConditionalIgnoreMode()
       m_ConditionalIgnoreModeCounter += 1
     End Sub
 
+    ''' <summary>
+    ''' Ends conditional ignore mode.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
     Public Sub EndConditionalIgnoreMode()
       m_ConditionalIgnoreModeCounter -= 1
     End Sub

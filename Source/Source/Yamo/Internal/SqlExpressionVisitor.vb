@@ -1160,9 +1160,14 @@ Namespace Internal
     ''' <param name="entityIndex"></param>
     Private Sub AppendEntityMemberAccess(propertyName As String, entityIndex As Int32)
       Dim entity = m_Model.GetEntity(entityIndex)
+      Dim isIgnored = entity.IsIgnored
       Dim prop = entity.Entity.GetProperty(propertyName)
 
-      If Not m_UseTableNamesOrAliases Then
+      If isIgnored Then
+        ' NOTE: currently, we append NULL if table is ignored. This could be solved better for SELECT clauses.
+        ' We could omit column in SQL and instead of using reader, set value directly to Nothing (default).
+        m_Sql.Append("NULL")
+      ElseIf Not m_UseTableNamesOrAliases Then
         m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, prop.ColumnName)
       ElseIf m_UseAliases Then
         Dim tableAlias = m_Model.GetTableAlias(entity.Index)
@@ -1182,21 +1187,30 @@ Namespace Internal
     ''' </summary>
     ''' <param name="entityIndex"></param>
     Private Sub AppendEntityMembersAccess(entityIndex As Int32)
+      ' this might be called from group by or custom select
+
       Dim entity = m_Model.GetEntity(entityIndex)
 
       ' NOTE: excluding columns is not (yet) supported in this scenario, but column enumeration belows already supports it.
       ' In case exclusion is added, test this! Also, if whole table is excluded, entity.GetColumnCount() returns 0 (and we'll
       ' most likely get exception later). In this case we propably shouldn't support excluding whole table (it doesn't make sense anyway)!
 
+      Dim isIgnored = entity.IsIgnored
       Dim properties = entity.Entity.GetProperties()
       Dim columnCount = entity.GetColumnCount()
       Dim columnIndex = 0
 
       For propertyIndex = 0 To properties.Count - 1
         If entity.IncludedColumns(propertyIndex) Then
-          m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.TableAlias)
-          m_Sql.Append(".")
-          m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, properties(propertyIndex).ColumnName)
+          If isIgnored Then
+            ' NOTE: currently, we append NULL if table is ignored. This could be solved better for SELECT clauses.
+            ' We could omit columns in SQL and instead of using entity reader, set value directly to Nothing (default).
+            m_Sql.Append("NULL")
+          Else
+            m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.TableAlias)
+            m_Sql.Append(".")
+            m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, properties(propertyIndex).ColumnName)
+          End If
 
           If m_InCustomSelectMode Then
             Dim columnAlias = CreateColumnAlias(m_CustomEntityIndex, columnIndex)
