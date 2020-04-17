@@ -712,8 +712,8 @@ Namespace Tests
         Assert.AreEqual(4, result2.Count)
         Assert.AreEqual((article1, 42, article1LabelEn), result2(0))
         Assert.AreEqual((article2, 42, DirectCast(Nothing, Label)), result2(1))
-        Assert.AreEqual((article3, 42, article3LabelEn), result2(2))
-        Assert.AreEqual((article3, 42, article3LabelDe), result2(3))
+        Assert.AreEqual((article3, 42, article3LabelDe), result2(2))
+        Assert.AreEqual((article3, 42, article3LabelEn), result2(3))
 
         ' selecting same table twice
         Dim result3 = db.Query(Of (Article, Int32, Label, Label))($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("le")}, {Sql.Model.Columns(Of Label)("lg")} FROM Article AS a LEFT JOIN Label AS le ON a.Id = le.Id AND le.Language = {English} LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = {German} ORDER BY a.Id")
