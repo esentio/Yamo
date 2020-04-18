@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -55,6 +56,10 @@ namespace Yamo.PlaygroundCS
             //Test34();
             //Test35();
             //Test36();
+            Test37();
+            Test38();
+            Test39();
+            Test40();
         }
 
         public static MyContext CreateContext()
@@ -681,6 +686,65 @@ namespace Yamo.PlaygroundCS
                                   .Select(l => l.Language)
                                   .Distinct()
                                   .ToList();
+            }
+        }
+
+        public static void Test37()
+        {
+            using (var db = CreateContext())
+            {
+                int? priceFilter = 42;
+
+                var list = db.From<Article>()
+                             .If(priceFilter.HasValue, exp => exp.Where(a => a.Price < priceFilter.Value))
+                             .SelectAll().ToList();
+            }
+        }
+
+        public static void Test38()
+        {
+            using (var db = CreateContext())
+            {
+                int? priceFilter = 42;
+                int maxPrice = 1000;
+
+                var list = db.From<Article>()
+                             .If(priceFilter.HasValue,
+                                then: exp => exp.Where(a => a.Price < priceFilter.Value),
+                                otherwise: exp => exp.Where(a => a.Price < maxPrice)
+                              )
+                             .SelectAll().ToList();
+            }
+        }
+
+        public static void Test39()
+        {
+            using (var db = CreateContext())
+            {
+                string labelFilter = "Foo";
+                int? priceFilter = 42;
+
+                var list = db.From<Article>()
+                             .If(!string.IsNullOrWhiteSpace(labelFilter),
+                                then: exp => exp.Join<Label>((a, l) => l.Id == a.Id)
+                                                .Where(l => l.Description == labelFilter)
+                              )
+                             .If(priceFilter.HasValue, exp => exp.And(a => a.Price < priceFilter.Value))
+                             .SelectAll().ToList();
+            }
+        }
+
+        public static void Test40()
+        {
+            using (var db = CreateContext())
+            {
+                var includeLabel = false;
+
+                // Label and Description properties will be set to null
+                var list = db.From<Article>()
+                             .If(includeLabel, exp => exp.Join<Label>((a, l) => l.Id == a.Id))
+                             .Select((a, l) => new { Article = a, Label = l, Description = l.Description})
+                             .ToList();
             }
         }
     }
