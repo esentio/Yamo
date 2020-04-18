@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Tests\QueryTests.vb" />
     <Compile Include="Tests\SelectDistinctTests.vb" />
+    <Compile Include="Tests\SelectWithConditionTests.vb" />
     <Compile Include="Tests\SelectWithHavingTests.vb" />
     <Compile Include="Tests\SelectWithGroupByTests.vb" />
     <Compile Include="Tests\PropertyModifiedTrackingTests.vb" />
@@ -88,11 +89,11 @@
     <Compile Include="Tests\SelectWithLimitTests.vb" />
     <Compile Include="Tests\SqlHelperAggregateTests.vb" />
     <Compile Include="Tests\SqlHelperDateDiffTests.vb" />
-    <Compile Include="Tests\SelectWithSqlStringConditionTests.vb" />
+    <Compile Include="Tests\SelectWithSqlStringWhereTests.vb" />
     <Compile Include="Tests\SelectWithSortTests.vb" />
     <Compile Include="Tests\TransactionTests.vb" />
     <Compile Include="Tests\SelectWithJoinTests.vb" />
-    <Compile Include="Tests\SelectWithConditionTests.vb" />
+    <Compile Include="Tests\SelectWithWhereTests.vb" />
     <Compile Include="Tests\DeleteTests.vb" />
     <Compile Include="Tests\UpdateTests.vb" />
     <Compile Include="Tests\InsertTests.vb" />

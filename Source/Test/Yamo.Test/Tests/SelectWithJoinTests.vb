@@ -7,7 +7,7 @@ Namespace Tests
 
     Protected Const English As String = "en"
 
-    Protected Const German As String = "ger"
+    Protected Const German As String = "de"
 
     <TestMethod()>
     Public Overridable Sub SelectWith1To1RelationshipUsingInnerJoin()
@@ -17,9 +17,9 @@ Namespace Tests
 
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).Join(Of Label)(Function(a, l) a.Id = l.Id).SelectAll().ToList()
@@ -38,9 +38,9 @@ Namespace Tests
 
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).SelectAll().ToList()
@@ -60,9 +60,9 @@ Namespace Tests
 
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).RightJoin(Of Label)(Function(a, l) a.Id = l.Id).SelectAll().ToList()
@@ -81,9 +81,9 @@ Namespace Tests
 
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).FullJoin(Of Label)(Function(a, l) a.Id = l.Id).SelectAll().ToList()
@@ -103,9 +103,9 @@ Namespace Tests
 
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
 
-      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).CrossJoin(Of Label).SelectAll().ToList()
@@ -354,7 +354,7 @@ Namespace Tests
 
       Dim article1LabelEn = Me.ModelFactory.CreateLabel("", 1, English)
       Dim article3LabelEn = Me.ModelFactory.CreateLabel("", 3, English)
-      Dim article3LabelGer = Me.ModelFactory.CreateLabel("", 3, German)
+      Dim article3LabelDe = Me.ModelFactory.CreateLabel("", 3, German)
 
       Dim article1Part1 = Me.ModelFactory.CreateArticlePart(1001, 1)
       Dim article3Part1 = Me.ModelFactory.CreateArticlePart(3001, 3)
@@ -362,7 +362,7 @@ Namespace Tests
       Dim article3Part3 = Me.ModelFactory.CreateArticlePart(3003, 3)
       Dim article4Part1 = Me.ModelFactory.CreateArticlePart(4001, 4)
 
-      InsertItems(article1, article2, article3, article1LabelEn, article3LabelEn, article3LabelGer, article1Part1, article3Part1, article3Part2, article3Part3, article4Part1)
+      InsertItems(article1, article2, article3, article1LabelEn, article3LabelEn, article3LabelDe, article1Part1, article3Part1, article3Part2, article3Part3, article4Part1)
 
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).
@@ -486,7 +486,7 @@ Namespace Tests
 
       Dim article1LabelEn = Me.ModelFactory.CreateLabel(NameOf(Article), 1, English)
       Dim article3LabelEn = Me.ModelFactory.CreateLabel(NameOf(Article), 3, English)
-      Dim article3LabelGer = Me.ModelFactory.CreateLabel(NameOf(Article), 3, German)
+      Dim article3LabelDe = Me.ModelFactory.CreateLabel(NameOf(Article), 3, German)
 
       Dim article1Part1 = Me.ModelFactory.CreateArticlePart(1001, 1)
       Dim article3Part1 = Me.ModelFactory.CreateArticlePart(3001, 3)
@@ -497,9 +497,9 @@ Namespace Tests
       Dim article1Part1LabelEn = Me.ModelFactory.CreateLabel(NameOf(ArticlePart), 1001, English)
       Dim article3Part1LabelEn = Me.ModelFactory.CreateLabel(NameOf(ArticlePart), 3001, English)
       Dim article3Part2LabelEn = Me.ModelFactory.CreateLabel(NameOf(ArticlePart), 3002, English)
-      Dim article3Part2LabelGer = Me.ModelFactory.CreateLabel(NameOf(ArticlePart), 3002, German)
+      Dim article3Part2LabelDe = Me.ModelFactory.CreateLabel(NameOf(ArticlePart), 3002, German)
 
-      InsertItems(article1, article2, article3, article1LabelEn, article3LabelEn, article3LabelGer, article1Part1, article3Part1, article3Part2, article3Part3, article4Part1, article1Part1LabelEn, article3Part1LabelEn, article3Part2LabelEn, article3Part2LabelGer)
+      InsertItems(article1, article2, article3, article1LabelEn, article3LabelEn, article3LabelDe, article1Part1, article3Part1, article3Part2, article3Part3, article4Part1, article1Part1LabelEn, article3Part1LabelEn, article3Part2LabelEn, article3Part2LabelDe)
 
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).

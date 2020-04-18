@@ -7,7 +7,7 @@ Namespace Tests
 
     Protected Const English As String = "en"
 
-    Protected Const German As String = "ger"
+    Protected Const German As String = "de"
 
     <TestMethod()>
     Public Overridable Sub ExecuteUsingString()
@@ -17,7 +17,7 @@ Namespace Tests
       InsertItems(label1En, label2En)
 
       Using db = CreateDbContext()
-        Dim result = db.Execute("UPDATE Label SET Language = 'ger'")
+        Dim result = db.Execute("UPDATE Label SET Language = 'de'")
         Assert.AreEqual(2, result)
 
         result = db.From(Of Label).Where(Function(o) o.Language = German).SelectCount()

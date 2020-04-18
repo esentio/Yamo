@@ -12,6 +12,10 @@
 
     Public Property Categories As List(Of Category)
 
+    Public Property AlternativeLabel1 As Label ' do not define this in model
+
+    Public Property AlternativeLabel2 As Label ' do not define this in model
+
     Public Overrides Function Equals(obj As Object) As Boolean
       If obj Is Nothing OrElse TypeOf obj IsNot Article Then
         Return False

@@ -45,6 +45,22 @@ Namespace Internal.Query.Metadata
     Public ReadOnly Property IsExcluded As Boolean
 
     ''' <summary>
+    ''' Gets whether entity is conditionally ignored
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property IsIgnored As Boolean
+
+    ''' <summary>
+    ''' Gets whether entity is excluded or conditionally ignored
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property IsExcludedOrIgnored As Boolean
+      Get
+        Return Me.IsExcluded OrElse Me.IsIgnored
+      End Get
+    End Property
+
+    ''' <summary>
     ''' Gets included columns.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -73,6 +89,7 @@ Namespace Internal.Query.Metadata
       Me.Index = index
       Me.Relationship = Nothing
       Me.IsExcluded = False
+      Me.IsIgnored = False
 
       Dim lastIndex = Me.Entity.GetPropertiesCount() - 1
       Dim includedColumns = New Boolean(lastIndex) {}
@@ -92,9 +109,11 @@ Namespace Internal.Query.Metadata
     ''' <param name="tableAlias"></param>
     ''' <param name="index"></param>
     ''' <param name="relationship"></param>
-    Sub New(entity As Entity, tableAlias As String, index As Int32, relationship As SqlEntityRelationship)
+    ''' <param name="isIgnored"></param>
+    Sub New(entity As Entity, tableAlias As String, index As Int32, relationship As SqlEntityRelationship, isIgnored As Boolean)
       Me.New(entity, tableAlias, index)
       Me.Relationship = relationship
+      Me.IsIgnored = isIgnored
     End Sub
 
     ''' <summary>
@@ -115,7 +134,7 @@ Namespace Internal.Query.Metadata
     End Sub
 
     ''' <summary>
-    ''' Gets count of included columns.<br/>
+    ''' Gets count of included columns. This returns non-zero count, even if table is ignored (unless the whole table is excluded).<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>

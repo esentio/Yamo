@@ -7,7 +7,7 @@ Namespace Tests
 
     Protected Const English As String = "en"
 
-    Protected Const German As String = "ger"
+    Protected Const German As String = "de"
 
     <TestMethod()>
     Public Overridable Sub SelectWithGroupByOneColumn()
@@ -88,9 +88,9 @@ Namespace Tests
 
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Lorem")
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English, "Ipsum")
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German, "Ipsum")
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German, "Ipsum")
 
-      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
         ' use entity for grouping
@@ -126,7 +126,7 @@ Namespace Tests
                          Select(Function(a, l) (a, l)).
                          ToList()
 
-        CollectionAssert.AreEquivalent({(article1, label1En), (article2, DirectCast(Nothing, Label)), (article3, label3En), (article3, label3Ger)}, result4)
+        CollectionAssert.AreEquivalent({(article1, label1En), (article2, DirectCast(Nothing, Label)), (article3, label3En), (article3, label3De)}, result4)
 
         Dim result5 = db.From(Of Article).
                          LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
@@ -134,7 +134,7 @@ Namespace Tests
                          Select(Function(a, l) (a, l)).
                          ToList()
 
-        CollectionAssert.AreEquivalent({(article1, label1En), (article2, DirectCast(Nothing, Label)), (article3, label3En), (article3, label3Ger)}, result5)
+        CollectionAssert.AreEquivalent({(article1, label1En), (article2, DirectCast(Nothing, Label)), (article3, label3En), (article3, label3De)}, result5)
       End Using
     End Sub
 
@@ -146,9 +146,9 @@ Namespace Tests
 
       Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Lorem")
       Dim label3En = Me.ModelFactory.CreateLabel("", 3, English, "Ipsum")
-      Dim label3Ger = Me.ModelFactory.CreateLabel("", 3, German, "Ipsum")
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German, "Ipsum")
 
-      InsertItems(article1, article2, article3, label1En, label3En, label3Ger)
+      InsertItems(article1, article2, article3, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
         ' use anonymous type for grouping

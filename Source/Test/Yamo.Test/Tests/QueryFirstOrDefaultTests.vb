@@ -8,7 +8,7 @@ Namespace Tests
 
     Protected Const English As String = "en"
 
-    Protected Const German As String = "ger"
+    Protected Const German As String = "de"
 
     <TestMethod()>
     Public Overridable Sub QueryFirstOrDefaultOfGuid()
@@ -567,9 +567,9 @@ Namespace Tests
 
       Dim article1LabelEn = Me.ModelFactory.CreateLabel(NameOf(Article), 1, English)
       Dim article3LabelEn = Me.ModelFactory.CreateLabel(NameOf(Article), 3, English)
-      Dim article3LabelGer = Me.ModelFactory.CreateLabel(NameOf(Article), 3, German)
+      Dim article3LabelDe = Me.ModelFactory.CreateLabel(NameOf(Article), 3, German)
 
-      InsertItems(article1, article2, article3, article1LabelEn, article3LabelEn, article3LabelGer)
+      InsertItems(article1, article2, article3, article1LabelEn, article3LabelEn, article3LabelDe)
 
       Using db = CreateDbContext()
         Dim result1null = db.QueryFirstOrDefault(Of (Article, Int32, Label)?)($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("l")} FROM Article AS a LEFT JOIN Label AS l ON a.Id = l.Id WHERE 1 = 2")
@@ -592,10 +592,10 @@ Namespace Tests
 
         ' selecting same table twice
         Dim result3nullWithValue = db.QueryFirstOrDefault(Of (Article, Int32, Label, Label)?)($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("le")}, {Sql.Model.Columns(Of Label)("lg")} FROM Article AS a LEFT JOIN Label AS le ON a.Id = le.Id AND le.Language = {English} LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = {German} WHERE a.Id = {article3.Id}")
-        Assert.AreEqual((article3, 42, article3LabelEn, article3LabelGer), result3nullWithValue.Value)
+        Assert.AreEqual((article3, 42, article3LabelEn, article3LabelDe), result3nullWithValue.Value)
 
         Dim result3 = db.QueryFirstOrDefault(Of (Article, Int32, Label, Label))($"SELECT {Sql.Model.Columns(Of Article)("a")}, 42, {Sql.Model.Columns(Of Label)("le")}, {Sql.Model.Columns(Of Label)("lg")} FROM Article AS a LEFT JOIN Label AS le ON a.Id = le.Id AND le.Language = {English} LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = {German} WHERE a.Id = {article3.Id}")
-        Assert.AreEqual((article3, 42, article3LabelEn, article3LabelGer), result3)
+        Assert.AreEqual((article3, 42, article3LabelEn, article3LabelDe), result3)
       End Using
     End Sub
 

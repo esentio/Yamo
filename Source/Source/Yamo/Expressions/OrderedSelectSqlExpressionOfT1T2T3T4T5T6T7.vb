@@ -350,5 +350,29 @@ Namespace Expressions
       Return New CustomSelectSqlExpression(Of TResult)(Me.Builder, Me.Executor)
     End Function
 
+    ''' <summary>
+    ''' Conditionally builds the expression.
+    ''' </summary>
+    ''' <typeparam name="TResult"></typeparam>
+    ''' <param name="condition"></param>
+    ''' <param name="[then]"></param>
+    ''' <param name="otherwise"></param>
+    ''' <returns></returns>
+    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7), TResult), Optional otherwise As Func(Of OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7), TResult) = Nothing) As TResult
+      Dim result As TResult
+
+      If condition Then
+        result = [then].Invoke(Me)
+      ElseIf otherwise Is Nothing Then
+        Me.Builder.StartConditionalIgnoreMode()
+        result = [then].Invoke(Me)
+        Me.Builder.EndConditionalIgnoreMode()
+      Else
+        result = otherwise.Invoke(Me)
+      End If
+
+      Return result
+    End Function
+
   End Class
 End Namespace
