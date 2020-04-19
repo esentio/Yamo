@@ -97,16 +97,5 @@ Namespace Sql
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
-    ''' <summary>
-    ''' Returns SQL format string that is appended to final SQL statement.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <param name="method"></param>
-    ''' <param name="dialectProvider"></param>
-    ''' <returns></returns>
-    Public Overloads Shared Function GetSqlFormat(method As MethodInfo, dialectProvider As SqlDialectProvider) As String
-      Return dialectProvider.GetInternalSqlHelper(GetType(DateDiff)).GetSqlFormat(method)
-    End Function
-
   End Class
 End Namespace

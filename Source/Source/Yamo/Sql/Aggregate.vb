@@ -9,9 +9,8 @@ Namespace Sql
   Public Class Aggregate
     Inherits SqlHelper
 
-    ' TODO: SIP - probably rewrite to IInternalSqlHelper in the future:
     ' - STDEV in SQLite only works with extension-functions.c
-    ' - add platform specific functions (we need better API first!)
+    ' - maybe add platform specific functions
 
     ''' <summary>
     ''' Translates to COUNT(*) function call.<br/>

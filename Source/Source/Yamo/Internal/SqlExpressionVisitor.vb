@@ -384,8 +384,17 @@ Namespace Internal
     ''' <param name="node"></param>
     ''' <returns></returns>
     Private Function VisitSqlHelperMethodCall(node As MethodCallExpression) As Expression
-      Dim getSqlFormatMethod = node.Method.DeclaringType.GetMethod(NameOf(SqlHelper.GetSqlFormat), BindingFlags.Public Or BindingFlags.Static)
-      Dim format = DirectCast(getSqlFormatMethod.Invoke(Nothing, {node.Method, m_Builder.DialectProvider}), String)
+      Dim dialectProvider = m_Builder.DialectProvider
+
+      Dim sqlHelperType = node.Method.DeclaringType
+      Dim dialectSpecifictSqlHelperType = dialectProvider.GetDialectSpecificSqlHelper(sqlHelperType)
+
+      If dialectSpecifictSqlHelperType IsNot Nothing Then
+        sqlHelperType = dialectSpecifictSqlHelperType
+      End If
+
+      Dim getSqlFormatMethod = sqlHelperType.GetMethod(NameOf(SqlHelper.GetSqlFormat), BindingFlags.Public Or BindingFlags.Static)
+      Dim format = DirectCast(getSqlFormatMethod.Invoke(Nothing, {node.Method, dialectProvider}), String)
 
       Dim args = New StringBuilder(node.Arguments.Count - 1) {}
       Dim sqlBuilder = m_Sql

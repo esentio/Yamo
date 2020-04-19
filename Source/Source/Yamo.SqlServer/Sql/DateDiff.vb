@@ -1,33 +1,23 @@
 ﻿Imports System.Reflection
-Imports Yamo.Sql
+Imports Yamo.Infrastructure
 
 Namespace Sql
 
   ''' <summary>
   ''' Date related SQL helper methods.<br/>
-  ''' Platform specific for MS SQL Server.
+  ''' Specific for MS SQL Server.
   ''' </summary>
-  Public Class InternalDateDiff
-    Implements IInternalSqlHelper
-
-    ''' <summary>
-    ''' Type of SQL helper that uses this internal SQL helper class.
-    ''' Returns <see cref="DateDiff"/> type.
-    ''' </summary>
-    ''' <returns></returns>
-    Public ReadOnly Property SqlHelperType As Type Implements IInternalSqlHelper.SqlHelperType
-      Get
-        Return GetType(DateDiff)
-      End Get
-    End Property
+  Public Class DateDiff
+    Inherits Yamo.Sql.DateDiff
 
     ''' <summary>
     ''' Returns SQL format string that is appended to final SQL statement.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="method"></param>
+    ''' <param name="dialectProvider"></param>
     ''' <returns></returns>
-    Public Function GetSqlFormat(method As MethodInfo) As String Implements IInternalSqlHelper.GetSqlFormat
+    Public Overloads Shared Function GetSqlFormat(method As MethodInfo, dialectProvider As SqlDialectProvider) As String
       Select Case method.Name
         Case NameOf(DateDiff.SameYear)
           Return "(DATEDIFF(year, {0}, {1}) = 0)"
