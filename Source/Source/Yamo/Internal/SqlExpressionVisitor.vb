@@ -682,7 +682,7 @@ Namespace Internal
           Case GetType(Boolean)
             m_Sql.Append(m_Builder.DialectProvider.Formatter.GetConstantValue(DirectCast(node.Value, Boolean)))
 
-          Case GetType(DateTime)
+          Case GetType(System.DateTime)
             AppendNewParameter(node.Value)
 
           Case GetType(Int16)

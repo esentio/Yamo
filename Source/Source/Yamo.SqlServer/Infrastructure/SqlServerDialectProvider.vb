@@ -26,7 +26,7 @@ Namespace Infrastructure
       Me.EntityReaderFactory = New EntityReaderFactory
       Me.DbValueConversion = New DbValueConversion
       Me.SupportedLimitType = LimitType.Top Or LimitType.OffsetFetch
-      RegisterDialectSpecificSqlHelper(Of Yamo.Sql.DateDiff, Yamo.SqlServer.Sql.DateDiff)()
+      RegisterDialectSpecificSqlHelper(Of Yamo.Sql.DateTime, Yamo.SqlServer.Sql.DateTime)()
     End Sub
 
   End Class

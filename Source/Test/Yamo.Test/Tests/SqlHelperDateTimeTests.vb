@@ -2,11 +2,11 @@
 
 Namespace Tests
 
-  Public MustInherit Class SqlHelperDateDiffTests
+  Public MustInherit Class SqlHelperDateTimeTests
     Inherits BaseIntegrationTests
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateDiffSameYear()
+    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameYear()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -24,18 +24,18 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim value = New DateTime(2000, 1, 1)
-        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameYear(x.DatetimeColumn, value)).SelectAll().ToList()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameYear(x.DatetimeColumn, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
 
-        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameYear(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
+        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameYear(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateDiffSameQuarter()
+    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameQuarter()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -53,18 +53,18 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim value = New DateTime(2000, 1, 1)
-        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameQuarter(x.DatetimeColumn, value)).SelectAll().ToList()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameQuarter(x.DatetimeColumn, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
 
-        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameQuarter(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
+        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameQuarter(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateDiffSameMonth()
+    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameMonth()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -82,18 +82,18 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim value = New DateTime(2000, 1, 1)
-        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameMonth(x.DatetimeColumn, value)).SelectAll().ToList()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameMonth(x.DatetimeColumn, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
 
-        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameMonth(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
+        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameMonth(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateDiffSameDay()
+    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameDay()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -111,18 +111,18 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim value = New DateTime(2000, 1, 1)
-        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameDay(x.DatetimeColumn, value)).SelectAll().ToList()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameDay(x.DatetimeColumn, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
 
-        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameDay(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
+        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameDay(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateDiffSameHour()
+    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameHour()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -140,18 +140,18 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim value = New DateTime(2000, 1, 1, 8, 0, 0)
-        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameHour(x.DatetimeColumn, value)).SelectAll().ToList()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameHour(x.DatetimeColumn, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
 
-        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameHour(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
+        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameHour(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateDiffSameMinute()
+    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameMinute()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -169,18 +169,18 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim value = New DateTime(2000, 1, 1, 8, 0, 0)
-        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameMinute(x.DatetimeColumn, value)).SelectAll().ToList()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameMinute(x.DatetimeColumn, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
 
-        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameMinute(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
+        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameMinute(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateDiffSameSecond()
+    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameSecond()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -198,18 +198,18 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim value = New DateTime(2000, 1, 1, 8, 0, 0)
-        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameSecond(x.DatetimeColumn, value)).SelectAll().ToList()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameSecond(x.DatetimeColumn, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
 
-        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameSecond(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
+        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameSecond(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateDiffSameMillisecond()
+    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameMillisecond()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0, 0)
@@ -227,11 +227,11 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim value = New DateTime(2000, 1, 1, 8, 0, 0, 0)
-        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameMillisecond(x.DatetimeColumn, value)).SelectAll().ToList()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameMillisecond(x.DatetimeColumn, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
 
-        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateDiff.SameMillisecond(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
+        result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Sql.DateTime.SameMillisecond(x.DatetimeColumnNull.Value, value)).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result)
       End Using

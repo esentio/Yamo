@@ -9,28 +9,28 @@ using Yamo.Sql;
 
 namespace Yamo.PlaygroundCS.Sql
 {
-    public class MyDateDiff : SqlHelper
+    public class DateTime : SqlHelper
     {
 
-        public static bool SameYear(DateTime date1, DateTime date2)
+        public static bool SameYear(System.DateTime date1, System.DateTime date2)
         {
             throw new Exception("This method is not intended to be called directly.");
         }
 
-        public static bool SameQuarter(DateTime date1, DateTime date2)
+        public static bool SameQuarter(System.DateTime date1, System.DateTime date2)
         {
             throw new Exception("This method is not intended to be called directly.");
         }
 
         // ...
 
-        public new static string GetSqlFormat(MethodInfo method, SqlFormatter formatter)
+        public static new string GetSqlFormat(MethodInfo method, SqlDialectProvider dialectProvider)
         {
             switch (method.Name)
             {
-                case nameof(DateDiff.SameYear):
+                case nameof(DateTime.SameYear):
                     return "DATEDIFF(year, {0}, {1}) = 0";
-                case nameof(DateDiff.SameQuarter):
+                case nameof(DateTime.SameQuarter):
                     return "DATEDIFF(quarter, {0}, {1}) = 0";
                 // ...
                 default:

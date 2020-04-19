@@ -4,9 +4,9 @@ Imports Yamo.Infrastructure
 Namespace Sql
 
   ''' <summary>
-  ''' Date related SQL helper methods.
+  ''' Date &amp; time related SQL helper methods.
   ''' </summary>
-  Public Class DateDiff
+  Public Class DateTime
     Inherits SqlHelper
 
     ''' <summary>
@@ -16,7 +16,7 @@ Namespace Sql
     ''' <param name="date1"></param>
     ''' <param name="date2"></param>
     ''' <returns></returns>
-    Public Shared Function SameYear(date1 As DateTime, date2 As DateTime) As Boolean
+    Public Shared Function SameYear(date1 As System.DateTime, date2 As System.DateTime) As Boolean
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -27,7 +27,7 @@ Namespace Sql
     ''' <param name="date1"></param>
     ''' <param name="date2"></param>
     ''' <returns></returns>
-    Public Shared Function SameQuarter(date1 As DateTime, date2 As DateTime) As Boolean
+    Public Shared Function SameQuarter(date1 As System.DateTime, date2 As System.DateTime) As Boolean
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -38,7 +38,7 @@ Namespace Sql
     ''' <param name="date1"></param>
     ''' <param name="date2"></param>
     ''' <returns></returns>
-    Public Shared Function SameMonth(date1 As DateTime, date2 As DateTime) As Boolean
+    Public Shared Function SameMonth(date1 As System.DateTime, date2 As System.DateTime) As Boolean
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -49,7 +49,7 @@ Namespace Sql
     ''' <param name="date1"></param>
     ''' <param name="date2"></param>
     ''' <returns></returns>
-    Public Shared Function SameDay(date1 As DateTime, date2 As DateTime) As Boolean
+    Public Shared Function SameDay(date1 As System.DateTime, date2 As System.DateTime) As Boolean
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -60,7 +60,7 @@ Namespace Sql
     ''' <param name="date1"></param>
     ''' <param name="date2"></param>
     ''' <returns></returns>
-    Public Shared Function SameHour(date1 As DateTime, date2 As DateTime) As Boolean
+    Public Shared Function SameHour(date1 As System.DateTime, date2 As System.DateTime) As Boolean
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -71,7 +71,7 @@ Namespace Sql
     ''' <param name="date1"></param>
     ''' <param name="date2"></param>
     ''' <returns></returns>
-    Public Shared Function SameMinute(date1 As DateTime, date2 As DateTime) As Boolean
+    Public Shared Function SameMinute(date1 As System.DateTime, date2 As System.DateTime) As Boolean
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -82,7 +82,7 @@ Namespace Sql
     ''' <param name="date1"></param>
     ''' <param name="date2"></param>
     ''' <returns></returns>
-    Public Shared Function SameSecond(date1 As DateTime, date2 As DateTime) As Boolean
+    Public Shared Function SameSecond(date1 As System.DateTime, date2 As System.DateTime) As Boolean
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -93,7 +93,7 @@ Namespace Sql
     ''' <param name="date1"></param>
     ''' <param name="date2"></param>
     ''' <returns></returns>
-    Public Shared Function SameMillisecond(date1 As DateTime, date2 As DateTime) As Boolean
+    Public Shared Function SameMillisecond(date1 As System.DateTime, date2 As System.DateTime) As Boolean
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 

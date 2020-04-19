@@ -107,7 +107,7 @@
     <Compile Include="Tests\SelectTests.vb" />
     <Compile Include="Tests\SelectWithLimitTests.vb" />
     <Compile Include="Tests\SqlHelperAggregateTests.vb" />
-    <Compile Include="Tests\SqlHelperDateDiffTests.vb" />
+    <Compile Include="Tests\SqlHelperDateTimeTests.vb" />
     <Compile Include="Tests\SelectWithSqlStringWhereTests.vb" />
     <Compile Include="Tests\SelectWithWhereTests.vb" />
     <Compile Include="Tests\SelectWithJoinTests.vb" />
