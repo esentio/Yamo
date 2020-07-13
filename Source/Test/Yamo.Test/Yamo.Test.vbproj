@@ -77,6 +77,7 @@
     <Compile Include="Tests\SelectDistinctTests.vb" />
     <Compile Include="Tests\SelectWithConditionTests.vb" />
     <Compile Include="Tests\SelectWithLimitTests.vb" />
+    <Compile Include="Tests\SqlHelperExpTests.vb" />
     <Compile Include="UnitTestDbContextOptionsExtensions.vb" />
     <Compile Include="UnitTestDialectProvider.vb" />
     <Compile Include="UnitTestDbContext.vb" />

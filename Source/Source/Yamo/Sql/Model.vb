@@ -1,4 +1,5 @@
-﻿Imports System.Reflection
+﻿Imports System.Linq.Expressions
+Imports System.Reflection
 Imports Yamo.Infrastructure
 
 Namespace Sql
@@ -28,7 +29,7 @@ Namespace Sql
     ''' <param name="method"></param>
     ''' <param name="dialectProvider"></param>
     ''' <returns></returns>
-    Public Overloads Shared Function GetSqlFormat(method As MethodInfo, dialectProvider As SqlDialectProvider) As String
+    Public Overloads Shared Function GetSqlFormat(method As MethodCallExpression, dialectProvider As SqlDialectProvider) As SqlFormat
       Throw New InvalidOperationException("This method is not intended to be called in this SQL helper.")
     End Function
 

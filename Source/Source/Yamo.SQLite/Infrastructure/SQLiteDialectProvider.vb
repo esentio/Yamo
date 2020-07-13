@@ -26,6 +26,7 @@ Namespace Infrastructure
       Me.EntityReaderFactory = New EntityReaderFactory
       Me.DbValueConversion = New SQLiteDbValueConversion
       Me.SupportedLimitType = LimitType.Limit
+      RegisterDialectSpecificSqlHelper(Of Yamo.Sql.Exp, Yamo.SQLite.Sql.Exp)()
       RegisterDialectSpecificSqlHelper(Of Yamo.Sql.DateTime, Yamo.SQLite.Sql.DateTime)()
     End Sub
 

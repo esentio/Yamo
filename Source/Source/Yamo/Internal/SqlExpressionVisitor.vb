@@ -394,20 +394,20 @@ Namespace Internal
       End If
 
       Dim getSqlFormatMethod = sqlHelperType.GetMethod(NameOf(SqlHelper.GetSqlFormat), BindingFlags.Public Or BindingFlags.Static)
-      Dim format = DirectCast(getSqlFormatMethod.Invoke(Nothing, {node.Method, dialectProvider}), String)
+      Dim sqlFormat = DirectCast(getSqlFormatMethod.Invoke(Nothing, {node, dialectProvider}), SqlFormat)
 
-      Dim args = New StringBuilder(node.Arguments.Count - 1) {}
+      Dim args = New StringBuilder(sqlFormat.Arguments.Count - 1) {}
       Dim sqlBuilder = m_Sql
 
-      For i = 0 To node.Arguments.Count - 1
+      For i = 0 To sqlFormat.Arguments.Count - 1
         m_Sql = New StringBuilder()
-        Visit(node.Arguments(i))
+        Visit(sqlFormat.Arguments(i))
         args(i) = m_Sql
       Next
 
       m_Sql = sqlBuilder
 
-      m_Sql.AppendFormat(format, args)
+      m_Sql.AppendFormat(sqlFormat.Format, args)
 
       Return node
     End Function

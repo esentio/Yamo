@@ -1,5 +1,7 @@
-﻿Imports System.Reflection
+﻿Imports System.Linq.Expressions
+Imports System.Reflection
 Imports Yamo.Infrastructure
+Imports Yamo.Sql
 
 Namespace Sql
 
@@ -17,26 +19,26 @@ Namespace Sql
     ''' <param name="method"></param>
     ''' <param name="dialectProvider"></param>
     ''' <returns></returns>
-    Public Overloads Shared Function GetSqlFormat(method As MethodInfo, dialectProvider As SqlDialectProvider) As String
-      Select Case method.Name
+    Public Overloads Shared Function GetSqlFormat(method As MethodCallExpression, dialectProvider As SqlDialectProvider) As SqlFormat
+      Select Case method.Method.Name
         Case NameOf(DateTime.SameYear)
-          Return "(DATEDIFF(year, {0}, {1}) = 0)"
+          Return New SqlFormat("(DATEDIFF(year, {0}, {1}) = 0)", method.Arguments)
         Case NameOf(DateTime.SameQuarter)
-          Return "(DATEDIFF(quarter, {0}, {1}) = 0)"
+          Return New SqlFormat("(DATEDIFF(quarter, {0}, {1}) = 0)", method.Arguments)
         Case NameOf(DateTime.SameMonth)
-          Return "(DATEDIFF(month, {0}, {1}) = 0)"
+          Return New SqlFormat("(DATEDIFF(month, {0}, {1}) = 0)", method.Arguments)
         Case NameOf(DateTime.SameDay)
-          Return "(DATEDIFF(day, {0}, {1}) = 0)"
+          Return New SqlFormat("(DATEDIFF(day, {0}, {1}) = 0)", method.Arguments)
         Case NameOf(DateTime.SameHour)
-          Return "(DATEDIFF(hour, {0}, {1}) = 0)"
+          Return New SqlFormat("(DATEDIFF(hour, {0}, {1}) = 0)", method.Arguments)
         Case NameOf(DateTime.SameMinute)
-          Return "(DATEDIFF(minute, {0}, {1}) = 0)"
+          Return New SqlFormat("(DATEDIFF(minute, {0}, {1}) = 0)", method.Arguments)
         Case NameOf(DateTime.SameSecond)
-          Return "(DATEDIFF(second, {0}, {1}) = 0)"
+          Return New SqlFormat("(DATEDIFF(second, {0}, {1}) = 0)", method.Arguments)
         Case NameOf(DateTime.SameMillisecond)
-          Return "(DATEDIFF(millisecond, {0}, {1}) = 0)"
+          Return New SqlFormat("(DATEDIFF(millisecond, {0}, {1}) = 0)", method.Arguments)
         Case Else
-          Throw New NotSupportedException($"Method '{method.Name}' is not supported.")
+          Throw New NotSupportedException($"Method '{method.Method.Name}' is not supported.")
       End Select
     End Function
 
