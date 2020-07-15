@@ -44,6 +44,72 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub SelectUsingSqlRaw()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 1
+      items(0).IntColumnNull = 1
+
+      items(1).IntColumn = 2
+      items(1).IntColumnNull = 2
+
+      items(2).IntColumn = 3
+      items(2).IntColumnNull = Nothing
+
+      items(3).IntColumn = 4
+      items(3).IntColumnNull = 4
+
+      items(4).IntColumn = 5
+      items(4).IntColumnNull = Nothing
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) Sql.Exp.Raw(Of Int32)($"{x.IntColumn} + 1 + {1}")).
+                         ToList()
+
+        CollectionAssert.AreEqual({3, 4, 5, 6, 7}, result1)
+
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) Sql.Exp.Raw(Of Int32?)($"{x.IntColumnNull} + 1")).
+                         ToList()
+
+        CollectionAssert.AreEqual({New Int32?(2), New Int32?(3), New Int32?(), New Int32?(5), New Int32?()}, result2)
+
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) Sql.Exp.Raw(Of Int32)($"1 + 2")).
+                         ToList()
+
+        CollectionAssert.AreEqual({3, 3, 3, 3, 3}, result3)
+
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) Sql.Exp.Raw(Of String)($"'foo'")).
+                         ToList()
+
+        CollectionAssert.AreEqual({"foo", "foo", "foo", "foo", "foo"}, result4)
+
+        Dim result5 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) Sql.Exp.Raw(Of Int32)("1 + 2")).
+                         ToList()
+
+        CollectionAssert.AreEqual({3, 3, 3, 3, 3}, result5)
+
+        Dim result6 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) Sql.Exp.Raw(Of String)("'foo'")).
+                         ToList()
+
+        CollectionAssert.AreEqual({"foo", "foo", "foo", "foo", "foo"}, result6)
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub SelectUsingCoalesce()
       Dim items = CreateItems()
 

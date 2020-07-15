@@ -21,7 +21,7 @@ Namespace Sql
     Public ReadOnly Property Arguments As IReadOnlyList(Of Expression)
 
     ''' <summary>
-    ''' Creates new instance of <see cref="ModelInfo"/>.
+    ''' Creates new instance of <see cref="SqlFormat"/>.
     ''' </summary>
     ''' <param name="format"></param>
     ''' <param name="arguments"></param>

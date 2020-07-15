@@ -23,6 +23,28 @@ Namespace Sql
     End Function
 
     ''' <summary>
+    ''' Use expression provided as a raw SQL string.<br/>
+    ''' If expression is read, it forces using DbDataReader.Get* method specific for that .NET type.<br/>
+    ''' This method is not intended to be called directly. Use it only as a part of the query expression.
+    ''' </summary>
+    ''' <param name="expression"></param>
+    ''' <returns></returns>
+    Public Shared Function Raw(Of T)(expression As FormattableString) As T
+      Throw New Exception("This method is not intended to be called directly.")
+    End Function
+
+    ''' <summary>
+    ''' Use expression provided as a raw SQL string.<br/>
+    ''' If expression is read, it forces using DbDataReader.Get* method specific for that .NET type.<br/>
+    ''' This method is not intended to be called directly. Use it only as a part of the query expression.
+    ''' </summary>
+    ''' <param name="expression"></param>
+    ''' <returns></returns>
+    Public Shared Function Raw(Of T)(expression As RawSqlString) As T
+      Throw New Exception("This method is not intended to be called directly.")
+    End Function
+
+    ''' <summary>
     ''' Translates to COALESCE(&lt;expression1&gt;, &lt;expression2&gt; ...) expression/function call.<br/>
     ''' This method is not intended to be called directly. Use it only as a part of the query expression.
     ''' </summary>
@@ -91,6 +113,9 @@ Namespace Sql
         Case NameOf(Exp.As)
           Return New SqlFormat("{0}", method.Arguments)
 
+        Case NameOf(Exp.Raw)
+          Return GetSqlFormatForRaw(method)
+
         Case NameOf(Exp.Coalesce)
           Dim arguments = FlattenArguments(method)
           Dim args = String.Join(", ", Enumerable.Range(0, arguments.Count).Select(Function(x) "{" & x.ToString(Globalization.CultureInfo.InvariantCulture) & "}"))
@@ -111,5 +136,42 @@ Namespace Sql
       End Select
     End Function
 
+    ''' <summary>
+    ''' Returns SQL format string for <see cref="Raw(Of T)(FormattableString)"/> and <see cref="Raw(Of T)(RawSqlString)"/> methods.
+    ''' </summary>
+    ''' <param name="method"></param>
+    ''' <returns></returns>
+    Private Shared Function GetSqlFormatForRaw(method As MethodCallExpression) As SqlFormat
+      Dim arg = method.Arguments(0)
+
+      If arg.NodeType = ExpressionType.Call AndAlso arg.Type Is GetType(FormattableString) Then
+        Dim createMethodExp = DirectCast(arg, MethodCallExpression)
+
+        If createMethodExp.Method.Name = "Create" AndAlso createMethodExp.Arguments.Count = 2 Then
+          Dim formatParamExp = createMethodExp.Arguments(0)
+          Dim argumentsParamExp = createMethodExp.Arguments(1)
+
+          If formatParamExp.NodeType = ExpressionType.Constant Then
+            Dim format = DirectCast(DirectCast(formatParamExp, ConstantExpression).Value, String)
+
+            If argumentsParamExp.NodeType = ExpressionType.NewArrayInit Then
+              Return New SqlFormat(format, DirectCast(argumentsParamExp, NewArrayExpression).Expressions)
+            ElseIf argumentsParamExp.NodeType = ExpressionType.NewArrayBounds Then
+              Return New SqlFormat(format, {})
+            End If
+          End If
+        End If
+
+      ElseIf arg.NodeType = ExpressionType.Convert AndAlso arg.Type Is GetType(RawSqlString) Then
+        Dim stringConstantExp = DirectCast(arg, UnaryExpression).Operand
+
+        If stringConstantExp.NodeType = ExpressionType.Constant Then
+          Dim format = DirectCast(DirectCast(stringConstantExp, ConstantExpression).Value, String)
+          Return New SqlFormat(format, {})
+        End If
+      End If
+
+      Throw New NotSupportedException($"Method '{method.Method.Name}' is not used correctly. Use only String or FormattableString as a method parameter. String has to be declared directly in method call. Using variable as a parameter is not supported.")
+    End Function
   End Class
 End Namespace
