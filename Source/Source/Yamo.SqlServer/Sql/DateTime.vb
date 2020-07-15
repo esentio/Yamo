@@ -21,6 +21,12 @@ Namespace Sql
     ''' <returns></returns>
     Public Overloads Shared Function GetSqlFormat(method As MethodCallExpression, dialectProvider As SqlDialectProvider) As SqlFormat
       Select Case method.Method.Name
+        Case NameOf(DateTime.GetCurrentDateTime)
+          Return New SqlFormat("GETDATE()", method.Arguments)
+        Case NameOf(DateTime.GetCurrentDate)
+          Return New SqlFormat("CONVERT(date, GETDATE())", method.Arguments)
+        Case NameOf(DateTime.GetDate)
+          Return New SqlFormat("CONVERT(date, {0})", method.Arguments)
         Case NameOf(DateTime.SameYear)
           Return New SqlFormat("(DATEDIFF(year, {0}, {1}) = 0)", method.Arguments)
         Case NameOf(DateTime.SameQuarter)
