@@ -6,7 +6,7 @@ Namespace Tests
     Inherits BaseIntegrationTests
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlCountAll()
+    Public Overridable Sub SelectUsingCountAll()
       Dim items = CreateItems()
 
       items(0).IntColumnNull = 1
@@ -43,7 +43,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlCount()
+    Public Overridable Sub SelectUsingCount()
       Dim items = CreateItems()
 
       items(0).IntColumnNull = 1
@@ -80,7 +80,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlCountDistinct()
+    Public Overridable Sub SelectUsingCountDistinct()
       Dim items = CreateItems()
 
       items(0).IntColumnNull = 1
@@ -117,7 +117,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlSum()
+    Public Overridable Sub SelectUsingSum()
       Dim items = CreateItems()
 
       items(0).IntColumn = 1
@@ -186,7 +186,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlSumDistinct()
+    Public Overridable Sub SelectUsingSumDistinct()
       Dim items = CreateItems()
 
       items(0).IntColumn = 1
@@ -255,7 +255,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlAvg()
+    Public Overridable Sub SelectUsingAvg()
       Dim items = CreateItems()
 
       items(0).IntColumn = 10
@@ -324,7 +324,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlAvgDistinct()
+    Public Overridable Sub SelectUsingAvgDistinct()
       Dim items = CreateItems()
 
       items(0).IntColumn = 10
@@ -393,7 +393,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlStdev()
+    Public Overridable Sub SelectUsingStdev()
       Dim items = CreateItems()
 
       items(0).IntColumn = 10
@@ -455,7 +455,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlStdevDistinct()
+    Public Overridable Sub SelectUsingStdevDistinct()
       Dim items = CreateItems()
 
       items(0).IntColumn = 10
@@ -517,7 +517,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlMin()
+    Public Overridable Sub SelectUsingMin()
       Dim items = CreateItems()
 
       items(0).IntColumn = 1
@@ -586,7 +586,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlMax()
+    Public Overridable Sub SelectUsingMax()
       Dim items = CreateItems()
 
       items(0).IntColumn = 1

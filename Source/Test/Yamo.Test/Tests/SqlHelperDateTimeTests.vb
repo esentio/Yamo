@@ -6,7 +6,7 @@ Namespace Tests
     Inherits BaseIntegrationTests
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeGetCurrentDateTime()
+    Public Overridable Sub SelectByGetCurrentDateTime()
       Dim items = CreateItems()
 
       Dim now = Helpers.Calendar.Now()
@@ -42,7 +42,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlDateTimeGetCurrentDateTime()
+    Public Overridable Sub SelectUsingGetCurrentDateTime()
       Dim items = CreateItems()
 
       Dim now = Helpers.Calendar.Now()
@@ -58,7 +58,7 @@ Namespace Tests
       Using db = CreateDbContext()
         Dim result = db.From(Of ItemWithAllSupportedValues).
                         OrderBy(Function(x) x.IntColumn).
-                        Select(Function(x) (Id:=x.IntColumn, Now:=Sql.DateTime.GetCurrentDateTime())).
+                        Select(Function(x) (Id:=x.IntColumn, now:=Sql.DateTime.GetCurrentDateTime())).
                         ToList()
 
         Assert.AreEqual(5, result.Count)
@@ -68,7 +68,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeGetCurrentDate()
+    Public Overridable Sub SelectByGetCurrentDate()
       Dim items = CreateItems()
 
       Dim today = Helpers.Calendar.Now().Date
@@ -104,7 +104,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlDateTimeGetCurrentDate()
+    Public Overridable Sub SelectUsingGetCurrentDate()
       Dim items = CreateItems()
 
       Dim today = Helpers.Calendar.Now().Date
@@ -120,7 +120,7 @@ Namespace Tests
       Using db = CreateDbContext()
         Dim result = db.From(Of ItemWithAllSupportedValues).
                         OrderBy(Function(x) x.IntColumn).
-                        Select(Function(x) (Id:=x.IntColumn, Today:=Sql.DateTime.GetCurrentDate())).
+                        Select(Function(x) (Id:=x.IntColumn, today:=Sql.DateTime.GetCurrentDate())).
                         ToList()
 
         Assert.AreEqual(5, result.Count)
@@ -130,7 +130,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeGetDate()
+    Public Overridable Sub SelectByGetDate()
       Dim items = CreateItems()
 
       Dim today = Helpers.Calendar.Now().Date
@@ -181,7 +181,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlDateTimeGetDate()
+    Public Overridable Sub SelectUsingGetDate()
       Dim items = CreateItems()
 
       Dim dt1 = New DateTime(2000, 1, 1)
@@ -228,7 +228,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameYear()
+    Public Overridable Sub SelectBySameYear()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -257,7 +257,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameQuarter()
+    Public Overridable Sub SelectBySameQuarter()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -286,7 +286,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameMonth()
+    Public Overridable Sub SelectBySameMonth()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -315,7 +315,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameDay()
+    Public Overridable Sub SelectBySameDay()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -344,7 +344,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameHour()
+    Public Overridable Sub SelectBySameHour()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -373,7 +373,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameMinute()
+    Public Overridable Sub SelectBySameMinute()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -402,7 +402,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameSecond()
+    Public Overridable Sub SelectBySameSecond()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0)
@@ -431,7 +431,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordByDateTimeUsingSqlDateTimeSameMillisecond()
+    Public Overridable Sub SelectBySameMillisecond()
       Dim items = CreateItems()
 
       items(0).DatetimeColumn = New DateTime(2000, 1, 1, 8, 0, 0, 0)

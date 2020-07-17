@@ -11,13 +11,13 @@ Namespace Tests
     End Function
 
     <TestMethod()>
-    Public Overrides Sub SelectUsingSqlStdev()
+    Public Overrides Sub SelectUsingStdev()
       ' do nothing
       ' STDEV in SQLite only works with extension-functions.c and Microsoft.Data.SQLite doesn't support it
     End Sub
 
     <TestMethod()>
-    Public Overrides Sub SelectUsingSqlStdevDistinct()
+    Public Overrides Sub SelectUsingStdevDistinct()
       ' do nothing
       ' STDEV in SQLite only works with extension-functions.c and Microsoft.Data.SQLite doesn't support it
     End Sub

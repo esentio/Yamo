@@ -6,7 +6,7 @@ Namespace Tests
     Inherits BaseIntegrationTests
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlAs()
+    Public Overridable Sub SelectUsingAs()
       Dim items = CreateItems()
 
       items(0).IntColumn = 1
@@ -44,7 +44,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSqlRaw()
+    Public Overridable Sub SelectUsingRaw()
       Dim items = CreateItems()
 
       items(0).IntColumn = 1
