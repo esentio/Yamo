@@ -33,11 +33,24 @@ Public Class DbContextOptionsBuilder
   End Function
 
   ''' <summary>
-  ''' Set database commands timeout.
+  ''' Sets database commands timeout.
   ''' </summary>
   ''' <param name="timeout"></param>
-  Public Sub UseCommandTimeout(timeout As Int32)
+  ''' <returns></returns>
+  Public Function UseCommandTimeout(timeout As Int32) As DbContextOptionsBuilder
     Me.Options.CommandTimeout = timeout
-  End Sub
+    Return Me
+  End Function
+
+  ''' <summary>
+  ''' Registers dialect specific SQL helper.
+  ''' </summary>
+  ''' <typeparam name="TSqlHelper"></typeparam>
+  ''' <typeparam name="TDialectSqlHelper"></typeparam>
+  ''' <returns></returns>
+  Public Function RegisterDialectSpecificSqlHelper(Of TSqlHelper, TDialectSqlHelper)() As DbContextOptionsBuilder
+    Me.Options.DialectProvider.RegisterDialectSpecificSqlHelper(Of TSqlHelper, TDialectSqlHelper)()
+    Return Me
+  End Function
 
 End Class

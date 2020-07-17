@@ -98,31 +98,32 @@ Namespace Infrastructure
     End Property
 
     ''' <summary>
-    ''' Stores internal SQL helpers.
+    ''' Stores dialect specific SQL helpers.
     ''' </summary>
-    Private m_InternalSqlHelpers As Dictionary(Of Type, IInternalSqlHelper) = New Dictionary(Of Type, IInternalSqlHelper)
+    Private m_DialectSpecificSqlHelpers As Dictionary(Of Type, Type) = New Dictionary(Of Type, Type)
 
     ''' <summary>
-    ''' Registers internal SQL helper.<br/>
+    ''' Registers dialect specific SQL helper.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="helper"></param>
-    Public Sub RegisterInternalSqlHelper(helper As IInternalSqlHelper)
-      m_InternalSqlHelpers(helper.SqlHelperType) = helper
+    ''' <typeparam name="TSqlHelper"></typeparam>
+    ''' <typeparam name="TDialectSqlHelper"></typeparam>
+    Public Sub RegisterDialectSpecificSqlHelper(Of TSqlHelper, TDialectSqlHelper)()
+      m_DialectSpecificSqlHelpers(GetType(TSqlHelper)) = GetType(TDialectSqlHelper)
     End Sub
 
     ''' <summary>
-    ''' Gets internal SQL helper.<br/>
+    ''' Gets dialect specific SQL helper if it is registered.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="sqlHelperType"></param>
     ''' <returns></returns>
-    Public Function GetInternalSqlHelper(sqlHelperType As Type) As IInternalSqlHelper
-      If Not m_InternalSqlHelpers.ContainsKey(sqlHelperType) Then
-        Throw New ArgumentException($"No internal SQL helper implementation registered for SQL helper type '{sqlHelperType}'.")
+    Public Function GetDialectSpecificSqlHelper(sqlHelperType As Type) As Type
+      If m_DialectSpecificSqlHelpers.ContainsKey(sqlHelperType) Then
+        Return m_DialectSpecificSqlHelpers(sqlHelperType)
+      Else
+        Return Nothing
       End If
-
-      Return m_InternalSqlHelpers(sqlHelperType)
     End Function
 
   End Class

@@ -315,7 +315,7 @@ namespace Yamo.PlaygroundCS
             using (var db = CreateContext())
             {
                 var result = db.From<Blog>()
-                               .Where(b => Yamo.Sql.DateDiff.SameDay(b.Created, DateTime.Now))
+                               .Where(b => Yamo.Sql.DateTime.SameDay(b.Created, DateTime.Now))
                                .SelectAll().ToList();
             }
         }

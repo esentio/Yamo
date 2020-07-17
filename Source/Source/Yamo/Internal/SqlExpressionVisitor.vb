@@ -384,21 +384,30 @@ Namespace Internal
     ''' <param name="node"></param>
     ''' <returns></returns>
     Private Function VisitSqlHelperMethodCall(node As MethodCallExpression) As Expression
-      Dim getSqlFormatMethod = node.Method.DeclaringType.GetMethod(NameOf(SqlHelper.GetSqlFormat), BindingFlags.Public Or BindingFlags.Static)
-      Dim format = DirectCast(getSqlFormatMethod.Invoke(Nothing, {node.Method, m_Builder.DialectProvider}), String)
+      Dim dialectProvider = m_Builder.DialectProvider
 
-      Dim args = New StringBuilder(node.Arguments.Count - 1) {}
+      Dim sqlHelperType = node.Method.DeclaringType
+      Dim dialectSpecifictSqlHelperType = dialectProvider.GetDialectSpecificSqlHelper(sqlHelperType)
+
+      If dialectSpecifictSqlHelperType IsNot Nothing Then
+        sqlHelperType = dialectSpecifictSqlHelperType
+      End If
+
+      Dim getSqlFormatMethod = sqlHelperType.GetMethod(NameOf(SqlHelper.GetSqlFormat), BindingFlags.Public Or BindingFlags.Static)
+      Dim sqlFormat = DirectCast(getSqlFormatMethod.Invoke(Nothing, {node, dialectProvider}), SqlFormat)
+
+      Dim args = New StringBuilder(sqlFormat.Arguments.Count - 1) {}
       Dim sqlBuilder = m_Sql
 
-      For i = 0 To node.Arguments.Count - 1
+      For i = 0 To sqlFormat.Arguments.Count - 1
         m_Sql = New StringBuilder()
-        Visit(node.Arguments(i))
+        Visit(sqlFormat.Arguments(i))
         args(i) = m_Sql
       Next
 
       m_Sql = sqlBuilder
 
-      m_Sql.AppendFormat(format, args)
+      m_Sql.AppendFormat(sqlFormat.Format, args)
 
       Return node
     End Function
@@ -673,7 +682,7 @@ Namespace Internal
           Case GetType(Boolean)
             m_Sql.Append(m_Builder.DialectProvider.Formatter.GetConstantValue(DirectCast(node.Value, Boolean)))
 
-          Case GetType(DateTime)
+          Case GetType(System.DateTime)
             AppendNewParameter(node.Value)
 
           Case GetType(Int16)

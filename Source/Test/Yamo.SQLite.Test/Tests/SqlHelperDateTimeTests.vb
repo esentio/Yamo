@@ -3,8 +3,8 @@
 Namespace Tests
 
   <TestClass()>
-  Public Class SqlHelperDateDiffTests
-    Inherits Yamo.Test.Tests.SqlHelperDateDiffTests
+  Public Class SqlHelperDateTimeTests
+    Inherits Yamo.Test.Tests.SqlHelperDateTimeTests
 
     Protected Overrides Function CreateTestEnvironment() As ITestEnvironment
       Return SQLiteTestEnvironment.Create()
