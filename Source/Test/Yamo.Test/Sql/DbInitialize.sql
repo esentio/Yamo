@@ -1,6 +1,12 @@
-﻿SET ANSI_NULLS ON
+﻿CREATE SCHEMA [test_schema]
+
+GO
+
+SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON
+
+
 
 CREATE TABLE [dbo].[Article](
 	[Id] [int] NOT NULL,
@@ -200,3 +206,13 @@ CREATE TABLE [dbo].[LinkedItemChild](
 
 
 
+CREATE TABLE [test_schema].[ItemInSchema](
+	[Id] [int] NOT NULL,
+	[Description] [nvarchar](50) NOT NULL,
+	[RelatedItemId] [int] NULL,
+	[Deleted] [datetime] NULL,
+ CONSTRAINT [PK_ItemInSchema] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]

@@ -12,3 +12,4 @@ DROP TABLE IF EXISTS ItemWithPropertyModifiedTracking;
 DROP TABLE IF EXISTS Label;
 DROP TABLE IF EXISTS LinkedItem;
 DROP TABLE IF EXISTS LinkedItemChild;
+DROP TABLE IF EXISTS test_schema.ItemInSchema;

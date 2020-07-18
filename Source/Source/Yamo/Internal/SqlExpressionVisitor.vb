@@ -1185,7 +1185,7 @@ Namespace Internal
         m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, prop.ColumnName)
       Else
         ' NOTE: this is not used right now
-        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.Entity.TableName)
+        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.Entity.TableName, entity.Entity.Schema)
         m_Sql.Append(".")
         m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, prop.ColumnName)
       End If

@@ -117,7 +117,8 @@ Namespace Expressions.Builders
       Dim sql As New StringBuilder
 
       sql.Append("DELETE FROM ")
-      Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstEntity().Entity.TableName)
+      Dim entity = m_Model.GetFirstEntity().Entity
+      Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       sql.AppendLine()
 
       If m_WhereExpressions.Any() Then

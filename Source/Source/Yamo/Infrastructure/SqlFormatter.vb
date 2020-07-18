@@ -130,6 +130,21 @@ Namespace Infrastructure
     End Function
 
     ''' <summary>
+    ''' Creates an identifier.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="name"></param>
+    ''' <param name="schema"></param>
+    ''' <returns></returns>
+    Public Overridable Function CreateIdentifier(name As String, schema As String) As String
+      If String.IsNullOrEmpty(schema) Then
+        Return "[" & name & "]"
+      Else
+        Return "[" & schema & "].[" & name & "]"
+      End If
+    End Function
+
+    ''' <summary>
     ''' Appends an identifier.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -139,6 +154,27 @@ Namespace Infrastructure
       sql.Append("[")
       sql.Append(name)
       sql.Append("]")
+    End Sub
+
+    ''' <summary>
+    ''' Appends an identifier.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="sql"></param>
+    ''' <param name="name"></param>
+    ''' <param name="schema"></param>
+    Public Overridable Sub AppendIdentifier(sql As StringBuilder, name As String, schema As String)
+      If String.IsNullOrEmpty(schema) Then
+        sql.Append("[")
+        sql.Append(name)
+        sql.Append("]")
+      Else
+        sql.Append("[")
+        sql.Append(schema)
+        sql.Append("].[")
+        sql.Append(name)
+        sql.Append("]")
+      End If
     End Sub
 
   End Class

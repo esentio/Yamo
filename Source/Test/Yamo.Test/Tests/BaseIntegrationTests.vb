@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Text.RegularExpressions
 
 Namespace Tests
 
@@ -16,15 +17,24 @@ Namespace Tests
     Protected Overridable Sub InitializeDatabase()
       Using db = CreateDbContext()
         Dim sql = File.ReadAllText("Sql\DbInitialize.sql")
-        db.Execute(sql)
+        ExecuteSql(db, sql)
       End Using
     End Sub
 
     Protected Overridable Sub UninitializeDatabase()
       Using db = CreateDbContext()
         Dim sql = File.ReadAllText("Sql\DbUninitialize.sql")
-        db.Execute(sql)
+        ExecuteSql(db, sql)
       End Using
+    End Sub
+
+    Private Sub ExecuteSql(db As BaseTestDbContext, sql As String)
+      ' this regex doesn't cover all valid GO use cases, but it's good enough for now
+      Dim sqls = Regex.Split(sql, "\r\nGO\r\n", RegexOptions.Multiline)
+
+      For Each s In sqls
+        db.Execute(s)
+      Next
     End Sub
 
     Protected Overridable Sub ReinitializeDatabase()

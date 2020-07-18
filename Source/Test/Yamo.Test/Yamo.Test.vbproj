@@ -73,6 +73,8 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\ItemInSchema.vb" />
+    <Compile Include="Tests\SchemaTests.vb" />
     <Compile Include="Tests\QueryTests.vb" />
     <Compile Include="Tests\SelectDistinctTests.vb" />
     <Compile Include="Tests\SelectWithConditionTests.vb" />
