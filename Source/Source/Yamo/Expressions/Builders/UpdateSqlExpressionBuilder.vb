@@ -176,7 +176,7 @@ Namespace Expressions.Builders
       Dim sql As New StringBuilder
 
       sql.Append("UPDATE ")
-      Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName)
+      Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       sql.AppendLine()
 
       If Not m_AutoFieldsParametersInfo.HasValue Then

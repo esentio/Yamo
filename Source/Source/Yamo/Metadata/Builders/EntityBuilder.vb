@@ -39,6 +39,17 @@ Namespace Metadata.Builders
     End Function
 
     ''' <summary>
+    ''' Configures the database table name that the entity maps to.
+    ''' </summary>
+    ''' <param name="name"></param>
+    ''' <returns></returns>
+    Public Function ToTable(name As String, schema As String) As EntityBuilder(Of TEntity)
+      m_Entity.TableName = name
+      m_Entity.Schema = schema
+      Return Me
+    End Function
+
+    ''' <summary>
     ''' Returns an object that can be used to configure a property of the entity.<br/>
     ''' If the specified property is not already part of the model, it will be added.
     ''' </summary>

@@ -91,7 +91,7 @@ Namespace Infrastructure
         i += 1
       Next
 
-      Dim tableName = builder.DialectProvider.Formatter.CreateIdentifier(entity.TableName)
+      Dim tableName = builder.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema)
 
       Dim sqlWhenUseDbIdentityAndDefaults = GetInsertWhenUseDbIdentityAndDefaults(tableName, declareColumnsWhenUseDbIdentityAndDefaults, outputColumnNamesWhenUseDbIdentityAndDefaults, columnNamesWhenUseDbIdentityAndDefaults, parameterNamesWhenUseDbIdentityAndDefaults)
       Dim sqlVariableAssignWhenUseDbIdentityAndDefaults = Expression.Assign(sqlVariable, Expression.Constant(sqlWhenUseDbIdentityAndDefaults, GetType(String)))
@@ -222,7 +222,7 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim whereColumns = New List(Of String)
 
       sql.Append("UPDATE ")
-      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName)
+      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       sql.AppendLine(" SET")
 
       Dim i = 0
@@ -302,7 +302,7 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       Dim whereColumns = New List(Of String)
 
-      Dim appendCall = Expression.Call(sqlVariable, "AppendLine", {}, Expression.Constant("UPDATE " & builder.DialectProvider.Formatter.CreateIdentifier(entity.TableName) & " SET", GetType(String)))
+      Dim appendCall = Expression.Call(sqlVariable, "AppendLine", {}, Expression.Constant("UPDATE " & builder.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " SET", GetType(String)))
       expressions.Add(appendCall)
 
       Dim i = 0
@@ -388,7 +388,7 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim whereColumns = New List(Of String)
 
       sql.Append("DELETE FROM ")
-      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName)
+      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       sql.AppendLine()
       sql.AppendLine("WHERE")
 
@@ -448,7 +448,7 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim whereColumns = New List(Of String)
 
       sql.Append("UPDATE ")
-      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName)
+      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       sql.AppendLine(" SET")
 
       Dim i = 0
@@ -518,7 +518,7 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim setColumns = New List(Of String)
 
       sql.Append("UPDATE ")
-      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName)
+      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       sql.AppendLine(" SET")
 
       Dim i = 0

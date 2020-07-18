@@ -242,5 +242,13 @@
       }
     End Function
 
+    Public Overridable Function CreateItemInSchema(id As Int32) As ItemInSchema
+      Return New ItemInSchema With {
+        .Id = id,
+        .Description = Helpers.Data.CreateRandomString(50),
+        .RelatedItemId = Nothing
+      }
+    End Function
+
   End Class
 End Namespace

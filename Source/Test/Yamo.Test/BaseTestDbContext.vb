@@ -21,6 +21,7 @@ Public Class BaseTestDbContext
     CreateLinkedItemModel(modelBuilder)
     CreateLinkedItemWithShuffledPropertiesModel(modelBuilder)
     CreateLinkedItemChildModel(modelBuilder)
+    CreateItemInSchemaModel(modelBuilder)
   End Sub
 
   Private Sub CreateArticleModel(modelBuilder As ModelBuilder)
@@ -179,6 +180,15 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of LinkedItemChild).Property(Function(x) x.Id).IsKey()
     modelBuilder.Entity(Of LinkedItemChild).Property(Function(x) x.LinkedItemId)
     modelBuilder.Entity(Of LinkedItemChild).Property(Function(x) x.Description).IsRequired()
+  End Sub
+
+  Private Sub CreateItemInSchemaModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemInSchema)().ToTable(NameOf(ItemInSchema), "test_schema")
+
+    modelBuilder.Entity(Of ItemInSchema).Property(Function(x) x.Id).IsKey()
+    modelBuilder.Entity(Of ItemInSchema).Property(Function(x) x.Description).IsRequired()
+    modelBuilder.Entity(Of ItemInSchema).Property(Function(x) x.RelatedItemId)
+    modelBuilder.Entity(Of ItemInSchema).Property(Function(x) x.Deleted).SetOnDeleteTo(Function() Helpers.Calendar.Now)
   End Sub
 
 End Class

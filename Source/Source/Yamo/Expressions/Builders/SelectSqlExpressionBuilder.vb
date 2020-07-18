@@ -130,7 +130,8 @@ Namespace Expressions.Builders
       End If
 
       sql.Append(" FROM ")
-      Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstEntity().Entity.TableName)
+      Dim entity = m_Model.GetFirstEntity().Entity
+      Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       sql.Append(" ")
       Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstTableAlias())
 
@@ -285,12 +286,12 @@ Namespace Expressions.Builders
         Dim tableAlias = m_Model.GetLastTableAlias()
 
         If predicate Is Nothing Then
-          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)
+          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)
           m_JoinExpressions.Add(sql)
         Else
           Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
           Dim result = m_Visitor.Translate(predicate, parametersType, entityIndexHints, m_Parameters.Count, True, True)
-          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & " ON " & result.Sql
+          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & " ON " & result.Sql
           m_JoinExpressions.Add(sql)
           m_Parameters.AddRange(result.Parameters)
         End If

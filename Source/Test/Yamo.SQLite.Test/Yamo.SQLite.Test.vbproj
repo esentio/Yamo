@@ -115,6 +115,7 @@
     <Compile Include="Tests\SelectCountTests.vb" />
     <Compile Include="Tests\SelectWithSortTests.vb" />
     <Compile Include="Tests\TransactionTests.vb" />
+    <Compile Include="Tests\SchemaTests.vb" />
     <Compile Include="Tests\UpdateTests.vb" />
   </ItemGroup>
   <ItemGroup>

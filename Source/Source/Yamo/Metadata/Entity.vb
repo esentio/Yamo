@@ -33,6 +33,12 @@
     Public Property TableName As String
 
     ''' <summary>
+    ''' Gets or sets schema of the entity.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property Schema As String
+
+    ''' <summary>
     ''' Creates new instance of <see cref="Entity"/>.
     ''' </summary>
     ''' <param name="entityType"></param>
@@ -42,6 +48,7 @@
       m_RelationshipNavigations = New Dictionary(Of String, RelationshipNavigation)
       Me.EntityType = entityType
       Me.TableName = entityType.Name
+      Me.Schema = ""
     End Sub
 
     ''' <summary>
