@@ -48,9 +48,10 @@ Namespace Expressions
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="sql"></param>
+    ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Execute(sql As RawSqlString) As Int32
-      Dim query = Me.Builder.CreateQuery(sql)
+    Public Function Execute(sql As RawSqlString, ParamArray parameters() As Object) As Int32
+      Dim query = Me.Builder.CreateQuery(sql, parameters)
       Return Me.Executor.Execute(query)
     End Function
 
@@ -72,9 +73,10 @@ Namespace Expressions
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="sql"></param>
+    ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function QueryFirstOrDefault(Of T)(sql As RawSqlString) As T
-      Dim query = Me.Builder.CreateQuery(sql)
+    Public Function QueryFirstOrDefault(Of T)(sql As RawSqlString, ParamArray parameters() As Object) As T
+      Dim query = Me.Builder.CreateQuery(sql, parameters)
       Return Me.Executor.QueryFirstOrDefault(Of T)(query)
     End Function
 
@@ -96,9 +98,10 @@ Namespace Expressions
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="sql"></param>
+    ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Query(Of T)(sql As RawSqlString) As List(Of T)
-      Dim q = Me.Builder.CreateQuery(sql)
+    Public Function Query(Of T)(sql As RawSqlString, ParamArray parameters() As Object) As List(Of T)
+      Dim q = Me.Builder.CreateQuery(sql, parameters)
       Return Me.Executor.QueryList(Of T)(q)
     End Function
 

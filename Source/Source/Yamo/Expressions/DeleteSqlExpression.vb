@@ -46,9 +46,10 @@ Namespace Expressions
     ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As String) As FilteredDeleteSqlExpression(Of T)
-      Me.Builder.AddWhere(predicate)
+    Public Function Where(predicate As String, ParamArray parameters() As Object) As FilteredDeleteSqlExpression(Of T)
+      Me.Builder.AddWhere(predicate, parameters)
       Return New FilteredDeleteSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
 

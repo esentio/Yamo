@@ -76,9 +76,10 @@ Namespace Expressions
     ''' Adds SET clause.
     ''' </summary>
     ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function [Set](predicate As String) As SetUpdateSqlExpression(Of T)
-      Me.Builder.AddSet(predicate)
+    Public Function [Set](predicate As String, ParamArray parameters() As Object) As SetUpdateSqlExpression(Of T)
+      Me.Builder.AddSet(predicate, parameters)
       Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
 

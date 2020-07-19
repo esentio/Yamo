@@ -145,9 +145,10 @@ Namespace Expressions
     ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As String) As FilteredSelectSqlExpression(Of T)
-      Me.Builder.AddWhere(predicate)
+    Public Function Where(predicate As String, ParamArray parameters() As Object) As FilteredSelectSqlExpression(Of T)
+      Me.Builder.AddWhere(predicate, parameters)
       Return New FilteredSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
     End Function
 

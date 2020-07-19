@@ -116,5 +116,29 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub DeleteRecordsWithRawSqlStringWithparameters()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.Nvarchar50Column = "d"
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.Nvarchar50Column = ""
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item3.Nvarchar50Column = "d"
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.Nvarchar50Column)).ColumnName
+
+        Dim affectedRows = db.Delete(Of ItemWithAllSupportedValues).Where("{0} = {1}", RawSqlString.Create(column), "d").Execute()
+        Assert.AreEqual(2, affectedRows)
+
+        Dim item = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.Id = item2.Id).SelectAll().FirstOrDefault()
+        Assert.IsNotNull(item)
+      End Using
+    End Sub
+
   End Class
 End Namespace

@@ -388,7 +388,8 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="predicate"></param>
-    Public Sub AddWhere(predicate As String)
+    ''' <param name="parameters"></param>
+    Public Sub AddWhere(predicate As String, ParamArray parameters() As Object)
       If IsInConditionalIgnoreMode() Then
         Exit Sub
       End If
@@ -397,7 +398,13 @@ Namespace Expressions.Builders
         m_WhereExpressions = New List(Of String)
       End If
 
-      m_WhereExpressions.Add(predicate)
+      If parameters Is Nothing OrElse parameters.Length = 0 Then
+        m_WhereExpressions.Add(predicate)
+      Else
+        Dim sql = ConvertToSqlString(predicate, parameters, m_Parameters.Count)
+        m_WhereExpressions.Add(sql.Sql)
+        m_Parameters.AddRange(sql.Parameters)
+      End If
     End Sub
 
     ''' <summary>
@@ -447,7 +454,8 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="predicate"></param>
-    Public Sub AddHaving(predicate As String)
+    ''' <param name="parameters"></param>
+    Public Sub AddHaving(predicate As String, ParamArray parameters() As Object)
       If IsInConditionalIgnoreMode() Then
         Exit Sub
       End If
@@ -456,7 +464,13 @@ Namespace Expressions.Builders
         m_HavingExpressions = New List(Of String)
       End If
 
-      m_HavingExpressions.Add(predicate)
+      If parameters Is Nothing OrElse parameters.Length = 0 Then
+        m_HavingExpressions.Add(predicate)
+      Else
+        Dim sql = ConvertToSqlString(predicate, parameters, m_Parameters.Count)
+        m_HavingExpressions.Add(sql.Sql)
+        m_Parameters.AddRange(sql.Parameters)
+      End If
     End Sub
 
     ''' <summary>

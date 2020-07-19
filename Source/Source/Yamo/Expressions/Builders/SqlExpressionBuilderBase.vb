@@ -53,7 +53,23 @@ Namespace Expressions.Builders
     Public Function ConvertToSqlString(sql As FormattableString, parameterIndex As Int32) As SqlString
       Dim args = sql.GetArguments()
 
-      Dim paramNames = New String(args.Length - 1) {}
+      If args.Length = 0 Then
+        Return New SqlString(sql.Format)
+      Else
+        Return ConvertToSqlString(sql.Format, args, parameterIndex)
+      End If
+    End Function
+
+    ''' <summary>
+    ''' Converts string format to <see cref="SqlString"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="format"></param>
+    ''' <param name="args"></param>
+    ''' <param name="parameterIndex"></param>
+    ''' <returns></returns>
+    Public Function ConvertToSqlString(format As String, args() As Object, parameterIndex As Int32) As SqlString
+      Dim formatArgs = New String(args.Length - 1) {}
       Dim parameters = New List(Of SqlParameter)(args.Length)
 
       For i = 0 To args.Length - 1
@@ -61,15 +77,18 @@ Namespace Expressions.Builders
 
         If TypeOf value Is ModelInfo Then
           Dim mi = DirectCast(value, ModelInfo)
-          paramNames(i) = CreateColumnsString(mi.Model, mi.TableAlias)
+          formatArgs(i) = CreateColumnsString(mi.Model, mi.TableAlias)
+        ElseIf TypeOf value Is RawSqlString Then
+          Dim s = DirectCast(value, RawSqlString)
+          formatArgs(i) = s.Value
         Else
           Dim paramName = CreateParameter(parameterIndex + i)
-          paramNames(i) = paramName
+          formatArgs(i) = paramName
           parameters.Add(New SqlParameter(paramName, value))
         End If
       Next
 
-      Dim sqlString = String.Format(sql.Format, paramNames)
+      Dim sqlString = String.Format(format, formatArgs)
 
       Return New SqlString(sqlString, parameters)
     End Function

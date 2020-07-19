@@ -42,9 +42,10 @@ Namespace Expressions
     ''' Adds AND condition to HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function [And](predicate As String) As HavingSelectSqlExpression(Of T)
-      Me.Builder.AddHaving(predicate)
+    Public Function [And](predicate As String, ParamArray parameters() As Object) As HavingSelectSqlExpression(Of T)
+      Me.Builder.AddHaving(predicate, parameters)
       Return Me
     End Function
 

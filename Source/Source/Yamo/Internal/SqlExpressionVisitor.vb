@@ -221,6 +221,10 @@ Namespace Internal
         If GetType(SqlHelper).IsAssignableFrom(node.Method.DeclaringType) Then
           Return VisitSqlHelperMethodCall(node)
         End If
+
+        If node.Method.DeclaringType Is GetType(RawSqlString) Then
+          Return VisitRawSqlStringCreateCall(node)
+        End If
       End If
 
       If node.Method.DeclaringType Is GetType(Enumerable) Then
@@ -409,6 +413,16 @@ Namespace Internal
 
       m_Sql.AppendFormat(sqlFormat.Format, args)
 
+      Return node
+    End Function
+
+    ''' <summary>
+    ''' Visits <see cref="RawSqlString.Create(String)"/> method call.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function VisitRawSqlStringCreateCall(node As MethodCallExpression) As Expression
+      m_Sql.Append(Evaluate(node.Arguments(0)))
       Return node
     End Function
 
@@ -833,6 +847,9 @@ Namespace Internal
         Return VisitValueTupleOrAnonymousType(node, True)
       ElseIf IsAnonymousType(node.Type) Then
         Return VisitValueTupleOrAnonymousType(node, False)
+      ElseIf node.Type Is GetType(RawSqlString) Then
+        m_Sql.Append(Evaluate(node.Arguments(0)))
+        Return node
       Else
         Return VisitAndEvaluate(node)
       End If

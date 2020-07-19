@@ -116,13 +116,13 @@
 
     Protected Sub GenerateHavingWithString(builder As CodeBuilder, entityCount As Int32)
       Dim comment = "Adds HAVING clause."
-      Dim params = {"predicate"}
+      Dim params = {"predicate", "parameters"}
       AddComment(builder, comment, params:=params, returns:="")
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Having(predicate As String) As HavingSelectSqlExpression(Of {generics})").PushIndent()
-      builder.Indent().AppendLine("Me.Builder.AddHaving(predicate)")
+      builder.Indent().AppendLine($"Public Function Having(predicate As String, ParamArray parameters() As Object) As HavingSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine("Me.Builder.AddHaving(predicate, parameters)")
       builder.Indent().AppendLine($"Return New HavingSelectSqlExpression(Of {generics})(Me.Builder, Me.Executor)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub

@@ -18,11 +18,21 @@ Namespace Tests
       InsertItems(items)
 
       Using db = CreateDbContext()
+        Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.Nvarchar50Column)).ColumnName
         Dim value = "amet"
+
         ' NOTE: DirectCast is needed (VB.NET compiler bug/feature?)
-        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) DirectCast($"{x.Nvarchar50Column} = {value}", FormattableString)).SelectAll().ToList()
-        Assert.AreEqual(1, result.Count)
-        Assert.AreEqual(items(2), result(0))
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).Where(Function(x) DirectCast($"{x.Nvarchar50Column} = {value}", FormattableString)).SelectAll().ToList()
+        Assert.AreEqual(1, result1.Count)
+        Assert.AreEqual(items(2), result1(0))
+
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).Where(Function(x) DirectCast($"{RawSqlString.Create(column)} = {value}", FormattableString)).SelectAll().ToList()
+        Assert.AreEqual(1, result2.Count)
+        Assert.AreEqual(items(2), result2(0))
+
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).Where(Function(x) DirectCast($"{New RawSqlString(column)} = {value}", FormattableString)).SelectAll().ToList()
+        Assert.AreEqual(1, result3.Count)
+        Assert.AreEqual(items(2), result3(0))
       End Using
     End Sub
 
@@ -40,6 +50,27 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim result = db.From(Of ItemWithAllSupportedValues).Where("Nvarchar50Column = 'amet'").SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(2), result(0))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectRecordByRawSqlStringWithParameters()
+      Dim items = CreateItems()
+
+      items(0).Nvarchar50Column = "lorem ipsum"
+      items(1).Nvarchar50Column = "dolor sit"
+      items(2).Nvarchar50Column = "amet"
+      items(3).Nvarchar50Column = "lorem ipsum dolor sit amet"
+      items(4).Nvarchar50Column = ""
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.Nvarchar50Column)).ColumnName
+
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where("{0} = {1}", RawSqlString.Create(column), "amet").SelectAll().ToList()
         Assert.AreEqual(1, result.Count)
         Assert.AreEqual(items(2), result(0))
       End Using
