@@ -130,7 +130,9 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim affectedRows = db.Delete(Of ItemWithAllSupportedValues).Where("Nvarchar50Column = {0}", "d").Execute()
+        Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.Nvarchar50Column)).ColumnName
+
+        Dim affectedRows = db.Delete(Of ItemWithAllSupportedValues).Where("{0} = {1}", RawSqlString.Create(column), "d").Execute()
         Assert.AreEqual(2, affectedRows)
 
         Dim item = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.Id = item2.Id).SelectAll().FirstOrDefault()

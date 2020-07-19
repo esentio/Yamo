@@ -17,7 +17,10 @@ Namespace Tests
       InsertItems(label1En, label2En)
 
       Using db = CreateDbContext()
-        Dim result = db.Execute($"UPDATE Label SET Language = {German}")
+        Dim table = db.Model.GetEntity(GetType(Label)).TableName
+        Dim column = db.Model.GetEntity(GetType(Label)).GetProperty(NameOf(Label.Language)).ColumnName
+
+        Dim result = db.Execute($"UPDATE {RawSqlString.Create(table)} SET {RawSqlString.Create(column)} = {German}")
         Assert.AreEqual(2, result)
 
         result = db.From(Of Label).Where(Function(o) o.Language = German).SelectCount()
@@ -49,12 +52,17 @@ Namespace Tests
       InsertItems(label1En, label2En)
 
       Using db = CreateDbContext()
-        Dim result = db.Execute("UPDATE Label SET Language = {0}", German)
+        Dim table = db.Model.GetEntity(GetType(Label)).TableName
+        Dim column = db.Model.GetEntity(GetType(Label)).GetProperty(NameOf(Label.Language)).ColumnName
+
+        Dim result = db.Execute("UPDATE {0} SET {1} = {2}", RawSqlString.Create(table), RawSqlString.Create(column), German)
         Assert.AreEqual(2, result)
 
         result = db.From(Of Label).Where(Function(o) o.Language = German).SelectCount()
         Assert.AreEqual(2, result)
       End Using
+
+      Dim a = New RawSqlString()
     End Sub
 
   End Class

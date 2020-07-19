@@ -507,9 +507,12 @@ Namespace Tests
 
       ' set value directly
       Using db = CreateDbContext()
+        Dim column1 = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.Nvarchar50Column)).ColumnName
+        Dim column2 = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.IntColumn)).ColumnName
+
         Dim affectedRows = db.Update(Of ItemWithAllSupportedValues).
-                              Set("Nvarchar50Column = {0}", "lorem").
-                              Set("IntColumn = {0}", 42).
+                              Set("{0} = {1}", RawSqlString.Create(column1), "lorem").
+                              Set("{0} = {1}", RawSqlString.Create(column2), 42).
                               Execute()
         Assert.AreEqual(3, affectedRows)
 
@@ -631,9 +634,11 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
+        Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.IntColumn)).ColumnName
+
         Dim affectedRows = db.Update(Of ItemWithAllSupportedValues).
                               Set(Sub(x) x.Nvarchar50Column = "lorem").
-                              Where("IntColumn < {0}", 3).
+                              Where("{0} < {1}", RawSqlString.Create(column), 3).
                               Execute()
         Assert.AreEqual(2, affectedRows)
 

@@ -26,7 +26,10 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result = db.Query(Of Int32)($"SELECT IntColumn FROM ItemWithAllSupportedValues WHERE NOT Nvarchar50Column = {item2.Nvarchar50Column} ORDER BY IntColumn")
+        Dim table = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).TableName
+        Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.Nvarchar50Column)).ColumnName
+
+        Dim result = db.Query(Of Int32)($"SELECT IntColumn FROM {RawSqlString.Create(table)} WHERE NOT {RawSqlString.Create(column)} = {item2.Nvarchar50Column} ORDER BY IntColumn")
         Assert.AreEqual(2, result.Count)
         Assert.AreEqual(item1.IntColumn, result(0))
         Assert.AreEqual(item3.IntColumn, result(1))
@@ -74,7 +77,10 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result = db.Query(Of Int32)("SELECT IntColumn FROM ItemWithAllSupportedValues WHERE NOT Nvarchar50Column = {0} ORDER BY IntColumn", "ipsum")
+        Dim table = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).TableName
+        Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.Nvarchar50Column)).ColumnName
+
+        Dim result = db.Query(Of Int32)("SELECT IntColumn FROM {0} WHERE NOT {1} = {2} ORDER BY IntColumn", RawSqlString.Create(table), RawSqlString.Create(column), "ipsum")
         Assert.AreEqual(2, result.Count)
         Assert.AreEqual(item1.IntColumn, result(0))
         Assert.AreEqual(item3.IntColumn, result(1))

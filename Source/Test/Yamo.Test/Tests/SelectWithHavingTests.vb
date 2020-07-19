@@ -177,9 +177,12 @@ Namespace Tests
       InsertItems(items)
 
       Using db = CreateDbContext()
+        Dim column1 = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.Nvarchar50Column)).ColumnName
+        Dim column2 = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.IntColumn)).ColumnName
+
         Dim result = db.From(Of ItemWithAllSupportedValues).
                         GroupBy(Function(x) New With {x.Nvarchar50Column, x.IntColumn}).
-                        Having("Nvarchar50Column = {0} AND IntColumn < {1}", "Lorem", 42).
+                        Having("{0} = {1} AND {2} < {3}", RawSqlString.Create(column1), "Lorem", RawSqlString.Create(column2), 42).
                         Select(Function(x) (x.Nvarchar50Column, x.IntColumn)).
                         ToList()
 

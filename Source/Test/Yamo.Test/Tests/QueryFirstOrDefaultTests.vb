@@ -27,7 +27,10 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result = db.QueryFirstOrDefault(Of Int32)($"SELECT IntColumn FROM ItemWithAllSupportedValues WHERE Nvarchar50Column = {item2.Nvarchar50Column}")
+        Dim table = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).TableName
+        Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.Nvarchar50Column)).ColumnName
+
+        Dim result = db.QueryFirstOrDefault(Of Int32)($"SELECT IntColumn FROM {RawSqlString.Create(table)} WHERE {RawSqlString.Create(column)} = {item2.Nvarchar50Column}")
         Assert.AreEqual(item2.IntColumn, result)
       End Using
     End Sub
@@ -71,7 +74,10 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result = db.QueryFirstOrDefault(Of Int32)("SELECT IntColumn FROM ItemWithAllSupportedValues WHERE Nvarchar50Column = {0}", "ipsum")
+        Dim table = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).TableName
+        Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.Nvarchar50Column)).ColumnName
+
+        Dim result = db.QueryFirstOrDefault(Of Int32)("SELECT IntColumn FROM {0} WHERE {1} = {2}", RawSqlString.Create(table), RawSqlString.Create(column), "ipsum")
         Assert.AreEqual(item2.IntColumn, result)
       End Using
     End Sub

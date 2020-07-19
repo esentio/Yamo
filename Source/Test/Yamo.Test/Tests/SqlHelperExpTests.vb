@@ -64,7 +64,9 @@ Namespace Tests
 
       InsertItems(items)
 
+
       Using db = CreateDbContext()
+        Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.IntColumn)).ColumnName
         Dim one = 1
         Dim two = 2
 
@@ -77,52 +79,79 @@ Namespace Tests
 
         Dim result2 = db.From(Of ItemWithAllSupportedValues).
                          OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) Sql.Exp.Raw(Of Int32)($"{RawSqlString.Create(column)} + 1 + {one}")).
+                         ToList()
+
+        CollectionAssert.AreEqual({3, 4, 5, 6, 7}, result2)
+
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) Sql.Exp.Raw(Of Int32)($"{New RawSqlString(column)} + 1 + {one}")).
+                         ToList()
+
+        CollectionAssert.AreEqual({3, 4, 5, 6, 7}, result3)
+
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
                          Select(Function(x) Sql.Exp.Raw(Of Int32?)($"{x.IntColumnNull} + 1")).
                          ToList()
 
-        CollectionAssert.AreEqual({New Int32?(2), New Int32?(3), New Int32?(), New Int32?(5), New Int32?()}, result2)
+        CollectionAssert.AreEqual({New Int32?(2), New Int32?(3), New Int32?(), New Int32?(5), New Int32?()}, result4)
 
-        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+        Dim result5 = db.From(Of ItemWithAllSupportedValues).
                          OrderBy(Function(x) x.IntColumn).
                          Select(Function(x) Sql.Exp.Raw(Of Int32)($"1 + 2")).
                          ToList()
 
-        CollectionAssert.AreEqual({3, 3, 3, 3, 3}, result3)
+        CollectionAssert.AreEqual({3, 3, 3, 3, 3}, result5)
 
-        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+        Dim result6 = db.From(Of ItemWithAllSupportedValues).
                          OrderBy(Function(x) x.IntColumn).
                          Select(Function(x) Sql.Exp.Raw(Of String)($"'foo'")).
                          ToList()
 
-        CollectionAssert.AreEqual({"foo", "foo", "foo", "foo", "foo"}, result4)
+        CollectionAssert.AreEqual({"foo", "foo", "foo", "foo", "foo"}, result6)
+      End Using
 
-        Dim result5 = db.From(Of ItemWithAllSupportedValues).
+      Using db = CreateDbContext()
+        Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.IntColumn)).ColumnName
+        Dim one = 1
+        Dim two = 2
+
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
                          OrderBy(Function(x) x.IntColumn).
-                         Select(Function(x) Sql.Exp.Raw(Of Int32)("IntColumn + 1 + 1")).
+                         Select(Function(x) Sql.Exp.Raw(Of Int32)("IntColumn + 1 + {0}", one)).
                          ToList()
 
-        CollectionAssert.AreEqual({3, 4, 5, 6, 7}, result5)
+        CollectionAssert.AreEqual({3, 4, 5, 6, 7}, result1)
 
-        Dim result6 = db.From(Of ItemWithAllSupportedValues).
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) Sql.Exp.Raw(Of Int32)("{0} + 1 + {1}", RawSqlString.Create(column), one)).
+                         ToList()
+
+        CollectionAssert.AreEqual({3, 4, 5, 6, 7}, result2)
+
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) Sql.Exp.Raw(Of Int32?)("IntColumnNull + 1")).
+                         ToList()
+
+        CollectionAssert.AreEqual({New Int32?(2), New Int32?(3), New Int32?(), New Int32?(5), New Int32?()}, result3)
+
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
                          OrderBy(Function(x) x.IntColumn).
                          Select(Function(x) Sql.Exp.Raw(Of Int32)("1 + 2")).
                          ToList()
 
-        CollectionAssert.AreEqual({3, 3, 3, 3, 3}, result6)
+        CollectionAssert.AreEqual({3, 3, 3, 3, 3}, result4)
 
-        Dim result7 = db.From(Of ItemWithAllSupportedValues).
+        Dim result5 = db.From(Of ItemWithAllSupportedValues).
                          OrderBy(Function(x) x.IntColumn).
                          Select(Function(x) Sql.Exp.Raw(Of String)("'foo'")).
                          ToList()
 
-        CollectionAssert.AreEqual({"foo", "foo", "foo", "foo", "foo"}, result7)
-
-        Dim result8 = db.From(Of ItemWithAllSupportedValues).
-                         OrderBy(Function(x) x.IntColumn).
-                         Select(Function(x) Sql.Exp.Raw(Of Int32)("{0} + {1}", one, two)).
-                         ToList()
-
-        CollectionAssert.AreEqual({3, 3, 3, 3, 3}, result8)
+        CollectionAssert.AreEqual({"foo", "foo", "foo", "foo", "foo"}, result5)
       End Using
     End Sub
 
