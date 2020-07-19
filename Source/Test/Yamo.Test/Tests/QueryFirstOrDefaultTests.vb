@@ -11,6 +11,72 @@ Namespace Tests
     Protected Const German As String = "de"
 
     <TestMethod()>
+    Public Overridable Sub QueryFirstOrDefaultUsingFormattableString()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 10
+      item1.Nvarchar50Column = "lorem"
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 20
+      item2.Nvarchar50Column = "ipsum"
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item3.IntColumn = 30
+      item3.Nvarchar50Column = "dolor"
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim result = db.QueryFirstOrDefault(Of Int32)($"SELECT IntColumn FROM ItemWithAllSupportedValues WHERE Nvarchar50Column = {item2.Nvarchar50Column}")
+        Assert.AreEqual(item2.IntColumn, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub QueryFirstOrDefaultUsingRawSqlString()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 10
+      item1.Nvarchar50Column = "lorem"
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 20
+      item2.Nvarchar50Column = "ipsum"
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item3.IntColumn = 30
+      item3.Nvarchar50Column = "dolor"
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim result = db.QueryFirstOrDefault(Of Int32)("SELECT IntColumn FROM ItemWithAllSupportedValues WHERE Nvarchar50Column = 'ipsum'")
+        Assert.AreEqual(item2.IntColumn, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub QueryFirstOrDefaultUsingRawSqlStringWithParameters()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 10
+      item1.Nvarchar50Column = "lorem"
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 20
+      item2.Nvarchar50Column = "ipsum"
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item3.IntColumn = 30
+      item3.Nvarchar50Column = "dolor"
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim result = db.QueryFirstOrDefault(Of Int32)("SELECT IntColumn FROM ItemWithAllSupportedValues WHERE Nvarchar50Column = {0}", "ipsum")
+        Assert.AreEqual(item2.IntColumn, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub QueryFirstOrDefaultOfGuid()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.UniqueidentifierColumn = Guid.Empty

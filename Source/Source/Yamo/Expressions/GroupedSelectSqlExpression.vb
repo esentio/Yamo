@@ -42,9 +42,10 @@ Namespace Expressions
     ''' Adds HAVING clause.
     ''' </summary>
     ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Having(predicate As String) As HavingSelectSqlExpression(Of T)
-      Me.Builder.AddHaving(predicate)
+    Public Function Having(predicate As String, ParamArray parameters() As Object) As HavingSelectSqlExpression(Of T)
+      Me.Builder.AddHaving(predicate, parameters)
       Return New HavingSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
     End Function
 

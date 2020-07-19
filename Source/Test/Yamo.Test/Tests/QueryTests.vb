@@ -10,6 +10,78 @@ Namespace Tests
     Protected Const German As String = "de"
 
     <TestMethod()>
+    Public Overridable Sub QueryUsingFormattableString()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 10
+      item1.Nvarchar50Column = "lorem"
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 20
+      item2.Nvarchar50Column = "ipsum"
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item3.IntColumn = 30
+      item3.Nvarchar50Column = "dolor"
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim result = db.Query(Of Int32)($"SELECT IntColumn FROM ItemWithAllSupportedValues WHERE NOT Nvarchar50Column = {item2.Nvarchar50Column} ORDER BY IntColumn")
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(item1.IntColumn, result(0))
+        Assert.AreEqual(item3.IntColumn, result(1))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub QueryUsingRawSqlString()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 10
+      item1.Nvarchar50Column = "lorem"
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 20
+      item2.Nvarchar50Column = "ipsum"
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item3.IntColumn = 30
+      item3.Nvarchar50Column = "dolor"
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim result = db.Query(Of Int32)("SELECT IntColumn FROM ItemWithAllSupportedValues WHERE NOT Nvarchar50Column = 'ipsum' ORDER BY IntColumn")
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(item1.IntColumn, result(0))
+        Assert.AreEqual(item3.IntColumn, result(1))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub QueryUsingRawSqlStringWithParameters()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 10
+      item1.Nvarchar50Column = "lorem"
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 20
+      item2.Nvarchar50Column = "ipsum"
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item3.IntColumn = 30
+      item3.Nvarchar50Column = "dolor"
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim result = db.Query(Of Int32)("SELECT IntColumn FROM ItemWithAllSupportedValues WHERE NOT Nvarchar50Column = {0} ORDER BY IntColumn", "ipsum")
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(item1.IntColumn, result(0))
+        Assert.AreEqual(item3.IntColumn, result(1))
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub QueryOfGuid()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.IntColumn = 1

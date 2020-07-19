@@ -92,8 +92,15 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="predicate"></param>
-    Public Sub AddWhere(predicate As String)
-      m_WhereExpressions.Add(predicate)
+    ''' <param name="parameters"></param>
+    Public Sub AddWhere(predicate As String, ParamArray parameters() As Object)
+      If parameters Is Nothing OrElse parameters.Length = 0 Then
+        m_WhereExpressions.Add(predicate)
+      Else
+        Dim sql = ConvertToSqlString(predicate, parameters, m_Parameters.Count)
+        m_WhereExpressions.Add(sql.Sql)
+        m_Parameters.AddRange(sql.Parameters)
+      End If
     End Sub
 
     ''' <summary>

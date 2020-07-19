@@ -144,9 +144,10 @@ Public Class DbContext
   ''' Executes SQL query and returns the number of affected rows.
   ''' </summary>
   ''' <param name="sql"></param>
+  ''' <param name="parameters"></param>
   ''' <returns></returns>
-  Public Function Execute(sql As RawSqlString) As Int32
-    Return (New SqlExpression(Me)).Execute(sql)
+  Public Function Execute(sql As RawSqlString, ParamArray parameters() As Object) As Int32
+    Return (New SqlExpression(Me)).Execute(sql, parameters)
   End Function
 
   ''' <summary>
@@ -164,9 +165,10 @@ Public Class DbContext
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
   ''' <param name="sql"></param>
+  ''' <param name="parameters"></param>
   ''' <returns></returns>
-  Public Function QueryFirstOrDefault(Of T)(sql As RawSqlString) As T
-    Return (New SqlExpression(Me)).QueryFirstOrDefault(Of T)(sql)
+  Public Function QueryFirstOrDefault(Of T)(sql As RawSqlString, ParamArray parameters() As Object) As T
+    Return (New SqlExpression(Me)).QueryFirstOrDefault(Of T)(sql, parameters)
   End Function
 
   ''' <summary>
@@ -184,9 +186,10 @@ Public Class DbContext
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
   ''' <param name="sql"></param>
+  ''' <param name="parameters"></param>
   ''' <returns></returns>
-  Public Function Query(Of T)(sql As RawSqlString) As List(Of T)
-    Return (New SqlExpression(Me)).Query(Of T)(sql)
+  Public Function Query(Of T)(sql As RawSqlString, ParamArray parameters() As Object) As List(Of T)
+    Return (New SqlExpression(Me)).Query(Of T)(sql, parameters)
   End Function
 
   ''' <summary>

@@ -39,8 +39,9 @@ Namespace Sql
     ''' This method is not intended to be called directly. Use it only as a part of the query expression.
     ''' </summary>
     ''' <param name="expression"></param>
+    ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Shared Function Raw(Of T)(expression As RawSqlString) As T
+    Public Shared Function Raw(Of T)(expression As RawSqlString, ParamArray parameters() As Object) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -137,7 +138,7 @@ Namespace Sql
     End Function
 
     ''' <summary>
-    ''' Returns SQL format string for <see cref="Raw(Of T)(FormattableString)"/> and <see cref="Raw(Of T)(RawSqlString)"/> methods.
+    ''' Returns SQL format string for <see cref="Raw(Of T)(FormattableString)"/> and <see cref="Raw(Of T)(RawSqlString, Object())"/> methods.
     ''' </summary>
     ''' <param name="method"></param>
     ''' <returns></returns>
@@ -167,7 +168,12 @@ Namespace Sql
 
         If stringConstantExp.NodeType = ExpressionType.Constant Then
           Dim format = DirectCast(DirectCast(stringConstantExp, ConstantExpression).Value, String)
-          Return New SqlFormat(format, {})
+
+          If method.Arguments.Count = 2 AndAlso method.Arguments(1).NodeType = ExpressionType.NewArrayInit Then
+            Return New SqlFormat(format, DirectCast(method.Arguments(1), NewArrayExpression).Expressions)
+          Else
+            Return New SqlFormat(format, {})
+          End If
         End If
       End If
 

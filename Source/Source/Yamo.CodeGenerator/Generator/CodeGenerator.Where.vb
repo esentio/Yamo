@@ -116,13 +116,13 @@
 
     Protected Sub GenerateWhereWithString(builder As CodeBuilder, entityCount As Int32)
       Dim comment = "Adds WHERE clause."
-      Dim params = {"predicate"}
+      Dim params = {"predicate", "parameters"}
       AddComment(builder, comment, params:=params, returns:="")
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Where(predicate As String) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
-      builder.Indent().AppendLine("Me.Builder.AddWhere(predicate)")
+      builder.Indent().AppendLine($"Public Function Where(predicate As String, ParamArray parameters() As Object) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine("Me.Builder.AddWhere(predicate, parameters)")
       builder.Indent().AppendLine($"Return New FilteredSelectSqlExpression(Of {generics})(Me.Builder, Me.Executor)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub

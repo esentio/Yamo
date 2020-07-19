@@ -53,6 +53,22 @@ Namespace Expressions.Builders
     Public Function ConvertToSqlString(sql As FormattableString, parameterIndex As Int32) As SqlString
       Dim args = sql.GetArguments()
 
+      If args.Length = 0 Then
+        Return New SqlString(sql.Format)
+      Else
+        Return ConvertToSqlString(sql.Format, args, parameterIndex)
+      End If
+    End Function
+
+    ''' <summary>
+    ''' Converts string format to <see cref="SqlString"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="format"></param>
+    ''' <param name="args"></param>
+    ''' <param name="parameterIndex"></param>
+    ''' <returns></returns>
+    Public Function ConvertToSqlString(format As String, args() As Object, parameterIndex As Int32) As SqlString
       Dim paramNames = New String(args.Length - 1) {}
       Dim parameters = New List(Of SqlParameter)(args.Length)
 
@@ -69,7 +85,7 @@ Namespace Expressions.Builders
         End If
       Next
 
-      Dim sqlString = String.Format(sql.Format, paramNames)
+      Dim sqlString = String.Format(format, paramNames)
 
       Return New SqlString(sqlString, parameters)
     End Function

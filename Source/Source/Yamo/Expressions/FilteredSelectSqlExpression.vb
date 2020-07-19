@@ -42,9 +42,10 @@ Namespace Expressions
     ''' Adds AND condition to WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function [And](predicate As String) As FilteredSelectSqlExpression(Of T)
-      Me.Builder.AddWhere(predicate)
+    Public Function [And](predicate As String, ParamArray parameters() As Object) As FilteredSelectSqlExpression(Of T)
+      Me.Builder.AddWhere(predicate, parameters)
       Return Me
     End Function
 

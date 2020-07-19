@@ -65,9 +65,12 @@ Namespace Tests
       InsertItems(items)
 
       Using db = CreateDbContext()
+        Dim one = 1
+        Dim two = 2
+
         Dim result1 = db.From(Of ItemWithAllSupportedValues).
                          OrderBy(Function(x) x.IntColumn).
-                         Select(Function(x) Sql.Exp.Raw(Of Int32)($"{x.IntColumn} + 1 + {1}")).
+                         Select(Function(x) Sql.Exp.Raw(Of Int32)($"{x.IntColumn} + 1 + {one}")).
                          ToList()
 
         CollectionAssert.AreEqual({3, 4, 5, 6, 7}, result1)
@@ -95,17 +98,31 @@ Namespace Tests
 
         Dim result5 = db.From(Of ItemWithAllSupportedValues).
                          OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) Sql.Exp.Raw(Of Int32)("IntColumn + 1 + 1")).
+                         ToList()
+
+        CollectionAssert.AreEqual({3, 4, 5, 6, 7}, result5)
+
+        Dim result6 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
                          Select(Function(x) Sql.Exp.Raw(Of Int32)("1 + 2")).
                          ToList()
 
-        CollectionAssert.AreEqual({3, 3, 3, 3, 3}, result5)
+        CollectionAssert.AreEqual({3, 3, 3, 3, 3}, result6)
 
-        Dim result6 = db.From(Of ItemWithAllSupportedValues).
+        Dim result7 = db.From(Of ItemWithAllSupportedValues).
                          OrderBy(Function(x) x.IntColumn).
                          Select(Function(x) Sql.Exp.Raw(Of String)("'foo'")).
                          ToList()
 
-        CollectionAssert.AreEqual({"foo", "foo", "foo", "foo", "foo"}, result6)
+        CollectionAssert.AreEqual({"foo", "foo", "foo", "foo", "foo"}, result7)
+
+        Dim result8 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) Sql.Exp.Raw(Of Int32)("{0} + {1}", one, two)).
+                         ToList()
+
+        CollectionAssert.AreEqual({3, 3, 3, 3, 3}, result8)
       End Using
     End Sub
 
