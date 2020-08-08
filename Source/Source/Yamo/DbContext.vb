@@ -201,7 +201,7 @@ Public Class DbContext
   ''' <param name="setAutoFields"></param>
   ''' <returns></returns>
   Public Function Insert(Of T)(obj As T, Optional useDbIdentityAndDefaults As Boolean = True, Optional setAutoFields As Boolean = True) As Int32
-    Return (New InsertSqlExpression(Of T)(Me, useDbIdentityAndDefaults, setAutoFields)).Insert(obj)
+    Return (New InsertSqlExpression(Of T)(Me)).Insert(obj, useDbIdentityAndDefaults, setAutoFields)
   End Function
 
   ''' <summary>
