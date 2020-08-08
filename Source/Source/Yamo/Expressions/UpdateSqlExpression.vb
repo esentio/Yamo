@@ -13,19 +13,12 @@ Namespace Expressions
     Inherits UpdateSqlExpressionBase
 
     ''' <summary>
-    ''' Stores whether auto fields should be set.
-    ''' </summary>
-    Private m_SetAutoFields As Boolean
-
-    ''' <summary>
     ''' Creates new instance of <see cref="UpdateSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="context"></param>
-    ''' <param name="setAutoFields"></param>
-    Friend Sub New(context As DbContext, setAutoFields As Boolean)
-      MyBase.New(context, New UpdateSqlExpressionBuilder(context, setAutoFields), New QueryExecutor(context))
+    Friend Sub New(context As DbContext)
+      MyBase.New(context, New UpdateSqlExpressionBuilder(context), New QueryExecutor(context))
       Me.Builder.SetMainTable(Of T)()
-      m_SetAutoFields = setAutoFields
     End Sub
 
     ''' <summary>
@@ -98,13 +91,14 @@ Namespace Expressions
     ''' Executes UPDATE statement and returns the number of affected rows.
     ''' </summary>
     ''' <param name="obj"></param>
+    ''' <param name="setAutoFields"></param>
     ''' <returns></returns>
-    Friend Function Update(obj As T) As Int32
+    Friend Function Update(obj As T, setAutoFields As Boolean) As Int32
       If SkipUpdate(obj) Then
         Return 0
       End If
 
-      If m_SetAutoFields Then
+      If setAutoFields Then
         Dim setter = EntityAutoFieldsSetterCache.GetOnUpdateSetter(Me.DbContext.Model, GetEntityType(obj))
         setter(obj, Me.DbContext)
       End If

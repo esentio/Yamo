@@ -212,17 +212,16 @@ Public Class DbContext
   ''' <param name="setAutoFields"></param>
   ''' <returns></returns>
   Public Function Update(Of T)(obj As T, Optional setAutoFields As Boolean = True) As Int32
-    Return (New UpdateSqlExpression(Of T)(Me, setAutoFields)).Update(obj)
+    Return (New UpdateSqlExpression(Of T)(Me)).Update(obj, setAutoFields)
   End Function
 
   ''' <summary>
   ''' Starts building SQL UPDATE statement.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
-  ''' <param name="setAutoFields"></param>
   ''' <returns></returns>
-  Public Function Update(Of T)(Optional setAutoFields As Boolean = True) As UpdateSqlExpression(Of T)
-    Return New UpdateSqlExpression(Of T)(Me, setAutoFields)
+  Public Function Update(Of T)() As UpdateSqlExpression(Of T)
+    Return New UpdateSqlExpression(Of T)(Me)
   End Function
 
   ''' <summary>

@@ -372,9 +372,9 @@ Namespace Tests
       Using db = CreateDbContext()
         db.UserId = userId
 
-        Dim affectedRows = db.Update(Of ItemWithAuditFields)(setAutoFields:=False).
+        Dim affectedRows = db.Update(Of ItemWithAuditFields)().
                               Set(Sub(x) x.Description = "lorem").
-                              Execute()
+                              Execute(setAutoFields:=False)
         Assert.AreEqual(3, affectedRows)
 
         Dim result = db.From(Of ItemWithAuditFields).SelectAll().ToList()
@@ -432,10 +432,10 @@ Namespace Tests
       Using db = CreateDbContext()
         db.UserId = userId
 
-        Dim affectedRows = db.Update(Of ItemWithAuditFields)(setAutoFields:=False).
+        Dim affectedRows = db.Update(Of ItemWithAuditFields)().
                               Set(Sub(x) x.Description = "lorem").
                               Where(Function(x) x.Description = "x").
-                              Execute()
+                              Execute(setAutoFields:=False)
         Assert.AreEqual(2, affectedRows)
 
         Dim result = db.From(Of ItemWithAuditFields).SelectAll().ToList()
