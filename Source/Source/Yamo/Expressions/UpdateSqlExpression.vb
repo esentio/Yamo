@@ -16,8 +16,9 @@ Namespace Expressions
     ''' Creates new instance of <see cref="UpdateSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="context"></param>
-    Friend Sub New(context As DbContext)
-      MyBase.New(context, New UpdateSqlExpressionBuilder(context), New QueryExecutor(context))
+    ''' <param name="tableNameOverride"></param>
+    Friend Sub New(context As DbContext, Optional tableNameOverride As String = Nothing)
+      MyBase.New(context, New UpdateSqlExpressionBuilder(context, tableNameOverride), New QueryExecutor(context))
       Me.Builder.SetMainTable(Of T)()
     End Sub
 
@@ -93,7 +94,7 @@ Namespace Expressions
     ''' <param name="obj"></param>
     ''' <param name="setAutoFields"></param>
     ''' <returns></returns>
-    Friend Function Update(obj As T, setAutoFields As Boolean) As Int32
+    Public Function Execute(obj As T, Optional setAutoFields As Boolean = True) As Int32
       If SkipUpdate(obj) Then
         Return 0
       End If

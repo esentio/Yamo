@@ -12,11 +12,17 @@ Public Class BaseTestDbContext
     CreateArticleSubstitutionModel(modelBuilder)
     CreateCategoryModel(modelBuilder)
     CreateItemWithAllSupportedValuesModel(modelBuilder)
+    CreateItemWithAllSupportedValuesArchiveModel(modelBuilder)
     CreateItemWithAuditFieldsModel(modelBuilder)
+    CreateItemWithAuditFieldsArchiveModel(modelBuilder)
     CreateItemWithDefaultValueIdModel(modelBuilder)
+    CreateItemWithDefaultValueIdArchiveModel(modelBuilder)
     CreateItemWithIdentityIdModel(modelBuilder)
+    CreateItemWithIdentityIdArchiveModel(modelBuilder)
     CreateItemWithIdentityIdAndDefaultValuesModel(modelBuilder)
+    CreateItemWithIdentityIdAndDefaultValuesArchiveModel(modelBuilder)
     CreateItemWithPropertyModifiedTrackingModel(modelBuilder)
+    CreateItemWithPropertyModifiedTrackingArchiveModel(modelBuilder)
     CreateLabelModel(modelBuilder)
     CreateLinkedItemModel(modelBuilder)
     CreateLinkedItemWithShuffledPropertiesModel(modelBuilder)
@@ -104,6 +110,40 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.VarbinaryMaxColumnNull)
   End Sub
 
+  Private Sub CreateItemWithAllSupportedValuesArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive)()
+
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Id).IsKey()
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.UniqueidentifierColumn)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.UniqueidentifierColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Nvarchar50Column).IsRequired()
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Nvarchar50ColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.NvarcharMaxColumn).IsRequired()
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.NvarcharMaxColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.BitColumn)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.BitColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.SmallintColumn)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.SmallintColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.IntColumn)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.IntColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.BigintColumn)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.BigintColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.RealColumn)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.RealColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.FloatColumn)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.FloatColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Numeric10and3Column)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Numeric10and3ColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Numeric15and0Column)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Numeric15and0ColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.DatetimeColumn)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.DatetimeColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Varbinary50Column).IsRequired()
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Varbinary50ColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.VarbinaryMaxColumn).IsRequired()
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.VarbinaryMaxColumnNull)
+  End Sub
+
   Private Sub CreateItemWithAuditFieldsModel(modelBuilder As ModelBuilder)
     modelBuilder.Entity(Of ItemWithAuditFields)()
 
@@ -117,6 +157,19 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of ItemWithAuditFields).Property(Function(x) x.DeletedUserId).SetOnDeleteTo(Function(c As BaseTestDbContext) c.UserId)
   End Sub
 
+  Private Sub CreateItemWithAuditFieldsArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithAuditFieldsArchive)()
+
+    modelBuilder.Entity(Of ItemWithAuditFieldsArchive).Property(Function(x) x.Id).IsKey().IsIdentity()
+    modelBuilder.Entity(Of ItemWithAuditFieldsArchive).Property(Function(x) x.Description).IsRequired()
+    modelBuilder.Entity(Of ItemWithAuditFieldsArchive).Property(Function(x) x.Created).SetOnInsertTo(Function() Helpers.Calendar.Now)
+    modelBuilder.Entity(Of ItemWithAuditFieldsArchive).Property(Function(x) x.CreatedUserId).SetOnInsertTo(Function(c As BaseTestDbContext) c.UserId)
+    modelBuilder.Entity(Of ItemWithAuditFieldsArchive).Property(Function(x) x.Modified).SetOnUpdateTo(Function() Helpers.Calendar.Now)
+    modelBuilder.Entity(Of ItemWithAuditFieldsArchive).Property(Function(x) x.ModifiedUserId).SetOnUpdateTo(Function(c As BaseTestDbContext) c.UserId)
+    modelBuilder.Entity(Of ItemWithAuditFieldsArchive).Property(Function(x) x.Deleted).SetOnDeleteTo(Function() Helpers.Calendar.Now)
+    modelBuilder.Entity(Of ItemWithAuditFieldsArchive).Property(Function(x) x.DeletedUserId).SetOnDeleteTo(Function(c As BaseTestDbContext) c.UserId)
+  End Sub
+
   Private Sub CreateItemWithDefaultValueIdModel(modelBuilder As ModelBuilder)
     modelBuilder.Entity(Of ItemWithDefaultValueId)()
 
@@ -124,11 +177,25 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of ItemWithDefaultValueId).Property(Function(x) x.Description).IsRequired()
   End Sub
 
+  Private Sub CreateItemWithDefaultValueIdArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithDefaultValueIdArchive)()
+
+    modelBuilder.Entity(Of ItemWithDefaultValueIdArchive).Property(Function(x) x.Id).IsKey().HasDefaultValue()
+    modelBuilder.Entity(Of ItemWithDefaultValueIdArchive).Property(Function(x) x.Description).IsRequired()
+  End Sub
+
   Private Sub CreateItemWithIdentityIdModel(modelBuilder As ModelBuilder)
     modelBuilder.Entity(Of ItemWithIdentityId)()
 
     modelBuilder.Entity(Of ItemWithIdentityId).Property(Function(x) x.Id).IsKey().IsIdentity()
     modelBuilder.Entity(Of ItemWithIdentityId).Property(Function(x) x.Description).IsRequired()
+  End Sub
+
+  Private Sub CreateItemWithIdentityIdArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithIdentityIdArchive)()
+
+    modelBuilder.Entity(Of ItemWithIdentityIdArchive).Property(Function(x) x.Id).IsKey().IsIdentity()
+    modelBuilder.Entity(Of ItemWithIdentityIdArchive).Property(Function(x) x.Description).IsRequired()
   End Sub
 
   Private Sub CreateItemWithIdentityIdAndDefaultValuesModel(modelBuilder As ModelBuilder)
@@ -140,12 +207,29 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of ItemWithIdentityIdAndDefaultValues).Property(Function(x) x.IntValue).HasDefaultValue()
   End Sub
 
+  Private Sub CreateItemWithIdentityIdAndDefaultValuesArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithIdentityIdAndDefaultValuesArchive)()
+
+    modelBuilder.Entity(Of ItemWithIdentityIdAndDefaultValuesArchive).Property(Function(x) x.Id).IsKey().IsIdentity()
+    modelBuilder.Entity(Of ItemWithIdentityIdAndDefaultValuesArchive).Property(Function(x) x.Description).IsRequired()
+    modelBuilder.Entity(Of ItemWithIdentityIdAndDefaultValuesArchive).Property(Function(x) x.UniqueidentifierValue).HasDefaultValue()
+    modelBuilder.Entity(Of ItemWithIdentityIdAndDefaultValuesArchive).Property(Function(x) x.IntValue).HasDefaultValue()
+  End Sub
+
   Private Sub CreateItemWithPropertyModifiedTrackingModel(modelBuilder As ModelBuilder)
     modelBuilder.Entity(Of ItemWithPropertyModifiedTracking)()
 
     modelBuilder.Entity(Of ItemWithPropertyModifiedTracking).Property(Function(x) x.Id).IsKey().IsIdentity()
     modelBuilder.Entity(Of ItemWithPropertyModifiedTracking).Property(Function(x) x.Description).IsRequired()
     modelBuilder.Entity(Of ItemWithPropertyModifiedTracking).Property(Function(x) x.IntValue)
+  End Sub
+
+  Private Sub CreateItemWithPropertyModifiedTrackingArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithPropertyModifiedTrackingArchive)()
+
+    modelBuilder.Entity(Of ItemWithPropertyModifiedTrackingArchive).Property(Function(x) x.Id).IsKey().IsIdentity()
+    modelBuilder.Entity(Of ItemWithPropertyModifiedTrackingArchive).Property(Function(x) x.Description).IsRequired()
+    modelBuilder.Entity(Of ItemWithPropertyModifiedTrackingArchive).Property(Function(x) x.IntValue)
   End Sub
 
   Private Sub CreateLabelModel(modelBuilder As ModelBuilder)

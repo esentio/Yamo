@@ -58,5 +58,11 @@ Namespace Tests
       End Using
     End Sub
 
+    Protected Overridable Sub InsertItemsToArchive(Of T)(db As DbContext, table As String, ParamArray items As T())
+      For Each item In items
+        db.Insert(Of T)(table).Execute(item)
+      Next
+    End Sub
+
   End Class
 End Namespace

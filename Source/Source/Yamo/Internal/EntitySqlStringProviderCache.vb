@@ -19,27 +19,27 @@ Namespace Internal
     ''' <summary>
     ''' Stores cached insert provider instances.
     ''' </summary>
-    Private m_InsertProviders As Dictionary(Of Type, Func(Of Object, Boolean, CreateInsertSqlStringResult))
+    Private m_InsertProviders As Dictionary(Of Type, Func(Of Object, String, Boolean, CreateInsertSqlStringResult))
 
     ''' <summary>
     ''' Stores cached update provider instances.
     ''' </summary>
-    Private m_UpdateProviders As Dictionary(Of Type, Func(Of Object, SqlString))
+    Private m_UpdateProviders As Dictionary(Of Type, Func(Of Object, String, SqlString))
 
     ''' <summary>
     ''' Stores cached delete provider instances.
     ''' </summary>
-    Private m_DeleteProviders As Dictionary(Of Type, Func(Of Object, SqlString))
+    Private m_DeleteProviders As Dictionary(Of Type, Func(Of Object, String, SqlString))
 
     ''' <summary>
     ''' Stores cached soft delete provider instances.
     ''' </summary>
-    Private m_SoftDeleteProviders As Dictionary(Of Type, Func(Of Object, SqlString))
+    Private m_SoftDeleteProviders As Dictionary(Of Type, Func(Of Object, String, SqlString))
 
     ''' <summary>
     ''' Stores cached soft delete without condition provider instances.
     ''' </summary>
-    Private m_SoftDeleteWithoutConditionProviders As Dictionary(Of Type, Func(Of Object(), SqlString))
+    Private m_SoftDeleteWithoutConditionProviders As Dictionary(Of Type, Func(Of String, Object(), SqlString))
 
     ''' <summary>
     ''' Initializes <see cref="EntitySqlStringProviderCache"/> related static data.
@@ -52,11 +52,11 @@ Namespace Internal
     ''' Creates new instance of <see cref="EntitySqlStringProviderCache"/>.
     ''' </summary>
     Private Sub New()
-      m_InsertProviders = New Dictionary(Of Type, Func(Of Object, Boolean, CreateInsertSqlStringResult))
-      m_UpdateProviders = New Dictionary(Of Type, Func(Of Object, SqlString))
-      m_DeleteProviders = New Dictionary(Of Type, Func(Of Object, SqlString))
-      m_SoftDeleteProviders = New Dictionary(Of Type, Func(Of Object, SqlString))
-      m_SoftDeleteWithoutConditionProviders = New Dictionary(Of Type, Func(Of Object(), SqlString))
+      m_InsertProviders = New Dictionary(Of Type, Func(Of Object, String, Boolean, CreateInsertSqlStringResult))
+      m_UpdateProviders = New Dictionary(Of Type, Func(Of Object, String, SqlString))
+      m_DeleteProviders = New Dictionary(Of Type, Func(Of Object, String, SqlString))
+      m_SoftDeleteProviders = New Dictionary(Of Type, Func(Of Object, String, SqlString))
+      m_SoftDeleteWithoutConditionProviders = New Dictionary(Of Type, Func(Of String, Object(), SqlString))
     End Sub
 
     ''' <summary>
@@ -64,11 +64,10 @@ Namespace Internal
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="builder"></param>
-    ''' <param name="useDbIdentityAndDefaults"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetInsertProvider(builder As InsertSqlExpressionBuilder, useDbIdentityAndDefaults As Boolean, type As Type) As Func(Of Object, Boolean, CreateInsertSqlStringResult)
-      Return GetInstance(builder.DialectProvider, builder.DbContext.Model).GetOrCreateInsertProvider(builder, useDbIdentityAndDefaults, type)
+    Public Shared Function GetInsertProvider(builder As InsertSqlExpressionBuilder, type As Type) As Func(Of Object, String, Boolean, CreateInsertSqlStringResult)
+      Return GetInstance(builder.DialectProvider, builder.DbContext.Model).GetOrCreateInsertProvider(builder, type)
     End Function
 
     ''' <summary>
@@ -78,7 +77,7 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetUpdateProvider(builder As UpdateSqlExpressionBuilder, type As Type) As Func(Of Object, SqlString)
+    Public Shared Function GetUpdateProvider(builder As UpdateSqlExpressionBuilder, type As Type) As Func(Of Object, String, SqlString)
       Return GetInstance(builder.DialectProvider, builder.DbContext.Model).GetOrCreateUpdateProvider(builder, type)
     End Function
 
@@ -89,7 +88,7 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetDeleteProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of Object, SqlString)
+    Public Shared Function GetDeleteProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of Object, String, SqlString)
       Return GetInstance(builder.DialectProvider, builder.DbContext.Model).GetOrCreateDeleteProvider(builder, type)
     End Function
 
@@ -100,7 +99,7 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetSoftDeleteProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of Object, SqlString)
+    Public Shared Function GetSoftDeleteProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of Object, String, SqlString)
       Return GetInstance(builder.DialectProvider, builder.DbContext.Model).GetOrCreateSoftDeleteProvider(builder, type)
     End Function
 
@@ -111,7 +110,7 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetSoftDeleteWithoutConditionProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of Object(), SqlString)
+    Public Shared Function GetSoftDeleteWithoutConditionProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of String, Object(), SqlString)
       Return GetInstance(builder.DialectProvider, builder.DbContext.Model).GetOrCreateSoftDeleteWithoutConditionProvider(builder, type)
     End Function
 
@@ -140,18 +139,17 @@ Namespace Internal
     ''' Gets or creates insert provider.
     ''' </summary>
     ''' <param name="builder"></param>
-    ''' <param name="useDbIdentityAndDefaults"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Private Function GetOrCreateInsertProvider(builder As InsertSqlExpressionBuilder, useDbIdentityAndDefaults As Boolean, type As Type) As Func(Of Object, Boolean, CreateInsertSqlStringResult)
-      Dim provider As Func(Of Object, Boolean, CreateInsertSqlStringResult) = Nothing
+    Private Function GetOrCreateInsertProvider(builder As InsertSqlExpressionBuilder, type As Type) As Func(Of Object, String, Boolean, CreateInsertSqlStringResult)
+      Dim provider As Func(Of Object, String, Boolean, CreateInsertSqlStringResult) = Nothing
 
       SyncLock m_InsertProviders
         m_InsertProviders.TryGetValue(type, provider)
       End SyncLock
 
       If provider Is Nothing Then
-        provider = builder.DialectProvider.EntitySqlStringProviderFactory.CreateInsertProvider(builder, useDbIdentityAndDefaults, type)
+        provider = builder.DialectProvider.EntitySqlStringProviderFactory.CreateInsertProvider(builder, type)
       Else
         Return provider
       End If
@@ -169,8 +167,8 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Private Function GetOrCreateUpdateProvider(builder As UpdateSqlExpressionBuilder, type As Type) As Func(Of Object, SqlString)
-      Dim provider As Func(Of Object, SqlString) = Nothing
+    Private Function GetOrCreateUpdateProvider(builder As UpdateSqlExpressionBuilder, type As Type) As Func(Of Object, String, SqlString)
+      Dim provider As Func(Of Object, String, SqlString) = Nothing
 
       SyncLock m_UpdateProviders
         m_UpdateProviders.TryGetValue(type, provider)
@@ -195,8 +193,8 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Private Function GetOrCreateDeleteProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of Object, SqlString)
-      Dim provider As Func(Of Object, SqlString) = Nothing
+    Private Function GetOrCreateDeleteProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of Object, String, SqlString)
+      Dim provider As Func(Of Object, String, SqlString) = Nothing
 
       SyncLock m_DeleteProviders
         m_DeleteProviders.TryGetValue(type, provider)
@@ -221,8 +219,8 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Private Function GetOrCreateSoftDeleteProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of Object, SqlString)
-      Dim provider As Func(Of Object, SqlString) = Nothing
+    Private Function GetOrCreateSoftDeleteProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of Object, String, SqlString)
+      Dim provider As Func(Of Object, String, SqlString) = Nothing
 
       SyncLock m_SoftDeleteProviders
         m_SoftDeleteProviders.TryGetValue(type, provider)
@@ -247,8 +245,8 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Private Function GetOrCreateSoftDeleteWithoutConditionProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of Object(), SqlString)
-      Dim provider As Func(Of Object(), SqlString) = Nothing
+    Private Function GetOrCreateSoftDeleteWithoutConditionProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of String, Object(), SqlString)
+      Dim provider As Func(Of String, Object(), SqlString) = Nothing
 
       SyncLock m_SoftDeleteWithoutConditionProviders
         m_SoftDeleteWithoutConditionProviders.TryGetValue(type, provider)

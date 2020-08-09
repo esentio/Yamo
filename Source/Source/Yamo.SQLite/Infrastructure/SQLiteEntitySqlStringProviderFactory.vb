@@ -1,4 +1,6 @@
-﻿Imports Yamo.Infrastructure
+﻿Imports System.Linq.Expressions
+Imports System.Reflection
+Imports Yamo.Infrastructure
 
 Namespace Infrastructure
 
@@ -19,9 +21,13 @@ Namespace Infrastructure
     ''' <param name="columnNames"></param>
     ''' <param name="parameterNames"></param>
     ''' <returns></returns>
-    Protected Overrides Function GetInsertWhenUseDbIdentityAndDefaults(tableName As String, declareColumns As List(Of String), outputColumnNames As List(Of String), columnNames As List(Of String), parameterNames As List(Of String)) As String
-      Return $"INSERT INTO {tableName} ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)});
-SELECT last_insert_rowid()"
+    Protected Overrides Function GetInsertWhenUseDbIdentityAndDefaults(tableName As Expression, declareColumns As List(Of String), outputColumnNames As List(Of String), columnNames As List(Of String), parameterNames As List(Of String)) As Expression
+      Dim part1 = Expression.Constant("INSERT INTO ", GetType(String))
+      Dim part3 = Expression.Constant($" ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)});
+SELECT last_insert_rowid()", GetType(String))
+
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Return Expression.Call(concatMethod, part1, tableName, part3)
     End Function
 
     ''' <summary>
@@ -33,8 +39,12 @@ SELECT last_insert_rowid()"
     ''' <param name="columnNames"></param>
     ''' <param name="parameterNames"></param>
     ''' <returns></returns>
-    Protected Overrides Function GetInsertWhenNotUseDbIdentityAndDefaults(tableName As String, hasIdentityColumn As Boolean, columnNames As List(Of String), parameterNames As List(Of String)) As String
-      Return $"INSERT INTO {tableName} ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)})"
+    Protected Overrides Function GetInsertWhenNotUseDbIdentityAndDefaults(tableName As Expression, hasIdentityColumn As Boolean, columnNames As List(Of String), parameterNames As List(Of String)) As Expression
+      Dim part1 = Expression.Constant("INSERT INTO ", GetType(String))
+      Dim part3 = Expression.Constant($" ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)})", GetType(String))
+
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Return Expression.Call(concatMethod, part1, tableName, part3)
     End Function
 
     ''' <summary>

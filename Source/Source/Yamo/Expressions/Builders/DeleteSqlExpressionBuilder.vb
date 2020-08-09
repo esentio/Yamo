@@ -19,6 +19,11 @@ Namespace Expressions.Builders
     Private m_SoftDelete As Boolean
 
     ''' <summary>
+    ''' Stores table name override.
+    ''' </summary>
+    Private m_TableNameOverride As String
+
+    ''' <summary>
     ''' Stores SQL model.
     ''' </summary>
     Private m_Model As SqlModel
@@ -49,9 +54,10 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="context"></param>
     ''' <param name="softDelete"></param>
-    Public Sub New(context As DbContext, softDelete As Boolean)
+    Public Sub New(context As DbContext, softDelete As Boolean, tableNameOverride As String)
       MyBase.New(context)
       m_SoftDelete = softDelete
+      m_TableNameOverride = tableNameOverride
       m_Model = New SqlModel(Me.DbContext.Model)
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       m_WhereExpressions = New List(Of String)
@@ -124,9 +130,14 @@ Namespace Expressions.Builders
       Dim sql As New StringBuilder
 
       sql.Append("DELETE FROM ")
-      Dim entity = m_Model.GetFirstEntity().Entity
-      Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
-      sql.AppendLine()
+
+      If m_TableNameOverride Is Nothing Then
+        Dim entity = m_Model.GetFirstEntity().Entity
+        Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
+        sql.AppendLine()
+      Else
+        sql.AppendLine(m_TableNameOverride)
+      End If
 
       If m_WhereExpressions.Any() Then
         sql.Append(" WHERE ")
@@ -141,13 +152,15 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <returns></returns>
     Private Function CreateSoftDeleteQuery() As Query
-      Dim entity = m_Model.GetFirstEntity()
+      Dim entity = m_Model.GetFirstEntity().Entity
 
-      Dim getter = EntityAutoFieldsGetterCache.GetOnDeleteGetter(m_Model.Model, entity.Entity.EntityType)
+      Dim table = If(m_TableNameOverride, Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema))
+
+      Dim getter = EntityAutoFieldsGetterCache.GetOnDeleteGetter(m_Model.Model, entity.EntityType)
       Dim values = getter(Me.DbContext)
 
-      Dim provider = EntitySqlStringProviderCache.GetSoftDeleteWithoutConditionProvider(Me, entity.Entity.EntityType)
-      Dim sqlString = provider(values)
+      Dim provider = EntitySqlStringProviderCache.GetSoftDeleteWithoutConditionProvider(Me, entity.EntityType)
+      Dim sqlString = provider(table, values)
 
       Dim sql As New StringBuilder
       Dim parameters As List(Of SqlParameter)
@@ -175,8 +188,17 @@ Namespace Expressions.Builders
     ''' <param name="obj"></param>
     ''' <returns></returns>
     Public Function CreateDeleteQuery(obj As Object) As Query
+      Dim table As String
+
+      If m_TableNameOverride Is Nothing Then
+        Dim entity = m_Model.GetFirstEntity().Entity
+        table = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema)
+      Else
+        table = m_TableNameOverride
+      End If
+
       Dim provider = EntitySqlStringProviderCache.GetDeleteProvider(Me, obj.GetType())
-      Dim sqlString = provider(obj)
+      Dim sqlString = provider(obj, table)
 
       Return New Query(sqlString)
     End Function
@@ -188,8 +210,17 @@ Namespace Expressions.Builders
     ''' <param name="obj"></param>
     ''' <returns></returns>
     Public Function CreateSoftDeleteQuery(obj As Object) As Query
+      Dim table As String
+
+      If m_TableNameOverride Is Nothing Then
+        Dim entity = m_Model.GetFirstEntity().Entity
+        table = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema)
+      Else
+        table = m_TableNameOverride
+      End If
+
       Dim provider = EntitySqlStringProviderCache.GetSoftDeleteProvider(Me, obj.GetType())
-      Dim sqlString = provider(obj)
+      Dim sqlString = provider(obj, table)
 
       Return New Query(sqlString)
     End Function

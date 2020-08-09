@@ -35,9 +35,10 @@ Namespace Expressions
     ''' Creates new instance of <see cref="InsertSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="context"></param>
-    Friend Sub New(context As DbContext)
+    ''' <param name="tableNameOverride"></param>
+    Friend Sub New(context As DbContext, Optional tableNameOverride As String = Nothing)
       Me.DbContext = context
-      Me.Builder = New InsertSqlExpressionBuilder(context)
+      Me.Builder = New InsertSqlExpressionBuilder(context, tableNameOverride)
       Me.Executor = New QueryExecutor(context)
     End Sub
 
@@ -48,7 +49,7 @@ Namespace Expressions
     ''' <param name="useDbIdentityAndDefaults"></param>
     ''' <param name="setAutoFields"></param>
     ''' <returns></returns>
-    Public Function Insert(obj As T, useDbIdentityAndDefaults As Boolean, setAutoFields As Boolean) As Int32
+    Public Function Execute(obj As T, Optional useDbIdentityAndDefaults As Boolean = True, Optional setAutoFields As Boolean = True) As Int32
       If setAutoFields Then
         Dim setter = EntityAutoFieldsSetterCache.GetOnInsertSetter(Me.DbContext.Model, GetEntityType(obj))
         setter(obj, Me.DbContext)

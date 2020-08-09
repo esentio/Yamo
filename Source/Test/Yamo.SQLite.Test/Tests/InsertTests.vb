@@ -16,8 +16,18 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overrides Sub InsertRecordWithDefaultValueIdAndUseDbIdentityAndDefaultsWithSpecifiedTableName()
+      Assert.ThrowsException(Of NotSupportedException)(AddressOf MyBase.InsertRecordWithDefaultValueIdAndUseDbIdentityAndDefaultsWithSpecifiedTableName)
+    End Sub
+
+    <TestMethod()>
     Public Overrides Sub InsertRecordWithIdentityIdAndDefaultValuesAndUseDbIdentityAndDefaults()
       Assert.ThrowsException(Of NotSupportedException)(AddressOf MyBase.InsertRecordWithIdentityIdAndDefaultValuesAndUseDbIdentityAndDefaults)
+    End Sub
+
+    <TestMethod()>
+    Public Overrides Sub InsertRecordWithIdentityIdAndDefaultValuesAndUseDbIdentityAndDefaultsWithSpecifiedTableName()
+      Assert.ThrowsException(Of NotSupportedException)(AddressOf MyBase.InsertRecordWithIdentityIdAndDefaultValuesAndUseDbIdentityAndDefaultsWithSpecifiedTableName)
     End Sub
 
   End Class

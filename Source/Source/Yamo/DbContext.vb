@@ -201,7 +201,17 @@ Public Class DbContext
   ''' <param name="setAutoFields"></param>
   ''' <returns></returns>
   Public Function Insert(Of T)(obj As T, Optional useDbIdentityAndDefaults As Boolean = True, Optional setAutoFields As Boolean = True) As Int32
-    Return (New InsertSqlExpression(Of T)(Me)).Insert(obj, useDbIdentityAndDefaults, setAutoFields)
+    Return (New InsertSqlExpression(Of T)(Me)).Execute(obj, useDbIdentityAndDefaults, setAutoFields)
+  End Function
+
+  ''' <summary>
+  ''' Starts building SQL INSERT statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
+  ''' <param name="table"></param>
+  ''' <returns></returns>
+  Public Function Insert(Of T)(table As String) As InsertSqlExpression(Of T)
+    Return New InsertSqlExpression(Of T)(Me, table)
   End Function
 
   ''' <summary>
@@ -212,7 +222,7 @@ Public Class DbContext
   ''' <param name="setAutoFields"></param>
   ''' <returns></returns>
   Public Function Update(Of T)(obj As T, Optional setAutoFields As Boolean = True) As Int32
-    Return (New UpdateSqlExpression(Of T)(Me)).Update(obj, setAutoFields)
+    Return (New UpdateSqlExpression(Of T)(Me)).Execute(obj, setAutoFields)
   End Function
 
   ''' <summary>
@@ -225,13 +235,23 @@ Public Class DbContext
   End Function
 
   ''' <summary>
+  ''' Starts building SQL UPDATE statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
+  ''' <param name="table"></param>
+  ''' <returns></returns>
+  Public Function Update(Of T)(table As String) As UpdateSqlExpression(Of T)
+    Return New UpdateSqlExpression(Of T)(Me, table)
+  End Function
+
+  ''' <summary>
   ''' Executes SQL DELETE statement and returns the number of affected rows.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
   ''' <param name="obj"></param>
   ''' <returns></returns>
   Public Function Delete(Of T)(obj As T) As Int32
-    Return (New DeleteSqlExpression(Of T)(Me, False)).Delete(obj)
+    Return (New DeleteSqlExpression(Of T)(Me, False)).Execute(obj)
   End Function
 
   ''' <summary>
@@ -244,13 +264,23 @@ Public Class DbContext
   End Function
 
   ''' <summary>
+  ''' Starts building SQL DELETE statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
+  ''' <param name="table"></param>
+  ''' <returns></returns>
+  Public Function Delete(Of T)(table As String) As DeleteSqlExpression(Of T)
+    Return New DeleteSqlExpression(Of T)(Me, False, table)
+  End Function
+
+  ''' <summary>
   ''' Executes SQL UPDATE statement that marks record as (soft) deleted and returns the number of affected rows.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
   ''' <param name="obj"></param>
   ''' <returns></returns>
   Public Function SoftDelete(Of T)(obj As T) As Int32
-    Return (New DeleteSqlExpression(Of T)(Me, True)).SoftDelete(obj)
+    Return (New DeleteSqlExpression(Of T)(Me, True)).Execute(obj)
   End Function
 
   ''' <summary>
@@ -260,6 +290,16 @@ Public Class DbContext
   ''' <returns></returns>
   Public Function SoftDelete(Of T)() As DeleteSqlExpression(Of T)
     Return New DeleteSqlExpression(Of T)(Me, True)
+  End Function
+
+  ''' <summary>
+  ''' Starts building SQL UPDATE statement that marks record(s) as (soft) deleted.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
+  ''' <param name="table"></param>
+  ''' <returns></returns>
+  Public Function SoftDelete(Of T)(table As String) As DeleteSqlExpression(Of T)
+    Return New DeleteSqlExpression(Of T)(Me, True, table)
   End Function
 
 #Region "IDisposable Support"

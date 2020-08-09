@@ -14,6 +14,11 @@ Namespace Expressions.Builders
     Inherits SqlExpressionBuilderBase
 
     ''' <summary>
+    ''' Stores table name override.
+    ''' </summary>
+    Private m_TableNameOverride As String
+
+    ''' <summary>
     ''' Stores SQL model.
     ''' </summary>
     Private m_Model As SqlModel
@@ -43,8 +48,9 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="context"></param>
-    Public Sub New(context As DbContext)
+    Public Sub New(context As DbContext, tableNameOverride As String)
       MyBase.New(context)
+      m_TableNameOverride = tableNameOverride
       m_Model = New SqlModel(Me.DbContext.Model)
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       m_SetExpressions = New List(Of String)
@@ -155,12 +161,18 @@ Namespace Expressions.Builders
       Dim sql As New StringBuilder
 
       sql.Append("UPDATE ")
-      Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
+
+      If m_TableNameOverride Is Nothing Then
+        Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
+      Else
+        sql.Append(m_TableNameOverride)
+      End If
+
       sql.AppendLine()
 
       If setAutoFields Then
         Dim index = m_Parameters.Count
-        Dim columns = m_Model.GetFirstEntity().Entity.GetNonKeyProperties().Where(Function(x) x.Property.SetOnUpdate).Select(Function(x) x.Property.ColumnName).ToArray()
+        Dim columns = entity.GetNonKeyProperties().Where(Function(x) x.Property.SetOnUpdate).Select(Function(x) x.Property.ColumnName).ToArray()
 
         If 0 < columns.Length Then
           Dim getter = EntityAutoFieldsGetterCache.GetOnUpdateGetter(m_Model.Model, entity.EntityType)
@@ -192,8 +204,17 @@ Namespace Expressions.Builders
     ''' <param name="obj"></param>
     ''' <returns></returns>
     Public Function CreateQuery(obj As Object) As Query
+      Dim table As String
+
+      If m_TableNameOverride Is Nothing Then
+        Dim entity = m_Model.GetFirstEntity().Entity
+        table = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema)
+      Else
+        table = m_TableNameOverride
+      End If
+
       Dim provider = EntitySqlStringProviderCache.GetUpdateProvider(Me, obj.GetType())
-      Dim sqlString = provider(obj)
+      Dim sqlString = provider(obj, table)
 
       Return New Query(sqlString)
     End Function
