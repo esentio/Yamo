@@ -123,15 +123,6 @@ Public Class DbContext
   End Sub
 
   ''' <summary>
-  ''' Starts building SQL SELECT statement.
-  ''' </summary>
-  ''' <typeparam name="T"></typeparam>
-  ''' <returns></returns>
-  Public Function From(Of T)() As SelectSqlExpression(Of T)
-    Return New SelectSqlExpression(Of T)(Me)
-  End Function
-
-  ''' <summary>
   ''' Executes SQL query and returns the number of affected rows.
   ''' </summary>
   ''' <param name="sql"></param>
@@ -190,6 +181,36 @@ Public Class DbContext
   ''' <returns></returns>
   Public Function Query(Of T)(sql As RawSqlString, ParamArray parameters() As Object) As List(Of T)
     Return (New SqlExpression(Me)).Query(Of T)(sql, parameters)
+  End Function
+
+  ''' <summary>
+  ''' Starts building SQL SELECT statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
+  ''' <param name="tableSource"></param>
+  ''' <returns></returns>
+  Public Function From(Of T)(tableSource As FormattableString) As SelectSqlExpression(Of T)
+    Return New SelectSqlExpression(Of T)(Me, tableSource)
+  End Function
+
+  ''' <summary>
+  ''' Starts building SQL SELECT statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
+  ''' <param name="tableSource"></param>
+  ''' <param name="parameters"></param>
+  ''' <returns></returns>
+  Public Function From(Of T)(tableSource As RawSqlString, ParamArray parameters() As Object) As SelectSqlExpression(Of T)
+    Return New SelectSqlExpression(Of T)(Me, tableSource, parameters)
+  End Function
+
+  ''' <summary>
+  ''' Starts building SQL SELECT statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
+  ''' <returns></returns>
+  Public Function From(Of T)() As SelectSqlExpression(Of T)
+    Return New SelectSqlExpression(Of T)(Me)
   End Function
 
   ''' <summary>

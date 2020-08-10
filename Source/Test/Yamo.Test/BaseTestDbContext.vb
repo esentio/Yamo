@@ -7,6 +7,7 @@ Public Class BaseTestDbContext
 
   Protected Overrides Sub OnModelCreating(modelBuilder As ModelBuilder)
     CreateArticleModel(modelBuilder)
+    CreateArticleArchiveModel(modelBuilder)
     CreateArticleCategoryModel(modelBuilder)
     CreateArticlePartModel(modelBuilder)
     CreateArticleSubstitutionModel(modelBuilder)
@@ -35,6 +36,17 @@ Public Class BaseTestDbContext
 
     modelBuilder.Entity(Of Article).Property(Function(x) x.Id).IsKey()
     modelBuilder.Entity(Of Article).Property(Function(x) x.Price)
+
+    modelBuilder.Entity(Of Article).HasOne(Function(x) x.Label)
+    modelBuilder.Entity(Of Article).HasMany(Function(x) x.Parts)
+    modelBuilder.Entity(Of Article).HasMany(Function(x) x.Categories)
+  End Sub
+
+  Private Sub CreateArticleArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ArticleArchive)()
+
+    modelBuilder.Entity(Of ArticleArchive).Property(Function(x) x.Id).IsKey()
+    modelBuilder.Entity(Of ArticleArchive).Property(Function(x) x.Price)
 
     modelBuilder.Entity(Of Article).HasOne(Function(x) x.Label)
     modelBuilder.Entity(Of Article).HasMany(Function(x) x.Parts)

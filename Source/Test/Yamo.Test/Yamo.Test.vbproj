@@ -73,6 +73,7 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\ArticleArchive.vb" />
     <Compile Include="Model\ItemInSchema.vb" />
     <Compile Include="Model\ItemWithAllSupportedValuesArchive.vb" />
     <Compile Include="Model\ItemWithAuditFieldsArchive.vb" />
@@ -83,6 +84,7 @@
     <Compile Include="Tests\SchemaTests.vb" />
     <Compile Include="Tests\QueryTests.vb" />
     <Compile Include="Tests\SelectDistinctTests.vb" />
+    <Compile Include="Tests\SelectWithTableSourceTests.vb" />
     <Compile Include="Tests\SelectWithConditionTests.vb" />
     <Compile Include="Tests\SelectWithLimitTests.vb" />
     <Compile Include="Tests\SqlHelperExpTests.vb" />

@@ -26,6 +26,11 @@ Namespace Expressions.Builders
     Private m_Visitor As SqlExpressionVisitor
 
     ''' <summary>
+    ''' Stores main table source expression
+    ''' </summary>
+    Private m_MainTableSourceExpression As String
+
+    ''' <summary>
     ''' Stores join expressions.
     ''' </summary>
     Private m_JoinExpressions As List(Of String)
@@ -90,6 +95,7 @@ Namespace Expressions.Builders
       m_Model = New SqlModel(Me.DbContext.Model)
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       ' lists are created only when necessary
+      m_MainTableSourceExpression = Nothing
       m_JoinExpressions = Nothing
       m_WhereExpressions = Nothing
       m_GroupByExpressions = Nothing
@@ -130,8 +136,14 @@ Namespace Expressions.Builders
       End If
 
       sql.Append(" FROM ")
-      Dim entity = m_Model.GetFirstEntity().Entity
-      Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
+
+      If m_MainTableSourceExpression Is Nothing Then
+        Dim entity = m_Model.GetFirstEntity().Entity
+        Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
+      Else
+        sql.Append(m_MainTableSourceExpression)
+      End If
+
       sql.Append(" ")
       Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstTableAlias())
 
@@ -176,6 +188,33 @@ Namespace Expressions.Builders
     ''' <typeparam name="T"></typeparam>
     Public Sub SetMainTable(Of T)()
       m_Model.SetMainTable(Of T)()
+    End Sub
+
+    ''' <summary>
+    ''' Sets main table source.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="tableSource"></param>
+    Public Sub SetMainTableSource(tableSource As FormattableString)
+      Dim sql = ConvertToSqlString(tableSource, m_Parameters.Count)
+      m_MainTableSourceExpression = sql.Sql
+      m_Parameters.AddRange(sql.Parameters)
+    End Sub
+
+    ''' <summary>
+    ''' Sets main table source.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="tableSource"></param>
+    ''' <param name="parameters"></param>
+    Public Sub SetMainTableSource(tableSource As RawSqlString, ParamArray parameters() As Object)
+      If parameters Is Nothing OrElse parameters.Length = 0 Then
+        m_MainTableSourceExpression = tableSource.Value
+      Else
+        Dim sql = ConvertToSqlString(tableSource.Value, parameters, m_Parameters.Count)
+        m_MainTableSourceExpression = sql.Sql
+        m_Parameters.AddRange(sql.Parameters)
+      End If
     End Sub
 
     ''' <summary>
