@@ -17,8 +17,30 @@ Namespace Sql
     ''' <typeparam name="T"></typeparam>
     ''' <param name="tableAlias"></param>
     ''' <returns></returns>
-    Public Shared Function Columns(Of T)(Optional tableAlias As String = Nothing) As ModelInfo
-      Return New ModelInfo(GetType(T), tableAlias)
+    Public Shared Function Columns(Of T)(Optional tableAlias As String = Nothing) As ColumnsModelInfo
+      Return New ColumnsModelInfo(GetType(T), tableAlias)
+    End Function
+
+    ''' <summary>
+    ''' Translates to SQL expression that contains column of defined entity (table).<br/>
+    ''' This method is not intended to be called directly. Use it only as a part of the query expression.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="propertyName"></param>
+    ''' <param name="tableAlias"></param>
+    ''' <returns></returns>
+    Public Shared Function Column(Of T)(propertyName As String, Optional tableAlias As String = Nothing) As ColumnModelInfo
+      Return New ColumnModelInfo(GetType(T), propertyName, tableAlias)
+    End Function
+
+    ''' <summary>
+    ''' Translates to SQL expression that contains table name of defined entity.<br/>
+    ''' This method is not intended to be called directly. Use it only as a part of the query expression.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <returns></returns>
+    Public Shared Function Table(Of T)() As TableModelInfo
+      Return New TableModelInfo(GetType(T))
     End Function
 
     ''' <summary>

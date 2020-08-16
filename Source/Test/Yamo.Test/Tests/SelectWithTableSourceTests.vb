@@ -58,8 +58,7 @@ Namespace Tests
       InsertItemsToArchive(ArticleArchiveTableName, article1, article2, article3)
 
       Using db = CreateDbContext()
-        ' order of columns in SELECT clause is important!
-        Dim result = db.From(Of Article)("(SELECT Id, Price FROM ArticleArchive WHERE Id < {0})", 3).
+        Dim result = db.From(Of Article)("(SELECT {0} FROM ArticleArchive WHERE Id < {1})", Sql.Model.Columns(Of Article), 3).
                         SelectAll().ToList()
 
         CollectionAssert.AreEquivalent({article1, article2}, result)
@@ -131,9 +130,8 @@ Namespace Tests
       InsertItemsToArchive(LabelArchiveTableName, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
-        ' order of columns in SELECT clause is important!
         Dim result = db.From(Of Article).
-                        Join(Of Label)("(SELECT TableId, Id, Language, Description FROM LabelArchive WHERE Language = {0})", English).
+                        Join(Of Label)("(SELECT {0} FROM LabelArchive WHERE Language = {1})", Sql.Model.Columns(Of Label), English).
                         On(Function(a, l) a.Id = l.Id).
                         SelectAll().ToList()
 
@@ -210,9 +208,8 @@ Namespace Tests
       InsertItemsToArchive(LabelArchiveTableName, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
-        ' order of columns in SELECT clause is important!
         Dim result = db.From(Of Article).
-                        LeftJoin(Of Label)("(SELECT TableId, Id, Language, Description FROM LabelArchive WHERE Language = {0})", English).
+                        LeftJoin(Of Label)("(SELECT {0} FROM LabelArchive WHERE Language = {1})", Sql.Model.Columns(Of Label), English).
                         On(Function(a, l) a.Id = l.Id).
                         SelectAll().ToList()
 
@@ -288,9 +285,8 @@ Namespace Tests
       InsertItemsToArchive(LabelArchiveTableName, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
-        ' order of columns in SELECT clause is important!
         Dim result = db.From(Of Article).
-                        RightJoin(Of Label)("(SELECT TableId, Id, Language, Description FROM LabelArchive WHERE Language = {0})", English).
+                        RightJoin(Of Label)("(SELECT {0} FROM LabelArchive WHERE Language = {1})", Sql.Model.Columns(Of Label), English).
                         On(Function(a, l) a.Id = l.Id).
                         SelectAll().ToList()
 
@@ -367,9 +363,8 @@ Namespace Tests
       InsertItemsToArchive(LabelArchiveTableName, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
-        ' order of columns in SELECT clause is important!
         Dim result = db.From(Of Article).
-                        FullJoin(Of Label)("(SELECT TableId, Id, Language, Description FROM LabelArchive WHERE Language = {0})", English).
+                        FullJoin(Of Label)("(SELECT {0} FROM LabelArchive WHERE Language = {1})", Sql.Model.Columns(Of Label), English).
                         On(Function(a, l) a.Id = l.Id).
                         SelectAll().ToList()
 
@@ -453,9 +448,8 @@ Namespace Tests
       InsertItemsToArchive(LabelArchiveTableName, label1En, label3En, label3De)
 
       Using db = CreateDbContext()
-        ' order of columns in SELECT clause is important!
         Dim result = db.From(Of Article).
-                        CrossJoin(Of Label)("(SELECT TableId, Id, Language, Description FROM LabelArchive WHERE Language = {0})", English).
+                        CrossJoin(Of Label)("(SELECT {0} FROM LabelArchive WHERE Language = {1})", Sql.Model.Columns(Of Label), English).
                         SelectAll().ToList()
 
         Assert.AreEqual(6, result.Count)

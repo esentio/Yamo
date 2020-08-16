@@ -75,9 +75,15 @@ Namespace Expressions.Builders
       For i = 0 To args.Length - 1
         Dim value = args(i)
 
-        If TypeOf value Is ModelInfo Then
-          Dim mi = DirectCast(value, ModelInfo)
-          formatArgs(i) = CreateColumnsString(mi.Model, mi.TableAlias)
+        If TypeOf value Is ColumnsModelInfo Then
+          Dim cmi = DirectCast(value, ColumnsModelInfo)
+          formatArgs(i) = CreateColumnsString(cmi.Model, cmi.TableAlias)
+        ElseIf TypeOf value Is ColumnModelInfo Then
+          Dim cmi = DirectCast(value, ColumnModelInfo)
+          formatArgs(i) = CreateColumnString(cmi.Model, cmi.TableAlias, cmi.PropertyName)
+        ElseIf TypeOf value Is TableModelInfo Then
+          Dim tmi = DirectCast(value, TableModelInfo)
+          formatArgs(i) = CreateTableString(tmi.Model)
         ElseIf TypeOf value Is RawSqlString Then
           Dim s = DirectCast(value, RawSqlString)
           formatArgs(i) = s.Value
@@ -124,6 +130,36 @@ Namespace Expressions.Builders
       Next
 
       Return sql.ToString()
+    End Function
+
+    ''' <summary>
+    ''' Creates string containing column.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="tableAlias"></param>
+    ''' <param name="propertyName"></param>
+    ''' <returns></returns>
+    Private Function CreateColumnString(model As Type, tableAlias As String, propertyName As String) As String
+      Dim entity = Me.DbContext.Model.GetEntity(model)
+      Dim prop = entity.GetProperty(propertyName)
+
+      If String.IsNullOrWhiteSpace(tableAlias) Then
+        Return Me.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)
+      Else
+        Return tableAlias & "." & Me.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName)
+      End If
+    End Function
+
+    ''' <summary>
+    ''' Creates string containing table.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <returns></returns>
+    Private Function CreateTableString(model As Type) As String
+      Dim entity = Me.DbContext.Model.GetEntity(model)
+      Return Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema)
     End Function
 
   End Class
