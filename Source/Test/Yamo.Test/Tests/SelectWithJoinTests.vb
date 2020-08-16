@@ -28,6 +28,15 @@ Namespace Tests
         Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 3 AndAlso a.Label.Id = 3 AndAlso a.Label.Language = English))
         Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 3 AndAlso a.Label.Id = 3 AndAlso a.Label.Language = German))
       End Using
+
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).Join(Of Label).On(Function(a, l) a.Id = l.Id).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 1 AndAlso a.Label.Id = 1))
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 3 AndAlso a.Label.Id = 3 AndAlso a.Label.Language = English))
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 3 AndAlso a.Label.Id = 3 AndAlso a.Label.Language = German))
+      End Using
     End Sub
 
     <TestMethod()>
@@ -44,6 +53,16 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).SelectAll().ToList()
+        Assert.AreEqual(4, result.Count)
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 1 AndAlso a.Label.Id = 1))
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 2 AndAlso a.Label Is Nothing))
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 3 AndAlso a.Label.Id = 3 AndAlso a.Label.Language = English))
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 3 AndAlso a.Label.Id = 3 AndAlso a.Label.Language = German))
+      End Using
+
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).LeftJoin(Of Label).On(Function(a, l) a.Id = l.Id).SelectAll().ToList()
         Assert.AreEqual(4, result.Count)
         Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 1 AndAlso a.Label.Id = 1))
         Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 2 AndAlso a.Label Is Nothing))
@@ -71,6 +90,15 @@ Namespace Tests
         Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 3 AndAlso a.Label.Id = 3 AndAlso a.Label.Language = English))
         Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 3 AndAlso a.Label.Id = 3 AndAlso a.Label.Language = German))
       End Using
+
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).RightJoin(Of Label).On(Function(a, l) a.Id = l.Id).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 1 AndAlso a.Label.Id = 1))
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 3 AndAlso a.Label.Id = 3 AndAlso a.Label.Language = English))
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 3 AndAlso a.Label.Id = 3 AndAlso a.Label.Language = German))
+      End Using
     End Sub
 
     <TestMethod()>
@@ -87,6 +115,16 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).FullJoin(Of Label)(Function(a, l) a.Id = l.Id).SelectAll().ToList()
+        Assert.AreEqual(4, result.Count)
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 1 AndAlso a.Label.Id = 1))
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 2 AndAlso a.Label Is Nothing))
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 3 AndAlso a.Label.Id = 3 AndAlso a.Label.Language = English))
+        Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 3 AndAlso a.Label.Id = 3 AndAlso a.Label.Language = German))
+      End Using
+
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).FullJoin(Of Label).On(Function(a, l) a.Id = l.Id).SelectAll().ToList()
         Assert.AreEqual(4, result.Count)
         Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 1 AndAlso a.Label.Id = 1))
         Assert.IsNotNull(result.SingleOrDefault(Function(a) a.Id = 2 AndAlso a.Label Is Nothing))
@@ -150,6 +188,22 @@ Namespace Tests
         Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
         Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
       End Using
+
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).Join(Of ArticlePart).On(Function(a, p) a.Id = p.ArticleId).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+
+        Dim article1Result = result.First(Function(a) a.Id = 1)
+        Assert.AreEqual(1, article1Result.Parts.Count)
+        Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 1001))
+
+        Dim article3Result = result.First(Function(a) a.Id = 3)
+        Assert.AreEqual(3, article3Result.Parts.Count)
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
+      End Using
     End Sub
 
     <TestMethod()>
@@ -168,6 +222,25 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).LeftJoin(Of ArticlePart)(Function(a, p) a.Id = p.ArticleId).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+
+        Dim article1Result = result.First(Function(a) a.Id = 1)
+        Assert.AreEqual(1, article1Result.Parts.Count)
+        Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 1001))
+
+        Dim article2Result = result.First(Function(a) a.Id = 2)
+        Assert.AreEqual(0, article2Result.Parts.Count)
+
+        Dim article3Result = result.First(Function(a) a.Id = 3)
+        Assert.AreEqual(3, article3Result.Parts.Count)
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
+      End Using
+
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).LeftJoin(Of ArticlePart).On(Function(a, p) a.Id = p.ArticleId).SelectAll().ToList()
         Assert.AreEqual(3, result.Count)
 
         Dim article1Result = result.First(Function(a) a.Id = 1)
@@ -213,6 +286,22 @@ Namespace Tests
         Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
         Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
       End Using
+
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).RightJoin(Of ArticlePart).On(Function(a, p) a.Id = p.ArticleId).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+
+        Dim article1Result = result.First(Function(a) a.Id = 1)
+        Assert.AreEqual(1, article1Result.Parts.Count)
+        Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 1001))
+
+        Dim article3Result = result.First(Function(a) a.Id = 3)
+        Assert.AreEqual(3, article3Result.Parts.Count)
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
+      End Using
     End Sub
 
     <TestMethod()>
@@ -231,6 +320,25 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).FullJoin(Of ArticlePart)(Function(a, p) a.Id = p.ArticleId).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+
+        Dim article1Result = result.First(Function(a) a.Id = 1)
+        Assert.AreEqual(1, article1Result.Parts.Count)
+        Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 1001))
+
+        Dim article2Result = result.First(Function(a) a.Id = 2)
+        Assert.AreEqual(0, article2Result.Parts.Count)
+
+        Dim article3Result = result.First(Function(a) a.Id = 3)
+        Assert.AreEqual(3, article3Result.Parts.Count)
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003))
+      End Using
+
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).FullJoin(Of ArticlePart).On(Function(a, p) a.Id = p.ArticleId).SelectAll().ToList()
         Assert.AreEqual(3, result.Count)
 
         Dim article1Result = result.First(Function(a) a.Id = 1)
@@ -527,6 +635,33 @@ Namespace Tests
         Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003 AndAlso p.Label Is Nothing))
       End Using
 
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label).On(Function(a, l) a.Id = l.Id AndAlso l.Language = English).
+                        LeftJoin(Of ArticlePart).On(Function(a As Article, p As ArticlePart) a.Id = p.ArticleId).
+                        LeftJoin(Of Label).On(Function(p As ArticlePart, l As Label) p.Id = l.Id AndAlso l.Language = English).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+
+        Dim article1Result = result.First(Function(a) a.Id = 1)
+        Assert.AreEqual(1, article1Result.Parts.Count)
+        Assert.IsTrue(article1Result.Label IsNot Nothing AndAlso article1Result.Label.TableId = NameOf(Article) AndAlso article1Result.Label.Language = English AndAlso article1Result.Label.Id = article1Result.Id)
+        Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 1001 AndAlso p.Label IsNot Nothing AndAlso p.Label.TableId = NameOf(ArticlePart) AndAlso p.Label.Language = English AndAlso p.Label.Id = p.Id))
+
+        Dim article2Result = result.First(Function(a) a.Id = 2)
+        Assert.IsTrue(article2Result.Label Is Nothing)
+        Assert.AreEqual(0, article2Result.Parts.Count)
+
+        Dim article3Result = result.First(Function(a) a.Id = 3)
+        Assert.AreEqual(3, article3Result.Parts.Count)
+        Assert.IsTrue(article3Result.Label IsNot Nothing AndAlso article3Result.Label.TableId = NameOf(Article) AndAlso article3Result.Label.Language = English AndAlso article3Result.Label.Id = article3Result.Id)
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001 AndAlso p.Label IsNot Nothing AndAlso p.Label.TableId = NameOf(ArticlePart) AndAlso p.Label.Language = English AndAlso p.Label.Id = p.Id))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002 AndAlso p.Label IsNot Nothing AndAlso p.Label.TableId = NameOf(ArticlePart) AndAlso p.Label.Language = English AndAlso p.Label.Id = p.Id))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003 AndAlso p.Label Is Nothing))
+      End Using
+
       ' same as above, but join in different order
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).
@@ -587,6 +722,33 @@ Namespace Tests
                         LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
                         LeftJoin(Of ArticlePart)(Function(j) j.T1.Id = j.T3.ArticleId).
                         LeftJoin(Of Label)(Function(j) j.T3.Id = j.T4.Id AndAlso j.T4.Language = English).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+
+        Dim article1Result = result.First(Function(a) a.Id = 1)
+        Assert.AreEqual(1, article1Result.Parts.Count)
+        Assert.IsTrue(article1Result.Label IsNot Nothing AndAlso article1Result.Label.TableId = NameOf(Article) AndAlso article1Result.Label.Language = English AndAlso article1Result.Label.Id = article1Result.Id)
+        Assert.IsNotNull(article1Result.Parts.SingleOrDefault(Function(p) p.Id = 1001 AndAlso p.Label IsNot Nothing AndAlso p.Label.TableId = NameOf(ArticlePart) AndAlso p.Label.Language = English AndAlso p.Label.Id = p.Id))
+
+        Dim article2Result = result.First(Function(a) a.Id = 2)
+        Assert.IsTrue(article2Result.Label Is Nothing)
+        Assert.AreEqual(0, article2Result.Parts.Count)
+
+        Dim article3Result = result.First(Function(a) a.Id = 3)
+        Assert.AreEqual(3, article3Result.Parts.Count)
+        Assert.IsTrue(article3Result.Label IsNot Nothing AndAlso article3Result.Label.TableId = NameOf(Article) AndAlso article3Result.Label.Language = English AndAlso article3Result.Label.Id = article3Result.Id)
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3001 AndAlso p.Label IsNot Nothing AndAlso p.Label.TableId = NameOf(ArticlePart) AndAlso p.Label.Language = English AndAlso p.Label.Id = p.Id))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3002 AndAlso p.Label IsNot Nothing AndAlso p.Label.TableId = NameOf(ArticlePart) AndAlso p.Label.Language = English AndAlso p.Label.Id = p.Id))
+        Assert.IsNotNull(article3Result.Parts.SingleOrDefault(Function(p) p.Id = 3003 AndAlso p.Label Is Nothing))
+      End Using
+
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label).On(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                        LeftJoin(Of ArticlePart).On(Function(j) j.T1.Id = j.T3.ArticleId).
+                        LeftJoin(Of Label).On(Function(j) j.T3.Id = j.T4.Id AndAlso j.T4.Language = English).
                         SelectAll().ToList()
 
         Assert.AreEqual(3, result.Count)
@@ -722,11 +884,55 @@ Namespace Tests
         Assert.IsNotNull(article3Result.Categories.SingleOrDefault(Function(c) c.Id = 3))
       End Using
 
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of ArticleCategory).On(Function(a As Article, ac As ArticleCategory) a.Id = ac.ArticleId).
+                        LeftJoin(Of Category).On(Function(ac As ArticleCategory, c As Category) ac.CategoryId = c.Id).As(Function(a) a.Categories).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+
+        Dim article1Result = result.First(Function(a) a.Id = 1)
+        Assert.AreEqual(2, article1Result.Categories.Count)
+        Assert.IsNotNull(article1Result.Categories.SingleOrDefault(Function(c) c.Id = 1))
+        Assert.IsNotNull(article1Result.Categories.SingleOrDefault(Function(c) c.Id = 2))
+
+        Dim article2Result = result.First(Function(a) a.Id = 2)
+        Assert.AreEqual(0, article2Result.Categories.Count)
+
+        Dim article3Result = result.First(Function(a) a.Id = 3)
+        Assert.AreEqual(1, article3Result.Categories.Count)
+        Assert.IsNotNull(article3Result.Categories.SingleOrDefault(Function(c) c.Id = 3))
+      End Using
+
       ' same as above, but use IJoin
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).
-                        LeftJoin(Of ArticleCategory)(Function(a As Article, ac As ArticleCategory) a.Id = ac.ArticleId).
-                        LeftJoin(Of Category)(Function(ac As ArticleCategory, c As Category) ac.CategoryId = c.Id).As(Function(j) j.T1.Categories).
+                        LeftJoin(Of ArticleCategory)(Function(j) j.T1.Id = j.T2.ArticleId).
+                        LeftJoin(Of Category)(Function(j) j.T2.CategoryId = j.T3.Id).As(Function(j) j.T1.Categories).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+
+        Dim article1Result = result.First(Function(a) a.Id = 1)
+        Assert.AreEqual(2, article1Result.Categories.Count)
+        Assert.IsNotNull(article1Result.Categories.SingleOrDefault(Function(c) c.Id = 1))
+        Assert.IsNotNull(article1Result.Categories.SingleOrDefault(Function(c) c.Id = 2))
+
+        Dim article2Result = result.First(Function(a) a.Id = 2)
+        Assert.AreEqual(0, article2Result.Categories.Count)
+
+        Dim article3Result = result.First(Function(a) a.Id = 3)
+        Assert.AreEqual(1, article3Result.Categories.Count)
+        Assert.IsNotNull(article3Result.Categories.SingleOrDefault(Function(c) c.Id = 3))
+      End Using
+
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of ArticleCategory).On(Function(j) j.T1.Id = j.T2.ArticleId).
+                        LeftJoin(Of Category).On(Function(j) j.T2.CategoryId = j.T3.Id).As(Function(j) j.T1.Categories).
                         SelectAll().ToList()
 
         Assert.AreEqual(3, result.Count)
@@ -997,9 +1203,182 @@ Namespace Tests
 
         Assert.AreEqual(linkedItem15, result(14))
         Assert.IsNull(result(14).NextItem)
-
-        ' TODO: SIP - test also 1:N relationships
       End Using
+
+      ' same as above, but use different syntax
+      Using db = CreateDbContext()
+        Dim result = db.From(Of LinkedItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(x) x.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T2.Id = j.T3.PreviousId.Value).As(Function(j) j.T2.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T3.Id = j.T4.PreviousId.Value).As(Function(j) j.T3.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T4.Id = j.T5.PreviousId.Value).As(Function(j) j.T4.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T5.Id = j.T6.PreviousId.Value).As(Function(j) j.T5.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T6.Id = j.T7.PreviousId.Value).As(Function(j) j.T6.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T7.Id = j.T8.PreviousId.Value).As(Function(j) j.T7.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T8.Id = j.T9.PreviousId.Value).As(Function(j) j.T8.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T9.Id = j.T10.PreviousId.Value).As(Function(j) j.T9.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T10.Id = j.T11.PreviousId.Value).As(Function(j) j.T10.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T11.Id = j.T12.PreviousId.Value).As(Function(j) j.T11.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T12.Id = j.T13.PreviousId.Value).As(Function(j) j.T12.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T13.Id = j.T14.PreviousId.Value).As(Function(j) j.T13.NextItem).
+                        LeftJoin(Of LinkedItem).On(Function(j) j.T14.Id = j.T15.PreviousId.Value).As(Function(j) j.T14.NextItem).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(15, result.Count)
+
+        Assert.AreEqual(linkedItem1, result(0))
+        Assert.AreEqual(linkedItem2, result(0).NextItem)
+        Assert.AreEqual(linkedItem3, result(0).NextItem.NextItem)
+        Assert.AreEqual(linkedItem4, result(0).NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem5, result(0).NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem6, result(0).NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem7, result(0).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem8, result(0).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem9, result(0).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem10, result(0).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem11, result(0).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem12, result(0).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem13, result(0).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem14, result(0).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem15, result(0).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.IsNull(result(0).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem2, result(1))
+        Assert.AreEqual(linkedItem3, result(1).NextItem)
+        Assert.AreEqual(linkedItem4, result(1).NextItem.NextItem)
+        Assert.AreEqual(linkedItem5, result(1).NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem6, result(1).NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem7, result(1).NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem8, result(1).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem9, result(1).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem10, result(1).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem11, result(1).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem12, result(1).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem13, result(1).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem14, result(1).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem15, result(1).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.IsNull(result(1).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem3, result(2))
+        Assert.AreEqual(linkedItem4, result(2).NextItem)
+        Assert.AreEqual(linkedItem5, result(2).NextItem.NextItem)
+        Assert.AreEqual(linkedItem6, result(2).NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem7, result(2).NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem8, result(2).NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem9, result(2).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem10, result(2).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem11, result(2).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem12, result(2).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem13, result(2).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem14, result(2).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem15, result(2).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.IsNull(result(2).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem4, result(3))
+        Assert.AreEqual(linkedItem5, result(3).NextItem)
+        Assert.AreEqual(linkedItem6, result(3).NextItem.NextItem)
+        Assert.AreEqual(linkedItem7, result(3).NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem8, result(3).NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem9, result(3).NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem10, result(3).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem11, result(3).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem12, result(3).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem13, result(3).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem14, result(3).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem15, result(3).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.IsNull(result(3).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem5, result(4))
+        Assert.AreEqual(linkedItem6, result(4).NextItem)
+        Assert.AreEqual(linkedItem7, result(4).NextItem.NextItem)
+        Assert.AreEqual(linkedItem8, result(4).NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem9, result(4).NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem10, result(4).NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem11, result(4).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem12, result(4).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem13, result(4).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem14, result(4).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem15, result(4).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.IsNull(result(4).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem6, result(5))
+        Assert.AreEqual(linkedItem7, result(5).NextItem)
+        Assert.AreEqual(linkedItem8, result(5).NextItem.NextItem)
+        Assert.AreEqual(linkedItem9, result(5).NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem10, result(5).NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem11, result(5).NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem12, result(5).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem13, result(5).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem14, result(5).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem15, result(5).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.IsNull(result(5).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem7, result(6))
+        Assert.AreEqual(linkedItem8, result(6).NextItem)
+        Assert.AreEqual(linkedItem9, result(6).NextItem.NextItem)
+        Assert.AreEqual(linkedItem10, result(6).NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem11, result(6).NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem12, result(6).NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem13, result(6).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem14, result(6).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem15, result(6).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.IsNull(result(6).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem8, result(7))
+        Assert.AreEqual(linkedItem9, result(7).NextItem)
+        Assert.AreEqual(linkedItem10, result(7).NextItem.NextItem)
+        Assert.AreEqual(linkedItem11, result(7).NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem12, result(7).NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem13, result(7).NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem14, result(7).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem15, result(7).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.IsNull(result(7).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem9, result(8))
+        Assert.AreEqual(linkedItem10, result(8).NextItem)
+        Assert.AreEqual(linkedItem11, result(8).NextItem.NextItem)
+        Assert.AreEqual(linkedItem12, result(8).NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem13, result(8).NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem14, result(8).NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem15, result(8).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.IsNull(result(8).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem10, result(9))
+        Assert.AreEqual(linkedItem11, result(9).NextItem)
+        Assert.AreEqual(linkedItem12, result(9).NextItem.NextItem)
+        Assert.AreEqual(linkedItem13, result(9).NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem14, result(9).NextItem.NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem15, result(9).NextItem.NextItem.NextItem.NextItem.NextItem)
+        Assert.IsNull(result(9).NextItem.NextItem.NextItem.NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem11, result(10))
+        Assert.AreEqual(linkedItem12, result(10).NextItem)
+        Assert.AreEqual(linkedItem13, result(10).NextItem.NextItem)
+        Assert.AreEqual(linkedItem14, result(10).NextItem.NextItem.NextItem)
+        Assert.AreEqual(linkedItem15, result(10).NextItem.NextItem.NextItem.NextItem)
+        Assert.IsNull(result(10).NextItem.NextItem.NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem12, result(11))
+        Assert.AreEqual(linkedItem13, result(11).NextItem)
+        Assert.AreEqual(linkedItem14, result(11).NextItem.NextItem)
+        Assert.AreEqual(linkedItem15, result(11).NextItem.NextItem.NextItem)
+        Assert.IsNull(result(11).NextItem.NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem13, result(12))
+        Assert.AreEqual(linkedItem14, result(12).NextItem)
+        Assert.AreEqual(linkedItem15, result(12).NextItem.NextItem)
+        Assert.IsNull(result(12).NextItem.NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem14, result(13))
+        Assert.AreEqual(linkedItem15, result(13).NextItem)
+        Assert.IsNull(result(13).NextItem.NextItem)
+
+        Assert.AreEqual(linkedItem15, result(14))
+        Assert.IsNull(result(14).NextItem)
+      End Using
+
+      ' TODO: SIP - test also 1:N relationships
     End Sub
 
   End Class

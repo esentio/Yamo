@@ -5,6 +5,8 @@ Namespace Tests
   Public MustInherit Class UpdateTests
     Inherits BaseIntegrationTests
 
+    Protected Const ItemWithAllSupportedValuesArchiveTableName As String = "ItemWithAllSupportedValuesArchive"
+
     <TestMethod()>
     Public Overridable Sub UpdateRecordWithAllSupportedValues()
       Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
@@ -646,6 +648,78 @@ Namespace Tests
 
         item1.Nvarchar50Column = "lorem"
         item2.Nvarchar50Column = "lorem"
+
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({item1, item2, item3}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub UpdateRecordWithSpecifiedTableName()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+
+      InsertItemsToArchive(ItemWithAllSupportedValuesArchiveTableName, item1, item2, item3)
+
+      item2.Nvarchar50Column = "lorem ipsum"
+      item2.IntColumn = 42
+
+      Using db = CreateDbContext()
+        Dim table = db.Model.GetEntity(GetType(ItemWithAllSupportedValuesArchive)).TableName
+
+        Dim affectedRows = db.Update(Of ItemWithAllSupportedValues)(table).Execute(item2)
+        Assert.AreEqual(1, affectedRows)
+
+        Dim result = db.From(Of ItemWithAllSupportedValuesArchive).SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({item1, item2, item3}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub UpdateRecordsWithSpecifiedTableName()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+
+      item1.IntColumn = 1
+      item2.IntColumn = 2
+      item3.IntColumn = 3
+
+      InsertItemsToArchive(ItemWithAllSupportedValuesArchiveTableName, item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim table = db.Model.GetEntity(GetType(ItemWithAllSupportedValuesArchive)).TableName
+
+        Dim affectedRows = db.Update(Of ItemWithAllSupportedValues)(table).
+                              Set(Sub(x) x.Nvarchar50Column = "lorem").
+                              Execute()
+        Assert.AreEqual(3, affectedRows)
+
+        Dim result = db.From(Of ItemWithAllSupportedValuesArchive).SelectAll().ToList()
+
+        item1.Nvarchar50Column = "lorem"
+        item2.Nvarchar50Column = "lorem"
+        item3.Nvarchar50Column = "lorem"
+
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({item1, item2, item3}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim table = db.Model.GetEntity(GetType(ItemWithAllSupportedValuesArchive)).TableName
+
+        Dim affectedRows = db.Update(Of ItemWithAllSupportedValues)(table).
+                              Set(Sub(x) x.Nvarchar50Column = "lorem ipsum").
+                              Where(Function(x) x.IntColumn = 2).
+                              Execute()
+        Assert.AreEqual(1, affectedRows)
+
+        Dim result = db.From(Of ItemWithAllSupportedValuesArchive).SelectAll().ToList()
+
+        item2.Nvarchar50Column = "lorem ipsum"
 
         Assert.AreEqual(3, result.Count)
         CollectionAssert.AreEquivalent({item1, item2, item3}, result)

@@ -20,13 +20,13 @@ Namespace Infrastructure
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="builder"></param>
-    ''' <param name="useDbIdentityAndDefaults"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateInsertProvider(builder As InsertSqlExpressionBuilder, useDbIdentityAndDefaults As Boolean, entityType As Type) As Func(Of Object, Boolean, CreateInsertSqlStringResult)
+    Public Overridable Function CreateInsertProvider(builder As InsertSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, Boolean, CreateInsertSqlStringResult)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
+      Dim tableParam = Expression.Parameter(GetType(String), "table")
       Dim useDbIdentityAndDefaultsParam = Expression.Parameter(GetType(Boolean), "useDbIdentityAndDefaults")
-      Dim parameters = {entityParam, useDbIdentityAndDefaultsParam}
+      Dim parameters = {entityParam, tableParam, useDbIdentityAndDefaultsParam}
 
       Dim expressions = New List(Of Expression)
 
@@ -91,17 +91,15 @@ Namespace Infrastructure
         i += 1
       Next
 
-      Dim tableName = builder.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema)
-
-      Dim sqlWhenUseDbIdentityAndDefaults = GetInsertWhenUseDbIdentityAndDefaults(tableName, declareColumnsWhenUseDbIdentityAndDefaults, outputColumnNamesWhenUseDbIdentityAndDefaults, columnNamesWhenUseDbIdentityAndDefaults, parameterNamesWhenUseDbIdentityAndDefaults)
-      Dim sqlVariableAssignWhenUseDbIdentityAndDefaults = Expression.Assign(sqlVariable, Expression.Constant(sqlWhenUseDbIdentityAndDefaults, GetType(String)))
+      Dim sqlWhenUseDbIdentityAndDefaults = GetInsertWhenUseDbIdentityAndDefaults(tableParam, declareColumnsWhenUseDbIdentityAndDefaults, outputColumnNamesWhenUseDbIdentityAndDefaults, columnNamesWhenUseDbIdentityAndDefaults, parameterNamesWhenUseDbIdentityAndDefaults)
+      Dim sqlVariableAssignWhenUseDbIdentityAndDefaults = Expression.Assign(sqlVariable, sqlWhenUseDbIdentityAndDefaults)
       expressionsWhenUseDbIdentityAndDefaults.Add(sqlVariableAssignWhenUseDbIdentityAndDefaults)
 
       Dim readDbGeneratedValuesVariableAssignWhenUseDbIdentityAndDefaults = Expression.Assign(readDbGeneratedValuesVariable, Expression.Constant(True, GetType(Boolean)))
       expressionsWhenUseDbIdentityAndDefaults.Add(readDbGeneratedValuesVariableAssignWhenUseDbIdentityAndDefaults)
 
-      Dim sqlWhenNotUseDbIdentityAndDefaults = GetInsertWhenNotUseDbIdentityAndDefaults(tableName, hasIdentityColumn, columnNamesWhenNotUseDbIdentityAndDefaults, parameterNamesWhenNotUseDbIdentityAndDefaults)
-      Dim sqlVariableAssignWhenNotUseDbIdentityAndDefaults = Expression.Assign(sqlVariable, Expression.Constant(sqlWhenNotUseDbIdentityAndDefaults, GetType(String)))
+      Dim sqlWhenNotUseDbIdentityAndDefaults = GetInsertWhenNotUseDbIdentityAndDefaults(tableParam, hasIdentityColumn, columnNamesWhenNotUseDbIdentityAndDefaults, parameterNamesWhenNotUseDbIdentityAndDefaults)
+      Dim sqlVariableAssignWhenNotUseDbIdentityAndDefaults = Expression.Assign(sqlVariable, sqlWhenNotUseDbIdentityAndDefaults)
       expressionsWhenNotUseDbIdentityAndDefaults.Add(sqlVariableAssignWhenNotUseDbIdentityAndDefaults)
 
       Dim readDbGeneratedValuesVariableAssignWhenNotUseDbIdentityAndDefaults = Expression.Assign(readDbGeneratedValuesVariable, Expression.Constant(False, GetType(Boolean)))
@@ -128,7 +126,7 @@ Namespace Infrastructure
 
       Dim body = Expression.Block({entityVariable, sqlVariable, parametersVariable, readDbGeneratedValuesVariable}, expressions)
 
-      Dim reader = Expression.Lambda(Of Func(Of Object, Boolean, CreateInsertSqlStringResult))(body, parameters)
+      Dim reader = Expression.Lambda(Of Func(Of Object, String, Boolean, CreateInsertSqlStringResult))(body, parameters)
       Return reader.Compile()
     End Function
 
@@ -142,10 +140,14 @@ Namespace Infrastructure
     ''' <param name="columnNames"></param>
     ''' <param name="parameterNames"></param>
     ''' <returns></returns>
-    Protected Overridable Function GetInsertWhenUseDbIdentityAndDefaults(tableName As String, declareColumns As List(Of String), outputColumnNames As List(Of String), columnNames As List(Of String), parameterNames As List(Of String)) As String
-      Return $"DECLARE @InsertedValues TABLE ({String.Join(", ", declareColumns)})
-INSERT INTO {tableName} ({String.Join(", ", columnNames)}) OUTPUT {String.Join(", ", outputColumnNames)} INTO @InsertedValues VALUES ({String.Join(", ", parameterNames)})
-SELECT * FROM @InsertedValues"
+    Protected Overridable Function GetInsertWhenUseDbIdentityAndDefaults(tableName As Expression, declareColumns As List(Of String), outputColumnNames As List(Of String), columnNames As List(Of String), parameterNames As List(Of String)) As Expression
+      Dim part1 = Expression.Constant($"DECLARE @InsertedValues TABLE ({String.Join(", ", declareColumns)})
+INSERT INTO ", GetType(String))
+      Dim part3 = Expression.Constant($" ({String.Join(", ", columnNames)}) OUTPUT {String.Join(", ", outputColumnNames)} INTO @InsertedValues VALUES ({String.Join(", ", parameterNames)})
+SELECT * FROM @InsertedValues", GetType(String))
+
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Return Expression.Call(concatMethod, part1, tableName, part3)
     End Function
 
     ''' <summary>
@@ -157,16 +159,24 @@ SELECT * FROM @InsertedValues"
     ''' <param name="columnNames"></param>
     ''' <param name="parameterNames"></param>
     ''' <returns></returns>
-    Protected Overridable Function GetInsertWhenNotUseDbIdentityAndDefaults(tableName As String, hasIdentityColumn As Boolean, columnNames As List(Of String), parameterNames As List(Of String)) As String
-      Dim sql = $"INSERT INTO {tableName} ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)})"
-
+    Protected Overridable Function GetInsertWhenNotUseDbIdentityAndDefaults(tableName As Expression, hasIdentityColumn As Boolean, columnNames As List(Of String), parameterNames As List(Of String)) As Expression
       If hasIdentityColumn Then
-        sql = $"SET IDENTITY_INSERT {tableName} ON
-{sql}
-SET IDENTITY_INSERT {tableName} OFF"
-      End If
+        Dim part1 = Expression.Constant("SET IDENTITY_INSERT ", GetType(String))
+        Dim part3 = Expression.Constant(" ON
+        INSERT INTO ", GetType(String))
+        Dim part5 = Expression.Constant($" ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)})
+        SET IDENTITY_INSERT ", GetType(String))
+        Dim part7 = Expression.Constant(" OFF", GetType(String))
 
-      Return sql
+        Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String())}, {})
+        Return Expression.Call(concatMethod, Expression.NewArrayInit(GetType(String), part1, tableName, part3, tableName, part5, tableName, part7))
+      Else
+        Dim part1 = Expression.Constant("INSERT INTO ", GetType(String))
+        Dim part3 = Expression.Constant($" ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)})", GetType(String))
+
+        Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+        Return Expression.Call(concatMethod, part1, tableName, part3)
+      End If
     End Function
 
     ''' <summary>
@@ -185,7 +195,7 @@ SET IDENTITY_INSERT {tableName} OFF"
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateUpdateProvider(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, SqlString)
+    Public Overridable Function CreateUpdateProvider(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, SqlString)
       If GetType(IHasDbPropertyModifiedTracking).IsAssignableFrom(entityType) Then
         Return CreateUpdateProviderForDbPropertyModifiedTrackingObject(builder, entityType)
       Else
@@ -200,9 +210,10 @@ SET IDENTITY_INSERT {tableName} OFF"
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Protected Overridable Function CreateUpdateProviderForSimpleObjects(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, SqlString)
+    Protected Overridable Function CreateUpdateProviderForSimpleObjects(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
-      Dim parameters = {entityParam}
+      Dim tableParam = Expression.Parameter(GetType(String), "table")
+      Dim parameters = {entityParam, tableParam}
 
       Dim expressions = New List(Of Expression)
 
@@ -221,8 +232,6 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim setColumns = New List(Of String)
       Dim whereColumns = New List(Of String)
 
-      sql.Append("UPDATE ")
-      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       sql.AppendLine(" SET")
 
       Dim i = 0
@@ -254,7 +263,9 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       Helpers.Text.AppendJoin(sql, " AND " & Environment.NewLine, whereColumns)
 
-      Dim sqlVariableAssign = Expression.Assign(sqlVariable, Expression.Constant(sql.ToString(), GetType(String)))
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Dim concatCall = Expression.Call(concatMethod, Expression.Constant("UPDATE ", GetType(String)), tableParam, Expression.Constant(sql.ToString(), GetType(String)))
+      Dim sqlVariableAssign = Expression.Assign(sqlVariable, concatCall)
       expressions.Add(sqlVariableAssign)
 
       Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, New ParameterModifier(0) {})
@@ -263,7 +274,7 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       Dim body = Expression.Block({entityVariable, sqlVariable, parametersVariable}, expressions)
 
-      Dim reader = Expression.Lambda(Of Func(Of Object, SqlString))(body, parameters)
+      Dim reader = Expression.Lambda(Of Func(Of Object, String, SqlString))(body, parameters)
       Return reader.Compile()
     End Function
 
@@ -274,9 +285,10 @@ SET IDENTITY_INSERT {tableName} OFF"
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Protected Overridable Function CreateUpdateProviderForDbPropertyModifiedTrackingObject(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, SqlString)
+    Protected Overridable Function CreateUpdateProviderForDbPropertyModifiedTrackingObject(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
-      Dim parameters = {entityParam}
+      Dim tableParam = Expression.Parameter(GetType(String), "table")
+      Dim parameters = {entityParam, tableParam}
 
       Dim expressions = New List(Of Expression)
 
@@ -302,8 +314,11 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       Dim whereColumns = New List(Of String)
 
-      Dim appendCall = Expression.Call(sqlVariable, "AppendLine", {}, Expression.Constant("UPDATE " & builder.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " SET", GetType(String)))
-      expressions.Add(appendCall)
+      Dim appendMethod = GetType(StringBuilder).GetMethod("Append", BindingFlags.Public Or BindingFlags.Instance, Nothing, {GetType(String)}, {})
+
+      expressions.Add(Expression.Call(sqlVariable, appendMethod, Expression.Constant("UPDATE ", GetType(String))))
+      expressions.Add(Expression.Call(sqlVariable, appendMethod, tableParam))
+      expressions.Add(Expression.Call(sqlVariable, "AppendLine", {}, Expression.Constant(" SET", GetType(String))))
 
       Dim i = 0
       For Each prop In entity.GetNonKeyProperties().Select(Function(x) x.Property)
@@ -326,14 +341,12 @@ SET IDENTITY_INSERT {tableName} OFF"
         i += 1
       Next
 
-      Dim jonMethod = GetType(String).GetMethod("Join", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(IEnumerable(Of String))}, {})
-      Dim joinCall = Expression.Call(jonMethod, Expression.Constant(", " & Environment.NewLine, GetType(String)), setColumnsVariable)
+      Dim joinMethod = GetType(String).GetMethod("Join", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(IEnumerable(Of String))}, {})
+      Dim joinCall = Expression.Call(joinMethod, Expression.Constant(", " & Environment.NewLine, GetType(String)), setColumnsVariable)
 
-      appendCall = Expression.Call(sqlVariable, "AppendLine", {}, joinCall)
-      expressions.Add(appendCall)
+      expressions.Add(Expression.Call(sqlVariable, "AppendLine", {}, joinCall))
 
-      appendCall = Expression.Call(sqlVariable, "AppendLine", {}, Expression.Constant("WHERE", GetType(String)))
-      expressions.Add(appendCall)
+      expressions.Add(Expression.Call(sqlVariable, "AppendLine", {}, Expression.Constant("WHERE", GetType(String))))
 
       For Each prop In entity.GetKeyProperties().Select(Function(x) x.Property)
         Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, i, builder)
@@ -346,9 +359,7 @@ SET IDENTITY_INSERT {tableName} OFF"
         i += 1
       Next
 
-      Dim appendMethod = GetType(StringBuilder).GetMethod("Append", BindingFlags.Public Or BindingFlags.Instance, Nothing, {GetType(String)}, {})
-      appendCall = Expression.Call(sqlVariable, appendMethod, Expression.Constant(String.Join(" AND " & Environment.NewLine, whereColumns), GetType(String)))
-      expressions.Add(appendCall)
+      expressions.Add(Expression.Call(sqlVariable, appendMethod, Expression.Constant(String.Join(" AND " & Environment.NewLine, whereColumns), GetType(String))))
 
       Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, New ParameterModifier(0) {})
       Dim sqlString = Expression.[New](sqlStringConstructor, Expression.Call(sqlVariable, "ToString", {}), parametersVariable)
@@ -356,7 +367,7 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       Dim body = Expression.Block({entityVariable, trackingVariable, sqlVariable, setColumnsVariable, parametersVariable}, expressions)
 
-      Dim reader = Expression.Lambda(Of Func(Of Object, SqlString))(body, parameters)
+      Dim reader = Expression.Lambda(Of Func(Of Object, String, SqlString))(body, parameters)
       Return reader.Compile()
     End Function
 
@@ -367,9 +378,10 @@ SET IDENTITY_INSERT {tableName} OFF"
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateDeleteProvider(builder As DeleteSqlExpressionBuilder, entityType As Type) As Func(Of Object, SqlString)
+    Public Overridable Function CreateDeleteProvider(builder As DeleteSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
-      Dim parameters = {entityParam}
+      Dim tableParam = Expression.Parameter(GetType(String), "table")
+      Dim parameters = {entityParam, tableParam}
 
       Dim expressions = New List(Of Expression)
 
@@ -387,8 +399,6 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim sql = New StringBuilder
       Dim whereColumns = New List(Of String)
 
-      sql.Append("DELETE FROM ")
-      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       sql.AppendLine()
       sql.AppendLine("WHERE")
 
@@ -406,7 +416,9 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       Helpers.Text.AppendJoin(sql, " AND " & Environment.NewLine, whereColumns)
 
-      Dim sqlVariableAssign = Expression.Assign(sqlVariable, Expression.Constant(sql.ToString(), GetType(String)))
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Dim concatCall = Expression.Call(concatMethod, Expression.Constant("DELETE FROM ", GetType(String)), tableParam, Expression.Constant(sql.ToString(), GetType(String)))
+      Dim sqlVariableAssign = Expression.Assign(sqlVariable, concatCall)
       expressions.Add(sqlVariableAssign)
 
       Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, New ParameterModifier(0) {})
@@ -415,7 +427,7 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       Dim body = Expression.Block({entityVariable, sqlVariable, parametersVariable}, expressions)
 
-      Dim reader = Expression.Lambda(Of Func(Of Object, SqlString))(body, parameters)
+      Dim reader = Expression.Lambda(Of Func(Of Object, String, SqlString))(body, parameters)
       Return reader.Compile()
     End Function
 
@@ -426,9 +438,10 @@ SET IDENTITY_INSERT {tableName} OFF"
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateSoftDeleteProvider(builder As DeleteSqlExpressionBuilder, entityType As Type) As Func(Of Object, SqlString)
+    Public Overridable Function CreateSoftDeleteProvider(builder As DeleteSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
-      Dim parameters = {entityParam}
+      Dim tableParam = Expression.Parameter(GetType(String), "table")
+      Dim parameters = {entityParam, tableParam}
 
       Dim expressions = New List(Of Expression)
 
@@ -447,8 +460,6 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim setColumns = New List(Of String)
       Dim whereColumns = New List(Of String)
 
-      sql.Append("UPDATE ")
-      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       sql.AppendLine(" SET")
 
       Dim i = 0
@@ -480,7 +491,9 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       Helpers.Text.AppendJoin(sql, " AND " & Environment.NewLine, whereColumns)
 
-      Dim sqlVariableAssign = Expression.Assign(sqlVariable, Expression.Constant(sql.ToString(), GetType(String)))
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Dim concatCall = Expression.Call(concatMethod, Expression.Constant("UPDATE ", GetType(String)), tableParam, Expression.Constant(sql.ToString(), GetType(String)))
+      Dim sqlVariableAssign = Expression.Assign(sqlVariable, concatCall)
       expressions.Add(sqlVariableAssign)
 
       Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, New ParameterModifier(0) {})
@@ -489,7 +502,7 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       Dim body = Expression.Block({entityVariable, sqlVariable, parametersVariable}, expressions)
 
-      Dim reader = Expression.Lambda(Of Func(Of Object, SqlString))(body, parameters)
+      Dim reader = Expression.Lambda(Of Func(Of Object, String, SqlString))(body, parameters)
       Return reader.Compile()
     End Function
 
@@ -500,9 +513,10 @@ SET IDENTITY_INSERT {tableName} OFF"
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateSoftDeleteWithoutConditionProvider(builder As DeleteSqlExpressionBuilder, entityType As Type) As Func(Of Object(), SqlString)
+    Public Overridable Function CreateSoftDeleteWithoutConditionProvider(builder As DeleteSqlExpressionBuilder, entityType As Type) As Func(Of String, Object(), SqlString)
+      Dim tableParam = Expression.Parameter(GetType(String), "table")
       Dim valuesParam = Expression.Parameter(GetType(Object()), "values")
-      Dim parameters = {valuesParam}
+      Dim parameters = {tableParam, valuesParam}
 
       Dim expressions = New List(Of Expression)
 
@@ -517,8 +531,6 @@ SET IDENTITY_INSERT {tableName} OFF"
       Dim sql = New StringBuilder
       Dim setColumns = New List(Of String)
 
-      sql.Append("UPDATE ")
-      builder.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       sql.AppendLine(" SET")
 
       Dim i = 0
@@ -536,7 +548,9 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       Helpers.Text.AppendJoin(sql, ", " & Environment.NewLine, setColumns)
 
-      Dim sqlVariableAssign = Expression.Assign(sqlVariable, Expression.Constant(sql.ToString(), GetType(String)))
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Dim concatCall = Expression.Call(concatMethod, Expression.Constant("UPDATE ", GetType(String)), tableParam, Expression.Constant(sql.ToString(), GetType(String)))
+      Dim sqlVariableAssign = Expression.Assign(sqlVariable, concatCall)
       expressions.Add(sqlVariableAssign)
 
       Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, New ParameterModifier(0) {})
@@ -545,7 +559,7 @@ SET IDENTITY_INSERT {tableName} OFF"
 
       Dim body = Expression.Block({sqlVariable, parametersVariable}, expressions)
 
-      Dim reader = Expression.Lambda(Of Func(Of Object(), SqlString))(body, parameters)
+      Dim reader = Expression.Lambda(Of Func(Of String, Object(), SqlString))(body, parameters)
       Return reader.Compile()
     End Function
 

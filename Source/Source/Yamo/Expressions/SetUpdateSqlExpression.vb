@@ -121,9 +121,10 @@ Namespace Expressions
     ''' <summary>
     ''' Executes UPDATE statement and returns the number of affected rows.
     ''' </summary>
+    ''' <param name="setAutoFields"></param>
     ''' <returns></returns>
-    Public Function Execute() As Int32
-      Dim query = Me.Builder.CreateQuery()
+    Public Function Execute(Optional setAutoFields As Boolean = True) As Int32
+      Dim query = Me.Builder.CreateQuery(setAutoFields)
       Return Me.Executor.Execute(query)
     End Function
 

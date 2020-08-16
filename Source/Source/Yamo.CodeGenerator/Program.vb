@@ -33,6 +33,9 @@ Module Program
     Dim joinedSelectSqlExpressionCodeGenerator = New JoinedSelectSqlExpressionCodeGenerator(indentation, maxEntityCount, outputFolder)
     joinedSelectSqlExpressionCodeGenerator.Generate()
 
+    Dim joinSelectSqlExpressionCodeGenerator = New JoinSelectSqlExpressionCodeGenerator(indentation, maxEntityCount, outputFolder)
+    joinSelectSqlExpressionCodeGenerator.Generate()
+
     Dim limitedSelectSqlExpressionCodeGenerator = New LimitedSelectSqlExpressionCodeGenerator(indentation, maxEntityCount, outputFolder)
     limitedSelectSqlExpressionCodeGenerator.Generate()
 

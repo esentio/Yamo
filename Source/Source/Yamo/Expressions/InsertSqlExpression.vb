@@ -32,35 +32,30 @@ Namespace Expressions
     Protected Property Executor As QueryExecutor
 
     ''' <summary>
-    ''' Stores whether auto fields should be set.
-    ''' </summary>
-    Private m_SetAutoFields As Boolean
-
-    ''' <summary>
     ''' Creates new instance of <see cref="InsertSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="context"></param>
-    ''' <param name="useDbIdentityAndDefaults"></param>
-    ''' <param name="setAutoFields"></param>
-    Friend Sub New(context As DbContext, useDbIdentityAndDefaults As Boolean, setAutoFields As Boolean)
+    ''' <param name="tableNameOverride"></param>
+    Friend Sub New(context As DbContext, Optional tableNameOverride As String = Nothing)
       Me.DbContext = context
-      Me.Builder = New InsertSqlExpressionBuilder(context, useDbIdentityAndDefaults)
+      Me.Builder = New InsertSqlExpressionBuilder(context, tableNameOverride)
       Me.Executor = New QueryExecutor(context)
-      m_SetAutoFields = setAutoFields
     End Sub
 
     ''' <summary>
     ''' Executes INSERT statement and returns the number of affected rows.
     ''' </summary>
     ''' <param name="obj"></param>
+    ''' <param name="useDbIdentityAndDefaults"></param>
+    ''' <param name="setAutoFields"></param>
     ''' <returns></returns>
-    Public Function Insert(obj As T) As Int32
-      If m_SetAutoFields Then
+    Public Function Execute(obj As T, Optional useDbIdentityAndDefaults As Boolean = True, Optional setAutoFields As Boolean = True) As Int32
+      If setAutoFields Then
         Dim setter = EntityAutoFieldsSetterCache.GetOnInsertSetter(Me.DbContext.Model, GetEntityType(obj))
         setter(obj, Me.DbContext)
       End If
 
-      Dim query = Me.Builder.CreateQuery(obj)
+      Dim query = Me.Builder.CreateQuery(obj, useDbIdentityAndDefaults)
       Dim affectedRows = Me.Executor.ExecuteInsert(query)
       ResetDbPropertyModifiedTracking(obj)
       Return affectedRows

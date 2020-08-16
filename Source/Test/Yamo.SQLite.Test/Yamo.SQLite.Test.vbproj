@@ -92,6 +92,7 @@
     <Compile Include="SQLiteTestEnvironment.vb" />
     <Compile Include="Tests\QueryTests.vb" />
     <Compile Include="Tests\SelectDistinctTests.vb" />
+    <Compile Include="Tests\SelectWithTableSourceTests.vb" />
     <Compile Include="Tests\SelectWithConditionTests.vb" />
     <Compile Include="Tests\SelectWithHavingTests.vb" />
     <Compile Include="Tests\SelectWithGroupByTests.vb" />

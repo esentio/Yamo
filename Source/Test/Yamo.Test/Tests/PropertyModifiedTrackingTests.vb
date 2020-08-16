@@ -5,6 +5,8 @@ Namespace Tests
   Public MustInherit Class PropertyModifiedTrackingTests
     Inherits BaseIntegrationTests
 
+    Protected Const ItemWithPropertyModifiedTrackingArchiveTableName As String = "ItemWithPropertyModifiedTrackingArchive"
+
     <TestMethod()>
     Public Overridable Sub InsertRecordWithPropertyModifiedTracking()
       Dim item = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
@@ -54,6 +56,45 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim result = db.From(Of ItemWithPropertyModifiedTracking).SelectAll().FirstOrDefault()
+        Assert.AreEqual(item, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub UpdateRecordWithPropertyModifiedTrackingWithSpecifiedTableName()
+      Dim item = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      item.Description = "foo"
+      item.IntValue = 42
+
+      InsertItemsToArchive(ItemWithPropertyModifiedTrackingArchiveTableName, item)
+
+      Assert.IsFalse(item.IsAnyDbPropertyModified())
+
+      ' don't change any property and try to update
+
+      Using db = CreateDbContext()
+        Dim table = db.Model.GetEntity(GetType(ItemWithPropertyModifiedTrackingArchive)).TableName
+        Dim affectedRows = db.Update(Of ItemWithPropertyModifiedTracking)(table).Execute(item)
+        Assert.AreEqual(0, affectedRows)
+        Assert.IsFalse(item.IsAnyDbPropertyModified())
+      End Using
+
+      ' now change one property, reset tracking, change another property and check, if only that property is updated
+      item.Description = "boo"
+      item.ResetDbPropertyModifiedTracking()
+      item.IntValue = 642
+
+      Using db = CreateDbContext()
+        Dim table = db.Model.GetEntity(GetType(ItemWithPropertyModifiedTrackingArchive)).TableName
+        Dim affectedRows = db.Update(Of ItemWithPropertyModifiedTracking)(table).Execute(item)
+        Assert.AreEqual(1, affectedRows)
+        Assert.IsFalse(item.IsAnyDbPropertyModified())
+      End Using
+
+      item.Description = "foo"
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithPropertyModifiedTrackingArchive).SelectAll().FirstOrDefault()
         Assert.AreEqual(item, result)
       End Using
     End Sub

@@ -20,6 +20,15 @@
       GenerateJoinWithPredicateWithIJoin(builder, entityCount)
       builder.AppendLine()
 
+      GenerateJoinWithNoParameters(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateJoinWithFormattableString(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateJoinWithRawSqlString(builder, entityCount)
+      builder.AppendLine()
+
       If entityCount < limit Then
         For i = 1 To entityCount
           GenerateLeftJoinWithPredicateWithOneEntity(builder, i, entityCount)
@@ -33,6 +42,15 @@
       End If
 
       GenerateLeftJoinWithPredicateWithIJoin(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateLeftJoinWithNoParameters(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateLeftJoinWithFormattableString(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateLeftJoinWithRawSqlString(builder, entityCount)
       builder.AppendLine()
 
       If entityCount < limit Then
@@ -50,6 +68,15 @@
       GenerateRightJoinWithPredicateWithIJoin(builder, entityCount)
       builder.AppendLine()
 
+      GenerateRightJoinWithNoParameters(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateRightJoinWithFormattableString(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateRightJoinWithRawSqlString(builder, entityCount)
+      builder.AppendLine()
+
       If entityCount < limit Then
         For i = 1 To entityCount
           GenerateFullJoinWithPredicateWithOneEntity(builder, i, entityCount)
@@ -65,10 +92,34 @@
       GenerateFullJoinWithPredicateWithIJoin(builder, entityCount)
       builder.AppendLine()
 
+      GenerateFullJoinWithNoParameters(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateFullJoinWithFormattableString(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateFullJoinWithRawSqlString(builder, entityCount)
+      builder.AppendLine()
+
       GenerateCrossJoin(builder, entityCount)
       builder.AppendLine()
 
+      GenerateCrossJoinWithFormattableString(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateCrossJoinWithRawSqlString(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateInternalJoinWithPredicate(builder, entityCount)
+      builder.AppendLine()
+
       GenerateInternalJoin(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateInternalJoinWithFormattableString(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateInternalJoinWithRawSqlString(builder, entityCount)
     End Sub
 
     Protected Sub GenerateJoinWithPredicateWithOneEntity(builder As CodeBuilder, index As Int32, entityCount As Int32)
@@ -108,6 +159,44 @@
 
       builder.Indent().AppendLine($"Public Function Join(Of TJoined)(predicate As Expression(Of Func(Of Join(Of {generics}, TJoined), Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.Inner, predicate, Nothing)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateJoinWithNoParameters(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds INNER JOIN clause."
+      Dim typeParams = {"TJoined"}
+      AddComment(builder, comment, typeParams:=typeParams, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function Join(Of TJoined)() As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.Inner)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateJoinWithFormattableString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds INNER JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"tableSource"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function Join(Of TJoined)(tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.Inner, tableSource)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateJoinWithRawSqlString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds INNER JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"tableSource", "parameters"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function Join(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.Inner, tableSource, parameters)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
 
@@ -151,6 +240,44 @@
       builder.Indent().AppendLine("End Function")
     End Sub
 
+    Protected Sub GenerateLeftJoinWithNoParameters(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds LEFT OUTER JOIN clause."
+      Dim typeParams = {"TJoined"}
+      AddComment(builder, comment, typeParams:=typeParams, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)() As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.LeftOuter)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateLeftJoinWithFormattableString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds LEFT OUTER JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"tableSource"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)(tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.LeftOuter, tableSource)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateLeftJoinWithRawSqlString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds LEFT OUTER JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"tableSource", "parameters"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.LeftOuter, tableSource, parameters)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
     Protected Sub GenerateRightJoinWithPredicateWithOneEntity(builder As CodeBuilder, index As Int32, entityCount As Int32)
       Dim comment = "Adds RIGHT OUTER JOIN clause."
       Dim typeParams = {"TJoined"}
@@ -188,6 +315,44 @@
 
       builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(predicate As Expression(Of Func(Of Join(Of {generics}, TJoined), Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.RightOuter, predicate, Nothing)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateRightJoinWithNoParameters(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds RIGHT OUTER JOIN clause."
+      Dim typeParams = {"TJoined"}
+      AddComment(builder, comment, typeParams:=typeParams, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)() As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.RightOuter)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateRightJoinWithFormattableString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds RIGHT OUTER JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"tableSource"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.RightOuter, tableSource)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateRightJoinWithRawSqlString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds RIGHT OUTER JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"tableSource", "parameters"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.RightOuter, tableSource, parameters)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
 
@@ -231,6 +396,44 @@
       builder.Indent().AppendLine("End Function")
     End Sub
 
+    Protected Sub GenerateFullJoinWithNoParameters(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds FULL OUTER JOIN clause."
+      Dim typeParams = {"TJoined"}
+      AddComment(builder, comment, typeParams:=typeParams, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)() As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.FullOuter)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateFullJoinWithFormattableString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds FULL OUTER JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"tableSource"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)(tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.FullOuter, tableSource)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateFullJoinWithRawSqlString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds FULL OUTER JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"tableSource", "parameters"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.FullOuter, tableSource, parameters)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
     Protected Sub GenerateCrossJoin(builder As CodeBuilder, entityCount As Int32)
       Dim comment = "Adds CROSS JOIN clause."
       Dim typeParams = {"TJoined"}
@@ -243,7 +446,37 @@
       builder.Indent().AppendLine("End Function")
     End Sub
 
-    Protected Sub GenerateInternalJoin(builder As CodeBuilder, entityCount As Int32)
+    Protected Sub GenerateCrossJoinWithFormattableString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds CROSS JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"tableSource"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function CrossJoin(Of TJoined)(tableSource As FormattableString) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Me.Builder.AddJoin(Of TJoined)(JoinType.CrossJoin, tableSource)")
+      builder.Indent().AppendLine("Me.Builder.AddOn(Of TJoined)(Nothing, {0, 1})")
+      builder.Indent().AppendLine($"Return New JoinedSelectSqlExpression(Of {generics}, TJoined)(Me.Builder, Me.Executor)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateCrossJoinWithRawSqlString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds CROSS JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"tableSource", "parameters"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function CrossJoin(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Me.Builder.AddJoin(Of TJoined)(JoinType.CrossJoin, tableSource, parameters)")
+      builder.Indent().AppendLine("Me.Builder.AddOn(Of TJoined)(Nothing, {0, 1})")
+      builder.Indent().AppendLine($"Return New JoinedSelectSqlExpression(Of {generics}, TJoined)(Me.Builder, Me.Executor)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateInternalJoinWithPredicate(builder As CodeBuilder, entityCount As Int32)
       Dim comment = "Adds JOIN clause."
       Dim typeParams = {"TJoined"}
       Dim params = {"joinType", "predicate", "entityIndexHints"}
@@ -254,6 +487,48 @@
       builder.Indent().AppendLine($"Private Function InternalJoin(Of TJoined)(joinType As JoinType, predicate As Expression, entityIndexHints As Int32()) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Me.Builder.AddJoin(Of TJoined)(joinType, predicate, entityIndexHints)")
       builder.Indent().AppendLine($"Return New JoinedSelectSqlExpression(Of {generics}, TJoined)(Me.Builder, Me.Executor)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateInternalJoin(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"joinType"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Private Function InternalJoin(Of TJoined)(joinType As JoinType) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Me.Builder.AddJoin(Of TJoined)(joinType)")
+      builder.Indent().AppendLine($"Return New JoinSelectSqlExpression(Of {generics}, TJoined)(Me.Builder, Me.Executor)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateInternalJoinWithFormattableString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"joinType", "tableSource"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Private Function InternalJoin(Of TJoined)(joinType As JoinType, tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Me.Builder.AddJoin(Of TJoined)(joinType, tableSource)")
+      builder.Indent().AppendLine($"Return New JoinSelectSqlExpression(Of {generics}, TJoined)(Me.Builder, Me.Executor)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateInternalJoinWithRawSqlString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds JOIN clause."
+      Dim typeParams = {"TJoined"}
+      Dim params = {"joinType", "tableSource", "parameters"}
+      AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Private Function InternalJoin(Of TJoined)(joinType As JoinType, tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine("Me.Builder.AddJoin(Of TJoined)(joinType, tableSource, parameters)")
+      builder.Indent().AppendLine($"Return New JoinSelectSqlExpression(Of {generics}, TJoined)(Me.Builder, Me.Executor)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
 

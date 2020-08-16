@@ -14,9 +14,9 @@ Namespace Expressions.Builders
     Inherits SqlExpressionBuilderBase
 
     ''' <summary>
-    ''' Stores whether auto fields should be set.
+    ''' Stores table name override.
     ''' </summary>
-    Private m_SetAutoFields As Boolean
+    Private m_TableNameOverride As String
 
     ''' <summary>
     ''' Stores SQL model.
@@ -44,25 +44,18 @@ Namespace Expressions.Builders
     Private m_Parameters As List(Of SqlParameter)
 
     ''' <summary>
-    ''' Stores auto fields parameters info.
-    ''' </summary>
-    Private m_AutoFieldsParametersInfo As (Index As Int32, Columns As String())?
-
-    ''' <summary>
     ''' Creates new instance of <see cref="UpdateSqlExpressionBuilder"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="context"></param>
-    ''' <param name="setAutoFields"></param>
-    Public Sub New(context As DbContext, setAutoFields As Boolean)
+    Public Sub New(context As DbContext, tableNameOverride As String)
       MyBase.New(context)
-      m_SetAutoFields = setAutoFields
+      m_TableNameOverride = tableNameOverride
       m_Model = New SqlModel(Me.DbContext.Model)
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       m_SetExpressions = New List(Of String)
       m_WhereExpressions = New List(Of String)
       m_Parameters = New List(Of SqlParameter)
-      m_AutoFieldsParametersInfo = Nothing ' lazy assigned
     End Sub
 
     ''' <summary>
@@ -135,10 +128,6 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     Public Sub AddWhere(predicate As Expression)
-      If Not m_AutoFieldsParametersInfo.HasValue Then
-        AddAutoFieldSetters()
-      End If
-
       Dim result = m_Visitor.Translate(predicate, ExpressionParametersType.Entities, {0}, m_Parameters.Count, False, False)
       m_WhereExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
@@ -161,52 +150,39 @@ Namespace Expressions.Builders
     End Sub
 
     ''' <summary>
-    ''' Adds auto field setters.
-    ''' </summary>
-    Private Sub AddAutoFieldSetters()
-      If m_SetAutoFields Then
-        Dim index = m_Parameters.Count
-        Dim columns = m_Model.GetFirstEntity().Entity.GetNonKeyProperties().Where(Function(x) x.Property.SetOnUpdate).Select(Function(x) x.Property.ColumnName).ToArray()
-
-        m_AutoFieldsParametersInfo = (index, columns)
-
-        For i = 0 To columns.Length - 1
-          m_SetExpressions.Add(Me.DialectProvider.Formatter.CreateIdentifier(columns(i)) & " = " & CreateParameter(index + i))
-          m_Parameters.Add(Nothing) ' will ve set later
-        Next
-      Else
-        m_AutoFieldsParametersInfo = (-1, {})
-      End If
-    End Sub
-
-    ''' <summary>
     ''' Creates query.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
+    ''' <param name="setAutoFields"></param>
     ''' <returns></returns>
-    Public Function CreateQuery() As Query
+    Public Function CreateQuery(setAutoFields As Boolean) As Query
       Dim entity = m_Model.GetFirstEntity().Entity
 
       Dim sql As New StringBuilder
 
       sql.Append("UPDATE ")
-      Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
-      sql.AppendLine()
 
-      If Not m_AutoFieldsParametersInfo.HasValue Then
-        AddAutoFieldSetters()
+      If m_TableNameOverride Is Nothing Then
+        Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
+      Else
+        sql.Append(m_TableNameOverride)
       End If
 
-      If m_SetAutoFields AndAlso 0 < m_AutoFieldsParametersInfo.Value.Columns.Length Then
-        Dim getter = EntityAutoFieldsGetterCache.GetOnUpdateGetter(m_Model.Model, entity.EntityType)
-        Dim values = getter(Me.DbContext)
+      sql.AppendLine()
 
-        Dim index = m_AutoFieldsParametersInfo.Value.Index
-        Dim columns = m_AutoFieldsParametersInfo.Value.Columns
+      If setAutoFields Then
+        Dim index = m_Parameters.Count
+        Dim columns = entity.GetNonKeyProperties().Where(Function(x) x.Property.SetOnUpdate).Select(Function(x) x.Property.ColumnName).ToArray()
 
-        For i = 0 To m_AutoFieldsParametersInfo.Value.Columns.Length - 1
-          m_Parameters(index + i) = New SqlParameter(CreateParameter(index + i), values(i))
-        Next
+        If 0 < columns.Length Then
+          Dim getter = EntityAutoFieldsGetterCache.GetOnUpdateGetter(m_Model.Model, entity.EntityType)
+          Dim values = getter(Me.DbContext)
+
+          For i = 0 To columns.Length - 1
+            m_SetExpressions.Add(Me.DialectProvider.Formatter.CreateIdentifier(columns(i)) & " = " & CreateParameter(index + i))
+            m_Parameters.Add(New SqlParameter(CreateParameter(index + i), values(i)))
+          Next
+        End If
       End If
 
       sql.Append("SET ")
@@ -228,8 +204,17 @@ Namespace Expressions.Builders
     ''' <param name="obj"></param>
     ''' <returns></returns>
     Public Function CreateQuery(obj As Object) As Query
+      Dim table As String
+
+      If m_TableNameOverride Is Nothing Then
+        Dim entity = m_Model.GetFirstEntity().Entity
+        table = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema)
+      Else
+        table = m_TableNameOverride
+      End If
+
       Dim provider = EntitySqlStringProviderCache.GetUpdateProvider(Me, obj.GetType())
-      Dim sqlString = provider(obj)
+      Dim sqlString = provider(obj, table)
 
       Return New Query(sqlString)
     End Function

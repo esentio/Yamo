@@ -77,6 +77,30 @@
         builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context), New QueryExecutor(context))")
         builder.Indent().AppendLine("Me.Builder.SetMainTable(Of T)()").PopIndent()
         builder.Indent().AppendLine("End Sub")
+
+        builder.AppendLine()
+
+        comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
+        params = {"context", "tableSource"}
+        AddComment(builder, comment, params:=params)
+
+        builder.Indent().AppendLine("Friend Sub New(context As DbContext, tableSource As FormattableString)").PushIndent()
+        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context), New QueryExecutor(context))")
+        builder.Indent().AppendLine("Me.Builder.SetMainTable(Of T)()")
+        builder.Indent().AppendLine("Me.Builder.SetMainTableSource(tableSource)").PopIndent()
+        builder.Indent().AppendLine("End Sub")
+
+        builder.AppendLine()
+
+        comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
+        params = {"context", "tableSource", "parameters"}
+        AddComment(builder, comment, params:=params)
+
+        builder.Indent().AppendLine("Friend Sub New(context As DbContext, tableSource As RawSqlString, ParamArray parameters() As Object)").PushIndent()
+        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context), New QueryExecutor(context))")
+        builder.Indent().AppendLine("Me.Builder.SetMainTable(Of T)()")
+        builder.Indent().AppendLine("Me.Builder.SetMainTableSource(tableSource, parameters)").PopIndent()
+        builder.Indent().AppendLine("End Sub")
       Else
         Dim comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
         Dim params = {"builder", "executor"}
