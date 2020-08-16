@@ -5,6 +5,8 @@ Namespace Tests
   Public MustInherit Class AuditFieldsTests
     Inherits BaseIntegrationTests
 
+    Protected Const ItemWithAuditFieldsArchiveTableName As String = "ItemWithAuditFieldsArchive"
+
     <TestMethod()>
     Public Overridable Sub InsertRecordWithCreatedFieldsAndSetAutoFields()
       Dim item = Me.ModelFactory.CreateItemWithAuditFields()
@@ -333,10 +335,7 @@ Namespace Tests
       Dim item3 = Me.ModelFactory.CreateItemWithAuditFields()
       Dim userId = 42
 
-      Using db = CreateDbContext()
-        Dim table = db.Model.GetEntity(GetType(ItemWithAuditFieldsArchive)).TableName
-        InsertItemsToArchive(db, table, item1, item2, item3)
-      End Using
+      InsertItemsToArchive(ItemWithAuditFieldsArchiveTableName, item1, item2, item3)
 
       Using db = CreateDbContext()
         db.UserId = userId
@@ -365,10 +364,7 @@ Namespace Tests
       Dim item3 = Me.ModelFactory.CreateItemWithAuditFields()
       Dim userId = 42
 
-      Using db = CreateDbContext()
-        Dim table = db.Model.GetEntity(GetType(ItemWithAuditFieldsArchive)).TableName
-        InsertItemsToArchive(db, table, item1, item2, item3)
-      End Using
+      InsertItemsToArchive(ItemWithAuditFieldsArchiveTableName, item1, item2, item3)
 
       Using db = CreateDbContext()
         db.UserId = userId

@@ -31,6 +31,11 @@ Namespace Expressions.Builders
     Private m_MainTableSourceExpression As String
 
     ''' <summary>
+    ''' Stores current join info
+    ''' </summary>
+    Private m_CurrentJoinInfo As JoinInfo?
+
+    ''' <summary>
     ''' Stores join expressions.
     ''' </summary>
     Private m_JoinExpressions As List(Of String)
@@ -96,6 +101,7 @@ Namespace Expressions.Builders
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       ' lists are created only when necessary
       m_MainTableSourceExpression = Nothing
+      m_CurrentJoinInfo = Nothing
       m_JoinExpressions = Nothing
       m_WhereExpressions = Nothing
       m_GroupByExpressions = Nothing
@@ -108,78 +114,6 @@ Namespace Expressions.Builders
       m_Parameters = New List(Of SqlParameter)
       m_ConditionalIgnoreModeCounter = 0
     End Sub
-
-    ''' <summary>
-    ''' Creates query.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function CreateQuery() As SelectQuery
-      ThrowIfInConditionalIgnoreMode()
-
-      Dim sql = New StringBuilder
-
-      sql.Append("SELECT ")
-
-      If m_UseDistinct Then
-        sql.Append("DISTINCT ")
-      End If
-
-      If m_LimitExpression IsNot Nothing AndAlso m_UseTopForLimit Then
-        sql.Append(m_LimitExpression)
-      End If
-
-      If m_SelectExpression Is Nothing Then
-        BuildAndAppendSelectExpression(sql)
-      Else
-        sql.Append(m_SelectExpression)
-      End If
-
-      sql.Append(" FROM ")
-
-      If m_MainTableSourceExpression Is Nothing Then
-        Dim entity = m_Model.GetFirstEntity().Entity
-        Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
-      Else
-        sql.Append(m_MainTableSourceExpression)
-      End If
-
-      sql.Append(" ")
-      Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstTableAlias())
-
-      If m_JoinExpressions IsNot Nothing Then
-        For Each joinExpression In m_JoinExpressions
-          sql.Append(" ")
-          sql.Append(joinExpression)
-        Next
-      End If
-
-      If m_WhereExpressions IsNot Nothing Then
-        sql.Append(" WHERE ")
-        Helpers.Text.AppendJoin(sql, " AND ", m_WhereExpressions)
-      End If
-
-      If m_GroupByExpressions IsNot Nothing Then
-        sql.Append(" GROUP BY ")
-        Helpers.Text.AppendJoin(sql, ", ", m_GroupByExpressions)
-      End If
-
-      If m_HavingExpressions IsNot Nothing Then
-        sql.Append(" HAVING ")
-        Helpers.Text.AppendJoin(sql, " AND ", m_HavingExpressions)
-      End If
-
-      If m_OrderByExpressions IsNot Nothing Then
-        sql.Append(" ORDER BY ")
-        Helpers.Text.AppendJoin(sql, ", ", m_OrderByExpressions)
-      End If
-
-      If m_LimitExpression IsNot Nothing AndAlso Not m_UseTopForLimit Then
-        sql.Append(m_LimitExpression)
-      End If
-
-      Return New SelectQuery(sql.ToString(), m_Parameters.ToList(), m_Model)
-    End Function
 
     ''' <summary>
     ''' Sets main table.<br/>
@@ -215,6 +149,162 @@ Namespace Expressions.Builders
         m_MainTableSourceExpression = sql.Sql
         m_Parameters.AddRange(sql.Parameters)
       End If
+    End Sub
+
+    ''' <summary>
+    ''' Adds join.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="joinType"></param>
+    Public Sub AddJoin(Of TJoined)(joinType As JoinType)
+      Dim isIgnored = IsInConditionalIgnoreMode()
+      m_CurrentJoinInfo = New JoinInfo(joinType, isIgnored)
+    End Sub
+
+    ''' <summary>
+    ''' Adds join.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="joinType"></param>
+    ''' <param name="tableSource"></param>
+    Public Sub AddJoin(Of TJoined)(joinType As JoinType, tableSource As FormattableString)
+      Dim isIgnored = IsInConditionalIgnoreMode()
+
+      ' if ignored, no need to process table source
+      If isIgnored Then
+        m_CurrentJoinInfo = New JoinInfo(joinType, isIgnored)
+      Else
+        Dim sql = ConvertToSqlString(tableSource, m_Parameters.Count)
+        m_CurrentJoinInfo = New JoinInfo(joinType, sql.Sql, isIgnored)
+        m_Parameters.AddRange(sql.Parameters)
+      End If
+    End Sub
+
+    ''' <summary>
+    ''' Adds join.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="joinType"></param>
+    ''' <param name="tableSource"></param>
+    ''' <param name="parameters"></param>
+    Public Sub AddJoin(Of TJoined)(joinType As JoinType, tableSource As RawSqlString, ParamArray parameters() As Object)
+      Dim isIgnored = IsInConditionalIgnoreMode()
+
+      ' if ignored, no need to process table source
+      If isIgnored Then
+        m_CurrentJoinInfo = New JoinInfo(joinType, isIgnored)
+      ElseIf parameters Is Nothing OrElse parameters.Length = 0 Then
+        m_CurrentJoinInfo = New JoinInfo(joinType, tableSource.Value, isIgnored)
+      Else
+        Dim sql = ConvertToSqlString(tableSource.Value, parameters, m_Parameters.Count)
+        m_CurrentJoinInfo = New JoinInfo(joinType, sql.Sql, isIgnored)
+        m_Parameters.AddRange(sql.Parameters)
+      End If
+    End Sub
+
+    ''' <summary>
+    ''' Adds join.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="joinType"></param>
+    ''' <param name="predicate"></param>
+    ''' <param name="entityIndexHints"></param>
+    Public Sub AddJoin(Of TJoined)(joinType As JoinType, predicate As Expression, entityIndexHints As Int32())
+      Dim isIgnored = IsInConditionalIgnoreMode()
+      AddJoin(Of TJoined)(New JoinInfo(joinType, isIgnored), predicate, entityIndexHints)
+    End Sub
+
+    ''' <summary>
+    ''' Adds join.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="joinInfo"></param>
+    ''' <param name="predicate"></param>
+    ''' <param name="entityIndexHints"></param>
+    Private Sub AddJoin(Of TJoined)(joinInfo As JoinInfo, predicate As Expression, entityIndexHints As Int32())
+      If m_JoinExpressions Is Nothing Then
+        m_JoinExpressions = New List(Of String)
+      End If
+
+      If entityIndexHints Is Nothing Then
+        entityIndexHints = TryGetEntityIndexHints(predicate)
+      End If
+
+      Dim relationship = TryGetRelationship(Of TJoined)(predicate, entityIndexHints)
+
+      If joinInfo.IsIgnored Then
+        m_Model.AddJoinedTable(Of TJoined)(relationship, True)
+      Else
+        m_Model.AddJoinedTable(Of TJoined)(relationship)
+
+        Dim sql As String
+        Dim joinTypeString As String
+
+        Select Case joinInfo.JoinType
+          Case JoinType.Inner
+            joinTypeString = "INNER JOIN"
+          Case JoinType.LeftOuter
+            joinTypeString = "LEFT OUTER JOIN"
+          Case JoinType.RightOuter
+            joinTypeString = "RIGHT OUTER JOIN"
+          Case JoinType.FullOuter
+            joinTypeString = "FULL OUTER JOIN"
+          Case JoinType.CrossJoin
+            joinTypeString = "CROSS JOIN"
+          Case Else
+            Throw New NotSupportedException($"Unsupported join type '{joinInfo.JoinType}'.")
+        End Select
+
+        Dim entity = m_Model.Model.GetEntity(GetType(TJoined))
+        Dim tableAlias = m_Model.GetLastTableAlias()
+
+        If predicate Is Nothing Then
+          If joinInfo.TableSource Is Nothing Then
+            sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)
+          Else
+            sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)
+          End If
+
+          m_JoinExpressions.Add(sql)
+        Else
+          Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
+          Dim result = m_Visitor.Translate(predicate, parametersType, entityIndexHints, m_Parameters.Count, True, True)
+
+          If joinInfo.TableSource Is Nothing Then
+            sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & " ON " & result.Sql
+          Else
+            sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & " ON " & result.Sql
+          End If
+
+          m_JoinExpressions.Add(sql)
+          m_Parameters.AddRange(result.Parameters)
+        End If
+      End If
+    End Sub
+
+    ''' <summary>
+    ''' Adds on.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="predicate"></param>
+    ''' <param name="entityIndexHints"></param>
+    Public Sub AddOn(Of TJoined)(predicate As Expression, entityIndexHints As Int32())
+      ' conditional ignore mode is not allowed purely for "ON" clause, therefore we should use value stored in current join info
+
+      If Not m_CurrentJoinInfo.HasValue Then
+        ' this should not happen
+        Throw New InvalidOperationException("Cannot apply ON clause without JOIN clause.")
+      End If
+
+      AddJoin(Of TJoined)(m_CurrentJoinInfo.Value, predicate, entityIndexHints)
+
+      m_CurrentJoinInfo = Nothing
     End Sub
 
     ''' <summary>
@@ -278,64 +368,6 @@ Namespace Expressions.Builders
 
       Return Nothing
     End Function
-
-    ''' <summary>
-    ''' Adds join.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <typeparam name="TJoined"></typeparam>
-    ''' <param name="joinType"></param>
-    ''' <param name="predicate"></param>
-    ''' <param name="entityIndexHints"></param>
-    Public Sub AddJoin(Of TJoined)(joinType As JoinType, predicate As Expression, entityIndexHints As Int32())
-      If m_JoinExpressions Is Nothing Then
-        m_JoinExpressions = New List(Of String)
-      End If
-
-      If entityIndexHints Is Nothing Then
-        entityIndexHints = TryGetEntityIndexHints(predicate)
-      End If
-
-      Dim relationship = TryGetRelationship(Of TJoined)(predicate, entityIndexHints)
-
-      If IsInConditionalIgnoreMode() Then
-        m_Model.AddJoinedTable(Of TJoined)(relationship, True)
-      Else
-        m_Model.AddJoinedTable(Of TJoined)(relationship)
-
-        Dim sql As String
-        Dim joinTypeString As String
-
-        Select Case joinType
-          Case JoinType.Inner
-            joinTypeString = "INNER JOIN"
-          Case JoinType.LeftOuter
-            joinTypeString = "LEFT OUTER JOIN"
-          Case JoinType.RightOuter
-            joinTypeString = "RIGHT OUTER JOIN"
-          Case JoinType.FullOuter
-            joinTypeString = "FULL OUTER JOIN"
-          Case JoinType.CrossJoin
-            joinTypeString = "CROSS JOIN"
-          Case Else
-            Throw New NotSupportedException($"Unsupported join type '{joinType}'.")
-        End Select
-
-        Dim entity = m_Model.Model.GetEntity(GetType(TJoined))
-        Dim tableAlias = m_Model.GetLastTableAlias()
-
-        If predicate Is Nothing Then
-          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)
-          m_JoinExpressions.Add(sql)
-        Else
-          Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
-          Dim result = m_Visitor.Translate(predicate, parametersType, entityIndexHints, m_Parameters.Count, True, True)
-          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & " ON " & result.Sql
-          m_JoinExpressions.Add(sql)
-          m_Parameters.AddRange(result.Parameters)
-        End If
-      End If
-    End Sub
 
     ''' <summary>
     ''' Sets last join relationship.<br/>
@@ -761,6 +793,78 @@ Namespace Expressions.Builders
     Public Sub EndConditionalIgnoreMode()
       m_ConditionalIgnoreModeCounter -= 1
     End Sub
+
+    ''' <summary>
+    ''' Creates query.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function CreateQuery() As SelectQuery
+      ThrowIfInConditionalIgnoreMode()
+
+      Dim sql = New StringBuilder
+
+      sql.Append("SELECT ")
+
+      If m_UseDistinct Then
+        sql.Append("DISTINCT ")
+      End If
+
+      If m_LimitExpression IsNot Nothing AndAlso m_UseTopForLimit Then
+        sql.Append(m_LimitExpression)
+      End If
+
+      If m_SelectExpression Is Nothing Then
+        BuildAndAppendSelectExpression(sql)
+      Else
+        sql.Append(m_SelectExpression)
+      End If
+
+      sql.Append(" FROM ")
+
+      If m_MainTableSourceExpression Is Nothing Then
+        Dim entity = m_Model.GetFirstEntity().Entity
+        Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
+      Else
+        sql.Append(m_MainTableSourceExpression)
+      End If
+
+      sql.Append(" ")
+      Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstTableAlias())
+
+      If m_JoinExpressions IsNot Nothing Then
+        For Each joinExpression In m_JoinExpressions
+          sql.Append(" ")
+          sql.Append(joinExpression)
+        Next
+      End If
+
+      If m_WhereExpressions IsNot Nothing Then
+        sql.Append(" WHERE ")
+        Helpers.Text.AppendJoin(sql, " AND ", m_WhereExpressions)
+      End If
+
+      If m_GroupByExpressions IsNot Nothing Then
+        sql.Append(" GROUP BY ")
+        Helpers.Text.AppendJoin(sql, ", ", m_GroupByExpressions)
+      End If
+
+      If m_HavingExpressions IsNot Nothing Then
+        sql.Append(" HAVING ")
+        Helpers.Text.AppendJoin(sql, " AND ", m_HavingExpressions)
+      End If
+
+      If m_OrderByExpressions IsNot Nothing Then
+        sql.Append(" ORDER BY ")
+        Helpers.Text.AppendJoin(sql, ", ", m_OrderByExpressions)
+      End If
+
+      If m_LimitExpression IsNot Nothing AndAlso Not m_UseTopForLimit Then
+        sql.Append(m_LimitExpression)
+      End If
+
+      Return New SelectQuery(sql.ToString(), m_Parameters.ToList(), m_Model)
+    End Function
 
   End Class
 End Namespace

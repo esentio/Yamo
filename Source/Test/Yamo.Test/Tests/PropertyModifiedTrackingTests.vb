@@ -5,6 +5,8 @@ Namespace Tests
   Public MustInherit Class PropertyModifiedTrackingTests
     Inherits BaseIntegrationTests
 
+    Protected Const ItemWithPropertyModifiedTrackingArchiveTableName As String = "ItemWithPropertyModifiedTrackingArchive"
+
     <TestMethod()>
     Public Overridable Sub InsertRecordWithPropertyModifiedTracking()
       Dim item = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
@@ -64,10 +66,7 @@ Namespace Tests
       item.Description = "foo"
       item.IntValue = 42
 
-      Using db = CreateDbContext()
-        Dim table = db.Model.GetEntity(GetType(ItemWithPropertyModifiedTrackingArchive)).TableName
-        InsertItemsToArchive(db, table, item)
-      End Using
+      InsertItemsToArchive(ItemWithPropertyModifiedTrackingArchiveTableName, item)
 
       Assert.IsFalse(item.IsAnyDbPropertyModified())
 

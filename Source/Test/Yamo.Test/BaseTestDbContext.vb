@@ -25,7 +25,9 @@ Public Class BaseTestDbContext
     CreateItemWithPropertyModifiedTrackingModel(modelBuilder)
     CreateItemWithPropertyModifiedTrackingArchiveModel(modelBuilder)
     CreateLabelModel(modelBuilder)
+    CreateLabelArchiveModel(modelBuilder)
     CreateLinkedItemModel(modelBuilder)
+    CreateLinkedItemArchiveModel(modelBuilder)
     CreateLinkedItemWithShuffledPropertiesModel(modelBuilder)
     CreateLinkedItemChildModel(modelBuilder)
     CreateItemInSchemaModel(modelBuilder)
@@ -253,12 +255,29 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of Label).Property(Function(x) x.Description).IsRequired()
   End Sub
 
+  Private Sub CreateLabelArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of LabelArchive)()
+
+    modelBuilder.Entity(Of LabelArchive).Property(Function(x) x.TableId).IsKey().IsRequired()
+    modelBuilder.Entity(Of LabelArchive).Property(Function(x) x.Id).IsKey()
+    modelBuilder.Entity(Of LabelArchive).Property(Function(x) x.Language).IsKey().IsRequired()
+    modelBuilder.Entity(Of LabelArchive).Property(Function(x) x.Description).IsRequired()
+  End Sub
+
   Private Sub CreateLinkedItemModel(modelBuilder As ModelBuilder)
     modelBuilder.Entity(Of LinkedItem)()
 
     modelBuilder.Entity(Of LinkedItem).Property(Function(x) x.Id).IsKey()
     modelBuilder.Entity(Of LinkedItem).Property(Function(x) x.PreviousId)
     modelBuilder.Entity(Of LinkedItem).Property(Function(x) x.Description).IsRequired()
+  End Sub
+
+  Private Sub CreateLinkedItemArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of LinkedItemArchive)()
+
+    modelBuilder.Entity(Of LinkedItemArchive).Property(Function(x) x.Id).IsKey()
+    modelBuilder.Entity(Of LinkedItemArchive).Property(Function(x) x.PreviousId)
+    modelBuilder.Entity(Of LinkedItemArchive).Property(Function(x) x.Description).IsRequired()
   End Sub
 
   Private Sub CreateLinkedItemWithShuffledPropertiesModel(modelBuilder As ModelBuilder)

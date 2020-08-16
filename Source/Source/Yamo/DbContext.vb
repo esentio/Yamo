@@ -187,6 +187,15 @@ Public Class DbContext
   ''' Starts building SQL SELECT statement.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
+  ''' <returns></returns>
+  Public Function From(Of T)() As SelectSqlExpression(Of T)
+    Return New SelectSqlExpression(Of T)(Me)
+  End Function
+
+  ''' <summary>
+  ''' Starts building SQL SELECT statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
   ''' <param name="tableSource"></param>
   ''' <returns></returns>
   Public Function From(Of T)(tableSource As FormattableString) As SelectSqlExpression(Of T)
@@ -202,15 +211,6 @@ Public Class DbContext
   ''' <returns></returns>
   Public Function From(Of T)(tableSource As RawSqlString, ParamArray parameters() As Object) As SelectSqlExpression(Of T)
     Return New SelectSqlExpression(Of T)(Me, tableSource, parameters)
-  End Function
-
-  ''' <summary>
-  ''' Starts building SQL SELECT statement.
-  ''' </summary>
-  ''' <typeparam name="T"></typeparam>
-  ''' <returns></returns>
-  Public Function From(Of T)() As SelectSqlExpression(Of T)
-    Return New SelectSqlExpression(Of T)(Me)
   End Function
 
   ''' <summary>

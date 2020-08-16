@@ -5,6 +5,8 @@ Namespace Tests
   Public MustInherit Class UpdateTests
     Inherits BaseIntegrationTests
 
+    Protected Const ItemWithAllSupportedValuesArchiveTableName As String = "ItemWithAllSupportedValuesArchive"
+
     <TestMethod()>
     Public Overridable Sub UpdateRecordWithAllSupportedValues()
       Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
@@ -658,10 +660,7 @@ Namespace Tests
       Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
 
-      Using db = CreateDbContext()
-        Dim table = db.Model.GetEntity(GetType(ItemWithAllSupportedValuesArchive)).TableName
-        InsertItemsToArchive(db, table, item1, item2, item3)
-      End Using
+      InsertItemsToArchive(ItemWithAllSupportedValuesArchiveTableName, item1, item2, item3)
 
       item2.Nvarchar50Column = "lorem ipsum"
       item2.IntColumn = 42
@@ -689,10 +688,7 @@ Namespace Tests
       item2.IntColumn = 2
       item3.IntColumn = 3
 
-      Using db = CreateDbContext()
-        Dim table = db.Model.GetEntity(GetType(ItemWithAllSupportedValuesArchive)).TableName
-        InsertItemsToArchive(db, table, item1, item2, item3)
-      End Using
+      InsertItemsToArchive(ItemWithAllSupportedValuesArchiveTableName, item1, item2, item3)
 
       Using db = CreateDbContext()
         Dim table = db.Model.GetEntity(GetType(ItemWithAllSupportedValuesArchive)).TableName

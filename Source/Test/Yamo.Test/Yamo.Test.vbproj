@@ -81,6 +81,8 @@
     <Compile Include="Model\ItemWithIdentityIdAndDefaultValuesArchive.vb" />
     <Compile Include="Model\ItemWithIdentityIdArchive.vb" />
     <Compile Include="Model\ItemWithPropertyModifiedTrackingArchive.vb" />
+    <Compile Include="Model\LabelArchive.vb" />
+    <Compile Include="Model\LinkedItemArchive.vb" />
     <Compile Include="Tests\SchemaTests.vb" />
     <Compile Include="Tests\QueryTests.vb" />
     <Compile Include="Tests\SelectDistinctTests.vb" />
