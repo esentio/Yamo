@@ -56,10 +56,12 @@ namespace Yamo.PlaygroundCS
             //Test34();
             //Test35();
             //Test36();
-            Test37();
-            Test38();
-            Test39();
-            Test40();
+            //Test37();
+            //Test38();
+            //Test39();
+            //Test40();
+            Test41();
+            Test42();
         }
 
         public static MyContext CreateContext()
@@ -745,6 +747,37 @@ namespace Yamo.PlaygroundCS
                              .If(includeLabel, exp => exp.Join<Label>((a, l) => l.Id == a.Id))
                              .Select((a, l) => new { Article = a, Label = l, Description = l.Description})
                              .ToList();
+            }
+        }
+
+        public static void Test41()
+        {
+            using (var db = CreateContext())
+            {
+                var tableName = "ArticleArchive";
+                var article = new Article() {Id = 42, Price = 10};
+
+                db.Insert<Article>(tableName).Execute(article);
+
+                article.Price = 11;
+
+                db.Update<Article>(tableName).Execute(article);
+
+                db.SoftDelete<Article>(tableName).Execute(article);
+                
+                db.Delete<Article>(tableName).Execute(article);
+            }
+        }
+
+        public static void Test42()
+        {
+            using (var db = CreateContext())
+            {
+                var lang = "en";
+                var list = db.From<Article>("ArticleArchive")
+                             .Join<Label>($"(SELECT {Yamo.Sql.Model.Columns<Label>()} FROM LabelArchive WHERE Language = {lang})")
+                             .On((a, l) => l.Id == a.Id)
+                             .SelectAll().ToList();
             }
         }
     }
