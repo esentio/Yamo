@@ -1,10 +1,10 @@
 ﻿Namespace Sql
 
   ''' <summary>
-  ''' Stores info about model and its alias.<br/>
+  ''' Stores info about columns of a model.<br/>
   ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
   ''' </summary>
-  Public Structure ModelInfo
+  Public Structure ColumnsModelInfo
 
     ''' <summary>
     ''' Type of model entity (table).
@@ -19,7 +19,7 @@
     Public ReadOnly Property TableAlias As String
 
     ''' <summary>
-    ''' Creates new instance of <see cref="ModelInfo"/>.
+    ''' Creates new instance of <see cref="ColumnsModelInfo"/>.
     ''' </summary>
     ''' <param name="model"></param>
     ''' <param name="tableAlias"></param>

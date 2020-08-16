@@ -646,7 +646,7 @@ namespace Yamo.PlaygroundCS
         {
             using (var db = CreateContext())
             {
-                var articles = db.Query<Article>($"SELECT {Yamo.Sql.Model.Columns<Article>()} FROM Article");
+                var articles = db.Query<Article>($"SELECT {Yamo.Sql.Model.Columns<Article>()} FROM {Yamo.Sql.Model.Table<Article>()}");
 
                 var data = db.QueryFirstOrDefault<(decimal, Label, Label)?>($@"
                     SELECT a.Price,
