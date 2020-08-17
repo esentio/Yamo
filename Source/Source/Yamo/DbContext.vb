@@ -241,9 +241,10 @@ Public Class DbContext
   ''' <typeparam name="T"></typeparam>
   ''' <param name="obj"></param>
   ''' <param name="setAutoFields"></param>
+  ''' <param name="forceUpdateAllFields"></param>
   ''' <returns></returns>
-  Public Function Update(Of T)(obj As T, Optional setAutoFields As Boolean = True) As Int32
-    Return (New UpdateSqlExpression(Of T)(Me)).Execute(obj, setAutoFields)
+  Public Function Update(Of T)(obj As T, Optional setAutoFields As Boolean = True, Optional forceUpdateAllFields As Boolean = False) As Int32
+    Return (New UpdateSqlExpression(Of T)(Me)).Execute(obj, setAutoFields, forceUpdateAllFields)
   End Function
 
   ''' <summary>

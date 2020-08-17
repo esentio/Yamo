@@ -195,7 +195,7 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateUpdateProvider(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, SqlString)
+    Public Overridable Function CreateUpdateProvider(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, Boolean, SqlString)
       If GetType(IHasDbPropertyModifiedTracking).IsAssignableFrom(entityType) Then
         Return CreateUpdateProviderForDbPropertyModifiedTrackingObject(builder, entityType)
       Else
@@ -210,10 +210,11 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Protected Overridable Function CreateUpdateProviderForSimpleObjects(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, SqlString)
+    Protected Overridable Function CreateUpdateProviderForSimpleObjects(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, Boolean, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim tableParam = Expression.Parameter(GetType(String), "table")
-      Dim parameters = {entityParam, tableParam}
+      Dim forceUpdateAllFieldsParam = Expression.Parameter(GetType(Boolean), "forceUpdateAllFields")
+      Dim parameters = {entityParam, tableParam, forceUpdateAllFieldsParam}
 
       Dim expressions = New List(Of Expression)
 
@@ -274,7 +275,7 @@ SELECT * FROM @InsertedValues", GetType(String))
 
       Dim body = Expression.Block({entityVariable, sqlVariable, parametersVariable}, expressions)
 
-      Dim reader = Expression.Lambda(Of Func(Of Object, String, SqlString))(body, parameters)
+      Dim reader = Expression.Lambda(Of Func(Of Object, String, Boolean, SqlString))(body, parameters)
       Return reader.Compile()
     End Function
 
@@ -285,10 +286,11 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Protected Overridable Function CreateUpdateProviderForDbPropertyModifiedTrackingObject(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, SqlString)
+    Protected Overridable Function CreateUpdateProviderForDbPropertyModifiedTrackingObject(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, Boolean, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim tableParam = Expression.Parameter(GetType(String), "table")
-      Dim parameters = {entityParam, tableParam}
+      Dim forceUpdateAllFieldsParam = Expression.Parameter(GetType(Boolean), "forceUpdateAllFields")
+      Dim parameters = {entityParam, tableParam, forceUpdateAllFieldsParam}
 
       Dim expressions = New List(Of Expression)
 
@@ -333,7 +335,7 @@ SELECT * FROM @InsertedValues", GetType(String))
 
         modifiedExpressions.Add(parameterAddCall)
 
-        Dim modifiedTest = Expression.Call(trackingVariable, NameOf(IHasDbPropertyModifiedTracking.IsDbPropertyModified), {}, Expression.Constant(prop.Name, GetType(String)))
+        Dim modifiedTest = Expression.OrElse(forceUpdateAllFieldsParam, Expression.Call(trackingVariable, NameOf(IHasDbPropertyModifiedTracking.IsDbPropertyModified), {}, Expression.Constant(prop.Name, GetType(String))))
         Dim modifiedCond = Expression.IfThen(modifiedTest, Expression.Block(modifiedExpressions))
 
         expressions.Add(modifiedCond)
@@ -367,7 +369,7 @@ SELECT * FROM @InsertedValues", GetType(String))
 
       Dim body = Expression.Block({entityVariable, trackingVariable, sqlVariable, setColumnsVariable, parametersVariable}, expressions)
 
-      Dim reader = Expression.Lambda(Of Func(Of Object, String, SqlString))(body, parameters)
+      Dim reader = Expression.Lambda(Of Func(Of Object, String, Boolean, SqlString))(body, parameters)
       Return reader.Compile()
     End Function
 

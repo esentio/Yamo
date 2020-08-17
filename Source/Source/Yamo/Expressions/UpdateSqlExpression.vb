@@ -93,9 +93,10 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="obj"></param>
     ''' <param name="setAutoFields"></param>
+    ''' <param name="forceUpdateAllFields"></param>
     ''' <returns></returns>
-    Public Function Execute(obj As T, Optional setAutoFields As Boolean = True) As Int32
-      If SkipUpdate(obj) Then
+    Public Function Execute(obj As T, Optional setAutoFields As Boolean = True, Optional forceUpdateAllFields As Boolean = False) As Int32
+      If Not forceUpdateAllFields And SkipUpdate(obj) Then
         Return 0
       End If
 
@@ -104,7 +105,7 @@ Namespace Expressions
         setter(obj, Me.DbContext)
       End If
 
-      Dim query = Me.Builder.CreateQuery(obj)
+      Dim query = Me.Builder.CreateQuery(obj, forceUpdateAllFields)
       Dim affectedRows = Me.Executor.Execute(query)
       ResetDbPropertyModifiedTracking(obj)
       Return affectedRows
