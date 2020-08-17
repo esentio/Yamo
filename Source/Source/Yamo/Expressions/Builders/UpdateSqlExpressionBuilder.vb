@@ -202,8 +202,9 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="obj"></param>
+    ''' <param name="forceUpdateAllFields"></param>
     ''' <returns></returns>
-    Public Function CreateQuery(obj As Object) As Query
+    Public Function CreateQuery(obj As Object, forceUpdateAllFields As Boolean) As Query
       Dim table As String
 
       If m_TableNameOverride Is Nothing Then
@@ -214,7 +215,7 @@ Namespace Expressions.Builders
       End If
 
       Dim provider = EntitySqlStringProviderCache.GetUpdateProvider(Me, obj.GetType())
-      Dim sqlString = provider(obj, table)
+      Dim sqlString = provider(obj, table, forceUpdateAllFields)
 
       Return New Query(sqlString)
     End Function

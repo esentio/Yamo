@@ -24,7 +24,7 @@ Namespace Internal
     ''' <summary>
     ''' Stores cached update provider instances.
     ''' </summary>
-    Private m_UpdateProviders As Dictionary(Of Type, Func(Of Object, String, SqlString))
+    Private m_UpdateProviders As Dictionary(Of Type, Func(Of Object, String, Boolean, SqlString))
 
     ''' <summary>
     ''' Stores cached delete provider instances.
@@ -53,7 +53,7 @@ Namespace Internal
     ''' </summary>
     Private Sub New()
       m_InsertProviders = New Dictionary(Of Type, Func(Of Object, String, Boolean, CreateInsertSqlStringResult))
-      m_UpdateProviders = New Dictionary(Of Type, Func(Of Object, String, SqlString))
+      m_UpdateProviders = New Dictionary(Of Type, Func(Of Object, String, Boolean, SqlString))
       m_DeleteProviders = New Dictionary(Of Type, Func(Of Object, String, SqlString))
       m_SoftDeleteProviders = New Dictionary(Of Type, Func(Of Object, String, SqlString))
       m_SoftDeleteWithoutConditionProviders = New Dictionary(Of Type, Func(Of String, Object(), SqlString))
@@ -77,7 +77,7 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetUpdateProvider(builder As UpdateSqlExpressionBuilder, type As Type) As Func(Of Object, String, SqlString)
+    Public Shared Function GetUpdateProvider(builder As UpdateSqlExpressionBuilder, type As Type) As Func(Of Object, String, Boolean, SqlString)
       Return GetInstance(builder.DialectProvider, builder.DbContext.Model).GetOrCreateUpdateProvider(builder, type)
     End Function
 
@@ -167,8 +167,8 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Private Function GetOrCreateUpdateProvider(builder As UpdateSqlExpressionBuilder, type As Type) As Func(Of Object, String, SqlString)
-      Dim provider As Func(Of Object, String, SqlString) = Nothing
+    Private Function GetOrCreateUpdateProvider(builder As UpdateSqlExpressionBuilder, type As Type) As Func(Of Object, String, Boolean, SqlString)
+      Dim provider As Func(Of Object, String, Boolean, SqlString) = Nothing
 
       SyncLock m_UpdateProviders
         m_UpdateProviders.TryGetValue(type, provider)
