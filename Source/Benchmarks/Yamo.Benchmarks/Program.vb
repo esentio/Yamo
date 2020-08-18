@@ -6,25 +6,17 @@ Module Program
   Sub Main()
     'CreateData()
 
-    'Dim benchmarks = {
-    '  BenchmarkConverter.TypeToBenchmarks(GetType(Dapper.DapperBenchmark)),
-    '  BenchmarkConverter.TypeToBenchmarks(GetType(EFCore.EFCoreBenchmark)),
-    '  BenchmarkConverter.TypeToBenchmarks(GetType(EFCore.EFCoreNoTrackingBenchmark)),
-    '  BenchmarkConverter.TypeToBenchmarks(GetType(Yamo.YamoBenchmark))
-    '}
-
-    'Dim summary = BenchmarkRunner.Run(benchmarks)
-
-    'BenchmarkSwitcher.FromAssembly(GetType(Program).Assembly).RunAllJoined()
-
     Dim benchmarks = {
-      GetType(Dapper.DapperBenchmark),
-      GetType(EFCore.EFCoreBenchmark),
-      GetType(EFCore.EFCoreNoTrackingBenchmark),
-      GetType(Yamo.YamoBenchmark)
+      BenchmarkConverter.TypeToBenchmarks(GetType(Select1Record)),
+      BenchmarkConverter.TypeToBenchmarks(GetType(Select500RecordsOneByOne)),
+      BenchmarkConverter.TypeToBenchmarks(GetType(SelectListOf1000Records)),
+      BenchmarkConverter.TypeToBenchmarks(GetType(SelectListOf1000RecordsWith1To1Join)),
+      BenchmarkConverter.TypeToBenchmarks(GetType(SelectListOf1000RecordsWith1ToNJoin))
     }
 
-    BenchmarkSwitcher.FromTypes(benchmarks).RunAllJoined()
+    Dim summary = BenchmarkRunner.Run(benchmarks)
+
+    'BenchmarkSwitcher.FromAssembly(GetType(Program).Assembly).RunAllJoined()
   End Sub
 
   Private Sub CreateData()
@@ -33,7 +25,7 @@ Module Program
     Dim connection = New SqlConnection("Server=localhost;Database=YamoTest;User Id=dbuser;Password=dbpassword;")
     connection.Open()
 
-    Using db = New Yamo.YamoDbContext(connection)
+    Using db = New YamoDbContext(connection)
       Dim now = DateTime.Now
 
       Dim k = 1
@@ -78,7 +70,6 @@ Module Program
         Next
       Next
     End Using
-
   End Sub
 
 End Module
