@@ -1,5 +1,4 @@
-﻿Imports System.Data.SqlClient
-Imports BenchmarkDotNet.Attributes
+﻿Imports BenchmarkDotNet.Attributes
 Imports BenchmarkDotNet.Configs
 Imports BenchmarkDotNet.Engines
 Imports Microsoft.Data.SqlClient

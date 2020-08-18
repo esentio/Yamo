@@ -1,5 +1,5 @@
 ﻿Imports System.Data.Common
-Imports System.Data.SqlClient
+Imports Microsoft.Data.SqlClient
 Imports Yamo.Test
 
 Public Class SqlServerTestDbContext
