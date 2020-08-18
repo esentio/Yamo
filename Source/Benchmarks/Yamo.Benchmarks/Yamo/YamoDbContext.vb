@@ -1,4 +1,4 @@
-﻿Imports System.Data.SqlClient
+﻿Imports Microsoft.Data.SqlClient
 Imports Yamo.Benchmarks.Model
 
 Namespace Yamo

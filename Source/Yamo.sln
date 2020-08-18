@@ -27,15 +27,15 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Yamo.SQLite.Test", "Test\Ya
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarks", "Benchmarks", "{16FA0B29-C6FF-46A8-BB2D-AC9CA744BA07}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Yamo.Benchmarks", "Benchmarks\Yamo.Benchmarks\Yamo.Benchmarks.vbproj", "{589A8829-5C72-4D0A-80F5-6B390DAC0D1E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{EA24AD48-C298-400B-98A7-BD9C7227EF70}"
 	ProjectSection(SolutionItems) = preProject
 		Nuget\pack.bat = Nuget\pack.bat
 		Nuget\push.bat = Nuget\push.bat
 	EndProjectSection
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Yamo.CodeGenerator", "Source\Yamo.CodeGenerator\Yamo.CodeGenerator.vbproj", "{61CCF9C3-BA54-46D1-883A-BDBD5B3508DB}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Yamo.CodeGenerator", "Source\Yamo.CodeGenerator\Yamo.CodeGenerator.vbproj", "{61CCF9C3-BA54-46D1-883A-BDBD5B3508DB}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Yamo.Benchmarks", "Benchmarks\Yamo.Benchmarks\Yamo.Benchmarks.vbproj", "{49E61955-B655-4752-ABD1-D7802B69BF44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,14 +75,14 @@ Global
 		{A17BF779-2DE6-457A-8CF4-DCAD92AC9F0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A17BF779-2DE6-457A-8CF4-DCAD92AC9F0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A17BF779-2DE6-457A-8CF4-DCAD92AC9F0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{589A8829-5C72-4D0A-80F5-6B390DAC0D1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{589A8829-5C72-4D0A-80F5-6B390DAC0D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{589A8829-5C72-4D0A-80F5-6B390DAC0D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{589A8829-5C72-4D0A-80F5-6B390DAC0D1E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{61CCF9C3-BA54-46D1-883A-BDBD5B3508DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{61CCF9C3-BA54-46D1-883A-BDBD5B3508DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61CCF9C3-BA54-46D1-883A-BDBD5B3508DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61CCF9C3-BA54-46D1-883A-BDBD5B3508DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49E61955-B655-4752-ABD1-D7802B69BF44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49E61955-B655-4752-ABD1-D7802B69BF44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49E61955-B655-4752-ABD1-D7802B69BF44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49E61955-B655-4752-ABD1-D7802B69BF44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,8 +96,8 @@ Global
 		{69A4543B-D746-47BC-98E0-341F499288AB} = {E437EDF2-E0D2-4CB7-885E-E500019E0AFD}
 		{9CF4DB78-78F3-4E40-A60B-807BE00CD02C} = {BDD76646-2418-41BA-8F7A-4CB3C2B42593}
 		{A17BF779-2DE6-457A-8CF4-DCAD92AC9F0F} = {E437EDF2-E0D2-4CB7-885E-E500019E0AFD}
-		{589A8829-5C72-4D0A-80F5-6B390DAC0D1E} = {16FA0B29-C6FF-46A8-BB2D-AC9CA744BA07}
 		{61CCF9C3-BA54-46D1-883A-BDBD5B3508DB} = {BDD76646-2418-41BA-8F7A-4CB3C2B42593}
+		{49E61955-B655-4752-ABD1-D7802B69BF44} = {16FA0B29-C6FF-46A8-BB2D-AC9CA744BA07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35AE73FF-F868-4905-9C15-F260BAE28227}

@@ -1,18 +1,30 @@
-﻿Imports System.Data.SqlClient
 Imports BenchmarkDotNet.Running
+Imports Microsoft.Data.SqlClient
 
-Module MainModule
+Module Program
 
   Sub Main()
     'CreateData()
 
-    Dim benchmarks = New List(Of BenchmarkRunInfo)
-    benchmarks.Add(BenchmarkConverter.TypeToBenchmarks(GetType(Dapper.DapperBenchmark)))
-    benchmarks.Add(BenchmarkConverter.TypeToBenchmarks(GetType(EFCore.EFCoreBenchmark)))
-    benchmarks.Add(BenchmarkConverter.TypeToBenchmarks(GetType(EFCore.EFCoreNoTrackingBenchmark)))
-    benchmarks.Add(BenchmarkConverter.TypeToBenchmarks(GetType(Yamo.YamoBenchmark)))
+    'Dim benchmarks = {
+    '  BenchmarkConverter.TypeToBenchmarks(GetType(Dapper.DapperBenchmark)),
+    '  BenchmarkConverter.TypeToBenchmarks(GetType(EFCore.EFCoreBenchmark)),
+    '  BenchmarkConverter.TypeToBenchmarks(GetType(EFCore.EFCoreNoTrackingBenchmark)),
+    '  BenchmarkConverter.TypeToBenchmarks(GetType(Yamo.YamoBenchmark))
+    '}
 
-    Dim summary = BenchmarkRunner.Run(benchmarks.ToArray())
+    'Dim summary = BenchmarkRunner.Run(benchmarks)
+
+    'BenchmarkSwitcher.FromAssembly(GetType(Program).Assembly).RunAllJoined()
+
+    Dim benchmarks = {
+      GetType(Dapper.DapperBenchmark),
+      GetType(EFCore.EFCoreBenchmark),
+      GetType(EFCore.EFCoreNoTrackingBenchmark),
+      GetType(Yamo.YamoBenchmark)
+    }
+
+    BenchmarkSwitcher.FromTypes(benchmarks).RunAllJoined()
   End Sub
 
   Private Sub CreateData()

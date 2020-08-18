@@ -1,7 +1,7 @@
-﻿Imports System.Data.SqlClient
-Imports Yamo.Benchmarks.Model
+﻿Imports Yamo.Benchmarks.Model
 Imports Microsoft.EntityFrameworkCore
 Imports EF = Microsoft.EntityFrameworkCore
+Imports Microsoft.Data.SqlClient
 
 Namespace EFCore
 
