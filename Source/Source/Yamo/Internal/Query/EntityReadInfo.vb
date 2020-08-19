@@ -115,6 +115,7 @@ Namespace Internal.Query
           If relationships(declaringEntityIndex).RelatedEntities Is Nothing Then
             relationships(declaringEntityIndex).RelatedEntities = New List(Of Int32)
           End If
+
           relationships(declaringEntityIndex).RelatedEntities.Add(index)
 
           If entity.Relationship.IsReferenceNavigation Then
@@ -123,6 +124,7 @@ Namespace Internal.Query
             If relationships(declaringEntityIndex).CollectionNavigations Is Nothing Then
               relationships(declaringEntityIndex).CollectionNavigations = New List(Of CollectionNavigation)
             End If
+
             relationships(declaringEntityIndex).CollectionNavigations.Add(DirectCast(entity.Relationship.RelationshipNavigation, CollectionNavigation))
           Else
             Throw New NotSupportedException($"Relationship of unknown type.")
@@ -171,10 +173,10 @@ Namespace Internal.Query
         readInfo._HasCollectionNavigation = True
 
         ' LINQ not used for performance and allocation reasons
-        Dim collectionInitializers = New List(Of Action(Of Object))(collectionNavigations.Count)
+        Dim collectionInitializers = New Action(Of Object)(collectionNavigations.Count - 1) {}
 
         For i = 0 To collectionNavigations.Count - 1
-          collectionInitializers.Add(EntityRelationshipSetterCache.GetCollectionInitSetter(model, entity.Entity.EntityType, collectionNavigations(i)))
+          collectionInitializers(i) = EntityRelationshipSetterCache.GetCollectionInitSetter(model, entity.Entity.EntityType, collectionNavigations(i))
         Next
 
         readInfo._CollectionInitializers = collectionInitializers

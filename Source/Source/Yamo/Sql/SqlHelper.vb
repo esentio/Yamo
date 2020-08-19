@@ -35,7 +35,7 @@ Namespace Sql
       Dim argCount = method.Arguments.Count
 
       If argCount = 0 Then
-        Return {}
+        Return Array.Empty(Of Expression)()
       End If
 
       Dim lastArg = method.Arguments(argCount - 1)

@@ -71,7 +71,7 @@ Namespace Infrastructure
         ' we support 2 types of factory methods: 1) without parameter 2) with descendant of DbContext as parameter
         Dim factoryMethodTypeArgs = factoryMethodType.GenericTypeArguments()
         If factoryMethodTypeArgs.Length = 1 Then
-          Dim invokeMethod = factoryMethodType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance, Nothing, {}, {})
+          Dim invokeMethod = factoryMethodType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance, Nothing, Array.Empty(Of Type)(), Array.Empty(Of ParameterModifier)())
           invokeCall = Expression.Call(factoryValue, invokeMethod)
         ElseIf factoryMethodTypeArgs.Length = 2 Then
           Dim contextType = factoryMethodTypeArgs(0)
@@ -80,7 +80,7 @@ Namespace Infrastructure
             Throw New NotSupportedException($"Unsupported factory method of type '{factoryMethodType}'. Parameter must inherit from DbContext.")
           End If
 
-          Dim invokeMethod = factoryMethodType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance, Nothing, {contextType}, {})
+          Dim invokeMethod = factoryMethodType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance, Nothing, {contextType}, Array.Empty(Of ParameterModifier)())
           invokeCall = Expression.Call(factoryValue, invokeMethod, {Expression.Convert(contextParam, contextType)})
         Else
           Throw New NotSupportedException($"Unsupported factory method of type '{factoryMethodType}'.")

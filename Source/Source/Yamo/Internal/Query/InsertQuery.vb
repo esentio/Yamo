@@ -42,7 +42,7 @@
     ''' <param name="parameters"></param>
     ''' <param name="readDbGeneratedValues"></param>
     ''' <param name="entity"></param>
-    Sub New(sql As String, parameters As List(Of SqlParameter), readDbGeneratedValues As Boolean, entity As Object)
+    Sub New(sql As String, parameters As IReadOnlyList(Of SqlParameter), readDbGeneratedValues As Boolean, entity As Object)
       MyBase.New(sql, parameters)
       Me.ReadDbGeneratedValues = readDbGeneratedValues
       Me.Entity = entity

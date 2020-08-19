@@ -24,7 +24,7 @@ Namespace Infrastructure
 
       Dim variable = Expression.Variable(type, "value")
 
-      Dim expressions = New List(Of Expression)
+      Dim expressions = New Expression(1) {}
 
       Dim readMethodForType = GetReadMethodForType(type)
       Dim readValueCall As Expression = Expression.Call(readerParam, readMethodForType.Method, Nothing, indexParam)
@@ -41,12 +41,12 @@ Namespace Infrastructure
         Dim propAssign = Expression.Assign(variable, readValueCall)
         Dim isDBNullCall = Expression.Call(readerParam, "IsDBNull", Nothing, indexParam)
         Dim cond = Expression.IfThenElse(isDBNullCall, propAssignNull, propAssign)
-        expressions.Add(cond)
+        expressions(0) = cond
       ElseIf type Is GetType(Byte()) Then
         Dim propAssign = Expression.Assign(variable, readValueCall)
         Dim isDBNullCall = Expression.Call(readerParam, "IsDBNull", Nothing, indexParam)
         Dim cond = Expression.IfThenElse(isDBNullCall, propAssignNull, propAssign)
-        expressions.Add(cond)
+        expressions(0) = cond
       ElseIf underlyingType Is Nothing Then
         'Dim propAssign = Expression.Assign(variable, readValueCall)
         'expressions.Add(propAssign)
@@ -57,16 +57,16 @@ Namespace Infrastructure
         Dim propAssign = Expression.Assign(variable, readValueCall)
         Dim isDBNullCall = Expression.Call(readerParam, "IsDBNull", Nothing, indexParam)
         Dim cond = Expression.IfThenElse(isDBNullCall, propAssignNull, propAssign)
-        expressions.Add(cond)
+        expressions(0) = cond
       Else
         Dim isDBNullCall = Expression.Call(readerParam, "IsDBNull", Nothing, indexParam)
-        Dim nullableConstructor = type.GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {underlyingType}, New ParameterModifier(0) {})
+        Dim nullableConstructor = type.GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {underlyingType}, Array.Empty(Of ParameterModifier)())
         Dim propAssign = Expression.Assign(variable, Expression.[New](nullableConstructor, readValueCall))
         Dim cond = Expression.IfThenElse(isDBNullCall, propAssignNull, propAssign)
-        expressions.Add(cond)
+        expressions(0) = cond
       End If
 
-      expressions.Add(variable)
+      expressions(1) = variable
 
       Dim body = Expression.Block({variable}, expressions)
 

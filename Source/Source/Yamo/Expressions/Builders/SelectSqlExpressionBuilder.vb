@@ -863,7 +863,7 @@ Namespace Expressions.Builders
         sql.Append(m_LimitExpression)
       End If
 
-      Return New SelectQuery(sql.ToString(), m_Parameters.ToList(), m_Model)
+      Return New SelectQuery(sql.ToString(), m_Parameters, m_Model)
     End Function
 
   End Class

@@ -24,6 +24,15 @@ Namespace Sql
     ''' Creates new instance of <see cref="SqlFormat"/>.
     ''' </summary>
     ''' <param name="format"></param>
+    Public Sub New(format As String)
+      Me.Format = format
+      Me.Arguments = Array.Empty(Of Expression)()
+    End Sub
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="SqlFormat"/>.
+    ''' </summary>
+    ''' <param name="format"></param>
     ''' <param name="arguments"></param>
     Public Sub New(format As String, arguments As IReadOnlyList(Of Expression))
       Me.Format = format

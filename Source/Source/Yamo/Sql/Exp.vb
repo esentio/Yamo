@@ -158,7 +158,7 @@ Namespace Sql
             If argumentsParamExp.NodeType = ExpressionType.NewArrayInit Then
               Return New SqlFormat(format, DirectCast(argumentsParamExp, NewArrayExpression).Expressions)
             ElseIf argumentsParamExp.NodeType = ExpressionType.NewArrayBounds Then
-              Return New SqlFormat(format, {})
+              Return New SqlFormat(format)
             End If
           End If
         End If
@@ -172,7 +172,7 @@ Namespace Sql
           If method.Arguments.Count = 2 AndAlso method.Arguments(1).NodeType = ExpressionType.NewArrayInit Then
             Return New SqlFormat(format, DirectCast(method.Arguments(1), NewArrayExpression).Expressions)
           Else
-            Return New SqlFormat(format, {})
+            Return New SqlFormat(format)
           End If
         End If
       End If

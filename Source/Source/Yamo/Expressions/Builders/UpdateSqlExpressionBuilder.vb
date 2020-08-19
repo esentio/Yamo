@@ -158,7 +158,7 @@ Namespace Expressions.Builders
     Public Function CreateQuery(setAutoFields As Boolean) As Query
       Dim entity = m_Model.GetFirstEntity().Entity
 
-      Dim sql As New StringBuilder
+      Dim sql = New StringBuilder
 
       sql.Append("UPDATE ")
 
@@ -194,7 +194,7 @@ Namespace Expressions.Builders
         Helpers.Text.AppendJoin(sql, " AND ", m_WhereExpressions)
       End If
 
-      Return New Query(sql.ToString(), m_Parameters.ToList())
+      Return New Query(sql.ToString(), m_Parameters)
     End Function
 
     ''' <summary>

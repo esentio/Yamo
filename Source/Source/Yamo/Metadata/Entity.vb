@@ -118,6 +118,30 @@
     End Function
 
     ''' <summary>
+    ''' Gets all properties defined on this entity, that should be automatically set during entity insert, with their indexes.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetSetOnInsertProperties() As List(Of ([Property] As [Property], Index As Int32))
+      Return m_Properties.Select(Function(p, i) (p, i)).Where(Function(t) t.Item1.SetOnInsert).ToList()
+    End Function
+
+    ''' <summary>
+    ''' Gets all properties defined on this entity, that should be automatically set during entity update, with their indexes.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetSetOnUpdateProperties() As List(Of ([Property] As [Property], Index As Int32))
+      Return m_Properties.Select(Function(p, i) (p, i)).Where(Function(t) t.Item1.SetOnUpdate).ToList()
+    End Function
+
+    ''' <summary>
+    ''' Gets all properties defined on this entity, that should be automatically set during entity soft delete, with their indexes.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetSetOnDeleteProperties() As List(Of ([Property] As [Property], Index As Int32))
+      Return m_Properties.Select(Function(p, i) (p, i)).Where(Function(t) t.Item1.SetOnDelete).ToList()
+    End Function
+
+    ''' <summary>
     ''' Gets all properties marked as indentity or having default value defined on this entity with their indexes.
     ''' </summary>
     ''' <returns></returns>

@@ -42,6 +42,7 @@ Namespace Infrastructure
       Dim readDbGeneratedValuesVariable = Expression.Variable(GetType(Boolean))
 
       Dim entity = builder.DbContext.Model.GetEntity(entityType)
+      Dim properties = entity.GetProperties()
 
       Dim declareColumnsWhenUseDbIdentityAndDefaults = New List(Of String)
       Dim outputColumnNamesWhenUseDbIdentityAndDefaults = New List(Of String)
@@ -56,8 +57,9 @@ Namespace Infrastructure
       Dim hasIdentityColumn = False
       Dim hasColumnWithDefaultValue = False
 
-      Dim i = 0
-      For Each prop In entity.GetProperties()
+      For i = 0 To properties.Count - 1
+        Dim prop = properties(i)
+
         Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, i, builder)
         Dim parameterName = p.ParameterName
         Dim parameterAddCall = p.ParameterAddCall
@@ -87,8 +89,6 @@ Namespace Infrastructure
         columnNamesWhenNotUseDbIdentityAndDefaults.Add(columnName)
         parameterNamesWhenNotUseDbIdentityAndDefaults.Add(parameterName)
         expressionsWhenNotUseDbIdentityAndDefaults.Add(parameterAddCall)
-
-        i += 1
       Next
 
       Dim sqlWhenUseDbIdentityAndDefaults = GetInsertWhenUseDbIdentityAndDefaults(tableParam, declareColumnsWhenUseDbIdentityAndDefaults, outputColumnNamesWhenUseDbIdentityAndDefaults, columnNamesWhenUseDbIdentityAndDefaults, parameterNamesWhenUseDbIdentityAndDefaults)
@@ -116,11 +116,11 @@ Namespace Infrastructure
         expressions.AddRange(expressionsWhenNotUseDbIdentityAndDefaults)
       End If
 
-      Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, New ParameterModifier(0) {})
+      Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, Array.Empty(Of ParameterModifier)())
       Dim sqlString = Expression.[New](sqlStringConstructor, sqlVariable, parametersVariable)
       expressions.Add(sqlString)
 
-      Dim resultConstructor = GetType(CreateInsertSqlStringResult).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(SqlString), GetType(Boolean)}, New ParameterModifier(0) {})
+      Dim resultConstructor = GetType(CreateInsertSqlStringResult).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(SqlString), GetType(Boolean)}, Array.Empty(Of ParameterModifier)())
       Dim result = Expression.[New](resultConstructor, sqlString, readDbGeneratedValuesVariable)
       expressions.Add(result)
 
@@ -146,7 +146,7 @@ INSERT INTO ", GetType(String))
       Dim part3 = Expression.Constant($" ({String.Join(", ", columnNames)}) OUTPUT {String.Join(", ", outputColumnNames)} INTO @InsertedValues VALUES ({String.Join(", ", parameterNames)})
 SELECT * FROM @InsertedValues", GetType(String))
 
-      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, Array.Empty(Of ParameterModifier)())
       Return Expression.Call(concatMethod, part1, tableName, part3)
     End Function
 
@@ -168,13 +168,13 @@ SELECT * FROM @InsertedValues", GetType(String))
         SET IDENTITY_INSERT ", GetType(String))
         Dim part7 = Expression.Constant(" OFF", GetType(String))
 
-        Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String())}, {})
+        Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String())}, Array.Empty(Of ParameterModifier)())
         Return Expression.Call(concatMethod, Expression.NewArrayInit(GetType(String), part1, tableName, part3, tableName, part5, tableName, part7))
       Else
         Dim part1 = Expression.Constant("INSERT INTO ", GetType(String))
         Dim part3 = Expression.Constant($" ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)})", GetType(String))
 
-        Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+        Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, Array.Empty(Of ParameterModifier)())
         Return Expression.Call(concatMethod, part1, tableName, part3)
       End If
     End Function
@@ -228,48 +228,55 @@ SELECT * FROM @InsertedValues", GetType(String))
       expressions.Add(Expression.Assign(parametersVariable, Expression.[New](parametersVariableType)))
 
       Dim entity = builder.DbContext.Model.GetEntity(entityType)
+      Dim keyProperties = entity.GetKeyProperties()
+      Dim nonKeyProperties = entity.GetNonKeyProperties()
 
       Dim sql = New StringBuilder
-      Dim setColumns = New List(Of String)
-      Dim whereColumns = New List(Of String)
+      Dim setColumns = New String(nonKeyProperties.Count - 1) {}
+      Dim whereColumns = New String(keyProperties.Count - 1) {}
 
       sql.AppendLine(" SET")
 
-      Dim i = 0
-      For Each prop In entity.GetNonKeyProperties().Select(Function(x) x.Property)
-        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, i, builder)
+      Dim parameterIndex = 0
+
+      For i = 0 To nonKeyProperties.Count - 1
+        Dim prop = nonKeyProperties(i).Property
+
+        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        setColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
+        setColumns(i) = builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName
 
-        i += 1
+        parameterIndex += 1
       Next
 
       Helpers.Text.AppendJoin(sql, ", " & Environment.NewLine, setColumns)
       sql.AppendLine()
       sql.AppendLine("WHERE")
 
-      For Each prop In entity.GetKeyProperties().Select(Function(x) x.Property)
-        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, i, builder)
+      For i = 0 To keyProperties.Count - 1
+        Dim prop = keyProperties(i).Property
+
+        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        whereColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
+        whereColumns(i) = builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName
 
-        i += 1
+        parameterIndex += 1
       Next
 
       Helpers.Text.AppendJoin(sql, " AND " & Environment.NewLine, whereColumns)
 
-      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, Array.Empty(Of ParameterModifier)())
       Dim concatCall = Expression.Call(concatMethod, Expression.Constant("UPDATE ", GetType(String)), tableParam, Expression.Constant(sql.ToString(), GetType(String)))
       Dim sqlVariableAssign = Expression.Assign(sqlVariable, concatCall)
       expressions.Add(sqlVariableAssign)
 
-      Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, New ParameterModifier(0) {})
+      Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, Array.Empty(Of ParameterModifier)())
       Dim sqlString = Expression.[New](sqlStringConstructor, sqlVariable, parametersVariable)
       expressions.Add(sqlString)
 
@@ -313,58 +320,60 @@ SELECT * FROM @InsertedValues", GetType(String))
       expressions.Add(Expression.Assign(parametersVariable, Expression.[New](parametersVariableType)))
 
       Dim entity = builder.DbContext.Model.GetEntity(entityType)
+      Dim keyProperties = entity.GetKeyProperties()
+      Dim nonKeyProperties = entity.GetNonKeyProperties()
 
-      Dim whereColumns = New List(Of String)
+      Dim whereColumns = New String(keyProperties.Count - 1) {}
 
-      Dim appendMethod = GetType(StringBuilder).GetMethod("Append", BindingFlags.Public Or BindingFlags.Instance, Nothing, {GetType(String)}, {})
+      Dim appendMethod = GetType(StringBuilder).GetMethod("Append", BindingFlags.Public Or BindingFlags.Instance, Nothing, {GetType(String)}, Array.Empty(Of ParameterModifier)())
 
       expressions.Add(Expression.Call(sqlVariable, appendMethod, Expression.Constant("UPDATE ", GetType(String))))
       expressions.Add(Expression.Call(sqlVariable, appendMethod, tableParam))
-      expressions.Add(Expression.Call(sqlVariable, "AppendLine", {}, Expression.Constant(" SET", GetType(String))))
+      expressions.Add(Expression.Call(sqlVariable, "AppendLine", Array.Empty(Of Type)(), Expression.Constant(" SET", GetType(String))))
 
-      Dim i = 0
-      For Each prop In entity.GetNonKeyProperties().Select(Function(x) x.Property)
-        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, i, builder)
+      Dim parameterIndex = 0
+
+      For i = 0 To nonKeyProperties.Count - 1
+        Dim prop = nonKeyProperties(i).Property
+
+        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
         Dim parameterAddCall = p.ParameterAddCall
 
-        Dim modifiedExpressions = New List(Of Expression)
+        Dim addSetColumnCall = Expression.Call(setColumnsVariable, "Add", Array.Empty(Of Type)(), Expression.Constant(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName, GetType(String)))
 
-        Dim addSetColumnCall = Expression.Call(setColumnsVariable, "Add", {}, Expression.Constant(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName, GetType(String)))
-        modifiedExpressions.Add(addSetColumnCall)
-
-        modifiedExpressions.Add(parameterAddCall)
-
-        Dim modifiedTest = Expression.OrElse(forceUpdateAllFieldsParam, Expression.Call(trackingVariable, NameOf(IHasDbPropertyModifiedTracking.IsDbPropertyModified), {}, Expression.Constant(prop.Name, GetType(String))))
-        Dim modifiedCond = Expression.IfThen(modifiedTest, Expression.Block(modifiedExpressions))
+        Dim modifiedTest = Expression.OrElse(forceUpdateAllFieldsParam, Expression.Call(trackingVariable, NameOf(IHasDbPropertyModifiedTracking.IsDbPropertyModified), Array.Empty(Of Type)(), Expression.Constant(prop.Name, GetType(String))))
+        Dim modifiedCond = Expression.IfThen(modifiedTest, Expression.Block(addSetColumnCall, parameterAddCall))
 
         expressions.Add(modifiedCond)
 
-        i += 1
+        parameterIndex += 1
       Next
 
-      Dim joinMethod = GetType(String).GetMethod("Join", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(IEnumerable(Of String))}, {})
+      Dim joinMethod = GetType(String).GetMethod("Join", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(IEnumerable(Of String))}, Array.Empty(Of ParameterModifier)())
       Dim joinCall = Expression.Call(joinMethod, Expression.Constant(", " & Environment.NewLine, GetType(String)), setColumnsVariable)
 
-      expressions.Add(Expression.Call(sqlVariable, "AppendLine", {}, joinCall))
+      expressions.Add(Expression.Call(sqlVariable, "AppendLine", Array.Empty(Of Type)(), joinCall))
 
-      expressions.Add(Expression.Call(sqlVariable, "AppendLine", {}, Expression.Constant("WHERE", GetType(String))))
+      expressions.Add(Expression.Call(sqlVariable, "AppendLine", Array.Empty(Of Type)(), Expression.Constant("WHERE", GetType(String))))
 
-      For Each prop In entity.GetKeyProperties().Select(Function(x) x.Property)
-        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, i, builder)
+      For i = 0 To keyProperties.Count - 1
+        Dim prop = keyProperties(i).Property
+
+        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        whereColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
+        whereColumns(i) = builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName
 
-        i += 1
+        parameterIndex += 1
       Next
 
       expressions.Add(Expression.Call(sqlVariable, appendMethod, Expression.Constant(String.Join(" AND " & Environment.NewLine, whereColumns), GetType(String))))
 
-      Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, New ParameterModifier(0) {})
-      Dim sqlString = Expression.[New](sqlStringConstructor, Expression.Call(sqlVariable, "ToString", {}), parametersVariable)
+      Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, Array.Empty(Of ParameterModifier)())
+      Dim sqlString = Expression.[New](sqlStringConstructor, Expression.Call(sqlVariable, "ToString", Array.Empty(Of Type)()), parametersVariable)
       expressions.Add(sqlString)
 
       Dim body = Expression.Block({entityVariable, trackingVariable, sqlVariable, setColumnsVariable, parametersVariable}, expressions)
@@ -397,33 +406,37 @@ SELECT * FROM @InsertedValues", GetType(String))
       expressions.Add(Expression.Assign(parametersVariable, Expression.[New](parametersVariableType)))
 
       Dim entity = builder.DbContext.Model.GetEntity(entityType)
+      Dim keyProperties = entity.GetKeyProperties()
 
       Dim sql = New StringBuilder
-      Dim whereColumns = New List(Of String)
+      Dim whereColumns = New String(keyProperties.Count - 1) {}
 
       sql.AppendLine()
       sql.AppendLine("WHERE")
 
-      Dim i = 0
-      For Each prop In entity.GetKeyProperties().Select(Function(x) x.Property)
-        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, i, builder)
+      Dim parameterIndex = 0
+
+      For i = 0 To keyProperties.Count - 1
+        Dim prop = keyProperties(i).Property
+
+        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        whereColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
+        whereColumns(i) = builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName
 
-        i += 1
+        parameterIndex += 1
       Next
 
       Helpers.Text.AppendJoin(sql, " AND " & Environment.NewLine, whereColumns)
 
-      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, Array.Empty(Of ParameterModifier)())
       Dim concatCall = Expression.Call(concatMethod, Expression.Constant("DELETE FROM ", GetType(String)), tableParam, Expression.Constant(sql.ToString(), GetType(String)))
       Dim sqlVariableAssign = Expression.Assign(sqlVariable, concatCall)
       expressions.Add(sqlVariableAssign)
 
-      Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, New ParameterModifier(0) {})
+      Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, Array.Empty(Of ParameterModifier)())
       Dim sqlString = Expression.[New](sqlStringConstructor, sqlVariable, parametersVariable)
       expressions.Add(sqlString)
 
@@ -457,48 +470,55 @@ SELECT * FROM @InsertedValues", GetType(String))
       expressions.Add(Expression.Assign(parametersVariable, Expression.[New](parametersVariableType)))
 
       Dim entity = builder.DbContext.Model.GetEntity(entityType)
+      Dim keyProperties = entity.GetKeyProperties()
+      Dim setOnDeleteProperties = entity.GetSetOnDeleteProperties()
 
       Dim sql = New StringBuilder
-      Dim setColumns = New List(Of String)
-      Dim whereColumns = New List(Of String)
+      Dim setColumns = New String(setOnDeleteProperties.Count - 1) {}
+      Dim whereColumns = New String(keyProperties.Count - 1) {}
 
       sql.AppendLine(" SET")
 
-      Dim i = 0
-      For Each prop In entity.GetNonKeyProperties().Where(Function(x) x.Property.SetOnDelete).Select(Function(x) x.Property)
-        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, i, builder)
+      Dim parameterIndex = 0
+
+      For i = 0 To setOnDeleteProperties.Count - 1
+        Dim prop = setOnDeleteProperties(i).Property
+
+        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        setColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
+        setColumns(i) = builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName
 
-        i += 1
+        parameterIndex += 1
       Next
 
       Helpers.Text.AppendJoin(sql, ", " & Environment.NewLine, setColumns)
       sql.AppendLine()
       sql.AppendLine("WHERE")
 
-      For Each prop In entity.GetKeyProperties().Select(Function(x) x.Property)
-        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, i, builder)
+      For i = 0 To keyProperties.Count - 1
+        Dim prop = keyProperties(i).Property
+
+        Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        whereColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
+        whereColumns(i) = builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName
 
-        i += 1
+        parameterIndex += 1
       Next
 
       Helpers.Text.AppendJoin(sql, " AND " & Environment.NewLine, whereColumns)
 
-      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, Array.Empty(Of ParameterModifier)())
       Dim concatCall = Expression.Call(concatMethod, Expression.Constant("UPDATE ", GetType(String)), tableParam, Expression.Constant(sql.ToString(), GetType(String)))
       Dim sqlVariableAssign = Expression.Assign(sqlVariable, concatCall)
       expressions.Add(sqlVariableAssign)
 
-      Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, New ParameterModifier(0) {})
+      Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, Array.Empty(Of ParameterModifier)())
       Dim sqlString = Expression.[New](sqlStringConstructor, sqlVariable, parametersVariable)
       expressions.Add(sqlString)
 
@@ -529,33 +549,37 @@ SELECT * FROM @InsertedValues", GetType(String))
       expressions.Add(Expression.Assign(parametersVariable, Expression.[New](parametersVariableType)))
 
       Dim entity = builder.DbContext.Model.GetEntity(entityType)
+      Dim setOnDeleteProperties = entity.GetSetOnDeleteProperties()
 
       Dim sql = New StringBuilder
-      Dim setColumns = New List(Of String)
+      Dim setColumns = New String(setOnDeleteProperties.Count - 1) {}
 
       sql.AppendLine(" SET")
 
-      Dim i = 0
-      For Each prop In entity.GetNonKeyProperties().Where(Function(x) x.Property.SetOnDelete).Select(Function(x) x.Property)
-        Dim value = Expression.ArrayAccess(valuesParam, Expression.Constant(i, GetType(Int32)))
-        Dim p = CreateParameter(parametersVariable, value, prop, i, builder)
+      Dim parameterIndex = 0
+
+      For i = 0 To setOnDeleteProperties.Count - 1
+        Dim prop = setOnDeleteProperties(i).Property
+
+        Dim value = Expression.ArrayAccess(valuesParam, Expression.Constant(parameterIndex, GetType(Int32)))
+        Dim p = CreateParameter(parametersVariable, value, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
         Dim parameterAddCall = p.ParameterAddCall
 
         expressions.Add(parameterAddCall)
-        setColumns.Add(builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName)
+        setColumns(i) = builder.DialectProvider.Formatter.CreateIdentifier(prop.ColumnName) & " = " & parameterName
 
-        i += 1
+        parameterIndex += 1
       Next
 
       Helpers.Text.AppendJoin(sql, ", " & Environment.NewLine, setColumns)
 
-      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, Array.Empty(Of ParameterModifier)())
       Dim concatCall = Expression.Call(concatMethod, Expression.Constant("UPDATE ", GetType(String)), tableParam, Expression.Constant(sql.ToString(), GetType(String)))
       Dim sqlVariableAssign = Expression.Assign(sqlVariable, concatCall)
       expressions.Add(sqlVariableAssign)
 
-      Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, New ParameterModifier(0) {})
+      Dim sqlStringConstructor = GetType(SqlString).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), parametersVariableType}, Array.Empty(Of ParameterModifier)())
       Dim sqlString = Expression.[New](sqlStringConstructor, sqlVariable, parametersVariable)
       expressions.Add(sqlString)
 
@@ -601,13 +625,13 @@ SELECT * FROM @InsertedValues", GetType(String))
       Dim dbTypeValue = GetDbType(prop.PropertyType)
       If dbTypeValue.HasValue Then
         Dim dbType = Expression.Constant(dbTypeValue.Value, GetType(DbType))
-        Dim parameterConstructor = GetType(SqlParameter).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), GetType(Object), GetType(DbType)}, New ParameterModifier(0) {})
+        Dim parameterConstructor = GetType(SqlParameter).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), GetType(Object), GetType(DbType)}, Array.Empty(Of ParameterModifier)())
         Dim parameter = Expression.[New](parameterConstructor, parameterName, parameterValue, dbType)
-        parameterAddCall = Expression.Call(parametersVariable, "Add", {}, parameter)
+        parameterAddCall = Expression.Call(parametersVariable, "Add", Array.Empty(Of Type)(), parameter)
       Else
-        Dim parameterConstructor = GetType(SqlParameter).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), GetType(Object)}, New ParameterModifier(0) {})
+        Dim parameterConstructor = GetType(SqlParameter).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), GetType(Object)}, Array.Empty(Of ParameterModifier)())
         Dim parameter = Expression.[New](parameterConstructor, parameterName, parameterValue)
-        parameterAddCall = Expression.Call(parametersVariable, "Add", {}, parameter)
+        parameterAddCall = Expression.Call(parametersVariable, "Add", Array.Empty(Of Type)(), parameter)
       End If
 
       Return (parameterNameValue, parameterAddCall)
