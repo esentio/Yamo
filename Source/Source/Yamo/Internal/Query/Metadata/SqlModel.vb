@@ -40,7 +40,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     Public Sub SetMainTable(Of T)()
-      If m_Entities.Any() Then
+      If Not m_Entities.Count = 0 Then
         Throw New InvalidOperationException("Main table already set.")
       End If
 
@@ -59,7 +59,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="relationship"></param>
     ''' <param name="isIgnored"></param>
     Public Sub AddJoinedTable(Of T)(Optional relationship As SqlEntityRelationship = Nothing, Optional isIgnored As Boolean = False)
-      If Not m_Entities.Any() Then
+      If m_Entities.Count = 0 Then
         Throw New InvalidOperationException("Main table isn't set yet.")
       End If
 

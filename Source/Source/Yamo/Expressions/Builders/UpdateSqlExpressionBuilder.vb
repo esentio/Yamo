@@ -172,14 +172,14 @@ Namespace Expressions.Builders
 
       If setAutoFields Then
         Dim index = m_Parameters.Count
-        Dim columns = entity.GetNonKeyProperties().Where(Function(x) x.Property.SetOnUpdate).Select(Function(x) x.Property.ColumnName).ToArray()
+        Dim properties = entity.GetSetOnUpdateProperties()
 
-        If 0 < columns.Length Then
+        If 0 < properties.Count Then
           Dim getter = EntityAutoFieldsGetterCache.GetOnUpdateGetter(m_Model.Model, entity.EntityType)
           Dim values = getter(Me.DbContext)
 
-          For i = 0 To columns.Length - 1
-            m_SetExpressions.Add(Me.DialectProvider.Formatter.CreateIdentifier(columns(i)) & " = " & CreateParameter(index + i))
+          For i = 0 To properties.Count - 1
+            m_SetExpressions.Add(Me.DialectProvider.Formatter.CreateIdentifier(properties(i).ColumnName) & " = " & CreateParameter(index + i))
             m_Parameters.Add(New SqlParameter(CreateParameter(index + i), values(i)))
           Next
         End If
@@ -188,7 +188,7 @@ Namespace Expressions.Builders
       sql.Append("SET ")
       Helpers.Text.AppendJoin(sql, ", ", m_SetExpressions)
 
-      If m_WhereExpressions.Any() Then
+      If Not m_WhereExpressions.Count = 0 Then
         sql.AppendLine()
         sql.Append("WHERE ")
         Helpers.Text.AppendJoin(sql, " AND ", m_WhereExpressions)

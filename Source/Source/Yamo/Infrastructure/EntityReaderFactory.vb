@@ -251,7 +251,7 @@ Namespace Infrastructure
       Dim identityOrDefaultValueProperties = entity.GetIdentityOrDefaultValueProperties()
 
       For i = 0 To identityOrDefaultValueProperties.Count - 1
-        Dim prop = identityOrDefaultValueProperties(i).Property
+        Dim prop = identityOrDefaultValueProperties(i)
 
         Dim readIndexArg = Expression.Add(indexParam, Expression.Constant(i))
         Dim varProp = Expression.Property(entityVariable, prop.Name)

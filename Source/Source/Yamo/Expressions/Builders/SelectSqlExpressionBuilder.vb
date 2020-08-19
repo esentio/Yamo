@@ -352,13 +352,15 @@ Namespace Expressions.Builders
         Dim relationshipNavigations = declaringSqlEntity.Entity.GetRelationshipNavigations(GetType(TJoined))
 
         If relationshipNavigations.Count = 1 Then
-          Select Case relationshipNavigations(0).GetType()
+          Dim relationshipNavigation = relationshipNavigations(0)
+
+          Select Case relationshipNavigation.GetType()
             Case GetType(ReferenceNavigation)
-              Return New SqlEntityRelationship(declaringSqlEntity, relationshipNavigations(0))
+              Return New SqlEntityRelationship(declaringSqlEntity, relationshipNavigation)
             Case GetType(CollectionNavigation)
-              Return New SqlEntityRelationship(declaringSqlEntity, relationshipNavigations(0))
+              Return New SqlEntityRelationship(declaringSqlEntity, relationshipNavigation)
             Case Else
-              Throw New NotSupportedException($"Relationship of type '{relationshipNavigations(0).GetType()}' is not supported.")
+              Throw New NotSupportedException($"Relationship of type '{relationshipNavigation.GetType()}' is not supported.")
           End Select
         Else
           ' no unambiguous match found; relationship might be specified later
@@ -670,9 +672,9 @@ Namespace Expressions.Builders
       End If
 
       Dim entity = m_Model.GetEntity(index)
-      Dim prop = entity.Entity.GetPropertyWithIndex(propertyName)
+      Dim prop = entity.Entity.GetProperty(propertyName)
 
-      If prop.Property.IsKey Then
+      If prop.IsKey Then
         Throw New ArgumentException("Primary key columns cannot be excluded from the query.")
       End If
 
@@ -833,9 +835,9 @@ Namespace Expressions.Builders
       Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstTableAlias())
 
       If m_JoinExpressions IsNot Nothing Then
-        For Each joinExpression In m_JoinExpressions
+        For i = 0 To m_JoinExpressions.Count - 1
           sql.Append(" ")
-          sql.Append(joinExpression)
+          sql.Append(m_JoinExpressions(i))
         Next
       End If
 

@@ -82,7 +82,7 @@ Namespace Expressions.Builders
     Public Sub AddWhere(predicate As Expression)
       If Not m_ParameterIndexShift.HasValue Then
         If m_SoftDelete Then
-          m_ParameterIndexShift = m_Model.GetFirstEntity().Entity.GetNonKeyProperties().Where(Function(x) x.Property.SetOnDelete).Count()
+          m_ParameterIndexShift = m_Model.GetFirstEntity().Entity.GetSetOnDeleteProperties().Count
         Else
           m_ParameterIndexShift = 0
         End If
@@ -139,7 +139,7 @@ Namespace Expressions.Builders
         sql.AppendLine(m_TableNameOverride)
       End If
 
-      If m_WhereExpressions.Any() Then
+      If Not m_WhereExpressions.Count = 0 Then
         sql.Append(" WHERE ")
         Helpers.Text.AppendJoin(sql, " AND ", m_WhereExpressions)
       End If
@@ -167,7 +167,7 @@ Namespace Expressions.Builders
 
       sql.Append(sqlString.Sql)
 
-      If m_WhereExpressions.Any() Then
+      If Not m_WhereExpressions.Count = 0 Then
         sql.Append(" WHERE ")
         Helpers.Text.AppendJoin(sql, " AND ", m_WhereExpressions)
 

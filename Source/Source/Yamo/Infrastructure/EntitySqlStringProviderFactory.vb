@@ -240,7 +240,7 @@ SELECT * FROM @InsertedValues", GetType(String))
       Dim parameterIndex = 0
 
       For i = 0 To nonKeyProperties.Count - 1
-        Dim prop = nonKeyProperties(i).Property
+        Dim prop = nonKeyProperties(i)
 
         Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
@@ -257,7 +257,7 @@ SELECT * FROM @InsertedValues", GetType(String))
       sql.AppendLine("WHERE")
 
       For i = 0 To keyProperties.Count - 1
-        Dim prop = keyProperties(i).Property
+        Dim prop = keyProperties(i)
 
         Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
@@ -334,7 +334,7 @@ SELECT * FROM @InsertedValues", GetType(String))
       Dim parameterIndex = 0
 
       For i = 0 To nonKeyProperties.Count - 1
-        Dim prop = nonKeyProperties(i).Property
+        Dim prop = nonKeyProperties(i)
 
         Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
@@ -358,7 +358,7 @@ SELECT * FROM @InsertedValues", GetType(String))
       expressions.Add(Expression.Call(sqlVariable, "AppendLine", Array.Empty(Of Type)(), Expression.Constant("WHERE", GetType(String))))
 
       For i = 0 To keyProperties.Count - 1
-        Dim prop = keyProperties(i).Property
+        Dim prop = keyProperties(i)
 
         Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
@@ -417,7 +417,7 @@ SELECT * FROM @InsertedValues", GetType(String))
       Dim parameterIndex = 0
 
       For i = 0 To keyProperties.Count - 1
-        Dim prop = keyProperties(i).Property
+        Dim prop = keyProperties(i)
 
         Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
@@ -482,7 +482,7 @@ SELECT * FROM @InsertedValues", GetType(String))
       Dim parameterIndex = 0
 
       For i = 0 To setOnDeleteProperties.Count - 1
-        Dim prop = setOnDeleteProperties(i).Property
+        Dim prop = setOnDeleteProperties(i)
 
         Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
@@ -499,7 +499,7 @@ SELECT * FROM @InsertedValues", GetType(String))
       sql.AppendLine("WHERE")
 
       For i = 0 To keyProperties.Count - 1
-        Dim prop = keyProperties(i).Property
+        Dim prop = keyProperties(i)
 
         Dim p = CreateParameterFromProperty(parametersVariable, entityVariable, prop, parameterIndex, builder)
         Dim parameterName = p.ParameterName
@@ -559,7 +559,7 @@ SELECT * FROM @InsertedValues", GetType(String))
       Dim parameterIndex = 0
 
       For i = 0 To setOnDeleteProperties.Count - 1
-        Dim prop = setOnDeleteProperties(i).Property
+        Dim prop = setOnDeleteProperties(i)
 
         Dim value = Expression.ArrayAccess(valuesParam, Expression.Constant(parameterIndex, GetType(Int32)))
         Dim p = CreateParameter(parametersVariable, value, prop, parameterIndex, builder)
