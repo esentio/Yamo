@@ -19,7 +19,7 @@ Namespace Infrastructure
     ''' <param name="entityType"></param>
     ''' <returns></returns>
     Public Shared Function CreateOnInsertSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)
-      Dim properties = model.GetEntity(entityType).GetProperties().Where(Function(p) p.SetOnInsert).Select(Function(p) (p, p.GetOnInsertFactory())).ToArray()
+      Dim properties = model.GetEntity(entityType).GetSetOnInsertProperties().Select(Function(p) (p, p.GetOnInsertFactory())).ToArray()
       Return CreateSetter(model, entityType, properties)
     End Function
 
@@ -31,7 +31,7 @@ Namespace Infrastructure
     ''' <param name="entityType"></param>
     ''' <returns></returns>
     Public Shared Function CreateOnUpdateSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)
-      Dim properties = model.GetEntity(entityType).GetProperties().Where(Function(p) p.SetOnUpdate).Select(Function(p) (p, p.GetOnUpdateFactory())).ToArray()
+      Dim properties = model.GetEntity(entityType).GetSetOnUpdateProperties().Select(Function(p) (p, p.GetOnUpdateFactory())).ToArray()
       Return CreateSetter(model, entityType, properties)
     End Function
 
@@ -43,7 +43,7 @@ Namespace Infrastructure
     ''' <param name="entityType"></param>
     ''' <returns></returns>
     Public Shared Function CreateOnDeleteSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)
-      Dim properties = model.GetEntity(entityType).GetProperties().Where(Function(p) p.SetOnDelete).Select(Function(p) (p, p.GetOnDeleteFactory())).ToArray()
+      Dim properties = model.GetEntity(entityType).GetSetOnDeleteProperties().Select(Function(p) (p, p.GetOnDeleteFactory())).ToArray()
 
       If properties.Length = 0 Then
         Throw New NotSupportedException($"Entity '{entityType}' doesn't support soft deleting.")
@@ -74,10 +74,12 @@ Namespace Infrastructure
       Dim entityVariable = Expression.Variable(entityType, "entityObj")
       expressions.Add(Expression.Assign(entityVariable, Expression.Convert(entityParam, entityType)))
 
-      Dim variables = New List(Of ParameterExpression)
+      Dim variables = New List(Of ParameterExpression)(properties.Length + 1)
       variables.Add(entityVariable)
 
-      For Each prop In properties
+      For i = 0 To properties.Length - 1
+        Dim prop = properties(i)
+
         Dim factoryMethod = prop.Factory
         Dim factoryMethodType = factoryMethod.GetType()
         Dim factoryVariable = Expression.Variable(factoryMethodType)
@@ -90,7 +92,7 @@ Namespace Infrastructure
         ' we support 2 types of factory methods: 1) without parameter 2) with descendant of DbContext as parameter
         Dim factoryMethodTypeArgs = factoryMethodType.GenericTypeArguments()
         If factoryMethodTypeArgs.Length = 1 Then
-          Dim invokeMethod = factoryMethodType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance, Nothing, {}, {})
+          Dim invokeMethod = factoryMethodType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance, Nothing, Array.Empty(Of Type)(), Array.Empty(Of ParameterModifier)())
           invokeCall = Expression.Call(factoryVariable, invokeMethod)
         ElseIf factoryMethodTypeArgs.Length = 2 Then
           Dim contextType = factoryMethodTypeArgs(0)
@@ -99,7 +101,7 @@ Namespace Infrastructure
             Throw New NotSupportedException($"Unsupported factory method of type '{factoryMethodType}'. Parameter must inherit from DbContext.")
           End If
 
-          Dim invokeMethod = factoryMethodType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance, Nothing, {contextType}, {})
+          Dim invokeMethod = factoryMethodType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance, Nothing, {contextType}, Array.Empty(Of ParameterModifier)())
           invokeCall = Expression.Call(factoryVariable, invokeMethod, {Expression.Convert(contextParam, contextType)})
         Else
           Throw New NotSupportedException($"Unsupported factory method of type '{factoryMethodType}'.")

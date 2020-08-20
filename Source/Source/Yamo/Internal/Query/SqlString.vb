@@ -15,7 +15,7 @@
     ''' Gets SQL parameters.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property Parameters As List(Of SqlParameter)
+    Public ReadOnly Property Parameters As IReadOnlyList(Of SqlParameter)
 
     ''' <summary>
     ''' Creates new instance of <see cref="SqlString"/>.
@@ -23,7 +23,7 @@
     ''' <param name="sql"></param>
     Sub New(sql As String)
       Me.Sql = sql
-      Me.Parameters = New List(Of SqlParameter)
+      Me.Parameters = Array.Empty(Of SqlParameter)()
     End Sub
 
     ''' <summary>
@@ -31,7 +31,7 @@
     ''' </summary>
     ''' <param name="sql"></param>
     ''' <param name="parameters"></param>
-    Sub New(sql As String, parameters As List(Of SqlParameter))
+    Sub New(sql As String, parameters As IReadOnlyList(Of SqlParameter))
       Me.Sql = sql
       Me.Parameters = parameters
     End Sub

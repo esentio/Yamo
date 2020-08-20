@@ -22,12 +22,16 @@ Namespace Infrastructure
       End If
 
       If GetType(T) Is GetType(Guid) Then
-        If TypeOf value Is Byte() Then
+        If TypeOf value Is String Then
+          value = New Guid(DirectCast(value, String))
+        ElseIf TypeOf value Is Byte() Then
           value = New Guid(DirectCast(value, Byte()))
         End If
       ElseIf GetType(T) Is GetType(Guid?) Then
-        If TypeOf value Is Byte() Then
-          value = New Guid?(New Guid((DirectCast(value, Byte()))))
+        If TypeOf value Is String Then
+          value = New Guid?(New Guid(DirectCast(value, String)))
+        ElseIf TypeOf value Is Byte() Then
+          value = New Guid?(New Guid(DirectCast(value, Byte())))
         End If
 
       ElseIf GetType(T) Is GetType(Boolean) Then

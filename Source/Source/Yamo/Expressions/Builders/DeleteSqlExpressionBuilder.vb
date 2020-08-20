@@ -82,7 +82,7 @@ Namespace Expressions.Builders
     Public Sub AddWhere(predicate As Expression)
       If Not m_ParameterIndexShift.HasValue Then
         If m_SoftDelete Then
-          m_ParameterIndexShift = m_Model.GetFirstEntity().Entity.GetNonKeyProperties().Where(Function(x) x.Property.SetOnDelete).Count()
+          m_ParameterIndexShift = m_Model.GetFirstEntity().Entity.GetSetOnDeleteProperties().Count
         Else
           m_ParameterIndexShift = 0
         End If
@@ -127,7 +127,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <returns></returns>
     Private Function CreateDeleteQuery() As Query
-      Dim sql As New StringBuilder
+      Dim sql = New StringBuilder
 
       sql.Append("DELETE FROM ")
 
@@ -139,12 +139,12 @@ Namespace Expressions.Builders
         sql.AppendLine(m_TableNameOverride)
       End If
 
-      If m_WhereExpressions.Any() Then
+      If Not m_WhereExpressions.Count = 0 Then
         sql.Append(" WHERE ")
         Helpers.Text.AppendJoin(sql, " AND ", m_WhereExpressions)
       End If
 
-      Return New Query(sql.ToString(), m_Parameters.ToList())
+      Return New Query(sql.ToString(), m_Parameters)
     End Function
 
     ''' <summary>
@@ -162,18 +162,19 @@ Namespace Expressions.Builders
       Dim provider = EntitySqlStringProviderCache.GetSoftDeleteWithoutConditionProvider(Me, entity.EntityType)
       Dim sqlString = provider(table, values)
 
-      Dim sql As New StringBuilder
-      Dim parameters As List(Of SqlParameter)
+      Dim sql = New StringBuilder
+      Dim parameters As IReadOnlyList(Of SqlParameter)
 
       sql.Append(sqlString.Sql)
 
-      If m_WhereExpressions.Any() Then
+      If Not m_WhereExpressions.Count = 0 Then
         sql.Append(" WHERE ")
         Helpers.Text.AppendJoin(sql, " AND ", m_WhereExpressions)
 
-        parameters = New List(Of SqlParameter)(sqlString.Parameters.Count + m_Parameters.Count)
-        parameters.AddRange(sqlString.Parameters)
-        parameters.AddRange(m_Parameters)
+        Dim params = New List(Of SqlParameter)(sqlString.Parameters.Count + m_Parameters.Count)
+        params.AddRange(sqlString.Parameters)
+        params.AddRange(m_Parameters)
+        parameters = params
       Else
         parameters = sqlString.Parameters
       End If

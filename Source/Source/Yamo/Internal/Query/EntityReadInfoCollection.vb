@@ -102,7 +102,7 @@ Namespace Internal.Query
       ' 
       ' This is necessary to properly group 1:N records.
 
-      m_ChainIndexes = New List(Of Integer)(Me.Count - 1) {}
+      m_ChainIndexes = New List(Of Int32)(Me.Count - 1) {}
 
       For i = 0 To Me.Count - 1
         Dim flags = New Boolean(Me.Count - 1) {}

@@ -12,7 +12,7 @@
     Public ReadOnly Property Name As String
 
     ''' <summary>
-    ''' Gets type of the property
+    ''' Gets type of the property.
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property PropertyType As Type
@@ -49,6 +49,16 @@
     Public Property IsRequired As Boolean
 
     ''' <summary>
+    ''' Gets property index.
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property Index() As Int32
+      Get
+        Return m_Index
+      End Get
+    End Property
+
+    ''' <summary>
     ''' Gets an indication whether the value should be automatically set during the entity insert.
     ''' </summary>
     ''' <returns></returns>
@@ -79,6 +89,11 @@
     End Property
 
     ''' <summary>
+    ''' Stores property index.
+    ''' </summary>
+    Private m_Index As Int32
+
+    ''' <summary>
     ''' Stores on insert value factory method.
     ''' </summary>
     Private m_OnInsertFactory As Object
@@ -106,6 +121,7 @@
       Me.IsIdentity = False
       Me.HasDefaultValue = False
       Me.IsRequired = GetIsRequiredDefault(propertyType)
+      m_Index = -1
       m_OnInsertFactory = Nothing
       m_OnUpdateFactory = Nothing
       m_OnDeleteFactory = Nothing
@@ -139,6 +155,14 @@
       Else
         ' ignore otherwise
       End If
+    End Sub
+
+    ''' <summary>
+    ''' Sets property index.
+    ''' </summary>
+    ''' <param name="index"></param>
+    Friend Sub SetIndex(index As Int32)
+      m_Index = index
     End Sub
 
     ''' <summary>

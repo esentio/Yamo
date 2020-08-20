@@ -28,13 +28,16 @@ Namespace Infrastructure
 
       Dim entityVariable = Expression.Variable(entityType, "entityObj")
 
-      Dim expressions = New List(Of Expression)
+      Dim entity = model.GetEntity(entityType)
+      Dim properties = entity.GetProperties()
+
+      Dim expressions = New List(Of Expression)(properties.Count + 2)
 
       expressions.Add(Expression.Assign(entityVariable, Expression.[New](entityType)))
 
-      Dim entity = model.GetEntity(entityType)
-      Dim i = 0
-      For Each prop In entity.GetProperties()
+      For i = 0 To properties.Count - 1
+        Dim prop = properties(i)
+
         Dim varProp = Expression.Property(entityVariable, prop.Name)
 
         Dim readMethodForType = GetReadMethodForType(prop.PropertyType)
@@ -48,31 +51,29 @@ Namespace Infrastructure
 
         Dim underlyingNullableType = Nullable.GetUnderlyingType(prop.PropertyType)
 
-        Dim includeExpressions = New List(Of Expression)
+        Dim includeExpressions = New Expression(1) {}
 
         If prop.PropertyType Is GetType(String) OrElse prop.PropertyType Is GetType(Byte()) Then
           Dim propAssign = Expression.Assign(varProp, readValueCall)
           Dim isDBNullCall = Expression.Call(readerParam, "IsDBNull", Nothing, indexParam)
           Dim isDBNullCond = Expression.IfThenElse(isDBNullCall, propAssignNull, propAssign)
-          includeExpressions.Add(isDBNullCond)
+          includeExpressions(0) = isDBNullCond
         ElseIf underlyingNullableType Is Nothing Then
           Dim propAssign = Expression.Assign(varProp, readValueCall)
-          includeExpressions.Add(propAssign)
+          includeExpressions(0) = propAssign
         Else
           Dim isDBNullCall = Expression.Call(readerParam, "IsDBNull", Nothing, indexParam)
-          Dim nullableConstructor = prop.PropertyType.GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {underlyingNullableType}, New ParameterModifier(0) {})
+          Dim nullableConstructor = prop.PropertyType.GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {underlyingNullableType}, Array.Empty(Of ParameterModifier)())
           Dim propAssign = Expression.Assign(varProp, Expression.[New](nullableConstructor, readValueCall))
           Dim isDBNullCond = Expression.IfThenElse(isDBNullCall, propAssignNull, propAssign)
-          includeExpressions.Add(isDBNullCond)
+          includeExpressions(0) = isDBNullCond
         End If
 
-        includeExpressions.Add(Expression.AddAssign(indexParam, Expression.Constant(1)))
+        includeExpressions(1) = Expression.AddAssign(indexParam, Expression.Constant(1))
 
         Dim includedCheck = Expression.ArrayIndex(includedColumnsParam, Expression.Constant(i))
         Dim includedCond = Expression.IfThenElse(includedCheck, Expression.Block(includeExpressions), propAssignNull)
         expressions.Add(includedCond)
-
-        i += 1
       Next
 
       expressions.Add(entityVariable)
@@ -135,10 +136,11 @@ Namespace Infrastructure
       Dim pkOffsetsParam = Expression.Parameter(GetType(Int32()), "pkOffsets")
       Dim parameters = {readerParam, indexParam, pkOffsetsParam}
 
-      Dim pkVariable = Expression.Variable(GetType(Object), "pk")
-
-      Dim variables = New List(Of ParameterExpression) From {pkVariable}
+      Dim variables = New List(Of ParameterExpression)
       Dim expressions = New List(Of Expression)
+
+      Dim pkVariable = Expression.Variable(GetType(Object), "pk")
+      variables.Add(pkVariable)
 
       Dim entity = model.GetEntity(entityType)
       Dim keyProperties = entity.GetKeyProperties()
@@ -246,8 +248,11 @@ Namespace Infrastructure
       expressions.Add(Expression.Assign(entityVariable, Expression.Convert(entityParam, entityType)))
 
       Dim entity = model.GetEntity(entityType)
-      Dim i = 0
-      For Each prop In entity.GetIdentityOrDefaultValueProperties().Select(Function(x) x.Property)
+      Dim identityOrDefaultValueProperties = entity.GetIdentityOrDefaultValueProperties()
+
+      For i = 0 To identityOrDefaultValueProperties.Count - 1
+        Dim prop = identityOrDefaultValueProperties(i)
+
         Dim readIndexArg = Expression.Add(indexParam, Expression.Constant(i))
         Dim varProp = Expression.Property(entityVariable, prop.Name)
 
@@ -272,13 +277,11 @@ Namespace Infrastructure
           expressions.Add(propAssign)
         Else
           Dim isDBNullCall = Expression.Call(readerParam, "IsDBNull", Nothing, readIndexArg)
-          Dim nullableConstructor = prop.PropertyType.GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {underlyingNullableType}, New ParameterModifier(0) {})
+          Dim nullableConstructor = prop.PropertyType.GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {underlyingNullableType}, Array.Empty(Of ParameterModifier)())
           Dim propAssign = Expression.Assign(varProp, Expression.[New](nullableConstructor, readValueCall))
           Dim cond = Expression.IfThenElse(isDBNullCall, propAssignNull, propAssign)
           expressions.Add(cond)
         End If
-
-        i += 1
       Next
 
       Dim body = Expression.Block({entityVariable}, expressions)

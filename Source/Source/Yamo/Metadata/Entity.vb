@@ -62,6 +62,7 @@
 
       If Not m_PropertiesDictionary.TryGetValue(name, prop) Then
         prop = New [Property](name, propertyType)
+        prop.SetIndex(m_Properties.Count)
         m_PropertiesDictionary.Add(name, prop)
         m_Properties.Add(prop)
       End If
@@ -79,50 +80,59 @@
     End Function
 
     ''' <summary>
-    ''' Gets property of this entity together with the index of the property.
-    ''' </summary>
-    ''' <param name="name"></param>
-    ''' <returns></returns>
-    Public Function GetPropertyWithIndex(name As String) As ([Property] As [Property], Index As Int32)
-      For i = 0 To m_Properties.Count - 1
-        If m_Properties(i).Name = name Then
-          Return (m_Properties(i), i)
-        End If
-      Next
-
-      Throw New Exception($"Unknown property '{name}'.")
-    End Function
-
-    ''' <summary>
     ''' Gets all properties defined on this entity.
     ''' </summary>
     ''' <returns></returns>
-    Public Function GetProperties() As List(Of [Property])
-      Return m_Properties.ToList()
+    Public Function GetProperties() As IReadOnlyList(Of [Property])
+      Return m_Properties
     End Function
 
     ''' <summary>
-    ''' Gets all primary key properties defined on this entity with their indexes.
+    ''' Gets all primary key properties defined on this entity.
     ''' </summary>
     ''' <returns></returns>
-    Public Function GetKeyProperties() As List(Of ([Property] As [Property], Index As Int32))
-      Return m_Properties.Select(Function(p, i) (p, i)).Where(Function(t) t.Item1.IsKey).ToList()
+    Public Function GetKeyProperties() As IReadOnlyList(Of [Property])
+      Return m_Properties.Where(Function(t) t.IsKey).ToArray()
     End Function
 
     ''' <summary>
-    ''' Gets all non-primary key properties defined on this entity with their indexes.
+    ''' Gets all non-primary key properties defined on this entity.
     ''' </summary>
     ''' <returns></returns>
-    Public Function GetNonKeyProperties() As List(Of ([Property] As [Property], Index As Int32))
-      Return m_Properties.Select(Function(p, i) (p, i)).Where(Function(t) Not t.Item1.IsKey).ToList()
+    Public Function GetNonKeyProperties() As IReadOnlyList(Of [Property])
+      Return m_Properties.Where(Function(t) Not t.IsKey).ToArray()
     End Function
 
     ''' <summary>
-    ''' Gets all properties marked as indentity or having default value defined on this entity with their indexes.
+    ''' Gets all properties defined on this entity, that should be automatically set during entity insert.
     ''' </summary>
     ''' <returns></returns>
-    Public Function GetIdentityOrDefaultValueProperties() As List(Of ([Property] As [Property], Index As Int32))
-      Return m_Properties.Select(Function(p, i) (p, i)).Where(Function(t) t.Item1.IsIdentity OrElse t.Item1.HasDefaultValue).ToList()
+    Public Function GetSetOnInsertProperties() As IReadOnlyList(Of [Property])
+      Return m_Properties.Where(Function(t) t.SetOnInsert).ToArray()
+    End Function
+
+    ''' <summary>
+    ''' Gets all properties defined on this entity, that should be automatically set during entity update.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetSetOnUpdateProperties() As IReadOnlyList(Of [Property])
+      Return m_Properties.Where(Function(t) t.SetOnUpdate).ToArray()
+    End Function
+
+    ''' <summary>
+    ''' Gets all properties defined on this entity, that should be automatically set during entity soft delete.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetSetOnDeleteProperties() As IReadOnlyList(Of [Property])
+      Return m_Properties.Where(Function(t) t.SetOnDelete).ToArray()
+    End Function
+
+    ''' <summary>
+    ''' Gets all properties marked as indentity or having default value defined on this entity.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetIdentityOrDefaultValueProperties() As IReadOnlyList(Of [Property])
+      Return m_Properties.Where(Function(t) t.IsIdentity OrElse t.HasDefaultValue).ToArray()
     End Function
 
     ''' <summary>
@@ -189,7 +199,7 @@
     ''' </summary>
     ''' <param name="relatedEntityType"></param>
     ''' <returns></returns>
-    Public Function GetRelationshipNavigations(relatedEntityType As Type) As IEnumerable(Of RelationshipNavigation)
+    Public Function GetRelationshipNavigations(relatedEntityType As Type) As IReadOnlyList(Of RelationshipNavigation)
       Return m_RelationshipNavigations.Values.Where(Function(r) r.RelatedEntityType = relatedEntityType).ToArray()
     End Function
 

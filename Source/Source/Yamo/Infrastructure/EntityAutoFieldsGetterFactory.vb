@@ -19,7 +19,7 @@ Namespace Infrastructure
     ''' <param name="entityType"></param>
     ''' <returns></returns>
     Public Shared Function CreateOnUpdateGetter(model As Model, entityType As Type) As Func(Of DbContext, Object())
-      Dim factories = model.GetEntity(entityType).GetProperties().Where(Function(p) p.SetOnUpdate).Select(Function(p) p.GetOnUpdateFactory()).ToArray()
+      Dim factories = model.GetEntity(entityType).GetSetOnUpdateProperties().Select(Function(p) p.GetOnUpdateFactory()).ToArray()
 
       If factories.Length = 0 Then
         Throw New NotSupportedException($"Entity '{entityType}' doesn't support auto fields on update.")
@@ -36,7 +36,7 @@ Namespace Infrastructure
     ''' <param name="entityType"></param>
     ''' <returns></returns>
     Public Shared Function CreateOnDeleteGetter(model As Model, entityType As Type) As Func(Of DbContext, Object())
-      Dim factories = model.GetEntity(entityType).GetProperties().Where(Function(p) p.SetOnDelete).Select(Function(p) p.GetOnDeleteFactory()).ToArray()
+      Dim factories = model.GetEntity(entityType).GetSetOnDeleteProperties().Select(Function(p) p.GetOnDeleteFactory()).ToArray()
 
       If factories.Length = 0 Then
         Throw New NotSupportedException($"Entity '{entityType}' doesn't support soft deleting.")
@@ -61,8 +61,9 @@ Namespace Infrastructure
       Dim valuesVariable = Expression.Variable(GetType(Object()), "values")
       expressions.Add(Expression.Assign(valuesVariable, Expression.Constant(New Object(factories.Length - 1) {}, GetType(Object()))))
 
-      Dim i = 0
-      For Each factoryMethod In factories
+      For i = 0 To factories.Length - 1
+        Dim factoryMethod = factories(i)
+
         Dim factoryMethodType = factoryMethod.GetType()
         Dim factoryValue = Expression.Constant(factoryMethod, factoryMethodType)
 
@@ -71,7 +72,7 @@ Namespace Infrastructure
         ' we support 2 types of factory methods: 1) without parameter 2) with descendant of DbContext as parameter
         Dim factoryMethodTypeArgs = factoryMethodType.GenericTypeArguments()
         If factoryMethodTypeArgs.Length = 1 Then
-          Dim invokeMethod = factoryMethodType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance, Nothing, {}, {})
+          Dim invokeMethod = factoryMethodType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance, Nothing, Array.Empty(Of Type)(), Array.Empty(Of ParameterModifier)())
           invokeCall = Expression.Call(factoryValue, invokeMethod)
         ElseIf factoryMethodTypeArgs.Length = 2 Then
           Dim contextType = factoryMethodTypeArgs(0)
@@ -80,7 +81,7 @@ Namespace Infrastructure
             Throw New NotSupportedException($"Unsupported factory method of type '{factoryMethodType}'. Parameter must inherit from DbContext.")
           End If
 
-          Dim invokeMethod = factoryMethodType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance, Nothing, {contextType}, {})
+          Dim invokeMethod = factoryMethodType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance, Nothing, {contextType}, Array.Empty(Of ParameterModifier)())
           invokeCall = Expression.Call(factoryValue, invokeMethod, {Expression.Convert(contextParam, contextType)})
         Else
           Throw New NotSupportedException($"Unsupported factory method of type '{factoryMethodType}'.")
@@ -91,8 +92,6 @@ Namespace Infrastructure
         Dim cast = Expression.Convert(invokeCall, GetType(Object))
 
         expressions.Add(Expression.Assign(valuesIndex, cast))
-
-        i += 1
       Next
 
       expressions.Add(valuesVariable)

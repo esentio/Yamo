@@ -189,7 +189,12 @@ Namespace Internal.Query
         command.CommandTimeout = timeout.Value
       End If
 
-      For Each p In query.Parameters
+      Dim count = query.Parameters.Count
+      Dim parameters = New DbParameter(count - 1) {}
+
+      For i = 0 To count - 1
+        Dim p = query.Parameters(i)
+
         Dim parameter = command.CreateParameter()
         parameter.ParameterName = p.Name
 
@@ -203,8 +208,10 @@ Namespace Internal.Query
           parameter.DbType = p.DbType.Value
         End If
 
-        command.Parameters.Add(parameter)
+        parameters(i) = parameter
       Next
+
+      command.Parameters.AddRange(parameters)
 
       m_DbContext.NotifyCommandExecution(command)
 
@@ -397,7 +404,8 @@ Namespace Internal.Query
       FillRelationships(entityInfo, value, declaringValue)
 
       If entityInfo.HasRelatedEntities Then
-        For Each index In entityInfo.RelatedEntities
+        For i = 0 To entityInfo.RelatedEntities.Count - 1
+          Dim index = entityInfo.RelatedEntities(i)
           Dim relatedEntity = entityInfos.Items(index)
           Read(entityInfos, relatedEntity, dataReader, value)
         Next
@@ -472,7 +480,8 @@ Namespace Internal.Query
       End If
 
       If entityInfo.HasRelatedEntities Then
-        For Each index In entityInfo.RelatedEntities
+        For i = 0 To entityInfo.RelatedEntities.Count - 1
+          Dim index = entityInfo.RelatedEntities(i)
           Dim relatedEntity = entityInfos.Items(index)
           Read(entityInfos, relatedEntity, cache, pks, dataReader, value)
         Next
@@ -504,8 +513,8 @@ Namespace Internal.Query
     ''' <param name="declaringValue"></param>
     Private Sub FillRelationships(entityReadInfo As EntityReadInfo, value As Object, declaringValue As Object)
       If entityReadInfo.HasCollectionNavigation Then
-        For Each collectionInitializer In entityReadInfo.CollectionInitializers
-          collectionInitializer(value)
+        For i = 0 To entityReadInfo.CollectionInitializers.Count - 1
+          entityReadInfo.CollectionInitializers(i).Invoke(value)
         Next
       End If
 

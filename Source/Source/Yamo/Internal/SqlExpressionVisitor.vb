@@ -888,14 +888,14 @@ Namespace Internal
         m_CustomEntities = New CustomSqlEntity(count - 1) {}
       End If
 
-      Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
+      Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToArray()
 
       ' NOTE: this will fail for nested ValueTuples, so we are limited to max 7 fields. Is it worth to support nesting?
 
       For i = 0 To count - 1
         Dim arg = node.Arguments(i)
         Dim type = arg.Type
-        Dim entityIndex = entities.IndexOf(type)
+        Dim entityIndex = Array.IndexOf(Of Type)(entities, type)
         Dim isEntity = Not entityIndex = -1
 
         m_CustomEntityIndex = i
@@ -932,10 +932,10 @@ Namespace Internal
       Else
         m_CustomEntities = New CustomSqlEntity(0) {}
 
-        Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToList()
+        Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToArray()
 
         Dim type = node.Type
-        Dim entityIndex = entities.IndexOf(type)
+        Dim entityIndex = Array.IndexOf(Of Type)(entities, type)
         Dim isEntity = Not entityIndex = -1
 
         m_CustomEntityIndex = 0

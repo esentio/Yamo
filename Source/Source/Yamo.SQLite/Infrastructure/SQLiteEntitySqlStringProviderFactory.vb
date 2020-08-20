@@ -26,7 +26,7 @@ Namespace Infrastructure
       Dim part3 = Expression.Constant($" ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)});
 SELECT last_insert_rowid()", GetType(String))
 
-      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, Array.Empty(Of ParameterModifier)())
       Return Expression.Call(concatMethod, part1, tableName, part3)
     End Function
 
@@ -43,7 +43,7 @@ SELECT last_insert_rowid()", GetType(String))
       Dim part1 = Expression.Constant("INSERT INTO ", GetType(String))
       Dim part3 = Expression.Constant($" ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)})", GetType(String))
 
-      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, {})
+      Dim concatMethod = GetType(String).GetMethod("Concat", BindingFlags.Public Or BindingFlags.Static, Nothing, {GetType(String), GetType(String), GetType(String)}, Array.Empty(Of ParameterModifier)())
       Return Expression.Call(concatMethod, part1, tableName, part3)
     End Function
 

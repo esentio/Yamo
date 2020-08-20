@@ -100,59 +100,67 @@
     End Function
 
     Public Overrides Function GetHashCode() As Int32
-      Dim values = New List(Of Object)
+      Dim hashCode = New HashCode()
 
-      values.Add(Me.Id)
-      values.Add(Me.UniqueidentifierColumn)
-      values.Add(Me.UniqueidentifierColumnNull)
-      values.Add(Me.Nvarchar50Column)
-      values.Add(Me.Nvarchar50ColumnNull)
-      values.Add(Me.NvarcharMaxColumn)
-      values.Add(Me.NvarcharMaxColumnNull)
-      values.Add(Me.BitColumn)
-      values.Add(Me.BitColumnNull)
-      values.Add(Me.SmallintColumn)
-      values.Add(Me.SmallintColumnNull)
-      values.Add(Me.IntColumn)
-      values.Add(Me.IntColumnNull)
-      values.Add(Me.BigintColumn)
-      values.Add(Me.BigintColumnNull)
-      values.Add(Me.RealColumn)
-      values.Add(Me.RealColumnNull)
-      values.Add(Me.FloatColumn)
-      values.Add(Me.FloatColumnNull)
-      values.Add(Me.Numeric10and3Column)
-      values.Add(Me.Numeric10and3ColumnNull)
-      values.Add(Me.Numeric15and0Column)
-      values.Add(Me.Numeric15and0ColumnNull)
-      values.Add(Me.DatetimeColumn)
-      values.Add(Me.DatetimeColumnNull)
+      hashCode.Add(Me.Id)
+      hashCode.Add(Me.UniqueidentifierColumn)
+      hashCode.Add(Me.UniqueidentifierColumnNull)
+      hashCode.Add(Me.Nvarchar50Column)
+      hashCode.Add(Me.Nvarchar50ColumnNull)
+      hashCode.Add(Me.NvarcharMaxColumn)
+      hashCode.Add(Me.NvarcharMaxColumnNull)
+      hashCode.Add(Me.BitColumn)
+      hashCode.Add(Me.BitColumnNull)
+      hashCode.Add(Me.SmallintColumn)
+      hashCode.Add(Me.SmallintColumnNull)
+      hashCode.Add(Me.IntColumn)
+      hashCode.Add(Me.IntColumnNull)
+      hashCode.Add(Me.BigintColumn)
+      hashCode.Add(Me.BigintColumnNull)
+      hashCode.Add(Me.RealColumn)
+      hashCode.Add(Me.RealColumnNull)
+      hashCode.Add(Me.FloatColumn)
+      hashCode.Add(Me.FloatColumnNull)
+      hashCode.Add(Me.Numeric10and3Column)
+      hashCode.Add(Me.Numeric10and3ColumnNull)
+      hashCode.Add(Me.Numeric15and0Column)
+      hashCode.Add(Me.Numeric15and0ColumnNull)
+      hashCode.Add(Me.DatetimeColumn)
+      hashCode.Add(Me.DatetimeColumnNull)
 
       If Me.Varbinary50Column Is Nothing Then
-        values.Add(Nothing)
+        hashCode.Add(Of Byte())(Nothing)
       Else
-        values.AddRange(Me.Varbinary50Column.Cast(Of Object))
+        For Each b In Me.Varbinary50Column.Cast(Of Object)
+          hashCode.Add(b)
+        Next
       End If
 
       If Me.Varbinary50ColumnNull Is Nothing Then
-        values.Add(Nothing)
+        hashCode.Add(Of Byte())(Nothing)
       Else
-        values.AddRange(Me.Varbinary50ColumnNull.Cast(Of Object))
+        For Each b In Me.Varbinary50ColumnNull.Cast(Of Object)
+          hashCode.Add(b)
+        Next
       End If
 
       If Me.VarbinaryMaxColumn Is Nothing Then
-        values.Add(Nothing)
+        hashCode.Add(Of Byte())(Nothing)
       Else
-        values.AddRange(Me.VarbinaryMaxColumn.Cast(Of Object))
+        For Each b In Me.VarbinaryMaxColumn.Cast(Of Object)
+          hashCode.Add(b)
+        Next
       End If
 
       If Me.VarbinaryMaxColumnNull Is Nothing Then
-        values.Add(Nothing)
+        hashCode.Add(Of Byte())(Nothing)
       Else
-        values.AddRange(Me.VarbinaryMaxColumnNull.Cast(Of Object))
+        For Each b In Me.VarbinaryMaxColumnNull.Cast(Of Object)
+          hashCode.Add(b)
+        Next
       End If
 
-      Return Helpers.Compare.GetHashCode(values.ToArray())
+      Return hashCode.ToHashCode()
     End Function
 
   End Class

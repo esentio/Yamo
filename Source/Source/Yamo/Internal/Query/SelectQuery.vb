@@ -34,7 +34,7 @@ Namespace Internal.Query
     ''' <param name="sql"></param>
     ''' <param name="parameters"></param>
     ''' <param name="model"></param>
-    Sub New(sql As String, parameters As List(Of SqlParameter), model As SqlModel)
+    Sub New(sql As String, parameters As IReadOnlyList(Of SqlParameter), model As SqlModel)
       MyBase.New(sql, parameters)
       Me.Model = model
     End Sub
