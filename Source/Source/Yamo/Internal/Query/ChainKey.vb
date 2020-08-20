@@ -25,42 +25,32 @@
     ''' </summary>
     ''' <returns></returns>
     Public Overrides Function GetHashCode() As Int32
-      ' using ValueTuple is just simple workaround until .NET becomes System.HashCode
-
       Dim length = m_Pks.Length
 
       If length = 1 Then
         Return If(m_Pks(0) Is Nothing, 0, m_Pks(0).GetHashCode())
       ElseIf length = 2 Then
-        Return (m_Pks(0), m_Pks(1)).GetHashCode()
+        Return HashCode.Combine(m_Pks(0), m_Pks(1))
       ElseIf length = 3 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2)).GetHashCode()
+        Return HashCode.Combine(m_Pks(0), m_Pks(1), m_Pks(2))
       ElseIf length = 4 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3)).GetHashCode()
+        Return HashCode.Combine(m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3))
       ElseIf length = 5 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4)).GetHashCode()
+        Return HashCode.Combine(m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4))
       ElseIf length = 6 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5)).GetHashCode()
+        Return HashCode.Combine(m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5))
       ElseIf length = 7 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6)).GetHashCode()
+        Return HashCode.Combine(m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6))
       ElseIf length = 8 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7)).GetHashCode()
-      ElseIf length = 9 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8)).GetHashCode()
-      ElseIf length = 10 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8), m_Pks(9)).GetHashCode()
-      ElseIf length = 11 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8), m_Pks(9), m_Pks(10)).GetHashCode()
-      ElseIf length = 12 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8), m_Pks(9), m_Pks(10), m_Pks(11)).GetHashCode()
-      ElseIf length = 13 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8), m_Pks(9), m_Pks(10), m_Pks(11), m_Pks(12)).GetHashCode()
-      ElseIf length = 14 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8), m_Pks(9), m_Pks(10), m_Pks(11), m_Pks(12), m_Pks(13)).GetHashCode()
-      ElseIf length = 15 Then
-        Return (m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7), m_Pks(8), m_Pks(9), m_Pks(10), m_Pks(11), m_Pks(12), m_Pks(13), m_Pks(14)).GetHashCode()
+        Return HashCode.Combine(m_Pks(0), m_Pks(1), m_Pks(2), m_Pks(3), m_Pks(4), m_Pks(5), m_Pks(6), m_Pks(7))
       Else
-        Throw New NotSupportedException("Too much joins.")
+        Dim hashCode = New HashCode
+
+        For i = 0 To length - 1
+          hashCode.Add(m_Pks(i))
+        Next
+
+        Return hashCode.ToHashCode()
       End If
     End Function
 

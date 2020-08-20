@@ -25,7 +25,7 @@
     End Function
 
     Public Overrides Function GetHashCode() As Int32
-      Return Helpers.Compare.GetHashCode(Me.Id, Me.ArticleId, Me.Price)
+      Return HashCode.Combine(Me.Id, Me.ArticleId, Me.Price)
     End Function
 
   End Class
