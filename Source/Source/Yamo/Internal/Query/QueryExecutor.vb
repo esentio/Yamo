@@ -69,7 +69,7 @@ Namespace Internal.Query
               reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
 
               If isValueTuple Then
-                customEntityInfos = CustomEntityReadInfo.CreateForGenericType(m_DialectProvider, m_DbContext.Model, resultType)
+                customEntityInfos = CustomEntityReadInfo.CreateForValueTupleType(m_DialectProvider, m_DbContext.Model, resultType)
               Else
                 customEntityInfos = CustomEntityReadInfo.CreateForModelType(m_DialectProvider, m_DbContext.Model, resultType)
               End If
@@ -104,7 +104,7 @@ Namespace Internal.Query
 
       If isValueTuple Then
         reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
-        customEntityInfos = CustomEntityReadInfo.CreateForGenericType(m_DialectProvider, m_DbContext.Model, resultType)
+        customEntityInfos = CustomEntityReadInfo.CreateForValueTupleType(m_DialectProvider, m_DbContext.Model, resultType)
       ElseIf isModel Then
         reader = CustomResultReaderCache.GetResultFactory(Of T)(m_DbContext.Model, resultType)
         customEntityInfos = CustomEntityReadInfo.CreateForModelType(m_DialectProvider, m_DbContext.Model, resultType)

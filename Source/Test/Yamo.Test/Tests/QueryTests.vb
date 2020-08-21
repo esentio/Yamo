@@ -802,5 +802,92 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub QueryOfLargeValueTuple()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      InsertItems(article1, article2, article3)
+
+      Using db = CreateDbContext()
+        ' 7 elements: (Int32, Int32, Int32, Int32, Int32, Int32, Int32)
+        Dim result1 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32))("SELECT 1, 2, 3, 4, 5, 6, Id FROM Article WHERE 1 = 2 ORDER BY Id")
+        Assert.AreEqual(0, result1.Count)
+
+        Dim result2 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32)?)("SELECT 1, 2, 3, 4, 5, 6, Id FROM Article WHERE 1 = 2 ORDER BY Id")
+        Assert.AreEqual(0, result2.Count)
+
+        Dim result3 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32))("SELECT 1, 2, 3, 4, 5, 6, Id FROM Article ORDER BY Id")
+        Assert.AreEqual(3, result3.Count)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 1), result3(0))
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 2), result3(1))
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 3), result3(2))
+
+        Dim result4 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32)?)("SELECT 1, 2, 3, 4, 5, 6, Id FROM Article ORDER BY Id")
+        Assert.AreEqual(3, result4.Count)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 1), result4(0).Value)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 2), result4(1).Value)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 3), result4(2).Value)
+
+        ' 8 elements: (Int32, Int32, Int32, Int32, Int32, Int32, Int32, (Int32))
+        Dim result5 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32))("SELECT 1, 2, 3, 4, 5, 6, 7, Id FROM Article WHERE 1 = 2 ORDER BY Id")
+        Assert.AreEqual(0, result5.Count)
+
+        Dim result6 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32)?)("SELECT 1, 2, 3, 4, 5, 6, 7, Id FROM Article WHERE 1 = 2 ORDER BY Id")
+        Assert.AreEqual(0, result6.Count)
+
+        Dim result7 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32))("SELECT 1, 2, 3, 4, 5, 6, 7, Id FROM Article ORDER BY Id")
+        Assert.AreEqual(3, result7.Count)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 1), result7(0))
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 2), result7(1))
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 3), result7(2))
+
+        Dim result8 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32)?)("SELECT 1, 2, 3, 4, 5, 6, 7, Id FROM Article ORDER BY Id")
+        Assert.AreEqual(3, result7.Count)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 1), result8(0).Value)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 2), result8(1).Value)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 3), result8(2).Value)
+
+        ' 15 elements: (Int32, Int32, Int32, Int32, Int32, Int32, Int32, (Int32, Int32, Int32, Int32, Int32, Int32, Int32, (Article)))
+        Dim result9 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article))($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id x, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()} FROM Article WHERE 1 = 2 ORDER BY Id")
+        Assert.AreEqual(0, result9.Count)
+
+        Dim result10 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article)?)($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id x, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()} FROM Article WHERE 1 = 2 ORDER BY Id")
+        Assert.AreEqual(0, result10.Count)
+
+        Dim result11 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article))($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id x, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()} FROM Article ORDER BY Id")
+        Assert.AreEqual(3, result11.Count)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 1, 10, 11, 12, 13, 14, article1), result11(0))
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 2, 10, 11, 12, 13, 14, article2), result11(1))
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 3, 10, 11, 12, 13, 14, article3), result11(2))
+
+        Dim result12 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article)?)($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id x, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()} FROM Article ORDER BY Id")
+        Assert.AreEqual(3, result12.Count)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 1, 10, 11, 12, 13, 14, article1), result12(0).Value)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 2, 10, 11, 12, 13, 14, article2), result12(1).Value)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 3, 10, 11, 12, 13, 14, article3), result12(2).Value)
+
+        ' 16 elements (Int32, Int32, Int32, Int32, Int32, Int32, Int32, (Int32, Int32, Int32, Int32, Int32, Int32, Int32, (Article, Int32)))
+        Dim result13 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article, Int32))($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id x, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()}, 16 FROM Article WHERE 1 = 2 ORDER BY Id")
+        Assert.AreEqual(0, result13.Count)
+
+        Dim result14 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article, Int32)?)($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id x, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()}, 16 FROM Article WHERE 1 = 2 ORDER BY Id")
+        Assert.AreEqual(0, result14.Count)
+
+        Dim result15 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article, Int32))($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id x, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()}, 16 FROM Article ORDER BY Id")
+        Assert.AreEqual(3, result15.Count)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 1, 10, 11, 12, 13, 14, article1, 16), result15(0))
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 2, 10, 11, 12, 13, 14, article2, 16), result15(1))
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 3, 10, 11, 12, 13, 14, article3, 16), result15(2))
+
+        Dim result16 = db.Query(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article, Int32)?)($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id x, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()}, 16 FROM Article ORDER BY Id")
+        Assert.AreEqual(3, result16.Count)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 1, 10, 11, 12, 13, 14, article1, 16), result16(0).Value)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 2, 10, 11, 12, 13, 14, article2, 16), result16(1).Value)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 3, 10, 11, 12, 13, 14, article3, 16), result16(2).Value)
+      End Using
+    End Sub
+
   End Class
 End Namespace

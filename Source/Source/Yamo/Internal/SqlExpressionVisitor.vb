@@ -882,7 +882,15 @@ Namespace Internal
     ''' <param name="isValueTuple"></param>
     ''' <returns></returns>
     Private Function VisitValueTupleOrAnonymousType(node As NewExpression, isValueTuple As Boolean) As Expression
-      Dim count = node.Arguments.Count
+      Dim args As IReadOnlyList(Of Expression)
+
+      If isValueTuple Then
+        args = FlattenValueTupleArguments(node)
+      Else
+        args = node.Arguments
+      End If
+
+      Dim count = args.Count
 
       If m_InCustomSelectMode Then
         m_CustomEntities = New CustomSqlEntity(count - 1) {}
@@ -893,7 +901,7 @@ Namespace Internal
       ' NOTE: this will fail for nested ValueTuples, so we are limited to max 7 fields. Is it worth to support nesting?
 
       For i = 0 To count - 1
-        Dim arg = node.Arguments(i)
+        Dim arg = args(i)
         Dim type = arg.Type
         Dim entityIndex = Array.IndexOf(Of Type)(entities, type)
         Dim isEntity = Not entityIndex = -1
@@ -920,6 +928,42 @@ Namespace Internal
 
       Return node
     End Function
+
+    ''' <summary>
+    ''' Gets flattened ValueTuple constructor arguments.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function FlattenValueTupleArguments(node As NewExpression) As List(Of Expression)
+      Dim args = New List(Of Expression)
+      AddValueTupleArguments(node, args)
+      Return args
+    End Function
+
+    ''' <summary>
+    ''' Recursively adds ValueTuple arguments to the list.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <param name="allArgs"></param>
+    Private Sub AddValueTupleArguments(node As NewExpression, allArgs As List(Of Expression))
+      Dim args = node.Arguments
+      'Dim args = node.Type.GetGenericArguments()
+      Dim count = args.Count
+
+      If 0 < count Then
+        For i = 0 To count - 2
+          allArgs.Add(args(i))
+        Next
+
+        Dim lastArg = args(count - 1)
+
+        If lastArg.NodeType = ExpressionType.New AndAlso IsValueTuple(lastArg.Type) Then
+          AddValueTupleArguments(DirectCast(lastArg, NewExpression), allArgs)
+        Else
+          allArgs.Add(lastArg)
+        End If
+      End If
+    End Sub
 
     ''' <summary>
     ''' Visits in custom select mode.
@@ -1083,6 +1127,7 @@ Namespace Internal
     ''' <param name="type"></param>
     ''' <returns></returns>
     Private Function IsValueTuple(type As Type) As Boolean
+      ' TODO: SIP - use/move to helpers (also other methods)
       If Not type.IsGenericType Then
         Return False
       End If

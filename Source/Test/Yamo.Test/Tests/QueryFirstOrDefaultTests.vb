@@ -671,5 +671,68 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub QueryFirstOrDefaultOfLargeValueTuple()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      InsertItems(article1, article2, article3)
+
+      Using db = CreateDbContext()
+        ' 7 elements: (Int32, Int32, Int32, Int32, Int32, Int32, Int32)
+        Dim result1 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32))("SELECT 1, 2, 3, 4, 5, 6, Id FROM Article WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of Int32, Int32, Int32, Int32, Int32, Int32, Int32), result1)
+
+        Dim result2 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32)?)("SELECT 1, 2, 3, 4, 5, 6, Id FROM Article WHERE 1 = 2")
+        Assert.IsFalse(result2.HasValue)
+
+        Dim result3 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32))($"SELECT 1, 2, 3, 4, 5, 6, Id FROM Article WHERE Id = {article1.Id}")
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 1), result3)
+
+        Dim result4 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32)?)($"SELECT 1, 2, 3, 4, 5, 6, Id FROM Article WHERE Id = {article1.Id}")
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 1), result4.Value)
+
+        ' 8 elements: (Int32, Int32, Int32, Int32, Int32, Int32, Int32, (Int32))
+        Dim result5 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32))("SELECT 1, 2, 3, 4, 5, 6, 7, Id FROM Article WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of Int32, Int32, Int32, Int32, Int32, Int32, Int32, ValueTuple(Of Int32))(0, 0, 0, 0, 0, 0, 0, New ValueTuple(Of Int32)(0)), result5)
+
+        Dim result6 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32)?)("SELECT 1, 2, 3, 4, 5, 6, 7, Id FROM Article WHERE 1 = 2")
+        Assert.IsFalse(result6.HasValue)
+
+        Dim result7 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32))($"SELECT 1, 2, 3, 4, 5, 6, 7, Id FROM Article WHERE Id = {article1.Id}")
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 1), result7)
+
+        Dim result8 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32)?)($"SELECT 1, 2, 3, 4, 5, 6, 7, Id FROM Article WHERE Id = {article1.Id}")
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 1), result8.Value)
+
+        ' 15 elements: (Int32, Int32, Int32, Int32, Int32, Int32, Int32, (Int32, Int32, Int32, Int32, Int32, Int32, Int32, (Article)))
+        Dim result9 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article))($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()} FROM Article WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of Int32, Int32, Int32, Int32, Int32, Int32, Int32, ValueTuple(Of Int32, Int32, Int32, Int32, Int32, Int32, Int32, ValueTuple(Of Article)))(0, 0, 0, 0, 0, 0, 0, New ValueTuple(Of Int32, Int32, Int32, Int32, Int32, Int32, Int32, ValueTuple(Of Article))(0, 0, 0, 0, 0, 0, 0, New ValueTuple(Of Article)(Nothing))), result9)
+
+        Dim result10 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article)?)($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()} FROM Article WHERE 1 = 2")
+        Assert.IsFalse(result10.HasValue)
+
+        Dim result11 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article))($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()} FROM Article WHERE Id = {article1.Id}")
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 1, 10, 11, 12, 13, 14, article1), result11)
+
+        Dim result12 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article)?)($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()} FROM Article WHERE Id = {article1.Id}")
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 1, 10, 11, 12, 13, 14, article1), result12.Value)
+
+        ' 16 elements (Int32, Int32, Int32, Int32, Int32, Int32, Int32, (Int32, Int32, Int32, Int32, Int32, Int32, Int32, (Article, Int32)))
+        Dim result13 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article, Int32))($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()}, 16 FROM Article WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of Int32, Int32, Int32, Int32, Int32, Int32, Int32, ValueTuple(Of Int32, Int32, Int32, Int32, Int32, Int32, Int32, ValueTuple(Of Article, Int32)))(0, 0, 0, 0, 0, 0, 0, New ValueTuple(Of Int32, Int32, Int32, Int32, Int32, Int32, Int32, ValueTuple(Of Article, Int32))(0, 0, 0, 0, 0, 0, 0, New ValueTuple(Of Article, Int32)(Nothing, 0))), result13)
+
+        Dim result14 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article, Int32)?)($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()}, 16 FROM Article WHERE 1 = 2")
+        Assert.IsFalse(result14.HasValue)
+
+        Dim result15 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article, Int32))($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()}, 16 FROM Article WHERE Id = {article1.Id}")
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 1, 10, 11, 12, 13, 14, article1, 16), result15)
+
+        Dim result16 = db.QueryFirstOrDefault(Of (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Article, Int32)?)($"SELECT 1, 2, 3, 4, 5, 6, 7, 8, Id, 10, 11, 12, 13, 14, {Sql.Model.Columns(Of Article)()}, 16 FROM Article WHERE Id = {article1.Id}")
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, 8, 1, 10, 11, 12, 13, 14, article1, 16), result16.Value)
+      End Using
+    End Sub
+
   End Class
 End Namespace

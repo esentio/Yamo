@@ -98,29 +98,25 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Creates new instances of <see cref="CustomEntityReadInfo"/> for generic type.<br/>
+    ''' Creates new instances of <see cref="CustomEntityReadInfo"/> for (nullable) value tuple type.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="dialectProvider"></param>
     ''' <param name="model"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function CreateForGenericType(dialectProvider As SqlDialectProvider, model As Model, type As Type) As CustomEntityReadInfo()
+    Public Shared Function CreateForValueTupleType(dialectProvider As SqlDialectProvider, model As Model, type As Type) As CustomEntityReadInfo()
       Dim underlyingNullableType = Nullable.GetUnderlyingType(type)
 
       If underlyingNullableType IsNot Nothing Then
         type = underlyingNullableType
       End If
 
-      If Not type.IsGenericType Then
-        Throw New ArgumentException($"Type '{type}' is not generic type.")
-      End If
-
-      Dim args = type.GetGenericArguments()
-      Dim result = New CustomEntityReadInfo(args.Length - 1) {}
+      Dim args = Helpers.Types.GetFlattenedValueTupleGenericArguments(type)
+      Dim result = New CustomEntityReadInfo(args.Count - 1) {}
       Dim readerIndex = 0
 
-      For i = 0 To args.Length - 1
+      For i = 0 To args.Count - 1
         Dim argType = args(i)
 
         If Helpers.Types.IsProbablyModel(argType) Then
