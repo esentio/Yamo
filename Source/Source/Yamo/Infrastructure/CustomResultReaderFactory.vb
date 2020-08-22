@@ -2,9 +2,9 @@
 Imports System.Linq.Expressions
 Imports System.Reflection
 Imports Yamo.Internal
+Imports Yamo.Internal.Helpers
 Imports Yamo.Internal.Query
 Imports Yamo.Internal.Query.Metadata
-Imports Yamo.Metadata
 
 Namespace Infrastructure
 
@@ -16,6 +16,16 @@ Namespace Infrastructure
     Inherits ReaderFactoryBase
 
     ''' <summary>
+    ''' Result type.
+    ''' </summary>
+    Private Enum ResultType
+      SingleValueOrEntity
+      AnonymousType
+      ValueTuple
+      NullableValueTuple
+    End Enum
+
+    ''' <summary>
     ''' Creates result factory.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -25,10 +35,18 @@ Namespace Infrastructure
     Public Shared Function CreateResultFactory(node As Expression, customEntities As CustomSqlEntity()) As Object
       If node.NodeType = ExpressionType.New Then
         ' ValueTuple or anonymous type
-        Return CreateResultFactory(customEntities, DirectCast(node, NewExpression).Constructor)
+        Dim result = node.Type
+
+        If Helpers.Types.IsValueTupleOrNullableValueTuple(result) Then
+          Dim valueTupleTypeInfo = Helpers.Types.GetValueTupleTypeInfo(result)
+          Return CreateResultFactory(ResultType.ValueTuple, customEntities, valueTupleTypeInfo:=valueTupleTypeInfo)
+        Else
+          Dim resultConstructorInfo = DirectCast(node, NewExpression).Constructor
+          Return CreateResultFactory(ResultType.AnonymousType, customEntities, resultConstructorInfo:=resultConstructorInfo)
+        End If
       Else
         ' single value or entity
-        Return CreateResultFactory(customEntities, Nothing)
+        Return CreateResultFactory(ResultType.SingleValueOrEntity, customEntities)
       End If
     End Function
 
@@ -36,44 +54,23 @@ Namespace Infrastructure
     ''' Creates result factory.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="resultType"></param>
+    ''' <param name="result"></param>
     ''' <returns></returns>
-    Public Shared Function CreateResultFactory(resultType As Type) As Object
-      Dim resultConstructorInfo As ConstructorInfo = Nothing
-      Dim nullableValueConstructorInfo As ConstructorInfo = Nothing
-      Dim customEntities As CustomSqlEntity()
-
+    Public Shared Function CreateResultFactory(result As Type) As Object
       ' NOTE: right now this should only be called from Query/QueryFirstOrDefault and only following types are supported:
       ' - nullable and non-nullable ValueTuples: with basic value-types or model entities as a field value
       ' - model entities
 
-      Dim underlyingNullableType = Nullable.GetUnderlyingType(resultType)
-
-      If underlyingNullableType Is Nothing Then
-        If resultType.IsGenericType Then
-          ' ValueTuple
-          Dim args = resultType.GetGenericArguments()
-          resultConstructorInfo = resultType.GetConstructor(args)
-          customEntities = args.Select(AddressOf CreateCustomSqlEntity).ToArray()
-        Else
-          ' entity model
-          customEntities = {CreateCustomSqlEntity(resultType, 0)}
-        End If
-
+      If Helpers.Types.IsValueTupleOrNullableValueTuple(result) Then
+        ' ValueTuple
+        Dim valueTupleTypeInfo = Helpers.Types.GetValueTupleTypeInfo(result)
+        Dim customEntities = valueTupleTypeInfo.FlattenedArguments.Select(AddressOf CreateCustomSqlEntity).ToArray()
+        Return CreateResultFactory(ResultType.ValueTuple, customEntities, valueTupleTypeInfo:=valueTupleTypeInfo)
       Else
-        resultConstructorInfo = resultType.GetConstructor(resultType.GetGenericArguments())
-
-        If underlyingNullableType.IsGenericType Then
-          ' nullable ValueTuple
-          Dim args = underlyingNullableType.GetGenericArguments()
-          nullableValueConstructorInfo = underlyingNullableType.GetConstructor(args)
-          customEntities = args.Select(AddressOf CreateCustomSqlEntity).ToArray()
-        Else
-          Throw New NotSupportedException($"Type '{resultType}' is not supported.")
-        End If
+        ' entity model
+        Dim customEntities = {CreateCustomSqlEntity(result, 0)}
+        Return CreateResultFactory(ResultType.SingleValueOrEntity, customEntities)
       End If
-
-      Return CreateResultFactory(customEntities, resultConstructorInfo, nullableValueConstructorInfo)
     End Function
 
     ''' <summary>
@@ -97,11 +94,12 @@ Namespace Infrastructure
     ''' <summary>
     ''' Creates result factory.
     ''' </summary>
+    ''' <param name="resultType"></param>
     ''' <param name="customEntities"></param>
     ''' <param name="resultConstructorInfo"></param>
-    ''' <param name="nullableValueConstructorInfo"></param>
+    ''' <param name="valueTupleTypeInfo"></param>
     ''' <returns></returns>
-    Private Shared Function CreateResultFactory(customEntities As CustomSqlEntity(), Optional resultConstructorInfo As ConstructorInfo = Nothing, Optional nullableValueConstructorInfo As ConstructorInfo = Nothing) As Object
+    Private Shared Function CreateResultFactory(resultType As ResultType, customEntities As CustomSqlEntity(), Optional resultConstructorInfo As ConstructorInfo = Nothing, Optional valueTupleTypeInfo As ValueTupleTypeInfo = Nothing) As Object
       Dim readerParam = Expression.Parameter(GetType(IDataReader), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
       Dim customEntityInfosParam = Expression.Parameter(GetType(CustomEntityReadInfo()), "customEntityInfos")
       Dim parameters = {readerParam, customEntityInfosParam}
@@ -173,25 +171,44 @@ Namespace Infrastructure
         arguments.Add(valueVar)
       Next
 
-      If resultConstructorInfo Is Nothing Then
-        ' single value or entity
-        expressions.Add(variables(0))
-      Else
-        If nullableValueConstructorInfo Is Nothing Then
-          ' ValueTuple or anonymous type
-          Dim newExp = Expression.[New](resultConstructorInfo, arguments)
-          expressions.Add(newExp)
-        Else
-          ' nullable ValueTuple
-          Dim newExp = Expression.[New](resultConstructorInfo, Expression.[New](nullableValueConstructorInfo, arguments))
-          expressions.Add(newExp)
-        End If
-      End If
+      Select Case resultType
+        Case ResultType.SingleValueOrEntity
+          expressions.Add(variables(0))
+        Case ResultType.AnonymousType
+          expressions.Add(Expression.[New](resultConstructorInfo, arguments))
+        Case ResultType.ValueTuple, ResultType.NullableValueTuple
+          expressions.Add(CreateValueTupleConstructor(valueTupleTypeInfo.CtorInfos, arguments, 0, 0))
+        Case Else
+          Throw New NotSupportedException($"Result type '{resultType}' is not supported.")
+      End Select
 
       Dim body = Expression.Block(variables, expressions)
 
       Dim reader = Expression.Lambda(body, parameters)
       Return reader.Compile()
+    End Function
+
+    ''' <summary>
+    ''' Creates value tuple constructor.
+    ''' </summary>
+    ''' <param name="ctorInfos"></param>
+    ''' <param name="arguments"></param>
+    ''' <param name="ctorIndex"></param>
+    ''' <param name="argumentIndex"></param>
+    ''' <returns></returns>
+    Private Shared Function CreateValueTupleConstructor(ctorInfos As List(Of CtorInfo), arguments As List(Of Expression), ctorIndex As Int32, argumentIndex As Int32) As Expression
+      Dim ctorInfo = ctorInfos(ctorIndex)
+
+      If ctorIndex = ctorInfos.Count - 1 Then
+        ' last constructor
+        Dim args = arguments.Skip(argumentIndex).Take(ctorInfo.ParameterCount)
+        Return Expression.[New](ctorInfo.ConstructorInfo, args)
+      Else
+        Dim take = ctorInfo.ParameterCount - 1
+        Dim args = arguments.Skip(argumentIndex).Take(take).ToList()
+        args.Add(CreateValueTupleConstructor(ctorInfos, arguments, ctorIndex + 1, argumentIndex + take))
+        Return Expression.[New](ctorInfo.ConstructorInfo, args)
+      End If
     End Function
 
   End Class

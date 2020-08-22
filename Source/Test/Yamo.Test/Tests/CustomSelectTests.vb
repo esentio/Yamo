@@ -1253,6 +1253,77 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub CustomSelectOfLargeValueTuple()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      InsertItems(article1, article2, article3)
+
+      Using db = CreateDbContext()
+        ' select large ValueTuple
+        Dim result1 = db.From(Of Article).
+                         Where(Function(a) a.Id = article1.Id).
+                         Select(Function(a) (1, 2, 3, 4, 5, 6, 7, Article:=a)).
+                         FirstOrDefault()
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, article1), result1)
+
+        Dim result2 = db.From(Of Article).
+                         Where(Function(a) a.Id = article1.Id).
+                         Select(Function(a) (1, 2, 3, 4, 5, 6, 7, Article:=a, 9, 10, 11, 12, 13, 14, 15, 16)).
+                         FirstOrDefault()
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, article1, 9, 10, 11, 12, 13, 14, 15, 16), result2)
+
+        ' select large ValueTuple, but no row is returned
+        Dim result3 = db.From(Of Article).
+                         Where(Function(a) a.Id = article1.Id).
+                         Select(Function(a) (1, 2, 3, 4, 5, 6, 7, Article:=a)).
+                         FirstOrDefault()
+        Assert.AreEqual(New ValueTuple(Of Int32, Int32, Int32, Int32, Int32, Int32, Int32, ValueTuple(Of Article))(1, 2, 3, 4, 5, 6, 7, New ValueTuple(Of Article)(article1)), result3)
+
+        Dim result4 = db.From(Of Article).
+                         Where(Function(a) a.Id = -1).
+                         Select(Function(a) (1, 2, 3, 4, 5, 6, 7, Article:=a, 9, 10, 11, 12, 13, 14, 15, 16)).
+                         FirstOrDefault()
+        Assert.AreEqual(New ValueTuple(Of Int32, Int32, Int32, Int32, Int32, Int32, Int32, ValueTuple(Of Article, Int32, Int32, Int32, Int32, Int32, Int32, ValueTuple(Of Int32, Int32)))(0, 0, 0, 0, 0, 0, 0, New ValueTuple(Of Article, Int32, Int32, Int32, Int32, Int32, Int32, ValueTuple(Of Int32, Int32))(Nothing, 0, 0, 0, 0, 0, 0, New ValueTuple(Of Int32, Int32)(0, 0))), result4)
+
+        ' select large ValueTuples
+        Dim result5 = db.From(Of Article).
+                         OrderBy(Function(a) a.Id).
+                         Select(Function(a) (1, 2, 3, 4, 5, 6, 7, Article:=a)).
+                         ToList()
+        Assert.AreEqual(3, result5.Count)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, article1), result5(0))
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, article2), result5(1))
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, article3), result5(2))
+
+        Dim result6 = db.From(Of Article).
+                         OrderBy(Function(a) a.Id).
+                         Select(Function(a) (1, 2, 3, 4, 5, 6, 7, Article:=a, 9, 10, 11, 12, 13, 14, 15, 16)).
+                         ToList()
+        Assert.AreEqual(3, result6.Count)
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, article1, 9, 10, 11, 12, 13, 14, 15, 16), result6(0))
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, article2, 9, 10, 11, 12, 13, 14, 15, 16), result6(1))
+        Assert.AreEqual((1, 2, 3, 4, 5, 6, 7, article3, 9, 10, 11, 12, 13, 14, 15, 16), result6(2))
+
+        ' select large ValueTuples, but no row is returned
+        Dim result7 = db.From(Of Article).
+                         Where(Function(a) a.Id = -1).
+                         OrderBy(Function(a) a.Id).
+                         Select(Function(a) (1, 2, 3, 4, 5, 6, 7, Article:=a)).
+                         ToList()
+        Assert.AreEqual(0, result7.Count)
+
+        Dim result8 = db.From(Of Article).
+                         Where(Function(a) a.Id = -1).
+                         OrderBy(Function(a) a.Id).
+                         Select(Function(a) (1, 2, 3, 4, 5, 6, 7, Article:=a, 9, 10, 11, 12, 13, 14, 15, 16)).
+                         ToList()
+        Assert.AreEqual(0, result8.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub CustomSelectOfValueTupleWithMultipleEntities()
       Dim article1 = Me.ModelFactory.CreateArticle(1)
       Dim article2 = Me.ModelFactory.CreateArticle(2)
