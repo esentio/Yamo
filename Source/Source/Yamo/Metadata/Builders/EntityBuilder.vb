@@ -42,6 +42,7 @@ Namespace Metadata.Builders
     ''' Configures the database table name that the entity maps to.
     ''' </summary>
     ''' <param name="name"></param>
+    ''' <param name="schema"></param>
     ''' <returns></returns>
     Public Function ToTable(name As String, schema As String) As EntityBuilder(Of TEntity)
       m_Entity.TableName = name
