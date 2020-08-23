@@ -1446,7 +1446,7 @@ General goal is to make Yamo as fast as possible. For that purpose - like in oth
 
 Current benchmarks are promising. But still, there is a place for improvements :-)
 
-Below is comparison between Yamo, Dapper and EF Core (full reports [here](tree/master/Benchmarks)):
+Below is comparison between Yamo, Dapper and EF Core (full reports [here](../../tree/master/Benchmarks)):
 
 ``` ini
 BenchmarkDotNet=v0.12.1, OS=Windows 10.0.18363.959 (1909/November2018Update/19H2)
@@ -1455,7 +1455,7 @@ Intel Core i7 CPU 950 3.07GHz (Nehalem), 1 CPU, 8 logical and 4 physical cores
   [Host]     : .NET Core 3.1.2 (CoreCLR 4.700.20.6602, CoreFX 4.700.20.6702), X64 RyuJIT
   DefaultJob : .NET Core 3.1.2 (CoreCLR 4.700.20.6602, CoreFX 4.700.20.6702), X64 RyuJIT
 ```
-####Select 1 record
+#### Select 1 record
 
 | Method                          |     Mean | Ratio | Allocated |
 | ------------------------------- | -------: | ----: | --------: |
@@ -1465,7 +1465,7 @@ Intel Core i7 CPU 950 3.07GHz (Nehalem), 1 CPU, 8 logical and 4 physical cores
 | EF Core (no tracking)           | 551.8 μs |  4.43 |  36.45 KB |
 | EF Core                         | 644.1 μs |  5.31 |  38.23 KB |
 
-####Select 500 records one by one
+#### Select 500 records one by one
 
 | Method                |      Mean | Ratio | Allocated |
 | --------------------- | --------: | ----: | --------: |
@@ -1475,7 +1475,7 @@ Intel Core i7 CPU 950 3.07GHz (Nehalem), 1 CPU, 8 logical and 4 physical cores
 | EF Core               | 147.72 ms |  1.77 |   7.25 MB |
 | EF Core (no tracking) | 154.32 ms |  1.69 |   6.78 MB |
 
-####Select list of 1000 records
+#### Select list of 1000 records
 
 | Method                |      Mean | Ratio |  Allocated |
 | --------------------- | --------: | ----: | ---------: |
@@ -1485,7 +1485,7 @@ Intel Core i7 CPU 950 3.07GHz (Nehalem), 1 CPU, 8 logical and 4 physical cores
 | EF Core (no tracking) |  4.944 ms |  1.34 |   434.3 KB |
 | EF Core               | 12.951 ms |  4.85 | 1416.51 KB |
 
-####Select list of 1000 records with 1:1 join
+#### Select list of 1000 records with 1:1 join
 
 | Method                |      Mean | Ratio |  Allocated |
 | --------------------- | --------: | ----: | ---------: |
