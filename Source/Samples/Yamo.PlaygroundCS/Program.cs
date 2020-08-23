@@ -19,7 +19,8 @@ namespace Yamo.PlaygroundCS
             m_Connection.Open();
 
             //Test1();
-            //Test2();
+            Test2();
+            Test2b();
             //Test3();
             //Test4();
             //Test5();
@@ -60,8 +61,8 @@ namespace Yamo.PlaygroundCS
             //Test38();
             //Test39();
             //Test40();
-            Test41();
-            Test42();
+            //Test41();
+            //Test42();
         }
 
         public static MyContext CreateContext()
@@ -94,7 +95,25 @@ namespace Yamo.PlaygroundCS
             using (var db = CreateContext())
             {
                 var login = "foo";
-                var affectedRows = db.Execute($"DELETE FROM [User] WHERE Login = {login}");
+                var affectedRows1 = db.Execute($"DELETE FROM [User] WHERE Login = {login}");
+
+                login = "boo";
+                var affectedRows2 = db.Execute("DELETE FROM [User] WHERE Login = {0}", login);
+            }
+        }
+
+        public static void Test2b()
+        {
+            using (var db = CreateContext())
+            {
+                var login = "foo";
+
+                // NEVER DO THIS!!! sql variable is string and login is not converted to SQL parameter
+                //var sql = $"DELETE FROM [User] WHERE Login = {login}";
+                //var affectedRows = db.Execute(sql);
+
+                FormattableString sql = $"DELETE FROM [User] WHERE Login = {login}";
+                var affectedRows = db.Execute(sql);
             }
         }
 
@@ -326,8 +345,10 @@ namespace Yamo.PlaygroundCS
         {
             using (var db = CreateContext())
             {
+                var value = "My awesome blog post";
+
                 var result = db.From<Blog>()
-                               .Where("Title = 'My awesome blog post' AND Deleted IS NULL")
+                               .Where("Title = {0} AND Deleted IS NULL", value)
                                .SelectAll().ToList();
             }
         }
@@ -654,7 +675,7 @@ namespace Yamo.PlaygroundCS
                     {Yamo.Sql.Model.Columns<Label>("lg")}
                     FROM Article AS a
                     LEFT JOIN Label AS le ON a.Id = le.Id AND le.Language = 'en'
-                    LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = 'ger'
+                    LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = 'de'
                     WHERE a.Id = 1");
             }
         }

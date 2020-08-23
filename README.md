@@ -10,8 +10,6 @@ There are 3 NuGet packages available:
 - [Yamo.SQLite](https://www.nuget.org/packages/Yamo.SQLite/) (support for SQLite)
 - [Yamo.SqlServer](https://www.nuget.org/packages/Yamo.SqlServer/) (support for MS SQL Server)
 
-Yamo has no external dependencies.
-
 ## What's new
 
 You can find [release notes here](https://github.com/esentio/Yamo/releases).
@@ -34,11 +32,11 @@ All examples below are in C# though. I understand it is more convenient for gene
 
 **Why another (micro) ORM? There is plenty of them already.**
 
-I know, but each of them lacks certain feature(s) that I would like them to have. On the contrary, Yamo might not be the right tool for you either. Just check the features and see. There are similarities with tools like EF Core or OrmLite, but Yamo has (will have) its own unique features.
+I know, but each of them lacks certain feature(s) that I would like them to have. On the contrary, Yamo might not be the right tool for you either. Just check the features and see. There are similarities with tools like EF Core or OrmLite, but Yamo has its own unique features.
 
-**What SQLite provider could I use?**
+**What ADO.NET providers does Yamo require?**
 
-You should be able to use any ADO.NET SQLite provider, but I tested it only with Microsoft.Data.Sqlite so far.
+You should be able to use any provider. But it is tested with Microsoft.Data.Sqlite and Microsoft.Data.SqlClient.
 
 **It's not yet in version 1.0. Can I use it already?** 
 
@@ -63,6 +61,7 @@ Yamo might be right tool for you when you aim for:
 - Map your POCO classes 1:1 to database tables.
 - Query POCOs, even with 1:N and M:N relationships.
 - Cross platform.
+- Performance.
 - You didn't leave immediately after you found out about VB.NET.
 
 On the contrary, you might want to look elsewhere when you need:
@@ -111,25 +110,40 @@ using (var db = CreateContext())
 }
 ```
 
-Ok, that's nothing special. `DbCommand` can do almost the same. But it is dangerous to build your queries from user entered values.
-
-So instead of passing `string`, we can pass `FormattableString` with parameters:
+For parametrized query we can use string interpolation and pass `FormattableString` or pass string format with parameters:
 
 ```c#
 using (var db = CreateContext())
 {
     var login = "foo";
-    var affectedRows = db.Execute($"DELETE FROM [User] WHERE Login = {login}");
+    var affectedRows1 = db.Execute($"DELETE FROM [User] WHERE Login = {login}");
+
+    login = "boo";
+    var affectedRows2 = db.Execute("DELETE FROM [User] WHERE Login = {0}", login);
 }
 ```
 
-The result will be following query:
+Both options will translate to the following query:
 
 ```sql
 DELETE FROM [User] WHERE Login = @p0
 ```
 
-Every argument is converted to `DbParameter`, so we are safe from SQL injections.
+Every argument is converted to `DbParameter`, so we are safe from SQL injections. However, if string interpolation is used, make sure you really pass `FormattableString` and not `String`:
+
+````cs
+using (var db = CreateContext())
+{
+    var login = "foo";
+
+    // NEVER DO THIS!!! sql variable is string and login is not converted to SQL parameter
+    //var sql = $"DELETE FROM [User] WHERE Login = {login}";
+    //var affectedRows = db.Execute(sql);
+
+    FormattableString sql = $"DELETE FROM [User] WHERE Login = {login}";
+    var affectedRows = db.Execute(sql);
+}
+````
 
 #### Transactions
 
@@ -212,7 +226,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 If table name equals class name and if column name equals property name, all you need to do is to call `Entity` and `Property` methods respectively. If the names differ, you must specify corresponding database names:
 
 ```c#
-modelBuilder.Entity<User>().ToTable("UserTable");
+modelBuilder.Entity<User>().ToTable("UserTable", "MySchema"); // schema is optional
 modelBuilder.Entity<User>().Property(u => u.Login).HasColumnName("UserLogin");
 ```
 
@@ -224,7 +238,7 @@ Right now, you can map to properties of following types: `Guid`, `Guid`, `Guid?`
 
 Database nullability is infered by property type. However, it is not possible to infer nullability for `string` and `byte[]`, since these are reference types and could always be `null`. Therefore, you should call `IsRequired` builder method for string and binary `NOT NULL` columns. Also, make sure such properties don't have `null` values when doing inserts or updates.
 
-It is important to note that you need to explicitly call `Entity` and `Property` builder methods for all your entities and all their mapped properties. Unmapped properties will be ignored by Yamo. An attempt to pass non-defined entity will cause a runtime exception.
+It is important to note that you need to explicitly call `Entity` and `Property` builder methods for all your entities and all their mapped properties. Unmapped properties will be ignored by Yamo. An attempt to pass non-defined entity will cause runtime exception.
 
 Besides properties that maps directly to database columns, you can also define navigation properties. They define how entities relate to each other. You can have either reference navigation property which holds reference to single related entity (1:1 relationship) or collection navigation property that holds reference to multiple related entities (1:N or M:N relationships).
 
@@ -255,7 +269,6 @@ Unlike in EF Core, there is currently no support for inverse navigation properti
 
 ###### Planned features:
 
-- [#8](https://github.com/esentio/Yamo/issues/8) Support for database schema.
 - [#10](https://github.com/esentio/Yamo/issues/10) Support mapping to various property types (using convert functions).
 - [#12](https://github.com/esentio/Yamo/issues/12) Create/detele table for model entity.
 - [#13](https://github.com/esentio/Yamo/issues/13) Support for inverse relationship navigation.
@@ -353,11 +366,13 @@ WHERE
 [Id] = @p4
 ```
 
+If you need to override this behavior, just set `forceUpdateAllFields` parameter of `Update` method to `true` and `UPDATE` statement with all columns will be generated.
+
 After operations like insert, update or select, `ResetDbPropertyModifiedTracking` is called automatically, so you don't need to worry about that.
 
 Note that if  `IsAnyDbPropertyModified` call returns `false`, no SQL `UPDATE` statement is executed.
 
-Parameterless `Update` method returns an instance of `UpdateSqlExpression`, which allows you to build `UPDATE` command and update more than one object at once. Just don't forget to call `Execute` method at the end.
+Parameterless `Update` method returns an instance of `UpdateSqlExpression`, which allows you to build `UPDATE` command and update more than one record at once. Just don't forget to call `Execute` method at the end.
 
 ````c#
 using (var db = CreateContext())
@@ -382,7 +397,6 @@ You can use complex expressions in `Set` or `Where` clauses. Details are discuss
 
 ###### Planned features:
 
-- [#18](https://github.com/esentio/Yamo/issues/18) Support for optional force update of all fields in `IHasDbPropertyModifiedTracking` objects.
 - [#16](https://github.com/esentio/Yamo/issues/16) Batch updates.
 - [#19](https://github.com/esentio/Yamo/issues/19) Support for upsert.
 
@@ -399,7 +413,7 @@ using (var db = CreateContext())
 }
 ```
 
-Similar to updates, parameterless `Delete` allows you to build delete query and delete more than one object at once.
+Similar to updates, parameterless `Delete` allows you to build delete query and delete more than one record at once.
 
 ```c#
 using (var db = CreateContext())
@@ -657,10 +671,13 @@ However, it's still not enough when we need to use specific SQL functions in our
 Yamo's attempt to solve this problem are SQL helpers. Let's start with an example:
 
 ```c#
+using Sql = Yamo.Sql;
+...
+
 using (var db = CreateContext())
 {
     var result = db.From<Blog>()
-                   .Where(b => Sql.DateDiff.SameDay(b.Created, DateTime.Now))
+                   .Where(b => Sql.DateTime.SameDay(b.Created, DateTime.Now))
                    .SelectAll().ToList();
 }
 ```
@@ -671,78 +688,81 @@ This will be translated to:
 SELECT [T0].[Id], [T0].[Title], [T0].[Content], [T0].[Created], [T0].[CreatedUserId], [T0].[Modified], [T0].[ModifiedUserId], [T0].[Deleted], [T0].[DeletedUserId] FROM [Blog] [T0] WHERE (DATEDIFF(day, [T0].[Created], @p0) = 0)
 ```
 
-`DateDiff` is an SQL helper class - descendant from `SqlHelper`. It implements bunch of static methods like `SameDay`, `SameMonth`, etc. When `Where` predicate is parsed and call to SQL helper is found, Yamo first translates all arguments of helper method. In this case `b.Created` will become `"[T0].[Created]"` and `DateTime.Now` will be `@p0`. Then it asks helper class what the final SQL chunk looks like. In our example, following string is returned: `DATEDIFF(day, {0}, {1}) = 0`. This is then used in `String.Format` call and `{0}` and `{1}` placeholders are substituted with actual translated values.
+`DateTime` is an SQL helper class - descendant from `SqlHelper`. It implements bunch of static methods like `SameDay`, `SameMonth`, etc. When `Where` predicate is parsed and call to SQL helper is found, Yamo asks helper class what the final SQL chunk should look like (string format) and how to convert helper method arguments (to become string format parameters).
 
-Unfortunatelly, there are not many built-in SQL helpers yet. Also, `DateDiff` implements only few `SameXYZ` methods (not SARGable, sorry), so you cannot get e.g. result of `DATEDIFF` call. Of course, more built-in helpers are planned in the future. Here is list of currently available:
+In this case `b.Created` will become `[T0].[Created]`, `DateTime.Now` will be `@p0` and `"DATEDIFF(day, {0}, {1}) = 0"` string format will be used.
+
+Below is the list of currently available and built-in SQL helpers:
 
 | Class       | Available methods                                            |
 | ----------- | ------------------------------------------------------------ |
-| `DateDiff`  | `SameYear`, `SameQuarter`, `SameMonth`, `SameDay`, `SameHour`, `SameMinute`, `SameSecond`, `SameMillisecond` |
+| `DateTime`  | `GetCurrentDateTime`, `GetCurrentDate`, `GetDate`, `SameYear`, `SameQuarter`, `SameMonth`, `SameDay`, `SameHour`, `SameMinute`, `SameSecond`, `SameMillisecond` |
 | `Aggregate` | `Count`, `CountDistinct`, `Sum`, `SumDistinct`, `Avg`, `AvgDistinct`, `Stdev`, `StdevDistinct`, `Min`, `Max` |
+| `Exp`       | `As`, `Raw`, `Coalesce`, `IsNull`, `IfNull`, `NullIf`, `IIf` |
+| `Model`     | `Columns`, `Column`, `Table`                                 |
 
-Fortunatelly, you can implement your own SQL helpers already! All you need to do is: 1.) to inherit from `SqlHelper` 2.) overload `GetSqlFormat` static method 3.) write you own (static) helper methods.
+You also can implement your own SQL helpers. All you need to do is inherit from `SqlHelper`, write you own (static) helper methods and overload `GetSqlFormat` static method.
 
-When call to any static method of `SqlHelper` descendant is detected, Yamo translates it to SQL instead of evaluating the call.
+When call to any static method of `SqlHelper` descendant is detected, Yamo translates it to SQL instead of evaluating the method call.
 
-Here is a simple implementation of our `DateDiff` helper:
+As an example, here is the implementation of our `DateTime` helper:
 
 ```c#
-public class DateDiff : SqlHelper
+public class DateTime : SqlHelper
 {
 
-    public static bool SameYear(DateTime date1, DateTime date2)
+    public static bool SameYear(System.DateTime date1, System.DateTime date2)
     {
         throw new Exception("This method is not intended to be called directly.");
     }
 
-    public static bool SameQuarter(DateTime date1, DateTime date2)
+    public static bool SameQuarter(System.DateTime date1, System.DateTime date2)
     {
         throw new Exception("This method is not intended to be called directly.");
     }
 
     // ...
 
-    public new static string GetSqlFormat(MethodInfo method, SqlFormatter formatter)
+    public static new SqlFormat GetSqlFormat(MethodCallExpression method, SqlDialectProvider dialectProvider)
     {
-        switch (method.Name)
+        switch (method.Method.Name)
         {
-            case nameof(DateDiff.SameYear):
-                return "DATEDIFF(year, {0}, {1}) = 0";
-            case nameof(DateDiff.SameQuarter):
-                return "DATEDIFF(quarter, {0}, {1}) = 0";
+            case nameof(DateTime.SameYear):
+                return new SqlFormat("DATEDIFF(year, {0}, {1}) = 0", method.Arguments);
+            case nameof(DateTime.SameQuarter):
+                return new SqlFormat("DATEDIFF(quarter, {0}, {1}) = 0", method.Arguments);
             // ...
             default:
-                throw new NotSupportedException($"Method '{method.Name}' is not supported.");
+                throw new NotSupportedException($"Method '{method.Method.Name}' is not supported.");
         }
     }
 }
 ```
 
-Don't worry about implementing the methods, they are never called (remember, you pass `Expression<Func<T, bool>>`, not `Func<T, bool>` to `Where`). Of course you can implement them anyway and use them as your .NET helper methods if you want.
+Don't worry about actually implementing the methods. They are never called (remember, you pass `Expression<Func<T, bool>>`, not `Func<T, bool>` to `Where`). Of course you can implement them anyway and use them as your .NET helper methods if you want.
 
-Right now there is a limitation though. Returned SQL is platform specific: `DATEDIFF` doesn't work in SQLite. There is a way how to write platform independent helpers, but the API is still little clumsy so you need to stick with writing your helpers twice for the moment (if you need them in both MS SQL Server and SQLite databases).
+If the helper produces platform specific SQL and you need to support both MS SQL Server and SQLite databases, it is recommended to do the following. Create one common helper class and then platform specific helper classes. Inheriting them from common helper class is not required, but it is recommended. Register platform specific helpers with `SqlDialectProvider.RegisterDialectSpecificSqlHelper<TSqlHelper, TDialectSqlHelper>()` method. When helper method of the main class is used in the query, Yamo will actually call `GetSqlFormat()` for the particular platform.
 
-Note: built-in `DateDiff` is actually platform independent and calling `SameDate` in SQLite will use `(strftime('%Y-%m-%d', {0}) = strftime('%Y-%m-%d', {1}))` format string.
+That is also the case of built-in `DateTime` helper. Calling `SameDay` for SQLite will return `"(strftime('%Y-%m-%d', {0}) = strftime('%Y-%m-%d', {1}))"` format string, since `DATEDIFF` doesn't work in SQLite.
 
-###### Planned features:
-
-- [#23](https://github.com/esentio/Yamo/issues/23) Better API for SQL helpers.
-- [#21](https://github.com/esentio/Yamo/issues/21) Add more built-in SQL helpers.
+You don't need to implement a helper for each call of native SQL. Goal is not to blindly port every SQL function, but to provide additional value and/or convenience. For "one time job" you can simply write chunks of SQL with `Exp.Raw<>()` method or use raw SQL string in your clauses.
 
 ##### Raw SQL
 
-If .NET expressions and SQL helpers are still not enough, you can always write your condition as raw SQL string:
+If .NET expressions and SQL helpers are still not enough, you can always write your condition using raw SQL string:
 
 ```c#
 using (var db = CreateContext())
 {
+    var value = "My awesome blog post";
+
     var result = db.From<Blog>()
-                   .Where("Title = 'My awesome blog post' AND Deleted IS NULL")
+                   .Where("Title = {0} AND Deleted IS NULL", value)
                    .SelectAll().ToList();
 }
 ```
 
-But better way is to use `FormattableString` instead:
+Or `FormattableString`, which gives you even more power:
 
 ```c#
 using (var db = CreateContext())
@@ -955,7 +975,7 @@ using (var db = CreateContext())
 }
 ```
 
-We explicitly instructed Yamo to fill `Article.Label` property with joined `Label` entity, although it wasn't necessary in this particular case.
+We explicitly instructed Yamo to fill `Article.Label` property with joined `Label` entity, although it wasn't necessary in this particular case (because of the model definition).
 
 Here is an example where using `As` hint is necessary, because we are joining the same table twice:
 
@@ -997,7 +1017,7 @@ using (var db = CreateContext())
 }
 ```
 
-Because `Article.Parts` is marked as collection navigation property, it is filled with related `ArticlePart` entities. Result then contains only unique `Article` objects.
+Because `Article.Parts` is marked as a collection navigation property, it is filled with related `ArticlePart` entities. Result then contains only unique `Article` objects.
 
 Ok, how about something more complex?
 
@@ -1043,7 +1063,7 @@ using (var db = CreateContext())
 
 We just queried data using three 1:1 relationships (`Label`), one 1:N relationship (`Article` - `ArticlePart`) and one M:N relationship (`Article` - `ArticleCategory` - `Category`). How cool is that?
 
-You can nest 1:N and M:N relationships - Yamo will group records correctly based on their primary key values. This is important to know the consequences. For example if we drop `j.T2.Language == lang` condition in the example above and our database contains english and german translations, `Article` result set will be doubled, because half of them will have english `Label` set and half of them german. But every `Article` will contain the same `Categories` and `Parts`. If we dropped `j.T4.Language == lang` condition instead, `Article` and `Categories` will remain the same, but all `Parts` in every `Article` will contain twice as much records - half of them with english `Label` and half of them with german.
+You can nest 1:N and M:N relationships - Yamo will group records correctly based on their primary key values. This is important to know the consequences. For example if we drop `j.T2.Language == lang` condition in the example above and our database contains english and german translations, `Article` result set will be doubled, because half of them will have english `Label` set and half of them german. But every `Article` will contain the same `Categories` and `Parts`. If we dropped `j.T4.Language == lang` condition instead, `Article` and `Categories` will remain the same, but all `Parts` in every `Article` will contain twice as many records - half of them with english `Label` and half of them with german.
 
 Note that if the resultset contains multiple copies of the same entity (same = same primary key value), Yamo always creates new object instance for each processed row. If in our example two `Article`s  belong to the same `Category`, both will contain the same `Category` in their `Categories` property. But it won't be the same object instance.
 
@@ -1057,7 +1077,7 @@ Of course, instances are only created when necessary. From 2 rows containing the
 
 So far we only showed limited selecting possibilities using `SelectAll`, which translates to `SELECT <all_column_from_all_queried_tables>`. However, it is possible to exclude certain columns or tables with `Exclude` and `ExcludeTX` methods.
 
-In the example above, it is actually not necessary to select columns from `ArticleCategory` junction table. Here is simplified query, where columns of this table are excluded:
+In the example above, it is actually not necessary to select columns from `ArticleCategory` junction table. Here is simplified query, where columns of this table are excluded in the select statement:
 
 ```c#
 using (var db = CreateContext())
@@ -1070,7 +1090,7 @@ using (var db = CreateContext())
 }
 ```
 
-Column with price was excluded as well, so every returned `Article` record will have price set to `default(decimal)`. Usefull when you need to exclude large BLOB values, etc.
+Column with price was excluded as well, so every returned `Article` record will have price set to `default(decimal)`. Useful when you need to exclude large BLOB values, etc.
 
 It is important to remark that calling `SelectAll` doesn't hit the database yet. You need to call `ToList` or `FirstOrDefault` methods.
 
@@ -1133,7 +1153,7 @@ using (var db = CreateContext())
 }
 ````
 
-In VB.NET you can even return `ValueTuple` (with up to 7 fields, nesting is not supported). C# [doesn't allow that](https://github.com/dotnet/roslyn/issues/12897) currently.
+In VB.NET you can even return `ValueTuple`. C# [doesn't allow that](https://github.com/dotnet/roslyn/issues/12897) currently.
 
 ````vbnet
 Using db = CreateDbContext()
@@ -1229,7 +1249,7 @@ using (var db = CreateContext())
 
 #### Limiting number of returned rows
 
-You can constrain the number of rows returned by a query with a `Limit` method. You can specify number of returned rows as well as offset.
+You can constrain the number of rows returned by the query with a `Limit` method. You can specify number of returned rows as well as offset.
 
 ````c#
 using (var db = CreateContext())
@@ -1256,7 +1276,86 @@ This will translate to appropriate `LIMIT`, `TOP` or `OFFSET FETCH` clauses depe
 
 **Important note:** `Limit` translates directly to SQL and affects the number of rows in the resultset. Keep that in mind when you use it together with 1:N joins. Not all joined entities which actually belong to last main entity from the output might be present in its relationship property list. Also, number or main entities might be lower that you specify in `count` parameter, because of join multiplications.
 
-#### Advanced queries
+### Conditionally built queries
+
+Often you need to build query dynamically. Add where conditions based on user input. Join a table if certain filter criteria are applied, but avoid joining otherwise for better performance. The list goes on.
+
+Yamo has built-in `If` method, which can be used to conditionally build select queries using fluent style API.
+
+Here is an example of conditionally applying where clause:
+
+```cs
+using (var db = CreateContext())
+{
+    int? priceFilter = 42;
+
+    var list = db.From<Article>()
+                 .If(priceFilter.HasValue, exp => exp.Where(a => a.Price < priceFilter.Value))
+                 .SelectAll().ToList();
+}
+```
+
+You can provide both if and else variants if you want:
+
+```cs
+using (var db = CreateContext())
+{
+    int? priceFilter = 42;
+    int maxPrice = 1000;
+
+    var list = db.From<Article>()
+                 .If(priceFilter.HasValue,
+                    then: exp => exp.Where(a => a.Price < priceFilter.Value),
+                    otherwise: exp => exp.Where(a => a.Price < maxPrice)
+                  )
+                 .SelectAll().ToList();
+}
+```
+
+You are not limited to `Where`, here we conditionally join another table:
+
+```cs
+using (var db = CreateContext())
+{
+    string labelFilter = "Foo";
+    int? priceFilter = 42;
+
+    var list = db.From<Article>()
+                 .If(!string.IsNullOrWhiteSpace(labelFilter),
+                    then: exp => exp.Join<Label>((a, l) => l.Id == a.Id)
+                                    .Where(l => l.Description == labelFilter)
+                  )
+                 .If(priceFilter.HasValue, exp => exp.And(a => a.Price < priceFilter.Value))
+                 .SelectAll().ToList();
+}
+```
+
+Keep in mind that conditional joins have consequences. Affected entity and its properties will be `null` if you use them later:
+```cs
+using (var db = CreateContext())
+{
+    var includeLabel = false;
+
+    // Label and Description properties will be set to null
+    var list = db.From<Article>()
+                 .If(includeLabel, exp => exp.Join<Label>((a, l) => l.Id == a.Id))
+                 .Select((a, l) => new { Article = a, Label = l, Description = l.Description})
+                 .ToList();
+}
+```
+
+Behavior is following:
+- If condition is not met, we don't append affected clauses to SQL string at all.
+- Conditions could be nested (`If` inside `If`).
+- Expressions inside `If` could be chained, for example `Where(...).OrderBy(...)`.
+- When method `SelectAll`, `SelectCount`, `Select`, `ToList` or `FirstOrDefault` is used inside `If` without providing `otherwise` parameter and when condition is not met, an `InvalidOperationException` is thrown (this scenario does not make much sense).
+- If both `then` and `otherwise` expressions are provided as parameters, they must be of the same type.
+- If there is conditional join and condition is not met, behavior is following:
+  - When `SelectAll` method is used, affected reference navigation property will be set to `null` and no record will be added to affected collection navigation property.
+  - If property from affected joined entity is used in a clause (`Where`, `OrderBy`, custom `Select`, etc.), `NULL` will be used in an output SQL statement instead of that column.
+  - If whole affected joined entity is used in `GroupBy` or in custom `Select`, all columns normally added to an SQL statement will be replaced with `NULL` value.
+
+### Advanced queries
 
 Sometimes, you really need to write your query manually. How to get simple value via raw SQL was already described [above](#simple-queries). But `Query` and `QueryFirstOrDefault` methods can do more than that.
 
@@ -1284,12 +1383,51 @@ using (var db = CreateContext())
         {Sql.Model.Columns<Label>("lg")}
         FROM Article AS a
         LEFT JOIN Label AS le ON a.Id = le.Id AND le.Language = 'en'
-        LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = 'ger'
+        LEFT JOIN Label AS lg ON a.Id = lg.Id AND lg.Language = 'de'
         WHERE a.Id = 1");
 }
 ```
 
 **Important note:** similarly to `Select` method,  `Query` and `QueryFirstOrDefault` don't set any relationship properties and you have to do it by yourself in postprocessing (if you need to).
+
+### Overriding table name
+
+Sometimes the name of the table is generated dynamically. Or there are multiple versions of the same table (with different prefix/suffix). Or we store old records in an archive table (with the same structure). That might be a problem, because once the model definition is cached, it cannot be changed. We can always create new `DbContext` class, but that's not always very handy.
+
+For these scenarios Yamo allows you to ad hoc override table name in the queries:
+
+```cs
+using (var db = CreateContext())
+{
+    var tableName = "ArticleArchive";
+    var article = new Article() {Id = 42, Price = 10};
+
+    db.Insert<Article>(tableName).Execute(article);
+
+    article.Price = 11;
+
+    db.Update<Article>(tableName).Execute(article);
+
+    db.SoftDelete<Article>(tableName).Execute(article);
+    
+    db.Delete<Article>(tableName).Execute(article);
+}
+```
+
+Select statements even allow you to use table source (in both `FROM` and `JOIN` clauses), so you can write nested selects:
+
+```cs
+using (var db = CreateContext())
+{
+    var lang = "en";
+    var list = db.From<Article>("ArticleArchive")
+                 .Join<Label>($"(SELECT {Yamo.Sql.Model.Columns<Label>()} FROM LabelArchive WHERE Language = {lang})")
+                 .On((a, l) => l.Id == a.Id)
+                 .SelectAll().ToList();
+}
+```
+
+In the future it should be possible to write nested selects also with managed API.
 
 ### Logging
 
@@ -1306,40 +1444,62 @@ protected override void OnCommandExecuting(DbCommand command)
 
 General goal is to make Yamo as fast as possible. For that purpose - like in other frameworks - lot of methods are code-generated in runtime. Everything is done using Expression Trees API; Reflection Emit (`ILGenerator`) is not used.
 
-Initial benchmarks are promising. Still, there is place for improvements once the internal architecture is stabilized and higher priority features are implemented.
+Current benchmarks are promising. But still, there is a place for improvements :-)
 
-Here are some preliminary benchmarks comparing Dapper (baseline), EF Core and Yamo (full report [here](benchmark.md)):
+Below is comparison between Yamo, Dapper and EF Core (full reports [here](tree/master/Benchmarks)):
 
 ``` ini
-BenchmarkDotNet=v0.10.12, OS=Windows 10 Redstone 3 [1709, Fall Creators Update] (10.0.16299.248)
-Intel Core i7 CPU 950 3.07GHz (Nehalem), 1 CPU, 8 logical cores and 4 physical cores
-Frequency=2987308 Hz, Resolution=334.7495 ns, Timer=TSC
-  [Host]     : .NET Framework 4.7 (CLR 4.0.30319.42000), 32bit LegacyJIT-v4.7.2633.0
-  DefaultJob : .NET Framework 4.7 (CLR 4.0.30319.42000), 32bit LegacyJIT-v4.7.2633.0
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.18363.959 (1909/November2018Update/19H2)
+Intel Core i7 CPU 950 3.07GHz (Nehalem), 1 CPU, 8 logical and 4 physical cores
+.NET Core SDK=3.1.200
+  [Host]     : .NET Core 3.1.2 (CoreCLR 4.700.20.6602, CoreFX 4.700.20.6702), X64 RyuJIT
+  DefaultJob : .NET Core 3.1.2 (CoreCLR 4.700.20.6602, CoreFX 4.700.20.6702), X64 RyuJIT
 ```
-| Type                      | Method                                    |         Mean | Scaled |  Allocated |
-| ------------------------- | ----------------------------------------- | -----------: | -----: | ---------: |
-| DapperBenchmark           | Select 1 record                           |     106.9 us |   1.00 |    4.11 KB |
-| YamoBenchmark             | Select 1 record                           |     129.1 us |   1.21 |    5.42 KB |
-| EFCoreNoTrackingBenchmark | Select 1 record                           |     392.8 us |   3.67 |   18.22 KB |
-| EFCoreBenchmark           | Select 1 record                           |     446.9 us |   4.18 |   19.92 KB |
-|                           |                                           |              |        |            |
-| DapperBenchmark           | Select 500 records one by one             |  53,162.3 us |   1.00 |  2058.7 KB |
-| YamoBenchmark             | Select 500 records one by one             |  81,145.8 us |   1.53 | 3217.51 KB |
-| EFCoreNoTrackingBenchmark | Select 500 records one by one             | 147,334.8 us |   2.77 | 4041.07 KB |
-| EFCoreBenchmark           | Select 500 records one by one             | 153,831.1 us |   2.89 |    4389 KB |
-|                           |                                           |              |        |            |
-| YamoBenchmark             | Select list of 1000 records               |   3,775.2 us |   0.98 |  153.34 KB |
-| DapperBenchmark           | Select list of 1000 records               |   3,836.4 us |   1.00 |  222.57 KB |
-| EFCoreNoTrackingBenchmark | Select list of 1000 records               |   3,996.0 us |   1.04 |  368.62 KB |
-| EFCoreBenchmark           | Select list of 1000 records               |   6,492.9 us |   1.69 |     805 KB |
-|                           |                                           |              |        |            |
-| DapperBenchmark           | Select list of 1000 records with 1:1 join |   7,326.7 us |   1.00 |   395.2 KB |
-| YamoBenchmark             | Select list of 1000 records with 1:1 join |   8,092.9 us |   1.11 |  340.94 KB |
-| EFCoreNoTrackingBenchmark | Select list of 1000 records with 1:1 join |  13,989.4 us |   1.92 |  927.11 KB |
-| EFCoreBenchmark           | Select list of 1000 records with 1:1 join |  31,426.6 us |   4.30 | 2406.77 KB |
-|                           |                                           |              |        |            |
-| DapperBenchmark           | Select list of 1000 records with 1:N join |  50,111.2 us |   1.00 | 2105.74 KB |
-| EFCoreNoTrackingBenchmark | Select list of 1000 records with 1:N join |  51,363.0 us |   1.02 |  2998.3 KB |
-| YamoBenchmark             | Select list of 1000 records with 1:N join |  57,411.0 us |   1.15 |  1920.8 KB |
-| EFCoreBenchmark           | Select list of 1000 records with 1:N join | 110,265.0 us |   2.20 |  6608.7 KB |
+####Select 1 record
+
+| Method                          |     Mean | Ratio | Allocated |
+| ------------------------------- | -------: | ----: | --------: |
+| Dapper                          | 112.9 μs |  0.89 |   5.39 KB |
+| Yamo                            | 126.6 μs |  1.00 |    7.1 KB |
+| Yamo (using query)              | 136.5 μs |  1.09 |   6.98 KB |
+| EF Core (no tracking)           | 551.8 μs |  4.43 |  36.45 KB |
+| EF Core                         | 644.1 μs |  5.31 |  38.23 KB |
+
+####Select 500 records one by one
+
+| Method                |      Mean | Ratio | Allocated |
+| --------------------- | --------: | ----: | --------: |
+| Dapper                |  56.70 ms |  0.68 |   2.64 MB |
+| Yamo (using query)    |  65.93 ms |  0.79 |   3.31 MB |
+| Yamo                  |  84.15 ms |  1.00 |    4.2 MB |
+| EF Core               | 147.72 ms |  1.77 |   7.25 MB |
+| EF Core (no tracking) | 154.32 ms |  1.69 |   6.78 MB |
+
+####Select list of 1000 records
+
+| Method                |      Mean | Ratio |  Allocated |
+| --------------------- | --------: | ----: | ---------: |
+| Yamo                  |  4.009 ms |  1.00 |  193.88 KB |
+| Yamo (using query)    |  4.080 ms |  1.01 |  193.72 KB |
+| Dapper                |  4.107 ms |  1.02 |   317.5 KB |
+| EF Core (no tracking) |  4.944 ms |  1.34 |   434.3 KB |
+| EF Core               | 12.951 ms |  4.85 | 1416.51 KB |
+
+####Select list of 1000 records with 1:1 join
+
+| Method                |      Mean | Ratio |  Allocated |
+| --------------------- | --------: | ----: | ---------: |
+| Yamo                  |  6.572 ms |  1.00 |  464.71 KB |
+| Dapper                |  6.614 ms |  1.00 |   607.5 KB |
+| EF Core (no tracking) |  7.917 ms |  1.16 |  832.96 KB |
+| EF Core               | 31.282 ms |  5.70 | 3141.84 KB |
+
+#### Select list of 1000 records with 1:N join
+
+| Method                |      Mean | Ratio | Allocated |
+| --------------------- | --------: | ----: | --------: |
+| EF Core (no tracking) |  49.69 ms |  0.86 |   2.75 MB |
+| Dapper                |  56.50 ms |  0.98 |   2.96 MB |
+| Yamo                  |  57.47 ms |  1.00 |   2.45 MB |
+| EF Core               | 103.01 ms |  1.80 |   8.17 MB |
+
