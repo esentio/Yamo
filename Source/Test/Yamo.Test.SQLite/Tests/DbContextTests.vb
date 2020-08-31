@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Data.Sqlite
+﻿Imports System.Data
+Imports Microsoft.Data.Sqlite
 Imports Yamo.Test
 
 Namespace Tests

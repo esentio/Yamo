@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Data.SqlClient
+﻿Imports System.Data
+Imports Microsoft.Data.SqlClient
 Imports Yamo.Test
 
 Namespace Tests
