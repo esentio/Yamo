@@ -9,4 +9,12 @@
     Return New UnitTestDbContext
   End Function
 
+  Public Sub InitializeDatabase() Implements ITestEnvironment.InitializeDatabase
+    Throw New NotSupportedException()
+  End Sub
+
+  Public Sub UninitializeDatabase() Implements ITestEnvironment.UninitializeDatabase
+    Throw New NotSupportedException()
+  End Sub
+
 End Class

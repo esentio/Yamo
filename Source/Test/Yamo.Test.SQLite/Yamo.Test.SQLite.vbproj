@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Yamo.Test</RootNamespace>
+    <RootNamespace>Yamo.Test.SQLite</RootNamespace>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
@@ -18,6 +18,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Sql\SQLiteDbInitialize.sql" />
+    <None Remove="Sql\SQLiteDbUninitialize.sql" />
+    <None Remove="testhost.dll.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="testhost.dll.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sql\SQLiteDbInitialize.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sql\SQLiteDbUninitialize.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
@@ -31,10 +49,14 @@
     <PackageReference Include="MSTest.TestAdapter" Version="2.0.0" />
     <PackageReference Include="MSTest.TestFramework" Version="2.0.0" />
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
+    <PackageReference Include="Microsoft.Data.SQLite" Version="3.1.7" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Source\Yamo.SQLite\Yamo.SQLite.vbproj" />
     <ProjectReference Include="..\..\Source\Yamo\Yamo.vbproj" />
+    <ProjectReference Include="..\Yamo.Test\Yamo.Test.vbproj" />
   </ItemGroup>
 
 </Project>
