@@ -56,6 +56,10 @@
       Return "(Of " & String.Join(", ", GetGenericNames(entityCount)) & ")"
     End Function
 
+    Protected Function GetGenericOfDefinitionWithoutTypes(entityCount As Int32) As String
+      Return "(Of " & String.Join("", Enumerable.Range(1, entityCount - 1).Select(Function(x) ",")) & ")"
+    End Function
+
     Protected Function GetOrdinal(index As Int32) As String
       If index = 1 Then
         Return "1st"
