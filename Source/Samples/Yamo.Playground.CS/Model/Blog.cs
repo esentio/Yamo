@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yamo.PlaygroundCS.Model
+namespace Yamo.Playground.CS.Model
 {
     class Blog
     {

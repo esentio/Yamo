@@ -5,9 +5,9 @@ using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yamo.PlaygroundCS.Model;
+using Yamo.Playground.CS.Model;
 
-namespace Yamo.PlaygroundCS
+namespace Yamo.Playground.CS
 {
     class Program
     {
@@ -766,7 +766,7 @@ namespace Yamo.PlaygroundCS
                 // Label and Description properties will be set to null
                 var list = db.From<Article>()
                              .If(includeLabel, exp => exp.Join<Label>((a, l) => l.Id == a.Id))
-                             .Select((a, l) => new { Article = a, Label = l, Description = l.Description})
+                             .Select((a, l) => new { Article = a, Label = l, Description = l.Description })
                              .ToList();
             }
         }
@@ -776,7 +776,7 @@ namespace Yamo.PlaygroundCS
             using (var db = CreateContext())
             {
                 var tableName = "ArticleArchive";
-                var article = new Article() {Id = 42, Price = 10};
+                var article = new Article() { Id = 42, Price = 10 };
 
                 db.Insert<Article>(tableName).Execute(article);
 
@@ -785,7 +785,7 @@ namespace Yamo.PlaygroundCS
                 db.Update<Article>(tableName).Execute(article);
 
                 db.SoftDelete<Article>(tableName).Execute(article);
-                
+
                 db.Delete<Article>(tableName).Execute(article);
             }
         }
@@ -802,4 +802,5 @@ namespace Yamo.PlaygroundCS
             }
         }
     }
+
 }

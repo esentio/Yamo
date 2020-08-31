@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yamo.Metadata.Builders;
-using Yamo.PlaygroundCS.Model;
+using Yamo.Playground.CS.Model;
 using Yamo.SqlServer;
 
-namespace Yamo.PlaygroundCS
+namespace Yamo.Playground.CS
 {
     public class MyContext : DbContext
     {

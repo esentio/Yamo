@@ -1,11 +1,11 @@
-﻿Imports System.Data.Common
+Imports System.Data.Common
 Imports Microsoft.Data.SqlClient
 
-Module MainModule
+Module Program
 
   Public Connection As DbConnection
 
-  Sub Main()
+  Sub Main(args As String())
     Connection = New SqlConnection("Server=localhost;Database=YamoTest;User Id=dbuser;Password=dbpassword;")
     Connection.Open()
 

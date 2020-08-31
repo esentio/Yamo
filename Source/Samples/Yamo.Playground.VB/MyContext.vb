@@ -52,7 +52,7 @@ Public Class MyContext
   End Sub
 
   Protected Overrides Sub OnConfiguring(optionsBuilder As DbContextOptionsBuilder)
-    optionsBuilder.UseSqlServer(MainModule.Connection)
+    optionsBuilder.UseSqlServer(Program.Connection)
   End Sub
 
 End Class

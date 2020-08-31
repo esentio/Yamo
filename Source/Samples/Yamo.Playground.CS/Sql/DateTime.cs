@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Yamo.Infrastructure;
 using Yamo.Sql;
 
-namespace Yamo.PlaygroundCS.Sql
+namespace Yamo.Playground.CS.Sql
 {
     public class DateTime : SqlHelper
     {

@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Yamo.Playground.VB</RootNamespace>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OptionStrict>On</OptionStrict>
+    <Version>0.6.0</Version>
+    <Authors>Peter Šimno</Authors>
+    <Company>Peter Šimno</Company>
+    <Description>Yamo playground (VB.NET)</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/esentio/Yamo</PackageProjectUrl>
+    <PackageTags>orm;micro-orm;sql;database</PackageTags>
+    <StartupObject>Sub Main</StartupObject>
+    <AssemblyName>Yamo.Benchmarks</AssemblyName>
+    <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Source\Yamo.SqlServer\Yamo.SqlServer.vbproj" />
+    <ProjectReference Include="..\..\Source\Yamo\Yamo.vbproj" />
+  </ItemGroup>
+
+</Project>
