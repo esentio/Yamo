@@ -3,12 +3,18 @@
   Public Class FilteredSelectSqlExpressionCodeGenerator
     Inherits CodeGenerator
 
-    Public Sub New(indentation As String, maxEntityCount As Int32, outputFolder As String)
-      MyBase.New(indentation, maxEntityCount, outputFolder)
+    Public Sub New(indentation As String, outputFolder As String, definition As GeneratedClassDefinition, definitions As List(Of GeneratedClassDefinition))
+      MyBase.New(indentation, outputFolder, definition, definitions)
     End Sub
 
-    Protected Overrides Function GetClassName() As String
-      Return "FilteredSelectSqlExpression"
+    Protected Overrides Function GetAllowedResultsForCondition() As GeneratedClass()
+      Return {
+        GeneratedClass.FilteredSelectSqlExpression,
+        GeneratedClass.GroupedSelectSqlExpression,
+        GeneratedClass.HavingSelectSqlExpression,
+        GeneratedClass.OrderedSelectSqlExpression,
+        GeneratedClass.LimitedSelectSqlExpression
+      }
     End Function
 
     Protected Overrides Sub Generate(builder As CodeBuilder, entityCount As Int32)

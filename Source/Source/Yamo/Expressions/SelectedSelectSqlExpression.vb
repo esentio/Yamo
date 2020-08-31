@@ -58,19 +58,55 @@ Namespace Expressions
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
     Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of SelectedSelectSqlExpression(Of T), TResult), Optional otherwise As Func(Of SelectedSelectSqlExpression(Of T), TResult) = Nothing) As TResult
-      Dim result As TResult
-
       If condition Then
-        result = [then].Invoke(Me)
+        Return [then].Invoke(Me)
       ElseIf otherwise Is Nothing Then
-        Me.Builder.StartConditionalIgnoreMode()
-        result = [then].Invoke(Me)
-        Me.Builder.EndConditionalIgnoreMode()
+        Return CreateResultForCondition(Of TResult)()
       Else
-        result = otherwise.Invoke(Me)
+        Return otherwise.Invoke(Me)
+      End If
+    End Function
+
+    ''' <summary>
+    ''' Creates result for condition if condition is not met.
+    ''' </summary>
+    ''' <typeparam name="TResult"></typeparam>
+    ''' <returns></returns>
+    Private Function CreateResultForCondition(Of TResult)() As TResult
+      Dim thisType = Me.GetType()
+      Dim resultType = GetType(TResult)
+
+      If thisType Is resultType Then
+        Return DirectCast(DirectCast(Me, Object), TResult)
       End If
 
-      Return result
+      If Not CanCreateResultForCondition(resultType) Then
+        Throw New InvalidOperationException($"Parameter 'otherwise' in If() method is required for return type '{resultType}'.")
+      End If
+
+      Return DirectCast(Activator.CreateInstance(resultType, Reflection.BindingFlags.NonPublic Or Reflection.BindingFlags.Instance, Nothing, {Me.Builder, Me.Executor}, Nothing), TResult)
+    End Function
+
+    ''' <summary>
+    ''' Checks if result can be created if condition is not met.
+    ''' </summary>
+    ''' <param name="resultType"></param>
+    ''' <returns></returns>
+    Private Function CanCreateResultForCondition(resultType As Type) As Boolean
+      If Not GetType(SelectSqlExpressionBase).IsAssignableFrom(resultType) Then
+        Return False
+      End If
+
+      If Not resultType.IsGenericType Then
+        Return False
+      End If
+
+      Dim genericType = resultType.GetGenericTypeDefinition()
+
+      If genericType Is GetType(SelectedSelectSqlExpression(Of )) Then Return True
+      If genericType Is GetType(DistinctSelectSqlExpression(Of )) Then Return True
+
+      Return False
     End Function
 
     ''' <summary>

@@ -3,12 +3,21 @@
   Public Class SelectSqlExpressionCodeGenerator
     Inherits CodeGenerator
 
-    Public Sub New(indentation As String, maxEntityCount As Int32, outputFolder As String)
-      MyBase.New(indentation, maxEntityCount, outputFolder)
+    Public Sub New(indentation As String, outputFolder As String, definition As GeneratedClassDefinition, definitions As List(Of GeneratedClassDefinition))
+      MyBase.New(indentation, outputFolder, definition, definitions)
     End Sub
 
-    Protected Overrides Function GetClassName() As String
-      Return "SelectSqlExpression"
+    Protected Overrides Function GetAllowedResultsForCondition() As GeneratedClass()
+      Return {
+        GeneratedClass.SelectSqlExpression,
+        GeneratedClass.JoinSelectSqlExpression,
+        GeneratedClass.JoinedSelectSqlExpression,
+        GeneratedClass.FilteredSelectSqlExpression,
+        GeneratedClass.GroupedSelectSqlExpression,
+        GeneratedClass.HavingSelectSqlExpression,
+        GeneratedClass.OrderedSelectSqlExpression,
+        GeneratedClass.LimitedSelectSqlExpression
+      }
     End Function
 
     Protected Overrides Sub Generate(builder As CodeBuilder, entityCount As Int32)
@@ -39,7 +48,7 @@
       GenerateConstructor(builder, entityCount)
       builder.AppendLine()
 
-      If Not entityCount = Me.MaxEntityCount Then
+      If Not entityCount = Me.Definition.MaxEntityCount Then
         GenerateJoin(builder, entityCount)
         builder.AppendLine()
       End If

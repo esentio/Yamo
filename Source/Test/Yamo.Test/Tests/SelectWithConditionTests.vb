@@ -3498,6 +3498,52 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub SelectAndTryConditionalExecution()
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True, Function(exp) exp).
+                        SelectAll().ToList()
+      End Using
+
+      ' condition is false, apply nothing
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(False, Function(exp)
+                                    Throw New Exception("This should not be executed.")
+                                    Return exp
+                                  End Function).
+                        SelectAll().ToList()
+      End Using
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True,
+                           Function(exp) exp,
+                           Function(exp)
+                             Throw New Exception("This should not be executed.")
+                             Return exp
+                           End Function
+                        ).
+                        SelectAll().ToList()
+      End Using
+
+      ' condition is false, apply false part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(False,
+                           Function(exp)
+                             Throw New Exception("This should not be executed.")
+                             Return exp
+                           End Function,
+                           Function(exp) exp
+                        ).
+                        SelectAll().ToList()
+      End Using
+    End Sub
+
     Protected Overridable Function CreateItems(Optional count As Int32 = 5) As List(Of ItemWithAllSupportedValues)
       Return Enumerable.Range(0, count).Select(Function(x) Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()).ToList()
     End Function

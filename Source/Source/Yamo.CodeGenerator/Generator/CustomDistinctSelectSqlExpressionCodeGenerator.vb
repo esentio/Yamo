@@ -3,12 +3,12 @@
   Public Class CustomDistinctSelectSqlExpressionCodeGenerator
     Inherits CodeGenerator
 
-    Public Sub New(indentation As String, outputFolder As String)
-      MyBase.New(indentation, 1, outputFolder)
+    Public Sub New(indentation As String, outputFolder As String, definition As GeneratedClassDefinition, definitions As List(Of GeneratedClassDefinition))
+      MyBase.New(indentation, outputFolder, definition, definitions)
     End Sub
 
-    Protected Overrides Function GetClassName() As String
-      Return "CustomDistinctSelectSqlExpression"
+    Protected Overrides Function GetAllowedResultsForCondition() As GeneratedClass()
+      Return {}
     End Function
 
     Protected Overrides Sub Generate(builder As CodeBuilder, entityCount As Int32)
