@@ -204,7 +204,19 @@ Namespace Tests
       End Using
 
       Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.BitColumn).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(2), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
         Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.BitColumn = False).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(1), items(3)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Not x.BitColumn).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(1), items(3)}, result)
       End Using
@@ -229,7 +241,19 @@ Namespace Tests
       End Using
 
       Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.BitColumnNull.Value).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(3)}, result)
+      End Using
+
+      Using db = CreateDbContext()
         Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.BitColumnNull.Value = False).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(1), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Not x.BitColumnNull.Value).SelectAll().ToList()
         Assert.AreEqual(2, result.Count)
         CollectionAssert.AreEquivalent({items(1), items(4)}, result)
       End Using

@@ -63,6 +63,8 @@ namespace Yamo.Playground.CS
             //Test40();
             //Test41();
             //Test42();
+            Test43();
+            Test44();
         }
 
         public static MyContext CreateContext()
@@ -799,6 +801,32 @@ namespace Yamo.Playground.CS
                              .Join<Label>($"(SELECT {Yamo.Sql.Model.Columns<Label>()} FROM LabelArchive WHERE Language = {lang})")
                              .On((a, l) => l.Id == a.Id)
                              .SelectAll().ToList();
+            }
+        }
+
+        public static void Test43()
+        {
+            using (var db = CreateContext())
+            {
+                var count = db.From<Blog>()
+                              .Where(x => Yamo.Sql.Exp.Coalesce<DateTime?>(x.Deleted, x.Modified).HasValue)
+                              .SelectCount();
+
+                var today = DateTime.Now.Date;
+
+                var list = db.From<Blog>()
+                             .Where(x => Yamo.Sql.Exp.Coalesce<DateTime?>(x.Deleted, x.Modified).Value != today)
+                             .SelectCount();
+            }
+        }
+
+        public static void Test44()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From<Article>()
+                              .Where(x => x.InStock)
+                              .SelectCount();
             }
         }
     }

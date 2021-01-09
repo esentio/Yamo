@@ -3,7 +3,7 @@ Imports Yamo.Test
 
 Namespace Global.Yamo
 
-  Public Module SqlServerDbContextOptionsExtensions
+  Public Module UnitTestDbContextOptionsExtensions
 
     <Extension>
     Public Function UseUnitTestSetup(optionsBuilder As DbContextOptionsBuilder) As DbContextOptionsBuilder

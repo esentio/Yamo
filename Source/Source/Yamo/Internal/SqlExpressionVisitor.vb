@@ -28,6 +28,11 @@ Namespace Internal
     Private m_Model As SqlModel
 
     ''' <summary>
+    ''' Stores expression translate mode.
+    ''' </summary>
+    Private m_Mode As ExpressionTranslateMode
+
+    ''' <summary>
     ''' Stores expression parameters.
     ''' </summary>
     Private m_ExpressionParameters As ReadOnlyCollection(Of ParameterExpression)
@@ -68,19 +73,9 @@ Namespace Internal
     Private m_UseTableNamesOrAliases As Boolean
 
     ''' <summary>
-    ''' Stores whether compensation for ignored negation should be performed.
-    ''' </summary>
-    Private m_CompensateForIgnoredNegation As Boolean
-
-    ''' <summary>
     ''' Stores current like parameter format.
     ''' </summary>
     Private m_CurrentLikeParameterFormat As String
-
-    ''' <summary>
-    ''' Stores whether visitor is in custom select mode.
-    ''' </summary>
-    Private m_InCustomSelectMode As Boolean
 
     ''' <summary>
     ''' Stores custom entities.
@@ -88,9 +83,14 @@ Namespace Internal
     Private m_CustomEntities As CustomSqlEntity()
 
     ''' <summary>
-    ''' Store custom entity index.
+    ''' Stores custom entity index.
     ''' </summary>
     Private m_CustomEntityIndex As Int32
+
+    ''' <summary>
+    ''' Stores stack of nodes.
+    ''' </summary>
+    Private m_Stack As Stack(Of NodeInfo)
 
     ''' <summary>
     ''' Creates new instance of <see cref="SqlExpressionVisitor"/>.<br/>
@@ -101,6 +101,7 @@ Namespace Internal
     Public Sub New(builder As SqlExpressionBuilderBase, model As SqlModel)
       m_Builder = builder
       m_Model = model
+      m_Stack = New Stack(Of NodeInfo)
     End Sub
 
     ''' <summary>
@@ -108,32 +109,32 @@ Namespace Internal
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="expression"></param>
-    ''' <param name="expressionParametersType"></param>
-    ''' <param name="entityIndexHints">entityIndexHints is null when expressionParametersType is not ExpressionParametersType.Entities</param>
+    ''' <param name="mode"></param>
+    ''' <param name="entityIndexHints">Null for <see cref="ExpressionParametersType.IJoin"/> and not null for <see cref="ExpressionParametersType.Entities"/>.</param>
     ''' <param name="parameterIndex"></param>
     ''' <param name="useAliases"></param>
     ''' <param name="useTableNamesOrAliases"></param>
     ''' <returns></returns>
-    Public Function Translate(expression As Expression, expressionParametersType As ExpressionParametersType, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
+    Public Function Translate(expression As Expression, mode As ExpressionTranslateMode, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
 
       Dim lambda = DirectCast(expression, LambdaExpression)
 
+      m_Mode = mode
       m_ExpressionParameters = lambda.Parameters
-      m_ExpressionParametersType = expressionParametersType
+      m_ExpressionParametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
       m_EntityIndexHints = entityIndexHints
       m_Sql = New StringBuilder()
       m_Parameters = New List(Of SqlParameter)
       m_ParameterIndex = parameterIndex
       m_UseAliases = useAliases
       m_UseTableNamesOrAliases = useTableNamesOrAliases
-      m_CompensateForIgnoredNegation = False
       m_CurrentLikeParameterFormat = Nothing
-      m_InCustomSelectMode = False
       m_CustomEntities = Nothing
       m_CustomEntityIndex = 0
+      m_Stack.Clear()
 
       Visit(lambda.Body)
 
@@ -147,30 +148,29 @@ Namespace Internal
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="expression"></param>
-    ''' <param name="expressionParametersType"></param>
-    ''' <param name="entityIndexHints">entityIndexHints is null when expressionParametersType is not ExpressionParametersType.Entities</param>
+    ''' <param name="entityIndexHints">Null for <see cref="ExpressionParametersType.IJoin"/> and not null for <see cref="ExpressionParametersType.Entities"/>.</param>
     ''' <param name="parameterIndex"></param>
     ''' <returns></returns>
-    Public Function TranslateCustomSelect(expression As Expression, expressionParametersType As ExpressionParametersType, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSqlEntity())
+    Public Function TranslateCustomSelect(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSqlEntity())
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
 
       Dim lambda = DirectCast(expression, LambdaExpression)
 
+      m_Mode = ExpressionTranslateMode.CustomSelect
       m_ExpressionParameters = lambda.Parameters
-      m_ExpressionParametersType = expressionParametersType
+      m_ExpressionParametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
       m_EntityIndexHints = entityIndexHints
       m_Sql = New StringBuilder()
       m_Parameters = New List(Of SqlParameter)
       m_ParameterIndex = parameterIndex
       m_UseAliases = True
       m_UseTableNamesOrAliases = True
-      m_CompensateForIgnoredNegation = False
       m_CurrentLikeParameterFormat = Nothing
-      m_InCustomSelectMode = True
       m_CustomEntities = Nothing
       m_CustomEntityIndex = 0
+      m_Stack.Clear()
 
       VisitInCustomSelectMode(lambda.Body)
 
@@ -188,7 +188,10 @@ Namespace Internal
     ''' <param name="node"></param>
     ''' <returns></returns>
     Public Overrides Function Visit(node As Expression) As Expression
-      Return MyBase.Visit(node)
+      m_Stack.Push(New NodeInfo(node))
+      Dim result = MyBase.Visit(node)
+      m_Stack.Pop()
+      Return result
     End Function
 
     ''' <summary>
@@ -201,19 +204,19 @@ Namespace Internal
       If node.Method.DeclaringType Is GetType(String) Then
         Select Case node.Method.Name
           Case NameOf(String.StartsWith)
-            Return VisitStartsWithMethodCall(node)
+            Return VisitStringStartsWithMethodCall(node)
           Case NameOf(String.EndsWith)
-            Return VisitEndsWithMethodCall(node)
+            Return VisitStringEndsWithMethodCall(node)
           Case NameOf(String.Contains)
-            Return VisitContainsMethodCall(node)
+            Return VisitStringContainsMethodCall(node)
           Case NameOf(String.Concat)
-            Return VisitConcatMethodCall(node)
+            Return VisitStringConcatMethodCall(node)
         End Select
       End If
 
       If node.Method.DeclaringType Is GetType(FormattableStringFactory) Then
         If node.Method.Name = NameOf(FormattableStringFactory.Create) Then
-          Return VisitCreateFormattableStringMethodCall(node)
+          Return VisitFormattableStringFactoryCreateMethodCall(node)
         End If
       End If
 
@@ -223,21 +226,21 @@ Namespace Internal
         End If
 
         If node.Method.DeclaringType Is GetType(RawSqlString) Then
-          Return VisitRawSqlStringCreateCall(node)
+          Return VisitRawSqlStringCreateMethodCall(node)
         End If
       End If
 
       If node.Method.DeclaringType Is GetType(Enumerable) Then
         ' arrays
         If node.Method.Name = NameOf(Enumerable.Contains) Then
-          Return VisitArrayEnumerableContainsMethodCall(node)
+          Return VisitEnumerableContainsMethodCall(node)
         End If
       End If
 
       If GetType(IEnumerable).IsAssignableFrom(node.Method.DeclaringType) Then
         ' lists, etc. (IEnumerable without Contains are filtered out)
         If node.Method.Name = NameOf(Enumerable.Contains) Then
-          Return VisitEnumerableContainsMethodCall(node)
+          Return VisitIEnumerableContainsMethodCall(node)
         End If
       End If
 
@@ -248,28 +251,32 @@ Namespace Internal
         Return VisitEntityPropertySetter(node)
       End If
 
-      Return VisitAndEvaluate(node)
+      Dim result = VisitAndEvaluate(node)
+
+      ExpandToBooleanComparisonIfNeeded(node)
+
+      Return result
     End Function
 
     ''' <summary>
-    ''' Visits starts with method call.
+    ''' Visits <see cref="[String].StartsWith"/> method call.
     ''' </summary>
     ''' <param name="node"></param>
     ''' <returns></returns>
-    Private Function VisitStartsWithMethodCall(node As MethodCallExpression) As Expression
-      Me.Visit(node.Object)
+    Private Function VisitStringStartsWithMethodCall(node As MethodCallExpression) As Expression
+      Visit(node.Object)
 
       m_Sql.Append(" LIKE ")
 
       If m_Builder.DialectProvider.Formatter.LikeWildcardsInParameter Then
         m_CurrentLikeParameterFormat = "{0}%"
-        Me.Visit(node.Arguments(0))
+        Visit(node.Arguments(0))
 
         If m_CurrentLikeParameterFormat IsNot Nothing Then
           Throw New Exception("Only constant string or evaluable expression is allowed as StartsWith parameter.")
         End If
       Else
-        Me.Visit(node.Arguments(0))
+        Visit(node.Arguments(0))
         m_Sql.Append(" + '%'")
       End If
 
@@ -277,50 +284,50 @@ Namespace Internal
     End Function
 
     ''' <summary>
-    ''' Visits end with method call.
+    ''' Visits <see cref="[String].EndsWith"/> method call.
     ''' </summary>
     ''' <param name="node"></param>
     ''' <returns></returns>
-    Private Function VisitEndsWithMethodCall(node As MethodCallExpression) As Expression
-      Me.Visit(node.Object)
+    Private Function VisitStringEndsWithMethodCall(node As MethodCallExpression) As Expression
+      Visit(node.Object)
 
       If m_Builder.DialectProvider.Formatter.LikeWildcardsInParameter Then
         m_Sql.Append(" LIKE ")
 
         m_CurrentLikeParameterFormat = "%{0}"
-        Me.Visit(node.Arguments(0))
+        Visit(node.Arguments(0))
 
         If m_CurrentLikeParameterFormat IsNot Nothing Then
           Throw New Exception("Only constant string or evaluable expression is allowed as EndsWith parameter.")
         End If
       Else
         m_Sql.Append(" LIKE '%' + ")
-        Me.Visit(node.Arguments(0))
+        Visit(node.Arguments(0))
       End If
 
       Return node
     End Function
 
     ''' <summary>
-    ''' Visits contains method call.
+    ''' Visits <see cref="[String].Contains"/> method call.
     ''' </summary>
     ''' <param name="node"></param>
     ''' <returns></returns>
-    Private Function VisitContainsMethodCall(node As MethodCallExpression) As Expression
-      Me.Visit(node.Object)
+    Private Function VisitStringContainsMethodCall(node As MethodCallExpression) As Expression
+      Visit(node.Object)
 
       If m_Builder.DialectProvider.Formatter.LikeWildcardsInParameter Then
         m_Sql.Append(" LIKE ")
 
         m_CurrentLikeParameterFormat = "%{0}%"
-        Me.Visit(node.Arguments(0))
+        Visit(node.Arguments(0))
 
         If m_CurrentLikeParameterFormat IsNot Nothing Then
           Throw New Exception("Only constant string or evaluable expression is allowed as Contains parameter.")
         End If
       Else
         m_Sql.Append(" LIKE '%' + ")
-        Me.Visit(node.Arguments(0))
+        Visit(node.Arguments(0))
         m_Sql.Append(" + '%'")
       End If
 
@@ -328,11 +335,11 @@ Namespace Internal
     End Function
 
     ''' <summary>
-    ''' Visits concat method call.
+    ''' Visits <see cref="[String].Concat"/> method call.
     ''' </summary>
     ''' <param name="node"></param>
     ''' <returns></returns>
-    Private Function VisitConcatMethodCall(node As MethodCallExpression) As Expression
+    Private Function VisitStringConcatMethodCall(node As MethodCallExpression) As Expression
       Dim expressions = node.Arguments
       Dim count = node.Arguments.Count
 
@@ -345,7 +352,7 @@ Namespace Internal
       End If
 
       For i = 0 To count - 1
-        Me.Visit(expressions(i))
+        Visit(expressions(i))
 
         If Not i = count - 1 Then
           m_Sql.Append(" ")
@@ -358,11 +365,11 @@ Namespace Internal
     End Function
 
     ''' <summary>
-    ''' Visits create <see cref="FormattableString"/> method call.
+    ''' Visits <see cref="FormattableStringFactory.Create"/> method call.
     ''' </summary>
     ''' <param name="node"></param>
     ''' <returns></returns>
-    Private Function VisitCreateFormattableStringMethodCall(node As MethodCallExpression) As Expression
+    Private Function VisitFormattableStringFactoryCreateMethodCall(node As MethodCallExpression) As Expression
       Dim format = DirectCast(DirectCast(node.Arguments(0), ConstantExpression).Value, String)
       Dim argsExpression = DirectCast(node.Arguments(1), NewArrayExpression)
 
@@ -417,21 +424,21 @@ Namespace Internal
     End Function
 
     ''' <summary>
-    ''' Visits <see cref="RawSqlString.Create(String)"/> method call.
+    ''' Visits <see cref="RawSqlString.Create"/> method call.
     ''' </summary>
     ''' <param name="node"></param>
     ''' <returns></returns>
-    Private Function VisitRawSqlStringCreateCall(node As MethodCallExpression) As Expression
+    Private Function VisitRawSqlStringCreateMethodCall(node As MethodCallExpression) As Expression
       m_Sql.Append(Evaluate(node.Arguments(0)))
       Return node
     End Function
 
     ''' <summary>
-    ''' Visits array enumerable contains method call.
+    ''' Visits <see cref="Enumerable.Contains"/> method call.
     ''' </summary>
     ''' <param name="node"></param>
     ''' <returns></returns>
-    Private Function VisitArrayEnumerableContainsMethodCall(node As MethodCallExpression) As Expression
+    Private Function VisitEnumerableContainsMethodCall(node As MethodCallExpression) As Expression
       Dim valueExpression = node.Arguments(1)
 
       Dim enumerableExpression = node.Arguments(0)
@@ -490,11 +497,11 @@ Namespace Internal
     End Function
 
     ''' <summary>
-    ''' Visits enumerable contains method call.
+    ''' Visits <see cref="Enumerable.Contains"/> method call on <see cref="IEnumerable"/>.
     ''' </summary>
     ''' <param name="node"></param>
     ''' <returns></returns>
-    Private Function VisitEnumerableContainsMethodCall(node As MethodCallExpression) As Expression
+    Private Function VisitIEnumerableContainsMethodCall(node As MethodCallExpression) As Expression
       Dim valueExpression = node.Arguments(0)
 
       Dim enumerableValues = DirectCast(Evaluate(node.Object), IEnumerable).Cast(Of Object).ToArray()
@@ -529,7 +536,7 @@ Namespace Internal
       Dim propertyName = node.Method.Name.Substring(4) ' trim "set_"
       Dim entityIndex = 0 ' should be always 0 in so far allowed scenarios (UPDATE SET) and m_EntityIndexHints should always be set
 
-      AppendEntityMemberAccess(propertyName, entityIndex)
+      AppendEntityMemberAccess(entityIndex, propertyName)
 
       m_Sql.Append(" = ")
 
@@ -547,36 +554,22 @@ Namespace Internal
     Protected Overrides Function VisitUnary(node As UnaryExpression) As Expression
       Select Case node.NodeType
         Case ExpressionType.[Not]
-          ' this is primitive look ahead optimization for negation of HasValue calls (see also VisitMember(node As MemberExpression) method)
-          ' note that nested negations won't be optimized
-          Dim compensateForIgnoredNegation = False
+          m_Stack.Peek().IsNegation = True
 
-          If node.Operand.NodeType = ExpressionType.MemberAccess Then
-            Dim operandNode = DirectCast(node.Operand, MemberExpression)
-            Dim operandExpression = operandNode.Expression
-
-            If operandExpression IsNot Nothing AndAlso operandExpression.NodeType = ExpressionType.MemberAccess AndAlso Nullable.GetUnderlyingType(operandExpression.Type) IsNot Nothing AndAlso operandNode.Member.Name = "HasValue" Then
-              Dim memberNode = DirectCast(operandExpression, MemberExpression)
-
-              If memberNode.Expression IsNot Nothing AndAlso memberNode.Expression.NodeType = ExpressionType.Parameter Then
-                compensateForIgnoredNegation = True
-              End If
-            End If
-          End If
-
-          If compensateForIgnoredNegation Then
-            m_CompensateForIgnoredNegation = True
+          If ShouldIgnoreNegation(node) Then
+            m_Stack.Peek().IsIgnoredNegation = True
           Else
-            m_Sql.Append(" NOT ")
+            m_Sql.Append("NOT ")
           End If
 
         Case ExpressionType.Convert, ExpressionType.ConvertChecked
+          ' ignore
 
         Case Else
           Throw New NotSupportedException($"The unary operator '{node.NodeType}' is not supported.")
       End Select
 
-      Me.Visit(node.Operand)
+      Visit(node.Operand)
 
       Return node
     End Function
@@ -603,65 +596,83 @@ Namespace Internal
         End If
       End If
 
-      m_Sql.Append("(")
-
-      Me.Visit(left)
+      Dim useBrackets = False
+      Dim expOperator As String
 
       Select Case nodeType
         Case ExpressionType.[And], ExpressionType.[AndAlso]
-          m_Sql.Append(" AND ")
+          useBrackets = True
+          expOperator = " AND "
 
         Case ExpressionType.[Or], ExpressionType.[OrElse]
-          m_Sql.Append(" OR ")
+          useBrackets = True
+          expOperator = " OR "
 
         Case ExpressionType.Equal
+          m_Stack.Peek().IsCompare = True
+
           If IsNullConstant(right) Then
-            m_Sql.Append(" IS ")
+            expOperator = " IS "
           Else
-            m_Sql.Append(" = ")
+            expOperator = " = "
           End If
 
         Case ExpressionType.NotEqual
+          m_Stack.Peek().IsCompare = True
+
           If IsNullConstant(right) Then
-            m_Sql.Append(" IS NOT ")
+            expOperator = " IS NOT "
           Else
-            m_Sql.Append(" <> ")
+            expOperator = " <> "
           End If
 
         Case ExpressionType.LessThan
-          m_Sql.Append(" < ")
+          expOperator = " < "
 
         Case ExpressionType.LessThanOrEqual
-          m_Sql.Append(" <= ")
+          expOperator = " <= "
 
         Case ExpressionType.GreaterThan
-          m_Sql.Append(" > ")
+          expOperator = " > "
 
         Case ExpressionType.GreaterThanOrEqual
-          m_Sql.Append(" >= ")
+          expOperator = " >= "
 
         Case ExpressionType.Add, ExpressionType.AddChecked
-          m_Sql.Append(" + ")
+          useBrackets = True
+          expOperator = " + "
 
         Case ExpressionType.Subtract, ExpressionType.SubtractChecked
-          m_Sql.Append(" - ")
+          useBrackets = True
+          expOperator = " - "
 
         Case ExpressionType.Multiply, ExpressionType.MultiplyChecked
-          m_Sql.Append(" * ")
+          useBrackets = True
+          expOperator = " * "
 
         Case ExpressionType.Divide
-          m_Sql.Append(" / ")
+          useBrackets = True
+          expOperator = " / "
 
         Case ExpressionType.Modulo
-          m_Sql.Append(" % ")
+          useBrackets = True
+          expOperator = " % "
 
         Case Else
-          Throw New NotSupportedException($"The binary Operator '{nodeType}' is not supported.")
+          Throw New NotSupportedException($"The binary operator '{nodeType}' is not supported.")
       End Select
 
-      Me.Visit(right)
+      If useBrackets Then
+        m_Sql.Append("(")
+      End If
 
-      m_Sql.Append(")")
+      Visit(left)
+      m_Sql.Append(expOperator)
+      Visit(right)
+
+      If useBrackets Then
+        m_Sql.Append(")")
+      End If
 
       Return node
     End Function
@@ -732,21 +743,7 @@ Namespace Internal
     ''' <param name="node"></param>
     ''' <returns></returns>
     Protected Overrides Function VisitParameter(node As ParameterExpression) As Expression
-      Dim index = m_ExpressionParameters.IndexOf(node)
-
-      If m_EntityIndexHints Is Nothing Then
-        ' this should not happen, because IJoin should be used when index hints are not available
-        Throw New Exception("Unable to match expression parameter with entity.")
-      End If
-
-      If index < 0 OrElse m_EntityIndexHints.Length <= index Then
-        Throw New Exception($"None or unambiguous match of entity of type '{node.Type}'. Use IJoin instead?")
-      End If
-
-      Dim entityIndex = m_EntityIndexHints(index)
-
-      AppendEntityMembersAccess(entityIndex)
-
+      AppendEntityMembersAccess(GetEntityIndex(node))
       Return node
     End Function
 
@@ -757,82 +754,71 @@ Namespace Internal
     ''' <param name="node"></param>
     ''' <returns></returns>
     Protected Overrides Function VisitMember(node As MemberExpression) As Expression
-      ' special handling for: entityParameter.Property, entityParameter.Property.Value, entityParameter.Property.HasValue, joinParameter.T1.Property, joinParameter.T1.Property.Value, joinParameter.T1.Property.HasValue, ...
+      ' special handling for:
+      ' - entityParameter.Property
+      ' - joinParameter.T1.Property
+      ' - x.Value
+      ' - x.HasValue
+      ' - ...
       ' other expressions are evaluated
 
-      Dim isEntityMemberAccess = False
-      Dim propertyName As String = Nothing
+      Dim nodeIsEntityMemberAccess = False
       Dim entityIndex As Int32 = -1
-      Dim isNullableHasValueAccess = False
+      Dim memberName As String = Nothing
 
-      Dim currentNode = node
-      Dim exp = currentNode.Expression
+      Dim expression = node.Expression
 
-      If exp IsNot Nothing Then
-        ' this is hot path; checking IsValueType before calling Nullable.GetUnderlyingType seems to be faster for most use cases
-        If exp.Type.IsValueType AndAlso Nullable.GetUnderlyingType(exp.Type) IsNot Nothing Then
-          If currentNode.Member.Name = "Value" Then
-            currentNode = DirectCast(exp, MemberExpression)
-            exp = currentNode.Expression
-          ElseIf currentNode.Member.Name = "HasValue" Then
-            isNullableHasValueAccess = True
-            currentNode = DirectCast(exp, MemberExpression)
-            exp = currentNode.Expression
-          End If
-        End If
+      If expression IsNot Nothing Then
+        memberName = node.Member.Name
 
-        propertyName = currentNode.Member.Name
-
-        If exp.NodeType = ExpressionType.Parameter Then
-          If m_ExpressionParametersType = ExpressionParametersType.IJoin Then
-            entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(node.Member.Name)
-            AppendEntityMembersAccess(entityIndex)
+        If Helpers.Types.IsNullable(expression.Type) Then
+          If Helpers.Types.IsNullableValueAccess(node.Member) Then
+            m_Stack.Peek().IsNullableValueAccess = True
+            Visit(expression)
             Return node
-          Else
-            isEntityMemberAccess = True
 
-            Dim index = m_ExpressionParameters.IndexOf(DirectCast(exp, ParameterExpression))
+          ElseIf Helpers.Types.IsNullableHasValueAccess(node.Member) Then
+            m_Stack.Peek().IsNullableHasValueAccess = True
+            Visit(expression)
 
-            If m_EntityIndexHints Is Nothing Then
-              ' this should not happen, because IJoin should be used when index hints are not available
-              Throw New Exception("Unable to match expression parameter with entity.")
+            If ParentNodeIsIgnoredNegation() Then
+              m_Sql.Append(" IS NULL")
+            Else
+              m_Sql.Append(" IS NOT NULL")
             End If
 
-            If index < 0 OrElse m_EntityIndexHints.Length <= index Then
-              Dim declaringType = currentNode.Member.DeclaringType
-              Throw New Exception($"None or unambiguous match of entity of type '{declaringType}'. Use IJoin instead?")
-            End If
-
-            entityIndex = m_EntityIndexHints(index)
+            Return node
           End If
+        End If
 
-        ElseIf exp.NodeType = ExpressionType.MemberAccess Then
-          Dim parent = DirectCast(exp, MemberExpression)
+        If IsEntity(expression) Then
+          nodeIsEntityMemberAccess = True
+          entityIndex = GetEntityIndex(DirectCast(expression, ParameterExpression))
 
-          If parent.Expression IsNot Nothing AndAlso parent.Expression.NodeType = ExpressionType.Parameter Then
-            isEntityMemberAccess = True
+        ElseIf IsJoinedEntity(expression) Then
+          nodeIsEntityMemberAccess = True
+          entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(DirectCast(expression, MemberExpression).Member.Name)
 
-            entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(parent.Member.Name)
-          End If
+        ElseIf IsJoin(expression) Then
+          entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(memberName)
+          AppendEntityMembersAccess(entityIndex)
+          Return node
         End If
       End If
 
-      If isEntityMemberAccess Then
-        AppendEntityMemberAccess(propertyName, entityIndex)
-
-        If isNullableHasValueAccess Then
-          If m_CompensateForIgnoredNegation Then
-            m_Sql.Append(" IS NULL")
-            m_CompensateForIgnoredNegation = False
-          Else
-            m_Sql.Append(" IS NOT NULL")
-          End If
-        End If
-
-        Return node
+      If nodeIsEntityMemberAccess Then
+        AppendEntityMemberAccess(entityIndex, memberName)
       Else
-        Return VisitAndEvaluate(node)
+        If IsInNullableValueAccess() Then
+          AppendNewParameter(Evaluate(m_Stack(1).Node))
+        Else
+          AppendNewParameter(Evaluate(node))
+        End If
       End If
+
+      ExpandToBooleanComparisonIfNeeded(node)
+
+      Return node
     End Function
 
     ''' <summary>
@@ -842,12 +828,14 @@ Namespace Internal
     ''' <param name="node"></param>
     ''' <returns></returns>
     Protected Overrides Function VisitNew(node As NewExpression) As Expression
-      If IsValueTuple(node.Type) Then
+      Dim type = node.Type
+
+      If Helpers.Types.IsValueTuple(type) Then
         ' TODO: SIP - does it make sense to support nullable ValueTuples as well?
         Return VisitValueTupleOrAnonymousType(node, True)
-      ElseIf IsAnonymousType(node.Type) Then
+      ElseIf Helpers.Types.IsAnonymousType(type) Then
         Return VisitValueTupleOrAnonymousType(node, False)
-      ElseIf node.Type Is GetType(RawSqlString) Then
+      ElseIf type Is GetType(RawSqlString) Then
         m_Sql.Append(Evaluate(node.Arguments(0)))
         Return node
       Else
@@ -892,13 +880,11 @@ Namespace Internal
 
       Dim count = args.Count
 
-      If m_InCustomSelectMode Then
+      If m_Mode = ExpressionTranslateMode.CustomSelect Then
         m_CustomEntities = New CustomSqlEntity(count - 1) {}
       End If
 
       Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToArray()
-
-      ' NOTE: this will fail for nested ValueTuples, so we are limited to max 7 fields. Is it worth to support nesting?
 
       For i = 0 To count - 1
         Dim arg = args(i)
@@ -910,7 +896,7 @@ Namespace Internal
 
         Visit(arg)
 
-        If m_InCustomSelectMode Then
+        If m_Mode = ExpressionTranslateMode.CustomSelect Then
           If isEntity Then
             m_CustomEntities(i) = New CustomSqlEntity(i, entityIndex, type)
           Else
@@ -957,7 +943,7 @@ Namespace Internal
 
         Dim lastArg = args(count - 1)
 
-        If lastArg.NodeType = ExpressionType.New AndAlso IsValueTuple(lastArg.Type) Then
+        If lastArg.NodeType = ExpressionType.New AndAlso Helpers.Types.IsValueTuple(lastArg.Type) Then
           AddValueTupleArguments(DirectCast(lastArg, NewExpression), allArgs)
         Else
           allArgs.Add(lastArg)
@@ -1122,79 +1108,6 @@ Namespace Internal
     End Function
 
     ''' <summary>
-    ''' Checks whether type is ValueTuple.
-    ''' </summary>
-    ''' <param name="type"></param>
-    ''' <returns></returns>
-    Private Function IsValueTuple(type As Type) As Boolean
-      ' TODO: SIP - use/move to helpers (also other methods)
-      If Not type.IsGenericType Then
-        Return False
-      End If
-
-      type = type.GetGenericTypeDefinition()
-
-      If type Is GetType(ValueTuple) Then
-        Return True
-      ElseIf type Is GetType(ValueTuple(Of )) Then
-        Return True
-      ElseIf type Is GetType(ValueTuple(Of ,)) Then
-        Return True
-      ElseIf type Is GetType(ValueTuple(Of ,,)) Then
-        Return True
-      ElseIf type Is GetType(ValueTuple(Of ,,,)) Then
-        Return True
-      ElseIf type Is GetType(ValueTuple(Of ,,,,)) Then
-        Return True
-      ElseIf type Is GetType(ValueTuple(Of ,,,,,)) Then
-        Return True
-      ElseIf type Is GetType(ValueTuple(Of ,,,,,,)) Then
-        Return True
-      ElseIf type Is GetType(ValueTuple(Of ,,,,,,,)) Then
-        Return True
-      End If
-
-      Return False
-    End Function
-
-    ''' <summary>
-    ''' Checks wheter type is an anonymous type.
-    ''' </summary>
-    ''' <param name="type"></param>
-    ''' <returns></returns>
-    Private Function IsAnonymousType(type As Type) As Boolean
-      ' via https://stackoverflow.com/questions/2483023/how-to-test-if-a-type-is-anonymous
-      ' and https://elegantcode.com/2011/06/24/detecting-anonymous-types-on-mono/
-      Return Attribute.IsDefined(type, GetType(CompilerGeneratedAttribute), False) AndAlso
-             type.IsGenericType AndAlso
-             (type.Name.Contains("AnonymousType") OrElse type.Name.Contains("AnonType")) AndAlso
-             (type.Name.StartsWith("<>") OrElse type.Name.StartsWith("VB$")) AndAlso
-             (type.Attributes And TypeAttributes.NotPublic) = TypeAttributes.NotPublic
-    End Function
-
-    ''' <summary>
-    ''' Checks whether expression is a null constant.
-    ''' </summary>
-    ''' <param name="node"></param>
-    ''' <returns></returns>
-    Private Function IsNullConstant(node As Expression) As Boolean
-      Return node.NodeType = ExpressionType.Constant AndAlso DirectCast(node, ConstantExpression).Value Is Nothing
-    End Function
-
-    ''' <summary>
-    ''' Strips quotes.
-    ''' </summary>
-    ''' <param name="node"></param>
-    ''' <returns></returns>
-    Private Function StripQuotes(node As Expression) As Expression
-      While node.NodeType = ExpressionType.Quote
-        node = DirectCast(node, UnaryExpression).Operand
-      End While
-
-      Return node
-    End Function
-
-    ''' <summary>
     ''' Creates column alias.
     ''' </summary>
     ''' <param name="index"></param>
@@ -1227,9 +1140,9 @@ Namespace Internal
     ''' <summary>
     ''' Appends entity member access.
     ''' </summary>
-    ''' <param name="propertyName"></param>
     ''' <param name="entityIndex"></param>
-    Private Sub AppendEntityMemberAccess(propertyName As String, entityIndex As Int32)
+    ''' <param name="propertyName"></param>
+    Private Sub AppendEntityMemberAccess(entityIndex As Int32, propertyName As String)
       Dim entity = m_Model.GetEntity(entityIndex)
       Dim isIgnored = entity.IsIgnored
       Dim prop = entity.Entity.GetProperty(propertyName)
@@ -1283,7 +1196,7 @@ Namespace Internal
             m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, properties(propertyIndex).ColumnName)
           End If
 
-          If m_InCustomSelectMode Then
+          If m_Mode = ExpressionTranslateMode.CustomSelect Then
             Dim columnAlias = CreateColumnAlias(m_CustomEntityIndex, columnIndex)
             m_Sql.Append(" ")
             m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
@@ -1299,6 +1212,205 @@ Namespace Internal
         End If
       Next
     End Sub
+
+    ''' <summary>
+    ''' Gets entity index.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function GetEntityIndex(node As ParameterExpression) As Int32
+      Dim index = m_ExpressionParameters.IndexOf(node)
+
+      If m_EntityIndexHints Is Nothing Then
+        ' this should not happen, because IJoin should be used when index hints are not available
+        Throw New Exception("Unable to match expression parameter with entity.")
+      End If
+
+      If index < 0 OrElse m_EntityIndexHints.Length <= index Then
+        Throw New Exception($"None or ambiguous match of entity of type '{node.Type}'. Use IJoin instead?")
+      End If
+
+      Return m_EntityIndexHints(index)
+    End Function
+
+    ''' <summary>
+    ''' Checks whether negation should be ignored in its current location and processed differently (elsewhere).
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function ShouldIgnoreNegation(node As UnaryExpression) As Boolean
+      ' Look ahead optimization for negations of HasValue calls and certain boolean expressions (direct entity member access).
+      ' Examples:
+      ' - Function(x) Not x.Foo.HasValue => [T0].[Foo] IS NULL
+      ' - Function(x) Not foo.Boo().HasValue => @p0 IS NULL
+      ' - Function(x) Not x.Foo => [T0].[Foo] = 0
+      ' - Function(x) Not x.Foo.Value => [T0].[Foo] = 0
+      ' - Function(j) Not j.T1.Foo => [T0].[Foo] = 0
+      ' - Function(j) Not j.T1.Foo.Value => [T0].[Foo] = 0
+      ' Following is not optimized:
+      ' - Function(x) Not foo.Boo => NOT @p0 = 1
+      ' - Function(x) Not foo.Boo() => NOT @p0 = 1
+      ' - ...
+      ' It's like this for simplicity. We could "optimize" (when BinaryExpression is not Operand) everything, maybe except SQL helpers.
+      ' But the additional code complexity is probably not worth it.
+
+      If node.Operand.NodeType = ExpressionType.MemberAccess Then
+        Dim memberExpression = DirectCast(node.Operand, MemberExpression)
+        Dim expression = memberExpression.Expression
+
+        If expression IsNot Nothing Then
+          Dim isNullable = Helpers.Types.IsNullable(expression.Type)
+
+          If isNullable AndAlso Helpers.Types.IsNullableHasValueAccess(memberExpression.Member) Then
+            ' Nullable.HasValue access
+            Return True
+          End If
+
+          If isNullable AndAlso Helpers.Types.IsNullableValueAccess(memberExpression.Member) Then
+            If expression.NodeType = ExpressionType.MemberAccess Then
+              memberExpression = DirectCast(expression, MemberExpression)
+              expression = memberExpression.Expression
+
+              If expression IsNot Nothing Then
+                Return IsEntityOrJoinedEntityMemberAccess(memberExpression)
+              End If
+            End If
+          Else
+            Return IsEntityOrJoinedEntityMemberAccess(memberExpression)
+          End If
+        End If
+      End If
+
+      Return False
+    End Function
+
+    ''' <summary>
+    ''' Expands "simple" boolean node to boolean comparison if needed.
+    ''' </summary>
+    ''' <param name="node"></param>
+    Private Sub ExpandToBooleanComparisonIfNeeded(node As Expression)
+      If Not m_Mode = ExpressionTranslateMode.Condition Then
+        Exit Sub
+      End If
+
+      ' checking Boolean? is probably faster that calling IsInNullableValueAccess()
+      If Not (node.Type Is GetType(Boolean) OrElse node.Type Is GetType(Boolean?)) Then
+        Exit Sub
+      End If
+
+      Dim depth = m_Stack.Count
+      Dim value = True
+      Dim parentIndex = 1
+
+      If parentIndex < depth AndAlso m_Stack(parentIndex).IsNullableValueAccess Then
+        parentIndex += 1
+      End If
+
+      If parentIndex < depth AndAlso m_Stack(parentIndex).IsNegation Then
+        value = Not m_Stack(parentIndex).IsIgnoredNegation
+        parentIndex += 1
+      End If
+
+      If depth <= parentIndex OrElse (Not m_Stack(parentIndex).IsCompare AndAlso Not m_Stack(parentIndex).IsNullableHasValueAccess) Then
+        m_Sql.Append(" = ")
+        m_Sql.Append(m_Builder.DialectProvider.Formatter.GetConstantValue(value))
+      End If
+    End Sub
+
+    ''' <summary>
+    ''' Checks whether node represents a null constant.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function IsNullConstant(node As Expression) As Boolean
+      Return node.NodeType = ExpressionType.Constant AndAlso DirectCast(node, ConstantExpression).Value Is Nothing
+    End Function
+
+    ''' <summary>
+    ''' Checks whether node represents <see cref="IJoin"/>.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function IsJoin(node As Expression) As Boolean
+      If m_ExpressionParametersType = ExpressionParametersType.IJoin Then
+        Return node.NodeType = ExpressionType.Parameter
+      End If
+
+      Return False
+    End Function
+
+    ''' <summary>
+    ''' Checks whether node represents an entity.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function IsEntity(node As Expression) As Boolean
+      If m_ExpressionParametersType = ExpressionParametersType.Entities Then
+        Return node.NodeType = ExpressionType.Parameter
+      End If
+
+      Return False
+    End Function
+
+    ''' <summary>
+    ''' Checks whether node represents an entity from <see cref="IJoin"/>.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function IsJoinedEntity(node As Expression) As Boolean
+      If m_ExpressionParametersType = ExpressionParametersType.IJoin Then
+        If node.NodeType = ExpressionType.MemberAccess Then
+          Dim memberExpression = DirectCast(node, MemberExpression).Expression
+
+          If memberExpression IsNot Nothing Then
+            Return memberExpression.NodeType = ExpressionType.Parameter
+          End If
+        End If
+      End If
+
+      Return False
+    End Function
+
+    ''' <summary>
+    ''' Checks whether node represents a member access of an entity or of an entity from <see cref="IJoin"/>.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function IsEntityOrJoinedEntityMemberAccess(node As MemberExpression) As Boolean
+      Dim expression = node.Expression
+
+      If expression IsNot Nothing Then
+        If m_ExpressionParametersType = ExpressionParametersType.IJoin Then
+          If expression.NodeType = ExpressionType.MemberAccess Then
+            expression = DirectCast(expression, MemberExpression).Expression
+
+            If expression IsNot Nothing Then
+              Return expression.NodeType = ExpressionType.Parameter
+            End If
+          End If
+        Else
+          Return expression.NodeType = ExpressionType.Parameter
+        End If
+      End If
+
+      Return False
+    End Function
+
+    ''' <summary>
+    ''' Checks whether parent node is ignored negation.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function ParentNodeIsIgnoredNegation() As Boolean
+      Return 2 <= m_Stack.Count AndAlso m_Stack(1).IsIgnoredNegation
+    End Function
+
+    ''' <summary>
+    ''' Checks whether parent node is <see cref="Nullable(Of T).Value"/> access.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function IsInNullableValueAccess() As Boolean
+      Return 2 <= m_Stack.Count AndAlso m_Stack(1).IsNullableValueAccess
+    End Function
 
   End Class
 End Namespace

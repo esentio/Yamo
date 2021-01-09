@@ -82,56 +82,57 @@ namespace Yamo.Playground.CS
         private void CreateArticleModel(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Article>();
-            modelBuilder.Entity<Article>().Property((x) => x.Id).IsKey();
-            modelBuilder.Entity<Article>().Property((x) => x.Price);
+            modelBuilder.Entity<Article>().Property(x => x.Id).IsKey();
+            modelBuilder.Entity<Article>().Property(x => x.Price);
+            modelBuilder.Entity<Article>().Property(x => x.InStock);
 
-            modelBuilder.Entity<Article>().HasOne((x) => x.Label);
-            modelBuilder.Entity<Article>().HasMany((x) => x.Parts);
-            modelBuilder.Entity<Article>().HasMany((x) => x.Categories);
+            modelBuilder.Entity<Article>().HasOne(x => x.Label);
+            modelBuilder.Entity<Article>().HasMany(x => x.Parts);
+            modelBuilder.Entity<Article>().HasMany(x => x.Categories);
         }
 
         private void CreateArticleCategoryModel(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ArticleCategory>();
-            modelBuilder.Entity<ArticleCategory>().Property((x) => x.ArticleId).IsKey();
-            modelBuilder.Entity<ArticleCategory>().Property((x) => x.CategoryId).IsKey();
+            modelBuilder.Entity<ArticleCategory>().Property(x => x.ArticleId).IsKey();
+            modelBuilder.Entity<ArticleCategory>().Property(x => x.CategoryId).IsKey();
         }
 
         private void CreateArticlePartModel(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ArticlePart>();
-            modelBuilder.Entity<ArticlePart>().Property((x) => x.Id).IsKey();
-            modelBuilder.Entity<ArticlePart>().Property((x) => x.ArticleId);
-            modelBuilder.Entity<ArticlePart>().Property((x) => x.Price);
+            modelBuilder.Entity<ArticlePart>().Property(x => x.Id).IsKey();
+            modelBuilder.Entity<ArticlePart>().Property(x => x.ArticleId);
+            modelBuilder.Entity<ArticlePart>().Property(x => x.Price);
 
-            modelBuilder.Entity<ArticlePart>().HasOne((x) => x.Label);
+            modelBuilder.Entity<ArticlePart>().HasOne(x => x.Label);
         }
 
         private void CreateArticleSubstitutionModel(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ArticleSubstitution>();
-            modelBuilder.Entity<ArticleSubstitution>().Property((x) => x.OriginalArticleId).IsKey();
-            modelBuilder.Entity<ArticleSubstitution>().Property((x) => x.SubstitutionArticleId).IsKey();
+            modelBuilder.Entity<ArticleSubstitution>().Property(x => x.OriginalArticleId).IsKey();
+            modelBuilder.Entity<ArticleSubstitution>().Property(x => x.SubstitutionArticleId).IsKey();
 
-            modelBuilder.Entity<ArticleSubstitution>().HasOne((x) => x.Original);
-            modelBuilder.Entity<ArticleSubstitution>().HasOne((x) => x.Substitution);
+            modelBuilder.Entity<ArticleSubstitution>().HasOne(x => x.Original);
+            modelBuilder.Entity<ArticleSubstitution>().HasOne(x => x.Substitution);
         }
 
         private void CreateCategoryModel(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>();
-            modelBuilder.Entity<Category>().Property((x) => x.Id).IsKey();
+            modelBuilder.Entity<Category>().Property(x => x.Id).IsKey();
 
-            modelBuilder.Entity<Category>().HasOne((x) => x.Label);
+            modelBuilder.Entity<Category>().HasOne(x => x.Label);
         }
 
         private void CreateLabelModel(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Label>();
-            modelBuilder.Entity<Label>().Property((x) => x.TableId).IsKey().IsRequired();
-            modelBuilder.Entity<Label>().Property((x) => x.Id).IsKey();
-            modelBuilder.Entity<Label>().Property((x) => x.Language).IsKey().IsRequired();
-            modelBuilder.Entity<Label>().Property((x) => x.Description).IsRequired();
+            modelBuilder.Entity<Label>().Property(x => x.TableId).IsKey().IsRequired();
+            modelBuilder.Entity<Label>().Property(x => x.Id).IsKey();
+            modelBuilder.Entity<Label>().Property(x => x.Language).IsKey().IsRequired();
+            modelBuilder.Entity<Label>().Property(x => x.Description).IsRequired();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

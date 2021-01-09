@@ -14,10 +14,15 @@ Namespace Tests
       Dim items = CreateItems()
 
       items(0).Nvarchar50Column = "Lorem"
+      items(0).BitColumn = True
       items(1).Nvarchar50Column = "Ipsum"
+      items(1).BitColumn = False
       items(2).Nvarchar50Column = "Lorem"
+      items(2).BitColumn = True
       items(3).Nvarchar50Column = "Ipsum"
+      items(3).BitColumn = False
       items(4).Nvarchar50Column = "Lorem"
+      items(4).BitColumn = True
 
       InsertItems(items)
 
@@ -30,13 +35,20 @@ Namespace Tests
 
         CollectionAssert.AreEquivalent({"Lorem", "Ipsum"}, result1)
 
-        ' use anonymous type with single property for grouping
         Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         GroupBy(Function(x) x.BitColumn).
+                         Select(Function(x) x.BitColumn).
+                         ToList()
+
+        CollectionAssert.AreEquivalent({True, False}, result2)
+
+        ' use anonymous type with single property for grouping
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
                          GroupBy(Function(x) New With {x.Nvarchar50Column}).
                          Select(Function(x) x.Nvarchar50Column).
                          ToList()
 
-        CollectionAssert.AreEquivalent({"Lorem", "Ipsum"}, result2)
+        CollectionAssert.AreEquivalent({"Lorem", "Ipsum"}, result3)
       End Using
     End Sub
 

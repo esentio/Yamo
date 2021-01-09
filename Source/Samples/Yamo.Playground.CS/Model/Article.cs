@@ -10,6 +10,7 @@ namespace Yamo.Playground.CS.Model
     {
         public int Id { get; set; }
         public decimal Price { get; set; }
+        public bool InStock { get; set; }
 
         public Label Label { get; set; }
         public List<ArticlePart> Parts { get; set; }

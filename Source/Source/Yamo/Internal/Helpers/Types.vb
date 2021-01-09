@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports System.Runtime.CompilerServices
 
 Namespace Internal.Helpers
 
@@ -13,6 +14,17 @@ Namespace Internal.Helpers
     ''' </summary>
     Private Sub New()
     End Sub
+
+    ''' <summary>
+    ''' Gets whether type is <see cref="Nullable(Of T)"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
+    Public Shared Function IsNullable(type As Type) As Boolean
+      ' this might be on hot path; checking IsValueType before calling Nullable.GetUnderlyingType seems to be faster for most use cases
+      Return type.IsValueType AndAlso Nullable.GetUnderlyingType(type) IsNot Nothing
+    End Function
 
     ''' <summary>
     ''' Gets whether type is ValueTuple or nullable ValueTuple.<br/>
@@ -56,6 +68,44 @@ Namespace Internal.Helpers
              genericType Is GetType(ValueTuple(Of ,,,,,)) OrElse
              genericType Is GetType(ValueTuple(Of ,,,,,,)) OrElse
              genericType Is GetType(ValueTuple(Of ,,,,,,,)) AndAlso IsValueTuple(type.GetGenericArguments(7))
+    End Function
+
+    ''' <summary>
+    ''' Checks whether type is an anonymous type.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
+    Public Shared Function IsAnonymousType(type As Type) As Boolean
+      ' via https://stackoverflow.com/questions/2483023/how-to-test-if-a-type-is-anonymous
+      ' and https://elegantcode.com/2011/06/24/detecting-anonymous-types-on-mono/
+      Return Attribute.IsDefined(type, GetType(CompilerGeneratedAttribute), False) AndAlso
+             type.IsGenericType AndAlso
+             (type.Name.Contains("AnonymousType") OrElse type.Name.Contains("AnonType")) AndAlso
+             (type.Name.StartsWith("<>") OrElse type.Name.StartsWith("VB$")) AndAlso
+             (type.Attributes And TypeAttributes.NotPublic) = TypeAttributes.NotPublic
+    End Function
+
+    ''' <summary>
+    ''' Checks whether member represents <see cref="Nullable(Of T).Value"/> call.<br/>
+    ''' Note: type is not checked!<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="member"></param>
+    ''' <returns></returns>
+    Public Shared Function IsNullableValueAccess(member As MemberInfo) As Boolean
+      Return member.Name = "Value"
+    End Function
+
+    ''' <summary>
+    ''' Checks whether member represents <see cref="Nullable(Of T).HasValue"/> call.<br/>
+    ''' Note: type is not checked!<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="member"></param>
+    ''' <returns></returns>
+    Public Shared Function IsNullableHasValueAccess(member As MemberInfo) As Boolean
+      Return member.Name = "HasValue"
     End Function
 
     ''' <summary>
