@@ -28,6 +28,11 @@ Namespace Internal
     Private m_Model As SqlModel
 
     ''' <summary>
+    ''' Stores expression translate mode.
+    ''' </summary>
+    Private m_Mode As ExpressionTranslateMode
+
+    ''' <summary>
     ''' Stores expression parameters.
     ''' </summary>
     Private m_ExpressionParameters As ReadOnlyCollection(Of ParameterExpression)
@@ -73,11 +78,6 @@ Namespace Internal
     Private m_CurrentLikeParameterFormat As String
 
     ''' <summary>
-    ''' Stores whether visitor is in custom select mode.
-    ''' </summary>
-    Private m_InCustomSelectMode As Boolean
-
-    ''' <summary>
     ''' Stores custom entities.
     ''' </summary>
     Private m_CustomEntities As CustomSqlEntity()
@@ -109,18 +109,20 @@ Namespace Internal
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="expression"></param>
+    ''' <param name="mode"></param>
     ''' <param name="entityIndexHints">Null for <see cref="ExpressionParametersType.IJoin"/> and not null for <see cref="ExpressionParametersType.Entities"/>.</param>
     ''' <param name="parameterIndex"></param>
     ''' <param name="useAliases"></param>
     ''' <param name="useTableNamesOrAliases"></param>
     ''' <returns></returns>
-    Public Function Translate(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
+    Public Function Translate(expression As Expression, mode As ExpressionTranslateMode, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
 
       Dim lambda = DirectCast(expression, LambdaExpression)
 
+      m_Mode = mode
       m_ExpressionParameters = lambda.Parameters
       m_ExpressionParametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
       m_EntityIndexHints = entityIndexHints
@@ -130,7 +132,6 @@ Namespace Internal
       m_UseAliases = useAliases
       m_UseTableNamesOrAliases = useTableNamesOrAliases
       m_CurrentLikeParameterFormat = Nothing
-      m_InCustomSelectMode = False
       m_CustomEntities = Nothing
       m_CustomEntityIndex = 0
       m_Stack.Clear()
@@ -157,6 +158,7 @@ Namespace Internal
 
       Dim lambda = DirectCast(expression, LambdaExpression)
 
+      m_Mode = ExpressionTranslateMode.CustomSelect
       m_ExpressionParameters = lambda.Parameters
       m_ExpressionParametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
       m_EntityIndexHints = entityIndexHints
@@ -166,7 +168,6 @@ Namespace Internal
       m_UseAliases = True
       m_UseTableNamesOrAliases = True
       m_CurrentLikeParameterFormat = Nothing
-      m_InCustomSelectMode = True
       m_CustomEntities = Nothing
       m_CustomEntityIndex = 0
       m_Stack.Clear()
@@ -879,7 +880,7 @@ Namespace Internal
 
       Dim count = args.Count
 
-      If m_InCustomSelectMode Then
+      If m_Mode = ExpressionTranslateMode.CustomSelect Then
         m_CustomEntities = New CustomSqlEntity(count - 1) {}
       End If
 
@@ -895,7 +896,7 @@ Namespace Internal
 
         Visit(arg)
 
-        If m_InCustomSelectMode Then
+        If m_Mode = ExpressionTranslateMode.CustomSelect Then
           If isEntity Then
             m_CustomEntities(i) = New CustomSqlEntity(i, entityIndex, type)
           Else
@@ -1195,7 +1196,7 @@ Namespace Internal
             m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, properties(propertyIndex).ColumnName)
           End If
 
-          If m_InCustomSelectMode Then
+          If m_Mode = ExpressionTranslateMode.CustomSelect Then
             Dim columnAlias = CreateColumnAlias(m_CustomEntityIndex, columnIndex)
             m_Sql.Append(" ")
             m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
@@ -1288,7 +1289,7 @@ Namespace Internal
     ''' </summary>
     ''' <param name="node"></param>
     Private Sub ExpandToBooleanComparisonIfNeeded(node As Expression)
-      If m_InCustomSelectMode Then
+      If Not m_Mode = ExpressionTranslateMode.Condition Then
         Exit Sub
       End If
 

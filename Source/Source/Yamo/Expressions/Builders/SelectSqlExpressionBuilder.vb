@@ -250,7 +250,7 @@ Namespace Expressions.Builders
 
         m_JoinExpressions.Add(sql)
       Else
-        Dim result = m_Visitor.Translate(predicate, entityIndexHints, m_Parameters.Count, True, True)
+        Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, m_Parameters.Count, True, True)
 
         If joinInfo.TableSource Is Nothing Then
           sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & " ON " & result.Sql
@@ -420,7 +420,7 @@ Namespace Expressions.Builders
         m_WhereExpressions = New List(Of String)
       End If
 
-      Dim result = m_Visitor.Translate(predicate, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, m_Parameters.Count, True, True)
       m_WhereExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -456,7 +456,7 @@ Namespace Expressions.Builders
         m_GroupByExpressions = New List(Of String)
       End If
 
-      Dim result = m_Visitor.Translate(keySelector, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(keySelector, ExpressionTranslateMode.GroupBy, entityIndexHints, m_Parameters.Count, True, True)
       m_GroupByExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -472,7 +472,7 @@ Namespace Expressions.Builders
         m_HavingExpressions = New List(Of String)
       End If
 
-      Dim result = m_Visitor.Translate(predicate, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, m_Parameters.Count, True, True)
       m_HavingExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -509,7 +509,7 @@ Namespace Expressions.Builders
         m_OrderByExpressions = New List(Of String)
       End If
 
-      Dim result = m_Visitor.Translate(keySelector, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(keySelector, ExpressionTranslateMode.OrderBy, entityIndexHints, m_Parameters.Count, True, True)
 
       If ascending Then
         m_OrderByExpressions.Add(result.Sql)

@@ -168,13 +168,13 @@ Namespace Tests
         Dim result As SqlString
 
         ' constant
-        result = Translate(visitor, Function(x) x.IntColumn = 100)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = 100)
         Assert.AreEqual("[T0].[IntColumn] = 100", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' local value (captured closure)
         Dim localValue = 101
-        result = Translate(visitor, Function(x) x.IntColumn = localValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = localValue)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
@@ -182,73 +182,73 @@ Namespace Tests
         ' --------------------------------------------------------------------------------------
 
         ' constant
-        result = Translate(visitor, Function(x) x.IntColumn = ConstantValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = ConstantValue)
         Assert.AreEqual("[T0].[IntColumn] = 200", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' field
-        result = Translate(visitor, Function(x) x.IntColumn = m_FieldValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = m_FieldValue)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(m_FieldValue, result.Parameters(0).Value)
 
         ' static field
-        result = Translate(visitor, Function(x) x.IntColumn = m_StaticFieldValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = m_StaticFieldValue)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(m_StaticFieldValue, result.Parameters(0).Value)
 
         ' property
-        result = Translate(visitor, Function(x) x.IntColumn = Me.PropertyValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Me.PropertyValue)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Me.PropertyValue, result.Parameters(0).Value)
 
         ' static property
-        result = Translate(visitor, Function(x) x.IntColumn = StaticPropertyValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = StaticPropertyValue)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(StaticPropertyValue, result.Parameters(0).Value)
 
         ' indexer property
-        result = Translate(visitor, Function(x) x.IntColumn = Me.IndexerPropertyValue(10000))
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Me.IndexerPropertyValue(10000))
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Me.IndexerPropertyValue(10000), result.Parameters(0).Value)
 
         ' static indexer property
-        result = Translate(visitor, Function(x) x.IntColumn = StaticIndexerPropertyValue(10000))
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = StaticIndexerPropertyValue(10000))
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(StaticIndexerPropertyValue(10000), result.Parameters(0).Value)
 
         ' function
-        result = Translate(visitor, Function(x) x.IntColumn = GetValue())
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = GetValue())
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(GetValue(), result.Parameters(0).Value)
 
         ' function with parameters
         Dim localParam = 10000
-        result = Translate(visitor, Function(x) x.IntColumn = GetValue(10000, localParam))
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = GetValue(10000, localParam))
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(GetValue(10000, localParam), result.Parameters(0).Value)
 
         ' function with nullable return value
-        result = Translate(visitor, Function(x) x.IntColumn = GetNullableValue().Value)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = GetNullableValue().Value)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(GetNullableValue(), result.Parameters(0).Value)
 
         ' static function
-        result = Translate(visitor, Function(x) x.IntColumn = GetStaticValue())
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = GetStaticValue())
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(GetStaticValue(), result.Parameters(0).Value)
 
         ' static function with parameters
-        result = Translate(visitor, Function(x) x.IntColumn = GetStaticValue(10000, localParam))
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = GetStaticValue(10000, localParam))
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(GetStaticValue(10000, localParam), result.Parameters(0).Value)
@@ -258,72 +258,72 @@ Namespace Tests
         Dim c = New Class1
 
         ' constant
-        result = Translate(visitor, Function(x) x.IntColumn = Class1.ConstantValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Class1.ConstantValue)
         Assert.AreEqual("[T0].[IntColumn] = 300", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' field
-        result = Translate(visitor, Function(x) x.IntColumn = c.FieldValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = c.FieldValue)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.FieldValue, result.Parameters(0).Value)
 
         ' static field
-        result = Translate(visitor, Function(x) x.IntColumn = Class1.StaticFieldValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Class1.StaticFieldValue)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Class1.StaticFieldValue, result.Parameters(0).Value)
 
         ' property
-        result = Translate(visitor, Function(x) x.IntColumn = c.PropertyValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = c.PropertyValue)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.PropertyValue, result.Parameters(0).Value)
 
         ' static property
-        result = Translate(visitor, Function(x) x.IntColumn = Class1.StaticPropertyValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Class1.StaticPropertyValue)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Class1.StaticPropertyValue, result.Parameters(0).Value)
 
         ' indexer property
-        result = Translate(visitor, Function(x) x.IntColumn = c.IndexerPropertyValue(10000))
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = c.IndexerPropertyValue(10000))
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.IndexerPropertyValue(10000), result.Parameters(0).Value)
 
         ' static indexer property
-        result = Translate(visitor, Function(x) x.IntColumn = Class1.StaticIndexerPropertyValue(10000))
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Class1.StaticIndexerPropertyValue(10000))
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Class1.StaticIndexerPropertyValue(10000), result.Parameters(0).Value)
 
         ' function
-        result = Translate(visitor, Function(x) x.IntColumn = c.GetValue())
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = c.GetValue())
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetValue(), result.Parameters(0).Value)
 
         ' function with parameters
-        result = Translate(visitor, Function(x) x.IntColumn = c.GetValue(10000, localParam))
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = c.GetValue(10000, localParam))
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetValue(10000, localParam), result.Parameters(0).Value)
 
         ' function with nullable return value
-        result = Translate(visitor, Function(x) x.IntColumn = c.GetNullableValue().Value)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = c.GetNullableValue().Value)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableValue(), result.Parameters(0).Value)
 
         ' static function
-        result = Translate(visitor, Function(x) x.IntColumn = Class1.GetStaticValue())
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Class1.GetStaticValue())
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Class1.GetStaticValue(), result.Parameters(0).Value)
 
         ' static function with parameters
-        result = Translate(visitor, Function(x) x.IntColumn = Class1.GetStaticValue(10000, localParam))
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Class1.GetStaticValue(10000, localParam))
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Class1.GetStaticValue(10000, localParam), result.Parameters(0).Value)
@@ -331,42 +331,42 @@ Namespace Tests
         ' --------------------------------------------------------------------------------------
 
         ' constant
-        result = Translate(visitor, Function(x) x.IntColumn = Module1.ConstantValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Module1.ConstantValue)
         Assert.AreEqual("[T0].[IntColumn] = 400", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' field
-        result = Translate(visitor, Function(x) x.IntColumn = Module1.FieldValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Module1.FieldValue)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Module1.FieldValue, result.Parameters(0).Value)
 
         ' property
-        result = Translate(visitor, Function(x) x.IntColumn = Module1.PropertyValue)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Module1.PropertyValue)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Module1.PropertyValue, result.Parameters(0).Value)
 
         ' indexer property
-        result = Translate(visitor, Function(x) x.IntColumn = Module1.IndexerPropertyValue(10000))
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Module1.IndexerPropertyValue(10000))
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Module1.IndexerPropertyValue(10000), result.Parameters(0).Value)
 
         ' function
-        result = Translate(visitor, Function(x) x.IntColumn = Module1.GetValue())
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Module1.GetValue())
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Module1.GetValue(), result.Parameters(0).Value)
 
         ' function with parameters
-        result = Translate(visitor, Function(x) x.IntColumn = Module1.GetValue(10000, localParam))
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Module1.GetValue(10000, localParam))
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Module1.GetValue(10000, localParam), result.Parameters(0).Value)
 
         ' function with nullable return value
-        result = Translate(visitor, Function(x) x.IntColumn = Module1.GetNullableValue().Value)
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = Module1.GetNullableValue().Value)
         Assert.AreEqual("[T0].[IntColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(Module1.GetNullableValue(), result.Parameters(0).Value)
@@ -374,7 +374,7 @@ Namespace Tests
         ' --------------------------------------------------------------------------------------
 
         ' SQL helper
-        result = Translate(visitor, Function(x) Sql.Exp.Raw(Of Int32)("IntColumn") = 100)
+        result = TranslateCondition(visitor, Function(x) Sql.Exp.Raw(Of Int32)("IntColumn") = 100)
         Assert.AreEqual("IntColumn = 100", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
@@ -390,268 +390,268 @@ Namespace Tests
         Dim localValue As Boolean
         Dim c = New Class2
 
-        result = Translate(visitor, Function(x) x.BitColumn = True)
+        result = TranslateCondition(visitor, Function(x) x.BitColumn = True)
         Assert.AreEqual("[T0].[BitColumn] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumn = True)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumn = True)
         Assert.AreEqual("[T0].[BitColumn] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) x.BitColumn = localValue)
+        result = TranslateCondition(visitor, Function(x) x.BitColumn = localValue)
         Assert.AreEqual("[T0].[BitColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumn = c.GetTrueValue())
+        result = TranslateCondition(visitor, Function(x) x.BitColumn = c.GetTrueValue())
         Assert.AreEqual("[T0].[BitColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumn = Sql.Exp.Raw(Of Boolean)("1"))
+        result = TranslateCondition(visitor, Function(x) x.BitColumn = Sql.Exp.Raw(Of Boolean)("1"))
         Assert.AreEqual("[T0].[BitColumn] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) x.BitColumn = False)
+        result = TranslateCondition(visitor, Function(x) x.BitColumn = False)
         Assert.AreEqual("[T0].[BitColumn] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumn = False)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumn = False)
         Assert.AreEqual("[T0].[BitColumn] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = False
-        result = Translate(visitor, Function(x) x.BitColumn = localValue)
+        result = TranslateCondition(visitor, Function(x) x.BitColumn = localValue)
         Assert.AreEqual("[T0].[BitColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumn = c.GetFalseValue())
+        result = TranslateCondition(visitor, Function(x) x.BitColumn = c.GetFalseValue())
         Assert.AreEqual("[T0].[BitColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetFalseValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumn = Sql.Exp.Raw(Of Boolean)("0"))
+        result = TranslateCondition(visitor, Function(x) x.BitColumn = Sql.Exp.Raw(Of Boolean)("0"))
         Assert.AreEqual("[T0].[BitColumn] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) Not x.BitColumn = True)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn = True)
         Assert.AreEqual("NOT [T0].[BitColumn] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) Not j.T1.BitColumn = True)
+        result = TranslateConditionWithJoin(visitor, Function(j) Not j.T1.BitColumn = True)
         Assert.AreEqual("NOT [T0].[BitColumn] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) Not x.BitColumn = localValue)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn = localValue)
         Assert.AreEqual("NOT [T0].[BitColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumn = c.GetTrueValue())
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn = c.GetTrueValue())
         Assert.AreEqual("NOT [T0].[BitColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumn = Sql.Exp.Raw(Of Boolean)("1"))
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn = Sql.Exp.Raw(Of Boolean)("1"))
         Assert.AreEqual("NOT [T0].[BitColumn] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) Not x.BitColumn = False)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn = False)
         Assert.AreEqual("NOT [T0].[BitColumn] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) Not j.T1.BitColumn = False)
+        result = TranslateConditionWithJoin(visitor, Function(j) Not j.T1.BitColumn = False)
         Assert.AreEqual("NOT [T0].[BitColumn] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = False
-        result = Translate(visitor, Function(x) Not x.BitColumn = localValue)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn = localValue)
         Assert.AreEqual("NOT [T0].[BitColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumn = c.GetFalseValue())
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn = c.GetFalseValue())
         Assert.AreEqual("NOT [T0].[BitColumn] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetFalseValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumn = Sql.Exp.Raw(Of Boolean)("0"))
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn = Sql.Exp.Raw(Of Boolean)("0"))
         Assert.AreEqual("NOT [T0].[BitColumn] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) x.BitColumn <> True)
+        result = TranslateCondition(visitor, Function(x) x.BitColumn <> True)
         Assert.AreEqual("[T0].[BitColumn] <> 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumn <> True)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumn <> True)
         Assert.AreEqual("[T0].[BitColumn] <> 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) x.BitColumn <> localValue)
+        result = TranslateCondition(visitor, Function(x) x.BitColumn <> localValue)
         Assert.AreEqual("[T0].[BitColumn] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumn <> c.GetTrueValue())
+        result = TranslateCondition(visitor, Function(x) x.BitColumn <> c.GetTrueValue())
         Assert.AreEqual("[T0].[BitColumn] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumn <> Sql.Exp.Raw(Of Boolean)("1"))
+        result = TranslateCondition(visitor, Function(x) x.BitColumn <> Sql.Exp.Raw(Of Boolean)("1"))
         Assert.AreEqual("[T0].[BitColumn] <> 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) x.BitColumn <> False)
+        result = TranslateCondition(visitor, Function(x) x.BitColumn <> False)
         Assert.AreEqual("[T0].[BitColumn] <> 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumn <> False)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumn <> False)
         Assert.AreEqual("[T0].[BitColumn] <> 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = False
-        result = Translate(visitor, Function(x) x.BitColumn <> localValue)
+        result = TranslateCondition(visitor, Function(x) x.BitColumn <> localValue)
         Assert.AreEqual("[T0].[BitColumn] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumn <> c.GetFalseValue())
+        result = TranslateCondition(visitor, Function(x) x.BitColumn <> c.GetFalseValue())
         Assert.AreEqual("[T0].[BitColumn] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetFalseValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumn <> Sql.Exp.Raw(Of Boolean)("0"))
+        result = TranslateCondition(visitor, Function(x) x.BitColumn <> Sql.Exp.Raw(Of Boolean)("0"))
         Assert.AreEqual("[T0].[BitColumn] <> 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) Not x.BitColumn <> True)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn <> True)
         Assert.AreEqual("NOT [T0].[BitColumn] <> 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) Not j.T1.BitColumn <> True)
+        result = TranslateConditionWithJoin(visitor, Function(j) Not j.T1.BitColumn <> True)
         Assert.AreEqual("NOT [T0].[BitColumn] <> 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) Not x.BitColumn <> localValue)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn <> localValue)
         Assert.AreEqual("NOT [T0].[BitColumn] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumn <> c.GetTrueValue())
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn <> c.GetTrueValue())
         Assert.AreEqual("NOT [T0].[BitColumn] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumn <> Sql.Exp.Raw(Of Boolean)("1"))
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn <> Sql.Exp.Raw(Of Boolean)("1"))
         Assert.AreEqual("NOT [T0].[BitColumn] <> 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) Not x.BitColumn <> False)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn <> False)
         Assert.AreEqual("NOT [T0].[BitColumn] <> 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) Not j.T1.BitColumn <> False)
+        result = TranslateConditionWithJoin(visitor, Function(j) Not j.T1.BitColumn <> False)
         Assert.AreEqual("NOT [T0].[BitColumn] <> 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = False
-        result = Translate(visitor, Function(x) Not x.BitColumn <> localValue)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn <> localValue)
         Assert.AreEqual("NOT [T0].[BitColumn] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumn <> c.GetFalseValue())
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn <> c.GetFalseValue())
         Assert.AreEqual("NOT [T0].[BitColumn] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetFalseValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumn <> Sql.Exp.Raw(Of Boolean)("0"))
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn <> Sql.Exp.Raw(Of Boolean)("0"))
         Assert.AreEqual("NOT [T0].[BitColumn] <> 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) x.BitColumn)
+        result = TranslateCondition(visitor, Function(x) x.BitColumn)
         Assert.AreEqual("[T0].[BitColumn] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumn)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumn)
         Assert.AreEqual("[T0].[BitColumn] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) localValue)
+        result = TranslateCondition(visitor, Function(x) localValue)
         Assert.AreEqual("@p0 = 1", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) c.GetTrueValue())
+        result = TranslateCondition(visitor, Function(x) c.GetTrueValue())
         Assert.AreEqual("@p0 = 1", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Sql.Exp.Raw(Of Boolean)("BitColumn = 1"))
+        result = TranslateCondition(visitor, Function(x) Sql.Exp.Raw(Of Boolean)("BitColumn = 1"))
         Assert.AreEqual("BitColumn = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) Not x.BitColumn)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumn)
         Assert.AreEqual("[T0].[BitColumn] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) Not j.T1.BitColumn)
+        result = TranslateConditionWithJoin(visitor, Function(j) Not j.T1.BitColumn)
         Assert.AreEqual("[T0].[BitColumn] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) Not localValue)
+        result = TranslateCondition(visitor, Function(x) Not localValue)
         Assert.AreEqual("NOT @p0 = 1", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not c.GetTrueValue())
+        result = TranslateCondition(visitor, Function(x) Not c.GetTrueValue())
         Assert.AreEqual("NOT @p0 = 1", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not Sql.Exp.Raw(Of Boolean)("BitColumn = 1"))
+        result = TranslateCondition(visitor, Function(x) Not Sql.Exp.Raw(Of Boolean)("BitColumn = 1"))
         Assert.AreEqual("NOT BitColumn = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) x.BitColumn = True AndAlso Not x.BitColumn = True And x.BitColumn OrElse Not x.BitColumn Or x.BitColumn)
+        result = TranslateCondition(visitor, Function(x) x.BitColumn = True AndAlso Not x.BitColumn = True And x.BitColumn OrElse Not x.BitColumn Or x.BitColumn)
         Assert.AreEqual("(((([T0].[BitColumn] = 1 AND NOT [T0].[BitColumn] = 1) AND [T0].[BitColumn] = 1) OR [T0].[BitColumn] = 0) OR [T0].[BitColumn] = 1)", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumn = True AndAlso Not j.T1.BitColumn = True And j.T1.BitColumn OrElse Not j.T1.BitColumn Or j.T1.BitColumn)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumn = True AndAlso Not j.T1.BitColumn = True And j.T1.BitColumn OrElse Not j.T1.BitColumn Or j.T1.BitColumn)
         Assert.AreEqual("(((([T0].[BitColumn] = 1 AND NOT [T0].[BitColumn] = 1) AND [T0].[BitColumn] = 1) OR [T0].[BitColumn] = 0) OR [T0].[BitColumn] = 1)", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
         localValue = True
-        result = Translate(visitor, Function(x) x.BitColumn = localValue AndAlso c.GetTrueValue() OrElse Not Sql.Exp.Raw(Of Boolean)("BitColumn = 1"))
+        result = TranslateCondition(visitor, Function(x) x.BitColumn = localValue AndAlso c.GetTrueValue() OrElse Not Sql.Exp.Raw(Of Boolean)("BitColumn = 1"))
         Assert.AreEqual("(([T0].[BitColumn] = @p0 AND @p1 = 1) OR NOT BitColumn = 1)", result.Sql)
         Assert.AreEqual(2, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
@@ -661,7 +661,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Sub TranslateNullableValue()
+    Public Sub TranslateNullableBooleanValue()
       Using db = CreateDbContext()
         Dim visitor = CreateSqlExpressionVisitor(db)
         Dim result As SqlString
@@ -669,268 +669,268 @@ Namespace Tests
         Dim localValue As Boolean?
         Dim c = New Class2
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value = True)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value = True)
         Assert.AreEqual("[T0].[BitColumnNull] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumnNull.Value = True)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumnNull.Value = True)
         Assert.AreEqual("[T0].[BitColumnNull] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value = localValue.Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value = localValue.Value)
         Assert.AreEqual("[T0].[BitColumnNull] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value = c.GetNullableTrueValue().Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value = c.GetNullableTrueValue().Value)
         Assert.AreEqual("[T0].[BitColumnNull] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value = Sql.Exp.Raw(Of Boolean?)("1").Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value = Sql.Exp.Raw(Of Boolean?)("1").Value)
         Assert.AreEqual("[T0].[BitColumnNull] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value = False)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value = False)
         Assert.AreEqual("[T0].[BitColumnNull] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumnNull.Value = False)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumnNull.Value = False)
         Assert.AreEqual("[T0].[BitColumnNull] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = False
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value = localValue.Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value = localValue.Value)
         Assert.AreEqual("[T0].[BitColumnNull] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value = c.GetNullableFalseValue().Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value = c.GetNullableFalseValue().Value)
         Assert.AreEqual("[T0].[BitColumnNull] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableFalseValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value = Sql.Exp.Raw(Of Boolean?)("0").Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value = Sql.Exp.Raw(Of Boolean?)("0").Value)
         Assert.AreEqual("[T0].[BitColumnNull] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value = True)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value = True)
         Assert.AreEqual("NOT [T0].[BitColumnNull] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) Not j.T1.BitColumnNull.Value = True)
+        result = TranslateConditionWithJoin(visitor, Function(j) Not j.T1.BitColumnNull.Value = True)
         Assert.AreEqual("NOT [T0].[BitColumnNull] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value = localValue.Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value = localValue.Value)
         Assert.AreEqual("NOT [T0].[BitColumnNull] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value = c.GetNullableTrueValue().Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value = c.GetNullableTrueValue().Value)
         Assert.AreEqual("NOT [T0].[BitColumnNull] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value = Sql.Exp.Raw(Of Boolean?)("1").Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value = Sql.Exp.Raw(Of Boolean?)("1").Value)
         Assert.AreEqual("NOT [T0].[BitColumnNull] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value = False)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value = False)
         Assert.AreEqual("NOT [T0].[BitColumnNull] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) Not j.T1.BitColumnNull.Value = False)
+        result = TranslateConditionWithJoin(visitor, Function(j) Not j.T1.BitColumnNull.Value = False)
         Assert.AreEqual("NOT [T0].[BitColumnNull] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = False
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value = localValue.Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value = localValue.Value)
         Assert.AreEqual("NOT [T0].[BitColumnNull] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value = c.GetNullableFalseValue().Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value = c.GetNullableFalseValue().Value)
         Assert.AreEqual("NOT [T0].[BitColumnNull] = @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableFalseValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value = Sql.Exp.Raw(Of Boolean?)("0").Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value = Sql.Exp.Raw(Of Boolean?)("0").Value)
         Assert.AreEqual("NOT [T0].[BitColumnNull] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value <> True)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value <> True)
         Assert.AreEqual("[T0].[BitColumnNull] <> 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumnNull.Value <> True)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumnNull.Value <> True)
         Assert.AreEqual("[T0].[BitColumnNull] <> 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value <> localValue.Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value <> localValue.Value)
         Assert.AreEqual("[T0].[BitColumnNull] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value <> c.GetNullableTrueValue().Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value <> c.GetNullableTrueValue().Value)
         Assert.AreEqual("[T0].[BitColumnNull] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value <> Sql.Exp.Raw(Of Boolean?)("1").Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value <> Sql.Exp.Raw(Of Boolean?)("1").Value)
         Assert.AreEqual("[T0].[BitColumnNull] <> 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value <> False)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value <> False)
         Assert.AreEqual("[T0].[BitColumnNull] <> 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumnNull.Value <> False)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumnNull.Value <> False)
         Assert.AreEqual("[T0].[BitColumnNull] <> 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = False
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value <> localValue.Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value <> localValue.Value)
         Assert.AreEqual("[T0].[BitColumnNull] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value <> c.GetNullableFalseValue().Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value <> c.GetNullableFalseValue().Value)
         Assert.AreEqual("[T0].[BitColumnNull] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableFalseValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value <> Sql.Exp.Raw(Of Boolean?)("0").Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value <> Sql.Exp.Raw(Of Boolean?)("0").Value)
         Assert.AreEqual("[T0].[BitColumnNull] <> 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value <> True)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value <> True)
         Assert.AreEqual("NOT [T0].[BitColumnNull] <> 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) Not j.T1.BitColumnNull.Value <> True)
+        result = TranslateConditionWithJoin(visitor, Function(j) Not j.T1.BitColumnNull.Value <> True)
         Assert.AreEqual("NOT [T0].[BitColumnNull] <> 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value <> localValue.Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value <> localValue.Value)
         Assert.AreEqual("NOT [T0].[BitColumnNull] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value <> c.GetNullableTrueValue().Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value <> c.GetNullableTrueValue().Value)
         Assert.AreEqual("NOT [T0].[BitColumnNull] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value <> Sql.Exp.Raw(Of Boolean?)("1").Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value <> Sql.Exp.Raw(Of Boolean?)("1").Value)
         Assert.AreEqual("NOT [T0].[BitColumnNull] <> 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value <> False)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value <> False)
         Assert.AreEqual("NOT [T0].[BitColumnNull] <> 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) Not j.T1.BitColumnNull.Value <> False)
+        result = TranslateConditionWithJoin(visitor, Function(j) Not j.T1.BitColumnNull.Value <> False)
         Assert.AreEqual("NOT [T0].[BitColumnNull] <> 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = False
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value <> localValue.Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value <> localValue.Value)
         Assert.AreEqual("NOT [T0].[BitColumnNull] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value <> c.GetNullableFalseValue().Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value <> c.GetNullableFalseValue().Value)
         Assert.AreEqual("NOT [T0].[BitColumnNull] <> @p0", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableFalseValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value <> Sql.Exp.Raw(Of Boolean?)("0").Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value <> Sql.Exp.Raw(Of Boolean?)("0").Value)
         Assert.AreEqual("NOT [T0].[BitColumnNull] <> 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value)
         Assert.AreEqual("[T0].[BitColumnNull] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumnNull.Value)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumnNull.Value)
         Assert.AreEqual("[T0].[BitColumnNull] = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) localValue.Value)
+        result = TranslateCondition(visitor, Function(x) localValue.Value)
         Assert.AreEqual("@p0 = 1", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) c.GetNullableTrueValue().Value)
+        result = TranslateCondition(visitor, Function(x) c.GetNullableTrueValue().Value)
         Assert.AreEqual("@p0 = 1", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Sql.Exp.Raw(Of Boolean?)("BitColumnNull = 1").Value)
+        result = TranslateCondition(visitor, Function(x) Sql.Exp.Raw(Of Boolean?)("BitColumnNull = 1").Value)
         Assert.AreEqual("BitColumnNull = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.Value)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.Value)
         Assert.AreEqual("[T0].[BitColumnNull] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) Not j.T1.BitColumnNull.Value)
+        result = TranslateConditionWithJoin(visitor, Function(j) Not j.T1.BitColumnNull.Value)
         Assert.AreEqual("[T0].[BitColumnNull] = 0", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) Not localValue.Value)
+        result = TranslateCondition(visitor, Function(x) Not localValue.Value)
         Assert.AreEqual("NOT @p0 = 1", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not c.GetNullableTrueValue().Value)
+        result = TranslateCondition(visitor, Function(x) Not c.GetNullableTrueValue().Value)
         Assert.AreEqual("NOT @p0 = 1", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not Sql.Exp.Raw(Of Boolean?)("BitColumnNull = 1").Value)
+        result = TranslateCondition(visitor, Function(x) Not Sql.Exp.Raw(Of Boolean?)("BitColumnNull = 1").Value)
         Assert.AreEqual("NOT BitColumnNull = 1", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value = True AndAlso Not x.BitColumnNull.Value = True And x.BitColumnNull.Value OrElse Not x.BitColumnNull.Value Or x.BitColumnNull.Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value = True AndAlso Not x.BitColumnNull.Value = True And x.BitColumnNull.Value OrElse Not x.BitColumnNull.Value Or x.BitColumnNull.Value)
         Assert.AreEqual("(((([T0].[BitColumnNull] = 1 AND NOT [T0].[BitColumnNull] = 1) AND [T0].[BitColumnNull] = 1) OR [T0].[BitColumnNull] = 0) OR [T0].[BitColumnNull] = 1)", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumnNull.Value = True AndAlso Not j.T1.BitColumnNull.Value = True And j.T1.BitColumnNull.Value OrElse Not j.T1.BitColumnNull.Value Or j.T1.BitColumnNull.Value)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumnNull.Value = True AndAlso Not j.T1.BitColumnNull.Value = True And j.T1.BitColumnNull.Value OrElse Not j.T1.BitColumnNull.Value Or j.T1.BitColumnNull.Value)
         Assert.AreEqual("(((([T0].[BitColumnNull] = 1 AND NOT [T0].[BitColumnNull] = 1) AND [T0].[BitColumnNull] = 1) OR [T0].[BitColumnNull] = 0) OR [T0].[BitColumnNull] = 1)", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
         localValue = True
-        result = Translate(visitor, Function(x) x.BitColumnNull.Value = localValue.Value AndAlso c.GetNullableTrueValue().Value OrElse Not Sql.Exp.Raw(Of Boolean?)("BitColumnNull = 1").Value)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.Value = localValue.Value AndAlso c.GetNullableTrueValue().Value OrElse Not Sql.Exp.Raw(Of Boolean?)("BitColumnNull = 1").Value)
         Assert.AreEqual("(([T0].[BitColumnNull] = @p0 AND @p1 = 1) OR NOT BitColumnNull = 1)", result.Sql)
         Assert.AreEqual(2, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
@@ -938,6 +938,36 @@ Namespace Tests
 
       End Using
     End Sub
+
+    <TestMethod()>
+    Public Sub TranslateWithPossibleExpandedBooleanComparison()
+      Using db = CreateDbContext()
+        Dim visitor = CreateSqlExpressionVisitor(db)
+        Dim result As SqlString
+
+        result = Translate(visitor, Function(x) x.BitColumn, ExpressionTranslateMode.Condition)
+        Assert.AreEqual("[T0].[BitColumn] = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = Translate(visitor, Function(x) x.BitColumn, ExpressionTranslateMode.GroupBy)
+        Assert.AreEqual("[T0].[BitColumn]", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = Translate(visitor, Function(x) x.BitColumn, ExpressionTranslateMode.OrderBy)
+        Assert.AreEqual("[T0].[BitColumn]", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = Translate(visitor, Function(x) x.BitColumn, ExpressionTranslateMode.CustomSelect)
+        Assert.AreEqual("[T0].[BitColumn]", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = Translate(visitor, Function(x) x.BitColumn, ExpressionTranslateMode.Set)
+        Assert.AreEqual("[T0].[BitColumn]", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+      End Using
+    End Sub
+
 
     <TestMethod()>
     Public Sub TranslateNullableHasValue()
@@ -948,58 +978,58 @@ Namespace Tests
         Dim localValue As Boolean?
         Dim c = New Class2
 
-        result = Translate(visitor, Function(x) x.BitColumnNull.HasValue)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.HasValue)
         Assert.AreEqual("[T0].[BitColumnNull] IS NOT NULL", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumnNull.HasValue)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumnNull.HasValue)
         Assert.AreEqual("[T0].[BitColumnNull] IS NOT NULL", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) localValue.HasValue)
+        result = TranslateCondition(visitor, Function(x) localValue.HasValue)
         Assert.AreEqual("@p0 IS NOT NULL", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) c.GetNullableTrueValue().HasValue)
+        result = TranslateCondition(visitor, Function(x) c.GetNullableTrueValue().HasValue)
         Assert.AreEqual("@p0 IS NOT NULL", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Sql.Exp.Raw(Of Boolean?)("BitColumnNull").HasValue)
+        result = TranslateCondition(visitor, Function(x) Sql.Exp.Raw(Of Boolean?)("BitColumnNull").HasValue)
         Assert.AreEqual("BitColumnNull IS NOT NULL", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) Not x.BitColumnNull.HasValue)
+        result = TranslateCondition(visitor, Function(x) Not x.BitColumnNull.HasValue)
         Assert.AreEqual("[T0].[BitColumnNull] IS NULL", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) Not j.T1.BitColumnNull.HasValue)
+        result = TranslateConditionWithJoin(visitor, Function(j) Not j.T1.BitColumnNull.HasValue)
         Assert.AreEqual("[T0].[BitColumnNull] IS NULL", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) Not localValue.HasValue)
+        result = TranslateCondition(visitor, Function(x) Not localValue.HasValue)
         Assert.AreEqual("@p0 IS NULL", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not c.GetNullableTrueValue().HasValue)
+        result = TranslateCondition(visitor, Function(x) Not c.GetNullableTrueValue().HasValue)
         Assert.AreEqual("@p0 IS NULL", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Not Sql.Exp.Raw(Of Boolean?)("BitColumnNull").HasValue)
+        result = TranslateCondition(visitor, Function(x) Not Sql.Exp.Raw(Of Boolean?)("BitColumnNull").HasValue)
         Assert.AreEqual("BitColumnNull IS NULL", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
         localValue = True
-        result = Translate(visitor, Function(x) x.BitColumnNull.HasValue AndAlso Not x.BitColumnNull.HasValue And localValue.HasValue OrElse Not c.GetNullableTrueValue().HasValue Or Sql.Exp.Raw(Of Boolean?)("BitColumnNull").HasValue)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull.HasValue AndAlso Not x.BitColumnNull.HasValue And localValue.HasValue OrElse Not c.GetNullableTrueValue().HasValue Or Sql.Exp.Raw(Of Boolean?)("BitColumnNull").HasValue)
         Assert.AreEqual("(((([T0].[BitColumnNull] IS NOT NULL AND [T0].[BitColumnNull] IS NULL) AND @p0 IS NOT NULL) OR @p1 IS NULL) OR BitColumnNull IS NOT NULL)", result.Sql)
         Assert.AreEqual(2, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
@@ -1017,58 +1047,58 @@ Namespace Tests
         Dim localValue As Boolean?
         Dim c = New Class2
 
-        result = Translate(visitor, Function(x) x.BitColumnNull Is Nothing)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull Is Nothing)
         Assert.AreEqual("[T0].[BitColumnNull] IS NULL", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumnNull Is Nothing)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumnNull Is Nothing)
         Assert.AreEqual("[T0].[BitColumnNull] IS NULL", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) localValue Is Nothing)
+        result = TranslateCondition(visitor, Function(x) localValue Is Nothing)
         Assert.AreEqual("@p0 IS NULL", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) c.GetNullableTrueValue() Is Nothing)
+        result = TranslateCondition(visitor, Function(x) c.GetNullableTrueValue() Is Nothing)
         Assert.AreEqual("@p0 IS NULL", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Sql.Exp.Raw(Of Boolean?)("BitColumnNull") Is Nothing)
+        result = TranslateCondition(visitor, Function(x) Sql.Exp.Raw(Of Boolean?)("BitColumnNull") Is Nothing)
         Assert.AreEqual("BitColumnNull IS NULL", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
-        result = Translate(visitor, Function(x) x.BitColumnNull IsNot Nothing)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull IsNot Nothing)
         Assert.AreEqual("[T0].[BitColumnNull] IS NOT NULL", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
-        result = TranslateJoin(visitor, Function(j) j.T1.BitColumnNull IsNot Nothing)
+        result = TranslateConditionWithJoin(visitor, Function(j) j.T1.BitColumnNull IsNot Nothing)
         Assert.AreEqual("[T0].[BitColumnNull] IS NOT NULL", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         localValue = True
-        result = Translate(visitor, Function(x) localValue IsNot Nothing)
+        result = TranslateCondition(visitor, Function(x) localValue IsNot Nothing)
         Assert.AreEqual("@p0 IS NOT NULL", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) c.GetNullableTrueValue() IsNot Nothing)
+        result = TranslateCondition(visitor, Function(x) c.GetNullableTrueValue() IsNot Nothing)
         Assert.AreEqual("@p0 IS NOT NULL", result.Sql)
         Assert.AreEqual(1, result.Parameters.Count)
         Assert.AreEqual(c.GetNullableTrueValue(), result.Parameters(0).Value)
 
-        result = Translate(visitor, Function(x) Sql.Exp.Raw(Of Boolean?)("BitColumnNull") IsNot Nothing)
+        result = TranslateCondition(visitor, Function(x) Sql.Exp.Raw(Of Boolean?)("BitColumnNull") IsNot Nothing)
         Assert.AreEqual("BitColumnNull IS NOT NULL", result.Sql)
         Assert.AreEqual(0, result.Parameters.Count)
 
         ' --------------------------------------------------------------------------------------
 
         localValue = True
-        result = Translate(visitor, Function(x) x.BitColumnNull Is Nothing AndAlso x.BitColumnNull IsNot Nothing And localValue Is Nothing OrElse c.GetNullableTrueValue() IsNot Nothing Or Sql.Exp.Raw(Of Boolean?)("BitColumnNull") Is Nothing)
+        result = TranslateCondition(visitor, Function(x) x.BitColumnNull Is Nothing AndAlso x.BitColumnNull IsNot Nothing And localValue Is Nothing OrElse c.GetNullableTrueValue() IsNot Nothing Or Sql.Exp.Raw(Of Boolean?)("BitColumnNull") Is Nothing)
         Assert.AreEqual("(((([T0].[BitColumnNull] IS NULL AND [T0].[BitColumnNull] IS NOT NULL) AND @p0 IS NULL) OR @p1 IS NOT NULL) OR BitColumnNull IS NULL)", result.Sql)
         Assert.AreEqual(2, result.Parameters.Count)
         Assert.AreEqual(localValue, result.Parameters(0).Value)
@@ -1085,12 +1115,20 @@ Namespace Tests
       Return DirectCast(fi.GetValue(builder), SqlExpressionVisitor)
     End Function
 
-    Public Function Translate(visitor As SqlExpressionVisitor, predicate As Expression(Of Func(Of ItemWithAllSupportedValues, Boolean))) As SqlString
-      Return visitor.Translate(predicate, {0}, 0, True, True)
+    Private Function TranslateCondition(visitor As SqlExpressionVisitor, predicate As Expression(Of Func(Of ItemWithAllSupportedValues, Boolean))) As SqlString
+      Return Translate(visitor, predicate, ExpressionTranslateMode.Condition)
     End Function
 
-    Public Function TranslateJoin(visitor As SqlExpressionVisitor, predicate As Expression(Of Func(Of Join(Of ItemWithAllSupportedValues, Article), Boolean))) As SqlString
-      Return visitor.Translate(predicate, Nothing, 0, True, True)
+    Private Function TranslateConditionWithJoin(visitor As SqlExpressionVisitor, predicate As Expression(Of Func(Of Join(Of ItemWithAllSupportedValues, Article), Boolean))) As SqlString
+      Return TranslateWithJoin(visitor, predicate, ExpressionTranslateMode.Condition)
+    End Function
+
+    Private Function Translate(visitor As SqlExpressionVisitor, predicate As Expression(Of Func(Of ItemWithAllSupportedValues, Boolean)), mode As ExpressionTranslateMode) As SqlString
+      Return visitor.Translate(predicate, mode, {0}, 0, True, True)
+    End Function
+
+    Private Function TranslateWithJoin(visitor As SqlExpressionVisitor, predicate As Expression(Of Func(Of Join(Of ItemWithAllSupportedValues, Article), Boolean)), mode As ExpressionTranslateMode) As SqlString
+      Return visitor.Translate(predicate, mode, Nothing, 0, True, True)
     End Function
 
   End Class

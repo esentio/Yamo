@@ -73,7 +73,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     Public Sub AddSet(predicate As Expression)
-      Dim result = m_Visitor.Translate(predicate, {0}, m_Parameters.Count, False, False)
+      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Set, {0}, m_Parameters.Count, False, False)
       m_SetExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -85,7 +85,7 @@ Namespace Expressions.Builders
     ''' <param name="predicate"></param>
     ''' <param name="value"></param>
     Public Sub AddSet(predicate As Expression, value As Object)
-      Dim result = m_Visitor.Translate(predicate, {0}, m_Parameters.Count, False, False)
+      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Set, {0}, m_Parameters.Count, False, False)
       m_Parameters.AddRange(result.Parameters)
       Dim parameterName = CreateParameter(m_Parameters.Count)
       m_SetExpressions.Add($"{result.Sql} = {parameterName}")
@@ -99,9 +99,9 @@ Namespace Expressions.Builders
     ''' <param name="predicate"></param>
     ''' <param name="valueSelector"></param>
     Public Sub AddSet(predicate As Expression, valueSelector As Expression)
-      Dim result1 = m_Visitor.Translate(predicate, {0}, m_Parameters.Count, False, False)
+      Dim result1 = m_Visitor.Translate(predicate, ExpressionTranslateMode.Set, {0}, m_Parameters.Count, False, False)
       m_Parameters.AddRange(result1.Parameters)
-      Dim result2 = m_Visitor.Translate(valueSelector, {0}, m_Parameters.Count, False, False)
+      Dim result2 = m_Visitor.Translate(valueSelector, ExpressionTranslateMode.Set, {0}, m_Parameters.Count, False, False)
       m_Parameters.AddRange(result2.Parameters)
       m_SetExpressions.Add($"{result1.Sql} = {result2.Sql}")
     End Sub
@@ -128,7 +128,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     Public Sub AddWhere(predicate As Expression)
-      Dim result = m_Visitor.Translate(predicate, {0}, m_Parameters.Count, False, False)
+      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, {0}, m_Parameters.Count, False, False)
       m_WhereExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
