@@ -210,11 +210,13 @@ Namespace Expressions.Builders
         m_JoinExpressions = New List(Of String)
       End If
 
-      If entityIndexHints Is Nothing Then
-        entityIndexHints = TryGetEntityIndexHints(predicate)
-      End If
+      Dim relationship As SqlEntityRelationship
 
-      Dim relationship = TryGetRelationship(Of TJoined)(entityIndexHints)
+      If entityIndexHints Is Nothing Then
+        relationship = TryGetRelationship(Of TJoined)(TryGetEntityIndexHints(predicate))
+      Else
+        relationship = TryGetRelationship(Of TJoined)(entityIndexHints)
+      End If
 
       m_Model.AddJoinedTable(Of TJoined)(relationship)
 
@@ -248,8 +250,7 @@ Namespace Expressions.Builders
 
         m_JoinExpressions.Add(sql)
       Else
-        Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
-        Dim result = m_Visitor.Translate(predicate, parametersType, entityIndexHints, m_Parameters.Count, True, True)
+        Dim result = m_Visitor.Translate(predicate, entityIndexHints, m_Parameters.Count, True, True)
 
         If joinInfo.TableSource Is Nothing Then
           sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & " ON " & result.Sql
@@ -295,6 +296,7 @@ Namespace Expressions.Builders
     ''' <param name="predicate"></param>
     ''' <returns></returns>
     Private Function TryGetEntityIndexHints(predicate As Expression) As Int32()
+      ' check is probably redundant, because right now this method is only called for IJoin parameter
       If predicate.NodeType = ExpressionType.Lambda Then
         Dim lambda = DirectCast(predicate, LambdaExpression)
 
@@ -320,35 +322,30 @@ Namespace Expressions.Builders
     ''' <param name="entityIndexHints"></param>
     ''' <returns></returns>
     Private Function TryGetRelationship(Of TJoined)(entityIndexHints As Int32()) As SqlEntityRelationship
-      Dim declaringEntityIndexHint = entityIndexHints?(0)
-
-      If Not declaringEntityIndexHint.HasValue Then
+      If entityIndexHints Is Nothing Then
         ' no relationship hint (exception is thrown later if needed)
         ' e.g. if we want just to use joined table in query and not return it at all
         Return Nothing
-
-      ElseIf declaringEntityIndexHint.HasValue Then
-        ' try to infer relationship from model
-        Dim declaringSqlEntity = m_Model.GetEntity(declaringEntityIndexHint.Value)
-        Dim relationshipNavigations = declaringSqlEntity.Entity.GetRelationshipNavigations(GetType(TJoined))
-
-        If relationshipNavigations.Count = 1 Then
-          Dim relationshipNavigation = relationshipNavigations(0)
-
-          Select Case relationshipNavigation.GetType()
-            Case GetType(ReferenceNavigation)
-              Return New SqlEntityRelationship(declaringSqlEntity, relationshipNavigation)
-            Case GetType(CollectionNavigation)
-              Return New SqlEntityRelationship(declaringSqlEntity, relationshipNavigation)
-            Case Else
-              Throw New NotSupportedException($"Relationship of type '{relationshipNavigation.GetType()}' is not supported.")
-          End Select
-        Else
-          ' no unambiguous match found; relationship might be specified later
-          Return Nothing
-        End If
       End If
 
+      ' try to infer relationship from model
+      Dim declaringSqlEntity = m_Model.GetEntity(entityIndexHints(0))
+      Dim relationshipNavigations = declaringSqlEntity.Entity.GetRelationshipNavigations(GetType(TJoined))
+
+      If relationshipNavigations.Count = 1 Then
+        Dim relationshipNavigation = relationshipNavigations(0)
+
+        Select Case relationshipNavigation.GetType()
+          Case GetType(ReferenceNavigation)
+            Return New SqlEntityRelationship(declaringSqlEntity, relationshipNavigation)
+          Case GetType(CollectionNavigation)
+            Return New SqlEntityRelationship(declaringSqlEntity, relationshipNavigation)
+          Case Else
+            Throw New NotSupportedException($"Relationship of type '{relationshipNavigation.GetType()}' is not supported.")
+        End Select
+      End If
+
+      ' no unambiguous match found; relationship might be specified later
       Return Nothing
     End Function
 
@@ -423,8 +420,7 @@ Namespace Expressions.Builders
         m_WhereExpressions = New List(Of String)
       End If
 
-      Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
-      Dim result = m_Visitor.Translate(predicate, parametersType, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(predicate, entityIndexHints, m_Parameters.Count, True, True)
       m_WhereExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -460,8 +456,7 @@ Namespace Expressions.Builders
         m_GroupByExpressions = New List(Of String)
       End If
 
-      Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
-      Dim result = m_Visitor.Translate(keySelector, parametersType, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(keySelector, entityIndexHints, m_Parameters.Count, True, True)
       m_GroupByExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -477,8 +472,7 @@ Namespace Expressions.Builders
         m_HavingExpressions = New List(Of String)
       End If
 
-      Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
-      Dim result = m_Visitor.Translate(predicate, parametersType, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(predicate, entityIndexHints, m_Parameters.Count, True, True)
       m_HavingExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -515,8 +509,7 @@ Namespace Expressions.Builders
         m_OrderByExpressions = New List(Of String)
       End If
 
-      Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
-      Dim result = m_Visitor.Translate(keySelector, parametersType, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(keySelector, entityIndexHints, m_Parameters.Count, True, True)
 
       If ascending Then
         m_OrderByExpressions.Add(result.Sql)
@@ -648,8 +641,7 @@ Namespace Expressions.Builders
     ''' <param name="selector"></param>
     ''' <param name="entityIndexHints"></param>
     Public Sub AddSelect(selector As Expression, entityIndexHints As Int32())
-      Dim parametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
-      Dim result = m_Visitor.TranslateCustomSelect(selector, parametersType, entityIndexHints, m_Parameters.Count)
+      Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, m_Parameters.Count)
       m_SelectExpression = result.SqlString.Sql
       m_Parameters.AddRange(result.SqlString.Parameters)
       m_Model.SetCustomEntities(result.CustomEntities)

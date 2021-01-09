@@ -4,6 +4,8 @@
 
   Public Property Price As Decimal
 
+  Public Property InStock As Boolean
+
 
   Public Property Label As Label
 

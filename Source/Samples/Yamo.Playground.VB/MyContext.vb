@@ -30,6 +30,7 @@ Public Class MyContext
     modelBuilder.Entity(Of Article)()
     modelBuilder.Entity(Of Article).Property(Function(a) a.Id).IsKey()
     modelBuilder.Entity(Of Article).Property(Function(a) a.Price)
+    modelBuilder.Entity(Of Article).Property(Function(a) a.InStock)
 
     modelBuilder.Entity(Of Article).HasOne(Function(b) b.Label)
     modelBuilder.Entity(Of Article).HasMany(Function(b) b.Parts)

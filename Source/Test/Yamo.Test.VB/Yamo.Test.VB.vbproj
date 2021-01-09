@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Yamo.Test</RootNamespace>
+    <RootNamespace>Yamo.Test.VB</RootNamespace>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Source\Yamo\Yamo.vbproj" />
+    <ProjectReference Include="..\Yamo.Test\Yamo.Test.vbproj" />
   </ItemGroup>
 
 </Project>

@@ -88,7 +88,7 @@ Namespace Expressions.Builders
         End If
       End If
 
-      Dim result = m_Visitor.Translate(predicate, ExpressionParametersType.Entities, {0}, m_Parameters.Count + m_ParameterIndexShift.Value, False, False)
+      Dim result = m_Visitor.Translate(predicate, {0}, m_Parameters.Count + m_ParameterIndexShift.Value, False, False)
       m_WhereExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
