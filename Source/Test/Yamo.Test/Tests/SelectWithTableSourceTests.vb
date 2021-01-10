@@ -20,14 +20,19 @@ Namespace Tests
       Dim article1 = Me.ModelFactory.CreateArticle(1)
       Dim article2 = Me.ModelFactory.CreateArticle(2)
       Dim article3 = Me.ModelFactory.CreateArticle(3)
+      Dim article4 = Me.ModelFactory.CreateArticle(4)
 
       InsertItemsToArchive(ArticleArchiveTableName, article1, article2, article3)
 
       Using db = CreateDbContext()
-        Dim result = db.From(Of Article)($"(SELECT {Sql.Model.Columns(Of Article)} FROM ArticleArchive WHERE Id < 3)").
+        Dim one = 1
+        Dim four = 4
+
+        Dim result = db.From(Of Article)($"(SELECT {Sql.Model.Columns(Of Article)} FROM ArticleArchive WHERE Id < {four})").
+                        Where(Function(x) one < x.Id).
                         SelectAll().ToList()
 
-        CollectionAssert.AreEquivalent({article1, article2}, result)
+        CollectionAssert.AreEquivalent({article2, article3}, result)
       End Using
     End Sub
 
