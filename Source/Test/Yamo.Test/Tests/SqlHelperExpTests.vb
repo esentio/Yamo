@@ -64,7 +64,6 @@ Namespace Tests
 
       InsertItems(items)
 
-
       Using db = CreateDbContext()
         Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.IntColumn)).ColumnName
         Dim one = 1
@@ -152,6 +151,30 @@ Namespace Tests
                          ToList()
 
         CollectionAssert.AreEqual({"foo", "foo", "foo", "foo", "foo"}, result5)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim column = db.Model.GetEntity(GetType(ItemWithAllSupportedValues)).GetProperty(NameOf(ItemWithAllSupportedValues.IntColumn)).ColumnName
+        Dim one = 1
+        Dim four = 4
+
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) Sql.Exp.Raw(Of Boolean)($"IntColumn < {four}")).
+                         And(Function(x) one < x.IntColumn).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) x.IntColumn).
+                         ToList()
+
+        CollectionAssert.AreEqual({2, 3}, result1)
+
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) Sql.Exp.Raw(Of Boolean)("{0} < {1}", RawSqlString.Create(column), four)).
+                         And(Function(x) one < x.IntColumn).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) x.IntColumn).
+                         ToList()
+
+        CollectionAssert.AreEqual({2, 3}, result1)
       End Using
     End Sub
 

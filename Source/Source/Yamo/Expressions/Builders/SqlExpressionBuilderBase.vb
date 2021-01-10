@@ -71,6 +71,7 @@ Namespace Expressions.Builders
     Public Function ConvertToSqlString(format As String, args() As Object, parameterIndex As Int32) As SqlString
       Dim formatArgs = New String(args.Length - 1) {}
       Dim parameters = New List(Of SqlParameter)(args.Length)
+      Dim parametersCount = 0
 
       For i = 0 To args.Length - 1
         Dim value = args(i)
@@ -88,9 +89,10 @@ Namespace Expressions.Builders
           Dim s = DirectCast(value, RawSqlString)
           formatArgs(i) = s.Value
         Else
-          Dim paramName = CreateParameter(parameterIndex + i)
+          Dim paramName = CreateParameter(parameterIndex + parametersCount)
           formatArgs(i) = paramName
           parameters.Add(New SqlParameter(paramName, value))
+          parametersCount += 1
         End If
       Next
 
