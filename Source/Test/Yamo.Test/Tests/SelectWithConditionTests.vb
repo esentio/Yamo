@@ -19,6 +19,69 @@ Namespace Tests
 
     Protected Const LabelArchiveTableName As String = "LabelArchive"
 
+    Protected MustOverride Function GetTableHints1() As String
+
+    Protected MustOverride Function GetTableHints2() As String
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithConditionalWithHints()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 0
+      items(1).IntColumn = 1
+      items(2).IntColumn = 2
+      items(3).IntColumn = 3
+      items(4).IntColumn = 4
+
+      InsertItems(items)
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True, Function(exp) exp.WithHints(GetTableHints1())).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent(items, result)
+        Assert.IsTrue(db.GetLastCommandText().Contains("FROM [ItemWithAllSupportedValues] [T0] " & GetTableHints1()))
+      End Using
+
+      ' condition is false, apply nothing
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(False, Function(exp) exp.WithHints(GetTableHints1())).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent(items, result)
+        Assert.IsFalse(db.GetLastCommandText().Contains("FROM [ItemWithAllSupportedValues] [T0] " & GetTableHints1()))
+      End Using
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(True,
+                           Function(exp) exp.WithHints(GetTableHints1()),
+                           Function(exp) exp.WithHints(GetTableHints2())
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent(items, result)
+        Assert.IsTrue(db.GetLastCommandText().Contains("FROM [ItemWithAllSupportedValues] [T0] " & GetTableHints1()))
+      End Using
+
+      ' condition is false, apply false part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        If(False,
+                           Function(exp) exp.WithHints(GetTableHints1()),
+                           Function(exp) exp.WithHints(GetTableHints2())
+                        ).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEquivalent(items, result)
+        Assert.IsTrue(db.GetLastCommandText().Contains("FROM [ItemWithAllSupportedValues] [T0] " & GetTableHints2()))
+      End Using
+    End Sub
+
     <TestMethod()>
     Public Overridable Sub SelectWithConditionalInnerJoin()
       Dim article1 = Me.ModelFactory.CreateArticle(1)
@@ -1012,6 +1075,89 @@ Namespace Tests
         Assert.AreEqual(label1De, result(0).Label)
         Assert.AreEqual(label2De, result(1).Label)
         Assert.AreEqual(label3De, result(2).Label)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithConditionalWithHintsOfJoinedTable()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
+      Dim label2En = Me.ModelFactory.CreateLabel("", 2, English)
+      Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
+
+      InsertItems(article1, article2, article3, label1En, label2En, label3En)
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        Join(Of Label)().
+                        If(True, Function(exp) exp.WithHints(GetTableHints1())).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label2En, result(1).Label)
+        Assert.AreEqual(label3En, result(2).Label)
+        Assert.IsTrue(db.GetLastCommandText().Contains("JOIN [Label] [T1] " & GetTableHints1()))
+      End Using
+
+      ' condition is false, apply nothing
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        Join(Of Label)().
+                        If(False, Function(exp) exp.WithHints(GetTableHints1())).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label2En, result(1).Label)
+        Assert.AreEqual(label3En, result(2).Label)
+        Assert.IsFalse(db.GetLastCommandText().Contains("JOIN [Label] [T1] " & GetTableHints1()))
+      End Using
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        Join(Of Label)().
+                        If(True,
+                           Function(exp) exp.WithHints(GetTableHints1()),
+                           Function(exp) exp.WithHints(GetTableHints2())
+                        ).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label2En, result(1).Label)
+        Assert.AreEqual(label3En, result(2).Label)
+        Assert.IsTrue(db.GetLastCommandText().Contains("JOIN [Label] [T1] " & GetTableHints1()))
+      End Using
+
+      ' condition is false, apply false part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        Join(Of Label)().
+                        If(False,
+                           Function(exp) exp.WithHints(GetTableHints1()),
+                           Function(exp) exp.WithHints(GetTableHints2())
+                        ).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        CollectionAssert.AreEqual({article1, article2, article3}, result)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(label2En, result(1).Label)
+        Assert.AreEqual(label3En, result(2).Label)
+        Assert.IsTrue(db.GetLastCommandText().Contains("JOIN [Label] [T1] " & GetTableHints2()))
       End Using
     End Sub
 

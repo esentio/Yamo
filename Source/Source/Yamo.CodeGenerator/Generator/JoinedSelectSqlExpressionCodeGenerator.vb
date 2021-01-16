@@ -11,6 +11,7 @@
       Return {
         GeneratedClass.SelectSqlExpression,
         GeneratedClass.JoinSelectSqlExpression,
+        GeneratedClass.JoinWithHintsSelectSqlExpression,
         GeneratedClass.JoinedSelectSqlExpression,
         GeneratedClass.FilteredSelectSqlExpression,
         GeneratedClass.GroupedSelectSqlExpression,

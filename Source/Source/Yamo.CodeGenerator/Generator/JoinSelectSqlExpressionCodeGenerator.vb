@@ -8,7 +8,9 @@
     End Sub
 
     Protected Overrides Function GetAllowedResultsForCondition() As GeneratedClass()
-      Return {}
+      Return {
+        GeneratedClass.JoinWithHintsSelectSqlExpression
+      }
     End Function
 
     Protected Overrides Sub Generate(builder As CodeBuilder, entityCount As Int32)
@@ -29,10 +31,13 @@
       GenerateConstructor(builder, entityCount)
       builder.AppendLine()
 
+      GenerateWithHints(builder, entityCount)
+      builder.AppendLine()
+
       GenerateOn(builder, entityCount)
       builder.AppendLine()
 
-      GenerateIfWithMandatoryOtherwise(builder, entityCount)
+      GenerateIf(builder, entityCount)
       builder.AppendLine()
 
       builder.PopIndent()

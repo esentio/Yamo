@@ -26,14 +26,24 @@ Namespace Expressions.Builders
     Private m_Visitor As SqlExpressionVisitor
 
     ''' <summary>
-    ''' Stores main table source expression
+    ''' Stores main table source expression.
     ''' </summary>
     Private m_MainTableSourceExpression As String
 
     ''' <summary>
-    ''' Stores current join info
+    ''' Stores main table hints.
+    ''' </summary>
+    Private m_MainTableHints As String
+
+    ''' <summary>
+    ''' Stores current join info.
     ''' </summary>
     Private m_CurrentJoinInfo As JoinInfo?
+
+    ''' <summary>
+    ''' Stores current joined table hints.
+    ''' </summary>
+    Private m_CurrentJoinTableHints As String
 
     ''' <summary>
     ''' Stores join expressions.
@@ -61,7 +71,7 @@ Namespace Expressions.Builders
     Private m_OrderByExpressions As List(Of String)
 
     ''' <summary>
-    ''' Stores limit expression
+    ''' Stores limit expression.
     ''' </summary>
     Private m_LimitExpression As String
 
@@ -96,7 +106,9 @@ Namespace Expressions.Builders
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       ' lists are created only when necessary
       m_MainTableSourceExpression = Nothing
+      m_MainTableHints = Nothing
       m_CurrentJoinInfo = Nothing
+      m_CurrentJoinTableHints = Nothing
       m_JoinExpressions = Nothing
       m_WhereExpressions = Nothing
       m_GroupByExpressions = Nothing
@@ -143,6 +155,29 @@ Namespace Expressions.Builders
         m_MainTableSourceExpression = sql.Sql
         m_Parameters.AddRange(sql.Parameters)
       End If
+    End Sub
+
+    ''' <summary>
+    ''' Sets main table hint(s).<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="tableHints"></param>
+    Public Sub SetMainTableHints(tableHints As String)
+      m_MainTableHints = tableHints
+    End Sub
+
+    ''' <summary>
+    ''' Sets table hint(s) for last joined table.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="tableHints"></param>
+    Public Sub SetLastJoinTableHints(tableHints As String)
+      If Not m_CurrentJoinInfo.HasValue Then
+        ' join has been conditionally ignored
+        Exit Sub
+      End If
+
+      m_CurrentJoinTableHints = tableHints
     End Sub
 
     ''' <summary>
@@ -195,7 +230,7 @@ Namespace Expressions.Builders
     ''' <param name="predicate"></param>
     ''' <param name="entityIndexHints"></param>
     Public Sub AddJoin(Of TJoined)(joinType As JoinType, predicate As Expression, entityIndexHints As Int32())
-      AddJoin(Of TJoined)(New JoinInfo(joinType), predicate, entityIndexHints)
+      AddJoin(Of TJoined)(New JoinInfo(joinType), Nothing, predicate, entityIndexHints)
     End Sub
 
     ''' <summary>
@@ -203,9 +238,10 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="joinInfo"></param>
+    ''' <param name="tableHints"></param>
     ''' <param name="predicate"></param>
     ''' <param name="entityIndexHints"></param>
-    Private Sub AddJoin(Of TJoined)(joinInfo As JoinInfo, predicate As Expression, entityIndexHints As Int32())
+    Private Sub AddJoin(Of TJoined)(joinInfo As JoinInfo, tableHints As String, predicate As Expression, entityIndexHints As Int32())
       If m_JoinExpressions Is Nothing Then
         m_JoinExpressions = New List(Of String)
       End If
@@ -243,9 +279,9 @@ Namespace Expressions.Builders
 
       If predicate Is Nothing Then
         If joinInfo.TableSource Is Nothing Then
-          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)
+          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints)
         Else
-          sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias)
+          sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints)
         End If
 
         m_JoinExpressions.Add(sql)
@@ -253,9 +289,9 @@ Namespace Expressions.Builders
         Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, m_Parameters.Count, True, True)
 
         If joinInfo.TableSource Is Nothing Then
-          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & " ON " & result.Sql
+          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints) & " ON " & result.Sql
         Else
-          sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & " ON " & result.Sql
+          sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints) & " ON " & result.Sql
         End If
 
         m_JoinExpressions.Add(sql)
@@ -285,9 +321,10 @@ Namespace Expressions.Builders
         Exit Sub
       End If
 
-      AddJoin(Of TJoined)(m_CurrentJoinInfo.Value, predicate, entityIndexHints)
+      AddJoin(Of TJoined)(m_CurrentJoinInfo.Value, m_CurrentJoinTableHints, predicate, entityIndexHints)
 
       m_CurrentJoinInfo = Nothing
+      m_CurrentJoinTableHints = Nothing
     End Sub
 
     ''' <summary>
@@ -721,6 +758,11 @@ Namespace Expressions.Builders
 
       sql.Append(" ")
       Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstTableAlias())
+
+      If m_MainTableHints IsNot Nothing Then
+        sql.Append(" ")
+        sql.Append(m_MainTableHints)
+      End If
 
       If m_JoinExpressions IsNot Nothing Then
         For i = 0 To m_JoinExpressions.Count - 1

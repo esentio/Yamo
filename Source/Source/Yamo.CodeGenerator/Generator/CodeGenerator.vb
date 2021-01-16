@@ -43,8 +43,12 @@ Namespace Generator
       Select Case type
         Case GeneratedClass.SelectSqlExpression
           Return "SelectSqlExpression"
+        Case GeneratedClass.SelectWithHintsSelectSqlExpression
+          Return "SelectWithHintsSelectSqlExpression"
         Case GeneratedClass.JoinSelectSqlExpression
           Return "JoinSelectSqlExpression"
+        Case GeneratedClass.JoinWithHintsSelectSqlExpression
+          Return "JoinWithHintsSelectSqlExpression"
         Case GeneratedClass.JoinedSelectSqlExpression
           Return "JoinedSelectSqlExpression"
         Case GeneratedClass.FilteredSelectSqlExpression
