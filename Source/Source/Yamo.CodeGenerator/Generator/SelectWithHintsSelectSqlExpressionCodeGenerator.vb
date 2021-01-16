@@ -47,10 +47,8 @@
       GenerateConstructor(builder, entityCount)
       builder.AppendLine()
 
-      If Not entityCount = Me.Definition.MaxEntityCount Then
-        GenerateJoin(builder, entityCount)
-        builder.AppendLine()
-      End If
+      GenerateJoin(builder, entityCount)
+      builder.AppendLine()
 
       GenerateWhere(builder, entityCount)
       builder.AppendLine()
