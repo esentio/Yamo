@@ -6,31 +6,21 @@ Imports Yamo.Internal.Query
 Namespace Expressions
 
   ''' <summary>
-  ''' Represents SQL UPDATE statement.
+  ''' Represents SQL UPDATE statement with defined table hints.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
-  Public Class UpdateSqlExpression(Of T)
+  Public Class WithHintsUpdateSqlExpression(Of T)
     Inherits UpdateSqlExpressionBase
 
     ''' <summary>
-    ''' Creates new instance of <see cref="UpdateSqlExpression(Of T)"/>.
+    ''' Creates new instance of <see cref="WithHintsUpdateSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="context"></param>
-    ''' <param name="tableNameOverride"></param>
-    Friend Sub New(context As DbContext, Optional tableNameOverride As String = Nothing)
-      MyBase.New(context, New UpdateSqlExpressionBuilder(context, tableNameOverride), New QueryExecutor(context))
-      Me.Builder.SetMainTable(Of T)()
+    ''' <param name="builder"></param>
+    ''' <param name="executor"></param>
+    Friend Sub New(context As DbContext, builder As UpdateSqlExpressionBuilder, executor As QueryExecutor)
+      MyBase.New(context, builder, executor)
     End Sub
-
-    ''' <summary>
-    ''' Adds table hint(s).
-    ''' </summary>
-    ''' <param name="tableHints"></param>
-    ''' <returns></returns>
-    Public Function WithHints(tableHints As String) As WithHintsUpdateSqlExpression(Of T)
-      Me.Builder.SetTableHints(tableHints)
-      Return New WithHintsUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
-    End Function
 
     ''' <summary>
     ''' Adds SET clause.

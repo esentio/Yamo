@@ -5,30 +5,21 @@ Imports Yamo.Internal.Query
 Namespace Expressions
 
   ''' <summary>
-  ''' Represents SQL INSERT statement.
+  ''' Represents SQL INSERT statement with defined table hints.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
-  Public Class InsertSqlExpression(Of T)
+  Public Class WithHintsInsertSqlExpression(Of T)
     Inherits InsertSqlExpressionBase
 
     ''' <summary>
-    ''' Creates new instance of <see cref="InsertSqlExpression(Of T)"/>.
+    ''' Creates new instance of <see cref="WithHintsInsertSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="context"></param>
-    ''' <param name="tableNameOverride"></param>
-    Friend Sub New(context As DbContext, Optional tableNameOverride As String = Nothing)
-      MyBase.New(context, New InsertSqlExpressionBuilder(context, tableNameOverride), New QueryExecutor(context))
+    ''' <param name="builder"></param>
+    ''' <param name="executor"></param>
+    Friend Sub New(context As DbContext, builder As InsertSqlExpressionBuilder, executor As QueryExecutor)
+      MyBase.New(context, builder, executor)
     End Sub
-
-    ''' <summary>
-    ''' Adds table hint(s).
-    ''' </summary>
-    ''' <param name="tableHints"></param>
-    ''' <returns></returns>
-    Public Function WithHints(tableHints As String) As WithHintsInsertSqlExpression(Of T)
-      Me.Builder.SetTableHints(tableHints)
-      Return New WithHintsInsertSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
-    End Function
 
     ''' <summary>
     ''' Executes INSERT statement and returns the number of affected rows.

@@ -4,10 +4,10 @@ Imports Yamo.Internal.Query
 Namespace Expressions
 
   ''' <summary>
-  ''' Base class for SQL UPDATE statements.<br/>
+  ''' Base class for SQL INSERT statements.<br/>
   ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
   ''' </summary>
-  Public MustInherit Class UpdateSqlExpressionBase
+  Public MustInherit Class InsertSqlExpressionBase
     Inherits SqlExpressionBase
 
     ''' <summary>
@@ -21,7 +21,7 @@ Namespace Expressions
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Protected Property Builder As UpdateSqlExpressionBuilder
+    Protected Property Builder As InsertSqlExpressionBuilder
 
     ''' <summary>
     ''' Gets query executor.<br/>
@@ -31,12 +31,12 @@ Namespace Expressions
     Protected Property Executor As QueryExecutor
 
     ''' <summary>
-    ''' Creates new instance of <see cref="UpdateSqlExpressionBase"/>.
+    ''' Creates new instance of <see cref="InsertSqlExpressionBase"/>.
     ''' </summary>
     ''' <param name="context"></param>
     ''' <param name="builder"></param>
     ''' <param name="executor"></param>
-    Friend Sub New(context As DbContext, builder As UpdateSqlExpressionBuilder, executor As QueryExecutor)
+    Friend Sub New(context As DbContext, builder As InsertSqlExpressionBuilder, executor As QueryExecutor)
       Me.DbContext = context
       Me.Builder = builder
       Me.Executor = executor

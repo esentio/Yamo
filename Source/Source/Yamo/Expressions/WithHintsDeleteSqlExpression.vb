@@ -6,10 +6,10 @@ Imports Yamo.Internal.Query
 Namespace Expressions
 
   ''' <summary>
-  ''' Represents SQL DELETE statement.
+  ''' Represents SQL DELETE statement with defined table hints.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
-  Public Class DeleteSqlExpression(Of T)
+  Public Class WithHintsDeleteSqlExpression(Of T)
     Inherits DeleteSqlExpressionBase
 
     ''' <summary>
@@ -18,26 +18,16 @@ Namespace Expressions
     Private m_SoftDelete As Boolean
 
     ''' <summary>
-    ''' Creates new instance of <see cref="DeleteSqlExpression(Of T)"/>.
+    ''' Creates new instance of <see cref="WithHintsDeleteSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="context"></param>
+    ''' <param name="builder"></param>
+    ''' <param name="executor"></param>
     ''' <param name="softDelete"></param>
-    ''' <param name="tableNameOverride"></param>
-    Friend Sub New(context As DbContext, softDelete As Boolean, Optional tableNameOverride As String = Nothing)
-      MyBase.New(context, New DeleteSqlExpressionBuilder(context, softDelete, tableNameOverride), New QueryExecutor(context))
-      Me.Builder.SetMainTable(Of T)()
+    Friend Sub New(context As DbContext, builder As DeleteSqlExpressionBuilder, executor As QueryExecutor, softDelete As Boolean)
+      MyBase.New(context, builder, executor)
       m_SoftDelete = softDelete
     End Sub
-
-    ''' <summary>
-    ''' Adds table hint(s).
-    ''' </summary>
-    ''' <param name="tableHints"></param>
-    ''' <returns></returns>
-    Public Function WithHints(tableHints As String) As WithHintsDeleteSqlExpression(Of T)
-      Me.Builder.SetTableHints(tableHints)
-      Return New WithHintsDeleteSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor, m_SoftDelete)
-    End Function
 
     ''' <summary>
     ''' Adds WHERE clause.

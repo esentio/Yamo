@@ -14,6 +14,11 @@ Namespace Expressions.Builders
     Inherits SqlExpressionBuilderBase
 
     ''' <summary>
+    ''' Stores SQL model.
+    ''' </summary>
+    Private m_Model As SqlModel
+
+    ''' <summary>
     ''' Stores whether soft delete is used.
     ''' </summary>
     Private m_SoftDelete As Boolean
@@ -24,9 +29,9 @@ Namespace Expressions.Builders
     Private m_TableNameOverride As String
 
     ''' <summary>
-    ''' Stores SQL model.
+    ''' Stores table hints.
     ''' </summary>
-    Private m_Model As SqlModel
+    Private m_TableHints As String
 
     ''' <summary>
     ''' Stores SQL expression visitor.
@@ -56,9 +61,10 @@ Namespace Expressions.Builders
     ''' <param name="softDelete"></param>
     Public Sub New(context As DbContext, softDelete As Boolean, tableNameOverride As String)
       MyBase.New(context)
+      m_Model = New SqlModel(Me.DbContext.Model)
       m_SoftDelete = softDelete
       m_TableNameOverride = tableNameOverride
-      m_Model = New SqlModel(Me.DbContext.Model)
+      m_TableHints = Nothing
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       m_WhereExpressions = New List(Of String)
       m_Parameters = New List(Of SqlParameter)
@@ -72,6 +78,15 @@ Namespace Expressions.Builders
     ''' <typeparam name="T"></typeparam>
     Public Sub SetMainTable(Of T)()
       m_Model.SetMainTable(Of T)()
+    End Sub
+
+    ''' <summary>
+    ''' Sets table hint(s).<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="tableHints"></param>
+    Public Sub SetTableHints(tableHints As String)
+      m_TableHints = tableHints
     End Sub
 
     ''' <summary>
@@ -134,10 +149,16 @@ Namespace Expressions.Builders
       If m_TableNameOverride Is Nothing Then
         Dim entity = m_Model.GetFirstEntity().Entity
         Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
-        sql.AppendLine()
       Else
-        sql.AppendLine(m_TableNameOverride)
+        sql.Append(m_TableNameOverride)
       End If
+
+      If m_TableHints IsNot Nothing Then
+        sql.Append(" ")
+        sql.Append(m_TableHints)
+      End If
+
+      sql.AppendLine()
 
       If Not m_WhereExpressions.Count = 0 Then
         sql.Append(" WHERE ")
@@ -155,6 +176,10 @@ Namespace Expressions.Builders
       Dim entity = m_Model.GetFirstEntity().Entity
 
       Dim table = If(m_TableNameOverride, Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema))
+
+      If m_TableHints IsNot Nothing Then
+        table = table & " " & m_TableHints
+      End If
 
       Dim getter = EntityAutoFieldsGetterCache.GetOnDeleteGetter(m_Model.Model, entity.EntityType)
       Dim values = getter(Me.DbContext)
@@ -198,6 +223,10 @@ Namespace Expressions.Builders
         table = m_TableNameOverride
       End If
 
+      If m_TableHints IsNot Nothing Then
+        table = table & " " & m_TableHints
+      End If
+
       Dim provider = EntitySqlStringProviderCache.GetDeleteProvider(Me, obj.GetType())
       Dim sqlString = provider(obj, table)
 
@@ -218,6 +247,10 @@ Namespace Expressions.Builders
         table = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema)
       Else
         table = m_TableNameOverride
+      End If
+
+      If m_TableHints IsNot Nothing Then
+        table = table & " " & m_TableHints
       End If
 
       Dim provider = EntitySqlStringProviderCache.GetSoftDeleteProvider(Me, obj.GetType())
