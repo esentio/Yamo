@@ -10,5 +10,13 @@ Namespace Tests
       Return SqlServerTestEnvironment.Create()
     End Function
 
+    Protected Overrides Function GetTableHints1() As String
+      Return "WITH (NOLOCK) /* hint 1 */"
+    End Function
+
+    Protected Overrides Function GetTableHints2() As String
+      Return "WITH (NOLOCK) /* hint 2 */"
+    End Function
+
   End Class
 End Namespace

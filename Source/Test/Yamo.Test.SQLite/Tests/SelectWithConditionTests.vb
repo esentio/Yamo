@@ -10,6 +10,14 @@ Namespace Tests
       Return SQLiteTestEnvironment.Create()
     End Function
 
+    Protected Overrides Function GetTableHints1() As String
+      Return "NOT INDEXED /* hint 1 */"
+    End Function
+
+    Protected Overrides Function GetTableHints2() As String
+      Return "NOT INDEXED /* hint 2 */"
+    End Function
+
     <TestMethod()>
     Public Overrides Sub SelectWithConditionalFullOuterJoin()
       Try

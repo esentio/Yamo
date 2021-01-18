@@ -63,8 +63,10 @@ namespace Yamo.Playground.CS
             //Test40();
             //Test41();
             //Test42();
-            Test43();
-            Test44();
+            //Test43();
+            //Test44();
+            Test45();
+            Test46();
         }
 
         public static MyContext CreateContext()
@@ -827,6 +829,31 @@ namespace Yamo.Playground.CS
                 var list = db.From<Article>()
                               .Where(x => x.InStock)
                               .SelectCount();
+            }
+        }
+
+        public static void Test45()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From<Article>().WithHints("WITH (TABLOCK)")
+                             .Join<Label>().WithHints("WITH (NOLOCK)").On((a, l) => l.Id == a.Id)
+                             .SelectAll().ToList();
+            }
+        }
+
+        public static void Test46()
+        {
+            using (var db = CreateContext())
+            {
+                var blog = new Blog() { Title = "Lorem ipsum", Content = ""};
+
+                db.Insert<Blog>().WithHints("WITH (TABLOCK)").Execute(blog);
+
+                blog.Content = "TODO";
+                db.Update<Blog>().WithHints("WITH (TABLOCK)").Execute(blog);
+
+                db.Delete<Blog>().WithHints("WITH (TABLOCK)").Execute(blog);
             }
         }
     }

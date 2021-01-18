@@ -2,7 +2,9 @@
 
   Public Enum GeneratedClass
     SelectSqlExpression
+    WithHintsSelectSqlExpression
     JoinSelectSqlExpression
+    JoinWithHintsSelectSqlExpression
     JoinedSelectSqlExpression
     FilteredSelectSqlExpression
     GroupedSelectSqlExpression

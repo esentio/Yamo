@@ -16,7 +16,7 @@ Public Class SQLiteTestDbContext
   End Sub
 
   Protected Overrides Sub OnCommandExecuting(command As DbCommand)
-
+    MyBase.OnCommandExecuting(command)
   End Sub
 
 End Class

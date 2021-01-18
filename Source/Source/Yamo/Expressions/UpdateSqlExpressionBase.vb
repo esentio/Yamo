@@ -24,7 +24,8 @@ Namespace Expressions
     Protected Property Builder As UpdateSqlExpressionBuilder
 
     ''' <summary>
-    ''' Gets query executor.
+    ''' Gets query executor.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
     Protected Property Executor As QueryExecutor

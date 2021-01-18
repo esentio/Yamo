@@ -23,6 +23,16 @@ Namespace Expressions
     End Sub
 
     ''' <summary>
+    ''' Adds table hint(s).
+    ''' </summary>
+    ''' <param name="tableHints"></param>
+    ''' <returns></returns>
+    Public Function WithHints(tableHints As String) As WithHintsUpdateSqlExpression(Of T)
+      Me.Builder.SetTableHints(tableHints)
+      Return New WithHintsUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
+    End Function
+
+    ''' <summary>
     ''' Adds SET clause.
     ''' </summary>
     ''' <param name="action"></param>

@@ -30,6 +30,16 @@ Namespace Expressions
     End Sub
 
     ''' <summary>
+    ''' Adds table hint(s).
+    ''' </summary>
+    ''' <param name="tableHints"></param>
+    ''' <returns></returns>
+    Public Function WithHints(tableHints As String) As WithHintsDeleteSqlExpression(Of T)
+      Me.Builder.SetTableHints(tableHints)
+      Return New WithHintsDeleteSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor, m_SoftDelete)
+    End Function
+
+    ''' <summary>
     ''' Adds WHERE clause.
     ''' </summary>
     ''' <param name="predicate"></param>

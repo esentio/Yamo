@@ -1,9 +1,16 @@
-﻿Imports Yamo.Test.Model
+﻿Imports System.Data.Common
+Imports Yamo.Test.Model
 
 Public Class BaseTestDbContext
   Inherits DbContext
 
   Public Property UserId As Int32
+
+  Private m_LastCommandText As String
+
+  Public Function GetLastCommandText() As String
+    Return m_LastCommandText
+  End Function
 
   Protected Overrides Sub OnModelCreating(modelBuilder As ModelBuilder)
     CreateArticleModel(modelBuilder)
@@ -304,6 +311,11 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of ItemInSchema).Property(Function(x) x.Description).IsRequired()
     modelBuilder.Entity(Of ItemInSchema).Property(Function(x) x.RelatedItemId)
     modelBuilder.Entity(Of ItemInSchema).Property(Function(x) x.Deleted).SetOnDeleteTo(Function() Helpers.Calendar.Now)
+  End Sub
+
+  Protected Overrides Sub OnCommandExecuting(command As DbCommand)
+    m_LastCommandText = command.CommandText
+    MyBase.OnCommandExecuting(command)
   End Sub
 
 End Class

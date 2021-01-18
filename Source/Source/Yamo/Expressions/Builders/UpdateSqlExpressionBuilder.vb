@@ -14,14 +14,19 @@ Namespace Expressions.Builders
     Inherits SqlExpressionBuilderBase
 
     ''' <summary>
+    ''' Stores SQL model.
+    ''' </summary>
+    Private m_Model As SqlModel
+
+    ''' <summary>
     ''' Stores table name override.
     ''' </summary>
     Private m_TableNameOverride As String
 
     ''' <summary>
-    ''' Stores SQL model.
+    ''' Stores table hints.
     ''' </summary>
-    Private m_Model As SqlModel
+    Private m_TableHints As String
 
     ''' <summary>
     ''' Stores SQL expression visitor.
@@ -50,8 +55,9 @@ Namespace Expressions.Builders
     ''' <param name="context"></param>
     Public Sub New(context As DbContext, tableNameOverride As String)
       MyBase.New(context)
-      m_TableNameOverride = tableNameOverride
       m_Model = New SqlModel(Me.DbContext.Model)
+      m_TableNameOverride = tableNameOverride
+      m_TableHints = Nothing
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       m_SetExpressions = New List(Of String)
       m_WhereExpressions = New List(Of String)
@@ -65,6 +71,15 @@ Namespace Expressions.Builders
     ''' <typeparam name="T"></typeparam>
     Public Sub SetMainTable(Of T)()
       m_Model.SetMainTable(Of T)()
+    End Sub
+
+    ''' <summary>
+    ''' Sets table hint(s).<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="tableHints"></param>
+    Public Sub SetTableHints(tableHints As String)
+      m_TableHints = tableHints
     End Sub
 
     ''' <summary>
@@ -168,6 +183,11 @@ Namespace Expressions.Builders
         sql.Append(m_TableNameOverride)
       End If
 
+      If m_TableHints IsNot Nothing Then
+        sql.Append(" ")
+        sql.Append(m_TableHints)
+      End If
+
       sql.AppendLine()
 
       If setAutoFields Then
@@ -212,6 +232,10 @@ Namespace Expressions.Builders
         table = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema)
       Else
         table = m_TableNameOverride
+      End If
+
+      If m_TableHints IsNot Nothing Then
+        table = table & " " & m_TableHints
       End If
 
       Dim provider = EntitySqlStringProviderCache.GetUpdateProvider(Me, obj.GetType())

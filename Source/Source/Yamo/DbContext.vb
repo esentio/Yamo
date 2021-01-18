@@ -229,6 +229,15 @@ Public Class DbContext
   ''' Starts building SQL INSERT statement.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
+  ''' <returns></returns>
+  Public Function Insert(Of T)() As InsertSqlExpression(Of T)
+    Return New InsertSqlExpression(Of T)(Me)
+  End Function
+
+  ''' <summary>
+  ''' Starts building SQL INSERT statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
   ''' <param name="table"></param>
   ''' <returns></returns>
   Public Function Insert(Of T)(table As String) As InsertSqlExpression(Of T)

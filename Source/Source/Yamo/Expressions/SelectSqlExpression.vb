@@ -45,6 +45,16 @@ Namespace Expressions
     End Sub
 
     ''' <summary>
+    ''' Adds table hint(s).
+    ''' </summary>
+    ''' <param name="tableHints"></param>
+    ''' <returns></returns>
+    Public Function WithHints(tableHints As String) As WithHintsSelectSqlExpression(Of T)
+      Me.Builder.SetMainTableHints(tableHints)
+      Return New WithHintsSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
+    End Function
+
+    ''' <summary>
     ''' Adds INNER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
@@ -578,6 +588,7 @@ Namespace Expressions
       If genericType Is GetType(SelectSqlExpression(Of ,,,,,,,,,,,,)) Then Return True
       If genericType Is GetType(SelectSqlExpression(Of ,,,,,,,,,,,,,)) Then Return True
       If genericType Is GetType(SelectSqlExpression(Of ,,,,,,,,,,,,,,)) Then Return True
+      If genericType Is GetType(WithHintsSelectSqlExpression(Of )) Then Return True
       If genericType Is GetType(JoinSelectSqlExpression(Of ,)) Then Return True
       If genericType Is GetType(JoinSelectSqlExpression(Of ,,)) Then Return True
       If genericType Is GetType(JoinSelectSqlExpression(Of ,,,)) Then Return True
@@ -592,6 +603,20 @@ Namespace Expressions
       If genericType Is GetType(JoinSelectSqlExpression(Of ,,,,,,,,,,,,)) Then Return True
       If genericType Is GetType(JoinSelectSqlExpression(Of ,,,,,,,,,,,,,)) Then Return True
       If genericType Is GetType(JoinSelectSqlExpression(Of ,,,,,,,,,,,,,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,,,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,,,,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,,,,,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,,,,,,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,,,,,,,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,,,,,,,,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,,,,,,,,,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,,,,,,,,,,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,,,,,,,,,,,,)) Then Return True
+      If genericType Is GetType(JoinWithHintsSelectSqlExpression(Of ,,,,,,,,,,,,,,)) Then Return True
       If genericType Is GetType(JoinedSelectSqlExpression(Of ,)) Then Return True
       If genericType Is GetType(JoinedSelectSqlExpression(Of ,,)) Then Return True
       If genericType Is GetType(JoinedSelectSqlExpression(Of ,,,)) Then Return True

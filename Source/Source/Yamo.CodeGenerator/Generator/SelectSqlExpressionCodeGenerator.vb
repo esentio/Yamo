@@ -10,7 +10,9 @@
     Protected Overrides Function GetAllowedResultsForCondition() As GeneratedClass()
       Return {
         GeneratedClass.SelectSqlExpression,
+        GeneratedClass.WithHintsSelectSqlExpression,
         GeneratedClass.JoinSelectSqlExpression,
+        GeneratedClass.JoinWithHintsSelectSqlExpression,
         GeneratedClass.JoinedSelectSqlExpression,
         GeneratedClass.FilteredSelectSqlExpression,
         GeneratedClass.GroupedSelectSqlExpression,
@@ -38,7 +40,6 @@
       Else
         comment = $"Represents SQL SELECT statement from {entityCount.ToInvariantString()} tables (entities)."
         typeParams = GetGenericNames(entityCount)
-
       End If
       AddComment(builder, comment, typeParams:=typeParams)
 
@@ -47,6 +48,11 @@
       builder.AppendLine()
       GenerateConstructor(builder, entityCount)
       builder.AppendLine()
+
+      If entityCount = 1 Then
+        GenerateWithHints(builder, entityCount)
+        builder.AppendLine()
+      End If
 
       If Not entityCount = Me.Definition.MaxEntityCount Then
         GenerateJoin(builder, entityCount)

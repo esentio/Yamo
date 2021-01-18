@@ -9,27 +9,7 @@ Namespace Expressions
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
   Public Class InsertSqlExpression(Of T)
-    Inherits SqlExpressionBase
-
-    ''' <summary>
-    ''' Gets context.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    Protected ReadOnly DbContext As DbContext
-
-    ''' <summary>
-    ''' Gets builder.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <returns></returns>
-    Protected Property Builder As InsertSqlExpressionBuilder
-
-    ''' <summary>
-    ''' Gets query executor.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <returns></returns>
-    Protected Property Executor As QueryExecutor
+    Inherits InsertSqlExpressionBase
 
     ''' <summary>
     ''' Creates new instance of <see cref="InsertSqlExpression(Of T)"/>.
@@ -37,10 +17,18 @@ Namespace Expressions
     ''' <param name="context"></param>
     ''' <param name="tableNameOverride"></param>
     Friend Sub New(context As DbContext, Optional tableNameOverride As String = Nothing)
-      Me.DbContext = context
-      Me.Builder = New InsertSqlExpressionBuilder(context, tableNameOverride)
-      Me.Executor = New QueryExecutor(context)
+      MyBase.New(context, New InsertSqlExpressionBuilder(context, tableNameOverride), New QueryExecutor(context))
     End Sub
+
+    ''' <summary>
+    ''' Adds table hint(s).
+    ''' </summary>
+    ''' <param name="tableHints"></param>
+    ''' <returns></returns>
+    Public Function WithHints(tableHints As String) As WithHintsInsertSqlExpression(Of T)
+      Me.Builder.SetTableHints(tableHints)
+      Return New WithHintsInsertSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
+    End Function
 
     ''' <summary>
     ''' Executes INSERT statement and returns the number of affected rows.
