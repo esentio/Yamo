@@ -9,11 +9,11 @@ Namespace Expressions
   ''' Represents SQL SELECT statement from one table (entity), which has defined table hints.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
-  Public Class SelectWithHintsSelectSqlExpression(Of T)
+  Public Class WithHintsSelectSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
 
     ''' <summary>
-    ''' Creates new instance of <see cref="SelectWithHintsSelectSqlExpression(Of T)"/>.
+    ''' Creates new instance of <see cref="WithHintsSelectSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="builder"></param>
     ''' <param name="executor"></param>
@@ -485,7 +485,7 @@ Namespace Expressions
     ''' <param name="[then]"></param>
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
-    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of SelectWithHintsSelectSqlExpression(Of T), TResult), Optional otherwise As Func(Of SelectWithHintsSelectSqlExpression(Of T), TResult) = Nothing) As TResult
+    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of WithHintsSelectSqlExpression(Of T), TResult), Optional otherwise As Func(Of WithHintsSelectSqlExpression(Of T), TResult) = Nothing) As TResult
       If condition Then
         Return [then].Invoke(Me)
       ElseIf otherwise Is Nothing Then

@@ -10,7 +10,7 @@
     Protected Overrides Function GetAllowedResultsForCondition() As GeneratedClass()
       Return {
         GeneratedClass.SelectSqlExpression,
-        GeneratedClass.SelectWithHintsSelectSqlExpression,
+        GeneratedClass.WithHintsSelectSqlExpression,
         GeneratedClass.JoinSelectSqlExpression,
         GeneratedClass.JoinWithHintsSelectSqlExpression,
         GeneratedClass.JoinedSelectSqlExpression,

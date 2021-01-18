@@ -113,10 +113,10 @@
 
         Select Case generatedClass
           Case GeneratedClass.SelectSqlExpression
-            If TypeOf Me Is SelectSqlExpressionCodeGenerator OrElse TypeOf Me Is SelectWithHintsSelectSqlExpressionCodeGenerator Then
+            If TypeOf Me Is SelectSqlExpressionCodeGenerator OrElse TypeOf Me Is WithHintsSelectSqlExpressionCodeGenerator Then
               min = Math.Max(entityCount + 1, definition.MinEntityCount)
             End If
-          Case GeneratedClass.SelectWithHintsSelectSqlExpression
+          Case GeneratedClass.WithHintsSelectSqlExpression
             If Not (TypeOf Me Is SelectSqlExpressionCodeGenerator AndAlso entityCount = 1) Then
               max = -1
             End If

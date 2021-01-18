@@ -1,6 +1,6 @@
 ﻿Namespace Generator
 
-  Public Class SelectWithHintsSelectSqlExpressionCodeGenerator
+  Public Class WithHintsSelectSqlExpressionCodeGenerator
     Inherits CodeGenerator
 
     Public Sub New(indentation As String, outputFolder As String, definition As GeneratedClassDefinition, definitions As List(Of GeneratedClassDefinition))

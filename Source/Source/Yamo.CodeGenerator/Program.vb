@@ -11,7 +11,7 @@ Module Program
     Dim outputFolder = config("OutputFolder")
 
     Dim selectSqlExpressionDefinition = New GeneratedClassDefinition(GeneratedClass.SelectSqlExpression, maxEntityCount)
-    Dim selectWithHintsSqlExpressionDefinition = New GeneratedClassDefinition(GeneratedClass.SelectWithHintsSelectSqlExpression, 1, 1)
+    Dim withHintsSqlExpressionDefinition = New GeneratedClassDefinition(GeneratedClass.WithHintsSelectSqlExpression, 1, 1)
     Dim joinSelectSqlExpressionDefinition = New GeneratedClassDefinition(GeneratedClass.JoinSelectSqlExpression, 2, maxEntityCount)
     Dim joinWithHintsSelectSqlExpressionDefinition = New GeneratedClassDefinition(GeneratedClass.JoinWithHintsSelectSqlExpression, 2, maxEntityCount)
     Dim joinedSelectSqlExpressionDefinition = New GeneratedClassDefinition(GeneratedClass.JoinedSelectSqlExpression, 2, maxEntityCount)
@@ -27,7 +27,7 @@ Module Program
 
     Dim definitions = New List(Of GeneratedClassDefinition) From {
       selectSqlExpressionDefinition,
-      selectWithHintsSqlExpressionDefinition,
+      withHintsSqlExpressionDefinition,
       joinSelectSqlExpressionDefinition,
       joinWithHintsSelectSqlExpressionDefinition,
       joinedSelectSqlExpressionDefinition,
@@ -83,8 +83,8 @@ Module Program
     Dim selectSqlExpressionCodeGenerator = New SelectSqlExpressionCodeGenerator(indentation, outputFolder, selectSqlExpressionDefinition, definitions)
     selectSqlExpressionCodeGenerator.Generate()
 
-    Dim selectWithHintsSqlExpressionCodeGenerator = New SelectWithHintsSelectSqlExpressionCodeGenerator(indentation, outputFolder, selectWithHintsSqlExpressionDefinition, definitions)
-    selectWithHintsSqlExpressionCodeGenerator.Generate()
+    Dim withHintsSelectSqlExpressionCodeGenerator = New WithHintsSelectSqlExpressionCodeGenerator(indentation, outputFolder, withHintsSqlExpressionDefinition, definitions)
+    withHintsSelectSqlExpressionCodeGenerator.Generate()
 
   End Sub
 End Module

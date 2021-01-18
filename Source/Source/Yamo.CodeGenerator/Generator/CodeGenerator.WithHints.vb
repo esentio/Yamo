@@ -14,9 +14,9 @@
 
         Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-        builder.Indent().AppendLine($"Public Function WithHints(tableHints As String) As SelectWithHintsSelectSqlExpression(Of {generics})").PushIndent()
+        builder.Indent().AppendLine($"Public Function WithHints(tableHints As String) As WithHintsSelectSqlExpression(Of {generics})").PushIndent()
         builder.Indent().AppendLine("Me.Builder.SetMainTableHints(tableHints)")
-        builder.Indent().AppendLine($"Return New SelectWithHintsSelectSqlExpression(Of {generics})(Me.Builder, Me.Executor)").PopIndent()
+        builder.Indent().AppendLine($"Return New WithHintsSelectSqlExpression(Of {generics})(Me.Builder, Me.Executor)").PopIndent()
         builder.Indent().AppendLine("End Function")
       Else
         Dim comment = "Adds table hint(s)."
