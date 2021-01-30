@@ -53,17 +53,17 @@ Namespace Tests
         Assert.AreEqual(article3, article3Result)
       End Using
 
-      ' TODO: uncomment when calling FirstOrDefault is supported in this scenario
-      'Using db = CreateDbContext()
-      '  Dim result = db.From(Of Article).
-      '                  Join(Of Label)(Function(a, l) a.Id = l.Id).
-      '                  Where(Function(j) j.T1.Id = 1).
-      '                  SelectAll().
-      '                  Distinct().
-      '                  FirstOrDefault()
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        Join(Of Label)(Function(a, l) a.Id = l.Id).
+                        Where(Function(j) j.T1.Id = 1).
+                        SelectAll().
+                        ExcludeT2().
+                        Distinct().
+                        FirstOrDefault()
 
-      '  Assert.AreEqual(article1, result)
-      'End Using
+        Assert.AreEqual(article1, result)
+      End Using
 
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).

@@ -2,7 +2,11 @@
 
   Partial Public Class CodeGenerator
 
-    Protected Sub AddComment(builder As CodeBuilder, comment As String, Optional typeParams() As String = Nothing, Optional params() As String = Nothing, Optional returns As String = Nothing)
+    Protected Sub AddComment(builder As CodeBuilder, comment As String, Optional typeParams() As String = Nothing, Optional params() As String = Nothing, Optional commentedParams() As (Param As String, Comment As String) = Nothing, Optional returns As String = Nothing)
+      If params IsNot Nothing AndAlso commentedParams IsNot Nothing Then
+        Throw New Exception("Both params and commentedParams are not allowed.")
+      End If
+
       builder.Indent().AppendLine("''' <summary>")
       builder.Indent().AppendLine("''' " & comment)
       builder.Indent().AppendLine("''' </summary>")
@@ -16,6 +20,10 @@
       If params IsNot Nothing Then
         For Each param In params
           builder.Indent().AppendLine($"''' <param name=""{param}""></param>")
+        Next
+      ElseIf commentedParams IsNot Nothing Then
+        For Each param In commentedParams
+          builder.Indent().AppendLine($"''' <param name=""{param.Param}"">{param.Comment}</param>")
         Next
       End If
 

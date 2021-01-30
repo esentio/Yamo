@@ -65,8 +65,9 @@ namespace Yamo.Playground.CS
             //Test42();
             //Test43();
             //Test44();
-            Test45();
-            Test46();
+            //Test45();
+            //Test46();
+            Test47();
         }
 
         public static MyContext CreateContext()
@@ -854,6 +855,69 @@ namespace Yamo.Playground.CS
                 db.Update<Blog>().WithHints("WITH (TABLOCK)").Execute(blog);
 
                 db.Delete<Blog>().WithHints("WITH (TABLOCK)").Execute(blog);
+            }
+        }
+
+        public static void Test47()
+        {
+            // ArticlePart table content:
+            // | ArticleId | Price |
+            // |-----------|-------|
+            // | 1         | 10    |
+            // | 1         | 11    |
+            // | 1         | 15    |
+            // | 2         | 12    |
+            // | 2         | 13    |
+            // | 3         | 14    |
+
+            // resultset:
+            // | Article.Id | ... | ArticlePart.Price |
+            // |------------|-----|-------------------|
+            // | 1          | ... | 10                |
+            // | 1          | ... | 11                |
+            // | 2          | ... | 12                |
+            // | 2          | ... | 13                |
+            // | 3          | ... | 14                |
+            // | 1          | ... | 15                |
+
+            using (var db = CreateContext())
+            {
+                var result1 = db.From<Article>()
+                                .LeftJoin<ArticlePart>((a, ap) => a.Id == ap.ArticleId)
+                                .OrderBy((ArticlePart ap) => ap.Price)
+                                .SelectAll().FirstOrDefault();
+
+                //Assert.AreEqual(1, result1.Id);
+                //Assert.AreEqual(1, result1.Parts.Count);
+                //Assert.AreEqual(10, result1.Parts[0].Price);
+
+                var result2 = db.From<Article>()
+                                .LeftJoin<ArticlePart>((a, ap) => a.Id == ap.ArticleId)
+                                .OrderBy((ArticlePart ap) => ap.Price)
+                                .SelectAll().FirstOrDefault(CollectionNavigationFillBehavior.ProcessOnlyFirstRow);
+
+                // same as result1
+
+                var result3 = db.From<Article>()
+                                .LeftJoin<ArticlePart>((a, ap) => a.Id == ap.ArticleId)
+                                .OrderBy((ArticlePart ap) => ap.Price)
+                                .SelectAll().FirstOrDefault(CollectionNavigationFillBehavior.ProcessUntilMainEntityChange);
+
+                //Assert.AreEqual(1, result3.Id);
+                //Assert.AreEqual(2, result3.Parts.Count);
+                //Assert.AreEqual(10, result3.Parts[0].Price);
+                //Assert.AreEqual(11, result3.Parts[1].Price);
+
+                var result4 = db.From<Article>()
+                                .LeftJoin<ArticlePart>((a, ap) => a.Id == ap.ArticleId)
+                                .OrderBy((ArticlePart ap) => ap.Price)
+                                .SelectAll().FirstOrDefault(CollectionNavigationFillBehavior.ProcessAllRows);
+
+                //Assert.AreEqual(1, result4.Id);
+                //Assert.AreEqual(3, result4.Parts.Count);
+                //Assert.AreEqual(10, result3.Parts[0].Price);
+                //Assert.AreEqual(11, result3.Parts[1].Price);
+                //Assert.AreEqual(15, result3.Parts[2].Price);
             }
         }
     }

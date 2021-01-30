@@ -221,10 +221,11 @@ Namespace Expressions
     ''' <summary>
     ''' Executes SQL query and returns first record or a default value.
     ''' </summary>
+    ''' <param name="behavior">Defines how collection navigation properties are filled. This setting has no effect if no collection navigation properties are used.</param>
     ''' <returns></returns>
-    Public Function FirstOrDefault() As T1
+    Public Function FirstOrDefault(Optional behavior As CollectionNavigationFillBehavior = CollectionNavigationFillBehavior.ProcessOnlyFirstRow) As T1
       Dim query = Me.Builder.CreateQuery()
-      Return Me.Executor.ReadFirstOrDefault(Of T1)(query)
+      Return Me.Executor.ReadFirstOrDefault(Of T1)(query, behavior)
     End Function
 
   End Class
