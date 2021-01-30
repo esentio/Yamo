@@ -31,6 +31,14 @@
       }
     End Function
 
+    Public Overridable Function CreateArticlePart(id As Int32, articleId As Int32, price As Decimal) As ArticlePart
+      Return New ArticlePart With {
+        .Id = id,
+        .ArticleId = articleId,
+        .Price = price
+      }
+    End Function
+
     Public Overridable Function CreateArticleSubstitution(originalArticleId As Int32, substitutionArticleId As Int32) As ArticleSubstitution
       Return New ArticleSubstitution With {
         .OriginalArticleId = originalArticleId,

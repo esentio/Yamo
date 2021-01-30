@@ -62,20 +62,38 @@
     Public Overrides Function Equals(obj As Object) As Boolean
       If TypeOf obj IsNot ChainKey Then Return False
 
-      Dim key = DirectCast(obj, ChainKey)
+      Return Me = DirectCast(obj, ChainKey)
+    End Function
 
-      If Not m_Pks.Length = key.m_Pks.Length Then
-        Return False
-      Else
-        For i = 0 To m_Pks.Length - 1
-          If Not Object.Equals(m_Pks(i), key.m_Pks(i)) Then
+    ''' <summary>
+    ''' Indicates whether two <see cref="ChainKey"/> instances are equal.
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="value2"></param>
+    ''' <returns></returns>
+    Public Shared Operator =(value1 As ChainKey, value2 As ChainKey) As Boolean
+      If value1.m_Pks.Length = value2.m_Pks.Length Then
+        For i = 0 To value1.m_Pks.Length - 1
+          If Not Object.Equals(value1.m_Pks(i), value2.m_Pks(i)) Then
             Return False
           End If
         Next
-      End If
 
-      Return True
-    End Function
+        Return True
+      Else
+        Return False
+      End If
+    End Operator
+
+    ''' <summary>
+    ''' Indicates whether two <see cref="ChainKey"/> instances are not equal.
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="value2"></param>
+    ''' <returns></returns>
+    Public Shared Operator <>(value1 As ChainKey, value2 As ChainKey) As Boolean
+      Return Not value1 = value2
+    End Operator
 
   End Structure
 End Namespace
