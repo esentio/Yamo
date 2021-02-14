@@ -664,6 +664,32 @@ Namespace Expressions.Builders
     End Sub
 
     ''' <summary>
+    ''' Includes selected property.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <param name="entityIndexHints"></param>
+    Public Sub IncludeToSelected(action As Expression, entityIndexHints As Int32())
+      ' TODO: SIP - implement
+      'Dim result = m_Visitor.TranslateInclude(action, entityIndexHints, m_Parameters.Count)
+      'm_SelectExpression = result.SqlString.Sql
+      'm_Parameters.AddRange(result.SqlString.Parameters)
+      'm_Model.SetCustomEntities(result.CustomEntities)
+    End Sub
+
+    ''' <summary>
+    ''' Includes selected property.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <param name="keySelectorEntityIndexHints"></param>
+    ''' <param name="valueSelectorEntityIndexHints"></param>
+    Public Sub IncludeToSelected(keySelector As Expression, valueSelector As Expression, keySelectorEntityIndexHints As Int32(), valueSelectorEntityIndexHints As Int32())
+      ' TODO: SIP - implement
+    End Sub
+
+    ''' <summary>
     ''' Adds select count.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>

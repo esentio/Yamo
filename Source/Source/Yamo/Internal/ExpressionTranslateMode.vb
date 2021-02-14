@@ -9,6 +9,7 @@
     GroupBy
     OrderBy
     CustomSelect
+    Include
     [Set]
   End Enum
 End Namespace

@@ -105,23 +105,15 @@ Namespace Internal
     End Sub
 
     ''' <summary>
-    ''' Translates expression to SQL string.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' Initializes values before translate call.
     ''' </summary>
-    ''' <param name="expression"></param>
+    ''' <param name="lambda"></param>
     ''' <param name="mode"></param>
-    ''' <param name="entityIndexHints">Null for <see cref="ExpressionParametersType.IJoin"/> and not null for <see cref="ExpressionParametersType.Entities"/>.</param>
+    ''' <param name="entityIndexHints"></param>
     ''' <param name="parameterIndex"></param>
     ''' <param name="useAliases"></param>
     ''' <param name="useTableNamesOrAliases"></param>
-    ''' <returns></returns>
-    Public Function Translate(expression As Expression, mode As ExpressionTranslateMode, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
-      If TypeOf expression IsNot LambdaExpression Then
-        Throw New ArgumentException("Expression must be of type LambdaExpression.")
-      End If
-
-      Dim lambda = DirectCast(expression, LambdaExpression)
-
+    Private Sub Initialize(lambda As LambdaExpression, mode As ExpressionTranslateMode, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean)
       m_Mode = mode
       m_ExpressionParameters = lambda.Parameters
       m_ExpressionParametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
@@ -135,6 +127,27 @@ Namespace Internal
       m_CustomEntities = Nothing
       m_CustomEntityIndex = 0
       m_Stack.Clear()
+    End Sub
+
+    ''' <summary>
+    ''' Translates expression to SQL string.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="expression"></param>
+    ''' <param name="mode"></param>
+    ''' <param name="entityIndexHints"><see langword="Nothing"/> for <see cref="ExpressionParametersType.IJoin"/> and not <see langword="Nothing"/> for <see cref="ExpressionParametersType.Entities"/>.</param>
+    ''' <param name="parameterIndex"></param>
+    ''' <param name="useAliases"></param>
+    ''' <param name="useTableNamesOrAliases"></param>
+    ''' <returns></returns>
+    Public Function Translate(expression As Expression, mode As ExpressionTranslateMode, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
+      If TypeOf expression IsNot LambdaExpression Then
+        Throw New ArgumentException("Expression must be of type LambdaExpression.")
+      End If
+
+      Dim lambda = DirectCast(expression, LambdaExpression)
+
+      Initialize(lambda, mode, entityIndexHints, parameterIndex, useAliases, useTableNamesOrAliases)
 
       Visit(lambda.Body)
 
@@ -148,7 +161,7 @@ Namespace Internal
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="expression"></param>
-    ''' <param name="entityIndexHints">Null for <see cref="ExpressionParametersType.IJoin"/> and not null for <see cref="ExpressionParametersType.Entities"/>.</param>
+    ''' <param name="entityIndexHints"><see langword="Nothing"/> for <see cref="ExpressionParametersType.IJoin"/> and not <see langword="Nothing"/> for <see cref="ExpressionParametersType.Entities"/>.</param>
     ''' <param name="parameterIndex"></param>
     ''' <returns></returns>
     Public Function TranslateCustomSelect(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSqlEntity())
@@ -158,19 +171,7 @@ Namespace Internal
 
       Dim lambda = DirectCast(expression, LambdaExpression)
 
-      m_Mode = ExpressionTranslateMode.CustomSelect
-      m_ExpressionParameters = lambda.Parameters
-      m_ExpressionParametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
-      m_EntityIndexHints = entityIndexHints
-      m_Sql = New StringBuilder()
-      m_Parameters = New List(Of SqlParameter)
-      m_ParameterIndex = parameterIndex
-      m_UseAliases = True
-      m_UseTableNamesOrAliases = True
-      m_CurrentLikeParameterFormat = Nothing
-      m_CustomEntities = Nothing
-      m_CustomEntityIndex = 0
-      m_Stack.Clear()
+      Initialize(lambda, ExpressionTranslateMode.CustomSelect, entityIndexHints, parameterIndex, True, True)
 
       VisitInCustomSelectMode(lambda.Body)
 
@@ -180,6 +181,57 @@ Namespace Internal
 
       Return (New SqlString(m_Sql.ToString(), m_Parameters), m_CustomEntities)
     End Function
+
+    'Public Function TranslateInclude(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSqlEntity())
+    '  If TypeOf expression IsNot LambdaExpression Then
+    '    Throw New ArgumentException("Expression must be of type LambdaExpression.")
+    '  End If
+
+    '  Dim lambda = DirectCast(expression, LambdaExpression)
+
+    '  Initialize(lambda, ExpressionTranslateMode.Include, entityIndexHints, parameterIndex, True, True)
+
+    '  If Not lambda.Body.NodeType = ExpressionType.Call Then
+    '    Throw New Exception($"Cannot process the expression. Body NodeType {lambda.Body.NodeType} is not allowed.")
+    '  End If
+
+    '  Dim node = DirectCast(lambda.Body, MethodCallExpression)
+    '  Dim isEntity = False
+    '  Dim isJoinedEntity = False
+
+    '  If node.Method.IsSpecialName AndAlso node.Object IsNot Nothing AndAlso node.Method.Name.StartsWith("set_") Then
+    '    isEntity = Me.IsEntity(node.Object)
+    '    isJoinedEntity = Me.IsJoinedEntity(node.Object)
+    '  End If
+
+    '  Dim entityIndex As Int32
+
+    '  If isEntity Then
+    '    entityIndex = GetEntityIndex(DirectCast(node.Object, ParameterExpression))
+    '  ElseIf isJoinedEntity Then
+    '    entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(DirectCast(node.Object, MemberExpression).Member.Name)
+    '  Else
+    '    Throw New Exception("Cannot process the expression.")
+    '  End If
+
+    '  Dim propertyName = node.Method.Name.Substring(4) ' trim "set_"
+
+
+
+    '  Dim arg = node.Arguments(0)
+
+
+
+
+
+    '  VisitInCustomSelectMode(lambda.Body)
+
+    '  m_ExpressionParameters = Nothing
+
+    '  CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, lambda.Body, m_CustomEntities)
+
+    '  Return (New SqlString(m_Sql.ToString(), m_Parameters), m_CustomEntities)
+    'End Function
 
     ''' <summary>
     ''' Visits expression.<br/>

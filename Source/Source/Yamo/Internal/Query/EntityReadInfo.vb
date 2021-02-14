@@ -176,7 +176,7 @@ Namespace Internal.Query
         Dim collectionInitializers = New Action(Of Object)(collectionNavigations.Count - 1) {}
 
         For i = 0 To collectionNavigations.Count - 1
-          collectionInitializers(i) = EntityRelationshipSetterCache.GetCollectionInitSetter(model, entity.Entity.EntityType, collectionNavigations(i))
+          collectionInitializers(i) = EntityMemberSetterCache.GetCollectionInitSetter(model, entity.Entity.EntityType, collectionNavigations(i))
         Next
 
         readInfo._CollectionInitializers = collectionInitializers
@@ -187,7 +187,7 @@ Namespace Internal.Query
       If entity.Relationship Is Nothing Then
         readInfo._RelationshipSetter = Nothing
       Else
-        readInfo._RelationshipSetter = EntityRelationshipSetterCache.GetSetter(model, entity.Relationship.DeclaringEntity.Entity.EntityType, entity.Relationship.RelationshipNavigation)
+        readInfo._RelationshipSetter = EntityMemberSetterCache.GetSetter(model, entity.Relationship.DeclaringEntity.Entity.EntityType, entity.Relationship.RelationshipNavigation)
       End If
 
       Return readInfo

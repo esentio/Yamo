@@ -16,6 +16,12 @@
 
     Public Property AlternativeLabel2 As Label ' do not define this in model
 
+    Public Property PriceWithDiscount As Decimal
+
+    Public Property LabelDescription As String
+
+    Public Property Tag As Object
+
     Public Overrides Function Equals(obj As Object) As Boolean
       If obj Is Nothing OrElse TypeOf obj IsNot Article Then
         Return False

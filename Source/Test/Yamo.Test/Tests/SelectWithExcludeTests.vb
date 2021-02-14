@@ -2,7 +2,7 @@
 
 Namespace Tests
 
-  Public MustInherit Class SelectTests
+  Public MustInherit Class SelectWithExcludeTests
     Inherits BaseIntegrationTests
 
     Protected Const English As String = "en"

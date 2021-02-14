@@ -35,6 +35,9 @@
       GenerateExclude(builder, entityCount)
       builder.AppendLine()
 
+      GenerateInclude(builder, entityCount)
+      builder.AppendLine()
+
       GenerateDistinct(builder, entityCount)
       builder.AppendLine()
 
