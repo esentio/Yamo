@@ -1,24 +1,22 @@
 ﻿Imports System.Data.Common
-Imports Yamo.Infrastructure
-Imports Yamo.Internal.Query.Metadata
 
 Namespace Internal.Query
 
   ''' <summary>
-  ''' Represents info used to read multiple entities from SQL result.<br/>
+  ''' Represents reader data for multiple entity values.<br/>
   ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
   ''' </summary>
-  Public Class EntityReadInfoCollection
+  Public Class EntitySqlResultReaderDataCollection
 
     ''' <summary>
-    ''' Gets entity read info items.<br/>
+    ''' Gets reader data of entities.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property Items As EntityReadInfo()
+    Public ReadOnly Property Items As EntitySqlResultReaderData()
 
     ''' <summary>
-    ''' Gets count of entity read infos.<br/>
+    ''' Gets count of entities.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
@@ -37,32 +35,16 @@ Namespace Internal.Query
     Private m_ChainIndexes As List(Of Int32)() ' probably change to something like Boolean() in the future (list is used just for convenience in GetChainKey method - once better hashing API is avaliable, refactor this!)
 
     ''' <summary>
-    ''' Creates new instance of <see cref="EntityReadInfoCollection"/>.
-    ''' </summary>
-    Private Sub New()
-    End Sub
-
-    ''' <summary>
-    ''' Creates new instance of <see cref="EntityReadInfoCollection"/>.<br/>
+    ''' Creates new instance of <see cref="EntitySqlResultReaderDataCollection"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="dialectProvider"></param>
-    ''' <param name="model"></param>
-    ''' <returns></returns>
-    Public Shared Function Create(dialectProvider As SqlDialectProvider, model As SqlModel) As EntityReadInfoCollection
-      Dim entityInfos = EntityReadInfo.Create(dialectProvider, model)
-      Dim hasCollectionNavigation = entityInfos.Any(Function(o) o.HasCollectionNavigation)
-
-      Dim result = New EntityReadInfoCollection
-
-      result._Items = entityInfos
-      result._Count = entityInfos.Length
-      result._HasCollectionNavigation = hasCollectionNavigation
-
-      result.SetChainIndexes()
-
-      Return result
-    End Function
+    ''' <param name="items"></param>
+    Public Sub New(items As EntitySqlResultReaderData())
+      Me.Items = items
+      Me.Count = items.Length
+      Me.HasCollectionNavigation = items.Any(Function(o) o.HasCollectionNavigation)
+      SetChainIndexes()
+    End Sub
 
     ''' <summary>
     ''' Sets chain indexes for all entities for later computation of chain key.
@@ -175,12 +157,12 @@ Namespace Internal.Query
     ''' <param name="pks"></param>
     Public Sub FillPks(dataReader As DbDataReader, pks As Object())
       For i = 0 To Me.Count - 1
-        Dim entityInfo = Me.Items(i)
+        Dim readerData = Me.Items(i)
 
-        If entityInfo.Entity.IsExcludedOrIgnored Then
+        If readerData.Entity.IsExcludedOrIgnored Then
           pks(i) = Nothing
-        ElseIf entityInfo.ContainsPKReader(dataReader, entityInfo.ReaderIndex, entityInfo.PKOffsets) Then
-          pks(i) = entityInfo.PKReader(dataReader, entityInfo.ReaderIndex, entityInfo.PKOffsets)
+        ElseIf readerData.ContainsPKReader(dataReader, readerData.ReaderIndex, readerData.PKOffsets) Then
+          pks(i) = readerData.PKReader(dataReader, readerData.ReaderIndex, readerData.PKOffsets)
         Else
           pks(i) = Nothing
         End If

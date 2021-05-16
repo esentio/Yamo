@@ -18,7 +18,7 @@ Namespace Expressions.Builders
     ''' <summary>
     ''' Stores SQL model.
     ''' </summary>
-    Private m_Model As SqlModel
+    Private m_Model As SelectSqlModel
 
     ''' <summary>
     ''' Stores SQL expression visitor.
@@ -100,9 +100,10 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="context"></param>
-    Public Sub New(context As DbContext)
+    ''' <param name="mainEntityType"></param>
+    Public Sub New(context As DbContext, mainEntityType As Type)
       MyBase.New(context)
-      m_Model = New SqlModel(Me.DbContext.Model)
+      m_Model = New SelectSqlModel(Me.DbContext.Model, mainEntityType)
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       ' lists are created only when necessary
       m_MainTableSourceExpression = Nothing
@@ -119,15 +120,6 @@ Namespace Expressions.Builders
       m_SelectExpression = Nothing
       m_UseDistinct = False
       m_Parameters = New List(Of SqlParameter)
-    End Sub
-
-    ''' <summary>
-    ''' Sets main table.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <typeparam name="T"></typeparam>
-    Public Sub SetMainTable(Of T)()
-      m_Model.SetMainTable(Of T)()
     End Sub
 
     ''' <summary>
@@ -254,7 +246,9 @@ Namespace Expressions.Builders
         relationship = TryGetRelationship(Of TJoined)(entityIndexHints)
       End If
 
-      m_Model.AddJoinedTable(Of TJoined)(relationship)
+      Dim sqlEntity = m_Model.AddJoin(Of TJoined)(relationship)
+      Dim entity = sqlEntity.Entity
+      Dim tableAlias = sqlEntity.TableAlias
 
       Dim sql As String
       Dim joinTypeString As String
@@ -273,9 +267,6 @@ Namespace Expressions.Builders
         Case Else
           Throw New NotSupportedException($"Unsupported join type '{joinInfo.JoinType}'.")
       End Select
-
-      Dim entity = m_Model.Model.GetEntity(GetType(TJoined))
-      Dim tableAlias = m_Model.GetLastTableAlias()
 
       If predicate Is Nothing Then
         If joinInfo.TableSource Is Nothing Then
@@ -305,7 +296,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="entityType"></param>
     Public Sub AddIgnoredJoin(entityType As Type)
-      m_Model.AddIgnoredJoinedTable(entityType)
+      m_Model.AddIgnoredJoin(entityType)
     End Sub
 
     ''' <summary>
@@ -707,7 +698,7 @@ Namespace Expressions.Builders
       Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, m_Parameters.Count)
       m_SelectExpression = result.SqlString.Sql
       m_Parameters.AddRange(result.SqlString.Parameters)
-      m_Model.SetCustomEntities(result.CustomEntities)
+      m_Model.CustomSqlResult = result.SqlResult
     End Sub
 
     ''' <summary>
@@ -776,14 +767,14 @@ Namespace Expressions.Builders
       sql.Append(" FROM ")
 
       If m_MainTableSourceExpression Is Nothing Then
-        Dim entity = m_Model.GetFirstEntity().Entity
+        Dim entity = m_Model.MainEntity.Entity
         Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       Else
         sql.Append(m_MainTableSourceExpression)
       End If
 
       sql.Append(" ")
-      Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstTableAlias())
+      Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.MainEntity.TableAlias)
 
       If m_MainTableHints IsNot Nothing Then
         sql.Append(" ")

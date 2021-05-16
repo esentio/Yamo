@@ -25,7 +25,7 @@ Namespace Internal
     ''' <summary>
     ''' Stores SQL model.
     ''' </summary>
-    Private m_Model As SqlModel
+    Private m_Model As SqlModelBase
 
     ''' <summary>
     ''' Stores expression translate mode.
@@ -63,7 +63,7 @@ Namespace Internal
     Private m_ParameterIndex As Int32
 
     ''' <summary>
-    ''' Stores wheter aliases should be used.
+    ''' Stores whether aliases should be used.
     ''' </summary>
     Private m_UseAliases As Boolean
 
@@ -78,14 +78,14 @@ Namespace Internal
     Private m_CurrentLikeParameterFormat As String
 
     ''' <summary>
-    ''' Stores custom entities.
+    ''' Stores custom SQL result.
     ''' </summary>
-    Private m_CustomEntities As CustomSqlEntity()
+    Private m_CustomSqlResult As SqlResultBase
 
     ''' <summary>
-    ''' Stores custom entity index.
+    ''' Stores index of custom SQL result item.
     ''' </summary>
-    Private m_CustomEntityIndex As Int32
+    Private m_CustomSqlResultItemIndex As Int32
 
     ''' <summary>
     ''' Stores stack of nodes.
@@ -98,7 +98,7 @@ Namespace Internal
     ''' </summary>
     ''' <param name="builder"></param>
     ''' <param name="model"></param>
-    Public Sub New(builder As SqlExpressionBuilderBase, model As SqlModel)
+    Public Sub New(builder As SqlExpressionBuilderBase, model As SqlModelBase)
       m_Builder = builder
       m_Model = model
       m_Stack = New Stack(Of NodeInfo)
@@ -124,8 +124,8 @@ Namespace Internal
       m_UseAliases = useAliases
       m_UseTableNamesOrAliases = useTableNamesOrAliases
       m_CurrentLikeParameterFormat = Nothing
-      m_CustomEntities = Nothing
-      m_CustomEntityIndex = 0
+      m_CustomSqlResult = Nothing
+      m_CustomSqlResultItemIndex = 0
       m_Stack.Clear()
     End Sub
 
@@ -164,7 +164,7 @@ Namespace Internal
     ''' <param name="entityIndexHints"><see langword="Nothing"/> for <see cref="ExpressionParametersType.IJoin"/> and not <see langword="Nothing"/> for <see cref="ExpressionParametersType.Entities"/>.</param>
     ''' <param name="parameterIndex"></param>
     ''' <returns></returns>
-    Public Function TranslateCustomSelect(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSqlEntity())
+    Public Function TranslateCustomSelect(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, SqlResult As SqlResultBase)
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -177,9 +177,7 @@ Namespace Internal
 
       m_ExpressionParameters = Nothing
 
-      CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, lambda.Body, m_CustomEntities)
-
-      Return (New SqlString(m_Sql.ToString(), m_Parameters), m_CustomEntities)
+      Return (New SqlString(m_Sql.ToString(), m_Parameters), m_CustomSqlResult)
     End Function
 
     'Public Function TranslateInclude(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSqlEntity())
@@ -931,31 +929,32 @@ Namespace Internal
       End If
 
       Dim count = args.Count
+      Dim items As SqlResultBase() = Nothing
 
       If m_Mode = ExpressionTranslateMode.CustomSelect Then
-        m_CustomEntities = New CustomSqlEntity(count - 1) {}
+        items = New SqlResultBase(count - 1) {}
       End If
 
-      Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToArray()
+      Dim entities = m_Model.GetEntities()
 
       For i = 0 To count - 1
         Dim arg = args(i)
         Dim type = arg.Type
-        Dim entityIndex = Array.IndexOf(Of Type)(entities, type)
-        Dim isEntity = Not entityIndex = -1
+        Dim entity = entities.FirstOrDefault(Function(x) x.Entity.EntityType = type)
+        Dim isEntity = entity IsNot Nothing
 
-        m_CustomEntityIndex = i
+        m_CustomSqlResultItemIndex = i
 
         Visit(arg)
 
         If m_Mode = ExpressionTranslateMode.CustomSelect Then
           If isEntity Then
-            m_CustomEntities(i) = New CustomSqlEntity(i, entityIndex, type)
+            items(i) = New EntitySqlResult(entity)
           Else
             Dim columnAlias = CreateColumnAlias(i)
             m_Sql.Append(" ")
             m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
-            m_CustomEntities(i) = New CustomSqlEntity(i, type)
+            items(i) = New ScalarValueSqlResult(type)
           End If
         End If
 
@@ -963,6 +962,12 @@ Namespace Internal
           m_Sql.Append(", ")
         End If
       Next
+
+      If isValueTuple Then
+        m_CustomSqlResult = New ValueTupleSqlResult(node.Type, items)
+      Else
+        m_CustomSqlResult = New AnonymousTypeSqlResult(node.Type, items)
+      End If
 
       Return node
     End Function
@@ -1010,27 +1015,25 @@ Namespace Internal
     ''' <returns></returns>
     Private Function VisitInCustomSelectMode(node As Expression) As Expression
       If node.NodeType = ExpressionType.New Then
+        ' anonymous type, value tuple
         Return Visit(node)
       Else
-        m_CustomEntities = New CustomSqlEntity(0) {}
-
-        Dim entities = m_Model.GetEntities().Select(Function(x) x.Entity.EntityType).ToArray()
-
-        Dim type = node.Type
-        Dim entityIndex = Array.IndexOf(Of Type)(entities, type)
-        Dim isEntity = Not entityIndex = -1
-
-        m_CustomEntityIndex = 0
-
         Visit(node)
 
-        If isEntity Then
-          m_CustomEntities(0) = New CustomSqlEntity(0, entityIndex, type)
-        Else
+        Dim type = node.Type
+        Dim entity = m_Model.GetEntities().FirstOrDefault(Function(x) x.Entity.EntityType = type)
+
+        If entity Is Nothing Then
+          ' simple scalar value
+
           Dim columnAlias = CreateColumnAlias(0)
           m_Sql.Append(" ")
           m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
-          m_CustomEntities(0) = New CustomSqlEntity(0, type)
+          m_CustomSqlResult = New ScalarValueSqlResult(type)
+
+        Else
+          ' whole entity
+          m_CustomSqlResult = New EntitySqlResult(entity)
         End If
 
         Return node
@@ -1206,7 +1209,7 @@ Namespace Internal
       ElseIf Not m_UseTableNamesOrAliases Then
         m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, prop.ColumnName)
       ElseIf m_UseAliases Then
-        Dim tableAlias = m_Model.GetTableAlias(entity.Index)
+        Dim tableAlias = m_Model.GetEntity(entity.Index).TableAlias
         m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, tableAlias)
         m_Sql.Append(".")
         m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, prop.ColumnName)
@@ -1249,7 +1252,7 @@ Namespace Internal
           End If
 
           If m_Mode = ExpressionTranslateMode.CustomSelect Then
-            Dim columnAlias = CreateColumnAlias(m_CustomEntityIndex, columnIndex)
+            Dim columnAlias = CreateColumnAlias(m_CustomSqlResultItemIndex, columnIndex)
             m_Sql.Append(" ")
             m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
           End If

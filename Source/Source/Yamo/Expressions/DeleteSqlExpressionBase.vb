@@ -30,6 +30,12 @@ Namespace Expressions
     ''' <returns></returns>
     Protected Property Executor As QueryExecutor
 
+    ''' <summary>
+    ''' Creates new instance of <see cref="DeleteSqlExpressionBase"/>.
+    ''' </summary>
+    ''' <param name="context"></param>
+    ''' <param name="builder"></param>
+    ''' <param name="executor"></param>
     Friend Sub New(context As DbContext, builder As DeleteSqlExpressionBuilder, executor As QueryExecutor)
       Me.DbContext = context
       Me.Builder = builder

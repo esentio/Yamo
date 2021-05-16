@@ -1108,8 +1108,7 @@ Namespace Tests
     End Sub
 
     Private Function CreateSqlExpressionVisitor(db As DbContext) As SqlExpressionVisitor
-      Dim builder = New SelectSqlExpressionBuilder(db)
-      builder.SetMainTable(Of ItemWithAllSupportedValues)()
+      Dim builder = New SelectSqlExpressionBuilder(db, GetType(ItemWithAllSupportedValues))
 
       Dim fi = builder.GetType().GetField("m_Visitor", Reflection.BindingFlags.Instance Or Reflection.BindingFlags.NonPublic)
       Return DirectCast(fi.GetValue(builder), SqlExpressionVisitor)

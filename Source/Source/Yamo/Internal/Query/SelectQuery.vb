@@ -14,7 +14,7 @@ Namespace Internal.Query
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property Model As SqlModel
+    Public ReadOnly Property Model As SelectSqlModel
 
     ''' <summary>
     ''' Creates new instance of <see cref="SelectQuery"/><br/>
@@ -22,7 +22,7 @@ Namespace Internal.Query
     ''' </summary>
     ''' <param name="sql"></param>
     ''' <param name="model"></param>
-    Sub New(sql As SqlString, model As SqlModel)
+    Sub New(sql As SqlString, model As SelectSqlModel)
       MyBase.New(sql)
       Me.Model = model
     End Sub
@@ -34,7 +34,7 @@ Namespace Internal.Query
     ''' <param name="sql"></param>
     ''' <param name="parameters"></param>
     ''' <param name="model"></param>
-    Sub New(sql As String, parameters As IReadOnlyList(Of SqlParameter), model As SqlModel)
+    Sub New(sql As String, parameters As IReadOnlyList(Of SqlParameter), model As SelectSqlModel)
       MyBase.New(sql, parameters)
       Me.Model = model
     End Sub
