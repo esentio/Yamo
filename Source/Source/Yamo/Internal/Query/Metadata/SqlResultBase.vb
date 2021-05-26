@@ -22,5 +22,12 @@
       Me.ResultType = resultType
     End Sub
 
+    ''' <summary>
+    ''' Gets count of columns in the resultset.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public MustOverride Function GetColumnCount() As Int32
+
   End Class
 End Namespace

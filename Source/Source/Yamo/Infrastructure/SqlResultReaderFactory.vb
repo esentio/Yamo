@@ -41,6 +41,37 @@ Namespace Infrastructure
     End Function
 
     ''' <summary>
+    ''' Creates wrapper for result factory that converts value type result to an object.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="resultType"></param>
+    ''' <param name="readerFunction"></param>
+    ''' <returns></returns>
+    Public Shared Function CreateValueTypeToObjectResultFactoryWrapper(resultType As Type, readerFunction As Object) As Func(Of IDataReader, ReaderDataBase, Object)
+      Dim readerParam = Expression.Parameter(GetType(IDataReader), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
+      Dim readerDataParam = Expression.Parameter(GetType(ReaderDataBase), "readerData")
+      Dim parameters = {readerParam, readerDataParam}
+
+      Dim variables = New List(Of ParameterExpression)
+      Dim expressions = New List(Of Expression)
+
+      Dim readerFunctionType = GetType(Func(Of , , )).MakeGenericType(GetType(IDataReader), GetType(ReaderDataBase), resultType)
+      Dim readerFuncVar = Expression.Variable(readerFunctionType, "readerFunc")
+      variables.Add(readerFuncVar)
+      expressions.Add(Expression.Assign(readerFuncVar, Expression.Convert(Expression.Constant(readerFunction), readerFunctionType)))
+
+      Dim invokeMethodInfo = readerFunctionType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance)
+      Dim invokeCall = Expression.Call(readerFuncVar, invokeMethodInfo, readerParam, readerDataParam)
+
+      expressions.Add(Expression.Convert(invokeCall, GetType(Object)))
+
+      Dim body = Expression.Block(variables, expressions)
+
+      Dim wrapper = Expression.Lambda(body, parameters)
+      Return DirectCast(wrapper.Compile(), Func(Of IDataReader, ReaderDataBase, Object))
+    End Function
+
+    ''' <summary>
     ''' Creates result factory.
     ''' </summary>
     ''' <param name="sqlResult"></param>

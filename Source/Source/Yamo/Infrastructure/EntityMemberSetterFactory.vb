@@ -24,9 +24,8 @@ Namespace Infrastructure
       Dim parameters = {entityParam, valueParam}
 
       Dim entityCasted = Expression.Convert(entityParam, entityType)
-      Dim valueCasted = Expression.Convert(valueParam, valueType)
-
       Dim prop = Expression.PropertyOrField(entityCasted, propertyOrFieldName)
+      Dim valueCasted = Expression.Convert(valueParam, prop.Type)
       Dim propAssign = Expression.Assign(prop, valueCasted)
 
       Dim body = Expression.Block(propAssign)

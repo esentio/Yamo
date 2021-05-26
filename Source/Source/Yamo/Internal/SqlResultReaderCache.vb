@@ -25,6 +25,12 @@ Namespace Internal
     Private m_Readers As Dictionary(Of Type, Object)
 
     ''' <summary>
+    ''' Stores cached reader instances that are wrapped as Func(Of IDataReader, ReaderDataBase, Object).<br/>
+    ''' Instance type is actually Func(Of IDataReader, ReaderDataBase, Object).
+    ''' </summary>
+    Private m_ValueTypeWrappedReaders As Dictionary(Of Type, Func(Of IDataReader, ReaderDataBase, Object))
+
+    ''' <summary>
     ''' Initializes <see cref="SqlResultReaderCache"/> related static data.
     ''' </summary>
     Shared Sub New()
@@ -36,7 +42,23 @@ Namespace Internal
     ''' </summary>
     Private Sub New()
       m_Readers = New Dictionary(Of Type, Object)
+      m_ValueTypeWrappedReaders = New Dictionary(Of Type, Func(Of IDataReader, ReaderDataBase, Object))
     End Sub
+
+    ''' <summary>
+    ''' Gets reader.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="sqlResult"></param>
+    ''' <returns></returns>
+    Public Shared Function GetReader(model As Model, sqlResult As SqlResultBase) As Func(Of IDataReader, ReaderDataBase, Object)
+      If sqlResult.ResultType.IsValueType Then
+        Return GetInstance(model).GetOrCreateValueTypeToObjectWrappedReader(model, sqlResult)
+      Else
+        Return DirectCast(GetInstance(model).GetOrCreateReader(model, sqlResult), Func(Of IDataReader, ReaderDataBase, Object))
+      End If
+    End Function
 
     ''' <summary>
     ''' Gets reader.<br/>
@@ -47,7 +69,7 @@ Namespace Internal
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
     Public Shared Function GetReader(Of T)(model As Model, sqlResult As SqlResultBase) As Func(Of IDataReader, ReaderDataBase, T)
-      Return GetInstance(model).GetOrCreateReader(Of T)(model, sqlResult)
+      Return DirectCast(GetInstance(model).GetOrCreateReader(model, sqlResult), Func(Of IDataReader, ReaderDataBase, T))
     End Function
 
     ''' <summary>
@@ -71,30 +93,60 @@ Namespace Internal
     ''' <summary>
     ''' Gets or creates result factory.
     ''' </summary>
-    ''' <typeparam name="T"></typeparam>
     ''' <param name="model"></param>
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
-    Private Function GetOrCreateReader(Of T)(model As Model, sqlResult As SqlResultBase) As Func(Of IDataReader, ReaderDataBase, T)
-      Dim reader As Func(Of IDataReader, ReaderDataBase, T) = Nothing
+    Private Function GetOrCreateReader(model As Model, sqlResult As SqlResultBase) As Object
+      Dim reader As Object = Nothing
       Dim resultType = sqlResult.ResultType
 
       SyncLock m_Readers
         Dim value As Object = Nothing
 
         If m_Readers.TryGetValue(resultType, value) Then
-          reader = DirectCast(value, Func(Of IDataReader, ReaderDataBase, T))
+          reader = value
         End If
       End SyncLock
 
       If reader Is Nothing Then
-        reader = DirectCast(SqlResultReaderFactory.CreateResultFactory(sqlResult), Func(Of IDataReader, ReaderDataBase, T))
+        reader = SqlResultReaderFactory.CreateResultFactory(sqlResult)
       Else
         Return reader
       End If
 
       SyncLock m_Readers
         m_Readers(resultType) = reader
+      End SyncLock
+
+      Return reader
+    End Function
+
+    ''' <summary>
+    ''' Gets or creates result factory that return value type as an object.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="sqlResult"></param>
+    ''' <returns></returns>
+    Private Function GetOrCreateValueTypeToObjectWrappedReader(model As Model, sqlResult As SqlResultBase) As Func(Of IDataReader, ReaderDataBase, Object)
+      Dim reader As Func(Of IDataReader, ReaderDataBase, Object) = Nothing
+      Dim resultType = sqlResult.ResultType
+
+      SyncLock m_ValueTypeWrappedReaders
+        Dim value As Func(Of IDataReader, ReaderDataBase, Object) = Nothing
+
+        If m_ValueTypeWrappedReaders.TryGetValue(resultType, value) Then
+          reader = value
+        End If
+      End SyncLock
+
+      If reader Is Nothing Then
+        reader = SqlResultReaderFactory.CreateValueTypeToObjectResultFactoryWrapper(sqlResult.ResultType, GetOrCreateReader(model, sqlResult))
+      Else
+        Return reader
+      End If
+
+      SyncLock m_ValueTypeWrappedReaders
+        m_ValueTypeWrappedReaders(resultType) = reader
       End SyncLock
 
       Return reader

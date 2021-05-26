@@ -163,7 +163,7 @@ Namespace Internal.Query
     ''' <returns></returns>
     Public Function ReadFirstOrDefault(Of T)(query As SelectQuery, behavior As CollectionNavigationFillBehavior) As T
       If query.Model.ContainsJoins() Then
-        Dim readerDataCollection = ReaderDataFactory.Create(m_DialectProvider, query.Model.Model, query.Model.GetEntities())
+        Dim readerDataCollection = ReaderDataFactory.Create(m_DialectProvider, m_DbContext.Model, query.Model.GetEntities())
 
         If readerDataCollection.HasCollectionNavigation Then
           Return ReadJoinedFirstOrDefaultWithCollectionNavigation(Of T)(query, readerDataCollection, behavior)
@@ -184,7 +184,7 @@ Namespace Internal.Query
     ''' <returns></returns>
     Public Function ReadList(Of T)(query As SelectQuery) As List(Of T)
       If query.Model.ContainsJoins() Then
-        Dim readerDataCollection = ReaderDataFactory.Create(m_DialectProvider, query.Model.Model, query.Model.GetEntities())
+        Dim readerDataCollection = ReaderDataFactory.Create(m_DialectProvider, m_DbContext.Model, query.Model.GetEntities())
 
         If readerDataCollection.HasCollectionNavigation Then
           Return ReadJoinedListWithCollectionNavigation(Of T)(query, readerDataCollection)
@@ -228,8 +228,10 @@ Namespace Internal.Query
     ''' <param name="query"></param>
     ''' <returns></returns>
     Private Function ReadSimpleFirstOrDefault(Of T)(query As SelectQuery) As T
-      Dim reader = EntityReaderCache.GetReader(m_DialectProvider, m_DbContext.Model, GetType(T))
-      Dim includedColumns = query.Model.MainEntity.IncludedColumns
+      Dim entity = query.Model.MainEntity
+      Dim readerData = ReaderDataFactory.Create(m_DialectProvider, m_DbContext.Model, entity)
+      Dim reader = readerData.Reader
+      Dim includedColumns = entity.IncludedColumns
 
       Dim value As T = Nothing
 
@@ -237,6 +239,7 @@ Namespace Internal.Query
         Using dataReader = command.ExecuteReader()
           If dataReader.Read() Then
             value = DirectCast(reader(dataReader, 0, includedColumns), T)
+            FillIncluded(readerData, dataReader, value)
             ResetDbPropertyModifiedTracking(value)
           End If
         End Using
@@ -343,8 +346,10 @@ Namespace Internal.Query
     ''' <param name="query"></param>
     ''' <returns></returns>
     Private Function ReadSimpleList(Of T)(query As SelectQuery) As List(Of T)
-      Dim reader = EntityReaderCache.GetReader(m_DialectProvider, m_DbContext.Model, GetType(T))
-      Dim includedColumns = query.Model.MainEntity.IncludedColumns
+      Dim entity = query.Model.MainEntity
+      Dim readerData = ReaderDataFactory.Create(m_DialectProvider, m_DbContext.Model, entity)
+      Dim reader = readerData.Reader
+      Dim includedColumns = entity.IncludedColumns
 
       Dim values = New List(Of T)
 
@@ -352,6 +357,7 @@ Namespace Internal.Query
         Using dataReader = command.ExecuteReader()
           While dataReader.Read()
             Dim value = DirectCast(reader(dataReader, 0, includedColumns), T)
+            FillIncluded(readerData, dataReader, value)
             ResetDbPropertyModifiedTracking(value)
             values.Add(value)
           End While
@@ -422,9 +428,9 @@ Namespace Internal.Query
     ''' <param name="readerDataCollection"></param>
     ''' <param name="readerData"></param>
     ''' <param name="dataReader"></param>
-    ''' <param name="declaringValue"></param>
+    ''' <param name="declaringEntity"></param>
     ''' <returns></returns>
-    Private Function Read(readerDataCollection As EntitySqlResultReaderDataCollection, readerData As EntitySqlResultReaderData, dataReader As IDataReader, declaringValue As Object) As Object
+    Private Function Read(readerDataCollection As EntitySqlResultReaderDataCollection, readerData As EntitySqlResultReaderData, dataReader As IDataReader, declaringEntity As Object) As Object
       Dim value As Object
       Dim entityIndex = readerData.Entity.Index
 
@@ -437,7 +443,8 @@ Namespace Internal.Query
       End If
 
       value = readerData.Reader(dataReader, readerData.ReaderIndex, readerData.Entity.IncludedColumns)
-      FillRelationships(readerData, value, declaringValue)
+      FillRelationships(readerData, declaringEntity, value)
+      FillIncluded(readerData, dataReader, value)
 
       If readerData.HasRelatedEntities Then
         For i = 0 To readerData.RelatedEntities.Count - 1
@@ -460,9 +467,9 @@ Namespace Internal.Query
     ''' <param name="cache"></param>
     ''' <param name="pks"></param>
     ''' <param name="dataReader"></param>
-    ''' <param name="declaringValue"></param>
+    ''' <param name="declaringEntity"></param>
     ''' <returns></returns>
-    Private Function Read(readerDataCollection As EntitySqlResultReaderDataCollection, readerData As EntitySqlResultReaderData, cache As ReaderEntityValueCache, pks As Object(), dataReader As IDataReader, declaringValue As Object) As Object
+    Private Function Read(readerDataCollection As EntitySqlResultReaderDataCollection, readerData As EntitySqlResultReaderData, cache As ReaderEntityValueCache, pks As Object(), dataReader As IDataReader, declaringEntity As Object) As Object
       Dim value As Object = Nothing
       Dim entityIndex = readerData.Entity.Index
       Dim valueFromCache = False
@@ -482,7 +489,8 @@ Namespace Internal.Query
       Else
         value = readerData.Reader(dataReader, readerData.ReaderIndex, readerData.Entity.IncludedColumns)
         cache.AddValue(entityIndex, key, value)
-        FillRelationships(readerData, value, declaringValue)
+        FillRelationships(readerData, declaringEntity, value)
+        FillIncluded(readerData, dataReader, value)
       End If
 
       If readerData.HasRelatedEntities Then
@@ -515,17 +523,39 @@ Namespace Internal.Query
     ''' Fills relationhip properties with instances of related entities.
     ''' </summary>
     ''' <param name="readerData"></param>
-    ''' <param name="value"></param>
-    ''' <param name="declaringValue"></param>
-    Private Sub FillRelationships(readerData As EntitySqlResultReaderData, value As Object, declaringValue As Object)
+    ''' <param name="declaringEntity"></param>
+    ''' <param name="relatedEntity"></param>
+    Private Sub FillRelationships(readerData As EntitySqlResultReaderData, declaringEntity As Object, relatedEntity As Object)
       If readerData.HasCollectionNavigation Then
         For i = 0 To readerData.CollectionInitializers.Count - 1
-          readerData.CollectionInitializers(i).Invoke(value)
+          readerData.CollectionInitializers(i).Invoke(relatedEntity)
         Next
       End If
 
-      If readerData.RelationshipSetter IsNot Nothing Then
-        readerData.RelationshipSetter.Invoke(declaringValue, value)
+      If readerData.HasRelationshipSetter Then
+        readerData.RelationshipSetter.Invoke(declaringEntity, relatedEntity)
+      End If
+    End Sub
+
+    ''' <summary>
+    ''' Fills included properties with read values.
+    ''' </summary>
+    ''' <param name="entityReaderData"></param>
+    ''' <param name="dataReader"></param>
+    ''' <param name="declaringEntity"></param>
+    Private Sub FillIncluded(entityReaderData As EntitySqlResultReaderData, dataReader As IDataReader, declaringEntity As Object)
+      If entityReaderData.HasIncludedSqlResults Then
+        For i = 0 To entityReaderData.IncludedSqlResultsReaderData.Count - 1
+          Dim includedSqlResultsReaderData = entityReaderData.IncludedSqlResultsReaderData(i)
+
+          Dim sqlResult = includedSqlResultsReaderData.ReaderData.SqlResult
+          Dim reader = SqlResultReaderCache.GetReader(m_DbContext.Model, sqlResult)
+          Dim readerData = includedSqlResultsReaderData.ReaderData
+
+          Dim value = reader(dataReader, readerData)
+
+          includedSqlResultsReaderData.Setter.Invoke(declaringEntity, value)
+        Next
       End If
     End Sub
 

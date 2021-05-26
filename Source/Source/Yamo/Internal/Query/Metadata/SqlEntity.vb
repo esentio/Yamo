@@ -68,6 +68,13 @@ Namespace Internal.Query.Metadata
     Public ReadOnly Property IncludedColumns As Boolean()
 
     ''' <summary>
+    ''' Gets included SQL results.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns>List of included results or <see langword="Nothing"/> if no additional results are included.</returns>
+    Public ReadOnly Property IncludedSqlResults As List(Of SqlEntityIncludedResult)
+
+    ''' <summary>
     ''' Creates new instance of <see cref="SqlEntity"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -99,6 +106,7 @@ Namespace Internal.Query.Metadata
       Next
 
       Me.IncludedColumns = includedColumns
+      Me.IncludedSqlResults = Nothing
     End Sub
 
     ''' <summary>
@@ -134,12 +142,14 @@ Namespace Internal.Query.Metadata
     End Sub
 
     ''' <summary>
-    ''' Gets count of included columns. This returns non-zero count, even if table is ignored (unless the whole table is excluded).<br/>
+    ''' Gets count of included columns. Only columns representing entity properties are counted, not columns representing included result(s).<br/>
+    ''' This returns non-zero count, even if table is ignored (unless the whole table is excluded).<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
+    ''' <param name="ignoreExclusion"></param>
     ''' <returns></returns>
-    Public Function GetColumnCount() As Int32
-      If Me.IsExcluded Then
+    Public Function GetColumnCount(Optional ignoreExclusion As Boolean = False) As Int32
+      If Me.IsExcluded AndAlso Not ignoreExclusion Then
         Return 0
       End If
 
@@ -153,6 +163,19 @@ Namespace Internal.Query.Metadata
 
       Return count
     End Function
+
+    ''' <summary>
+    ''' Adds included SQL result.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="includedSqlResult"></param>
+    Public Sub AddIncludedSqlResult(includedSqlResult As SqlEntityIncludedResult)
+      If Me.IncludedSqlResults Is Nothing Then
+        Me._IncludedSqlResults = New List(Of SqlEntityIncludedResult)
+      End If
+
+      Me.IncludedSqlResults.Add(includedSqlResult)
+    End Sub
 
   End Class
 End Namespace

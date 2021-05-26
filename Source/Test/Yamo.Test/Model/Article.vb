@@ -18,6 +18,8 @@
 
     Public Property PriceWithDiscount As Decimal
 
+    Public Property NullablePriceWithDiscount As Decimal?
+
     Public Property LabelDescription As String
 
     Public Property Tag As Object

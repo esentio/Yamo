@@ -25,5 +25,14 @@
       Me.Items = items
     End Sub
 
+    ''' <summary>
+    ''' Gets count of columns in the resultset.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Overrides Function GetColumnCount() As Int32
+      Return Me.Items.Sum(Function(x) x.GetColumnCount())
+    End Function
+
   End Class
 End Namespace

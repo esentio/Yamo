@@ -63,6 +63,11 @@ Namespace Internal
     Private m_ParameterIndex As Int32
 
     ''' <summary>
+    ''' Stores include index.
+    ''' </summary>
+    Private m_IncludeIndex As Int32
+
+    ''' <summary>
     ''' Stores whether aliases should be used.
     ''' </summary>
     Private m_UseAliases As Boolean
@@ -111,9 +116,10 @@ Namespace Internal
     ''' <param name="mode"></param>
     ''' <param name="entityIndexHints"></param>
     ''' <param name="parameterIndex"></param>
+    ''' <param name="includeIndex"></param>
     ''' <param name="useAliases"></param>
     ''' <param name="useTableNamesOrAliases"></param>
-    Private Sub Initialize(lambda As LambdaExpression, mode As ExpressionTranslateMode, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean)
+    Private Sub Initialize(lambda As LambdaExpression, mode As ExpressionTranslateMode, entityIndexHints As Int32(), parameterIndex As Int32, includeIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean)
       m_Mode = mode
       m_ExpressionParameters = lambda.Parameters
       m_ExpressionParametersType = If(entityIndexHints Is Nothing, ExpressionParametersType.IJoin, ExpressionParametersType.Entities)
@@ -121,6 +127,7 @@ Namespace Internal
       m_Sql = New StringBuilder()
       m_Parameters = New List(Of SqlParameter)
       m_ParameterIndex = parameterIndex
+      m_IncludeIndex = includeIndex
       m_UseAliases = useAliases
       m_UseTableNamesOrAliases = useTableNamesOrAliases
       m_CurrentLikeParameterFormat = Nothing
@@ -147,7 +154,7 @@ Namespace Internal
 
       Dim lambda = DirectCast(expression, LambdaExpression)
 
-      Initialize(lambda, mode, entityIndexHints, parameterIndex, useAliases, useTableNamesOrAliases)
+      Initialize(lambda, mode, entityIndexHints, parameterIndex, -1, useAliases, useTableNamesOrAliases)
 
       Visit(lambda.Body)
 
@@ -157,7 +164,7 @@ Namespace Internal
     End Function
 
     ''' <summary>
-    ''' Translates custom select.<br/>
+    ''' Translates custom select expression.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="expression"></param>
@@ -171,65 +178,103 @@ Namespace Internal
 
       Dim lambda = DirectCast(expression, LambdaExpression)
 
-      Initialize(lambda, ExpressionTranslateMode.CustomSelect, entityIndexHints, parameterIndex, True, True)
+      Initialize(lambda, ExpressionTranslateMode.CustomSelect, entityIndexHints, parameterIndex, -1, True, True)
 
-      VisitInCustomSelectMode(lambda.Body)
+      VisitInCustomSelectOrIncludeMode(lambda.Body)
 
       m_ExpressionParameters = Nothing
 
       Return (New SqlString(m_Sql.ToString(), m_Parameters), m_CustomSqlResult)
     End Function
 
-    'Public Function TranslateInclude(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, CustomEntities As CustomSqlEntity())
-    '  If TypeOf expression IsNot LambdaExpression Then
-    '    Throw New ArgumentException("Expression must be of type LambdaExpression.")
-    '  End If
+    ''' <summary>
+    ''' Translates custom column(s) include action expression.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="expression"></param>
+    ''' <param name="entityIndexHints"></param>
+    ''' <param name="parameterIndex"></param>
+    ''' <param name="includeIndex"></param>
+    ''' <returns></returns>
+    Public Function TranslateIncludeAction(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, includeIndex As Int32) As (SqlString As SqlString, EntityIndex As Int32, PropertyName As String, Result As SqlResultBase)
+      If TypeOf expression IsNot LambdaExpression Then
+        Throw New ArgumentException("Expression must be of type LambdaExpression.")
+      End If
 
-    '  Dim lambda = DirectCast(expression, LambdaExpression)
+      Dim lambda = DirectCast(expression, LambdaExpression)
 
-    '  Initialize(lambda, ExpressionTranslateMode.Include, entityIndexHints, parameterIndex, True, True)
+      Initialize(lambda, ExpressionTranslateMode.Include, entityIndexHints, parameterIndex, includeIndex, True, True)
 
-    '  If Not lambda.Body.NodeType = ExpressionType.Call Then
-    '    Throw New Exception($"Cannot process the expression. Body NodeType {lambda.Body.NodeType} is not allowed.")
-    '  End If
+      If Not lambda.Body.NodeType = ExpressionType.Call Then
+        Throw New Exception($"Cannot process the expression. Body NodeType {lambda.Body.NodeType} is not allowed.")
+      End If
 
-    '  Dim node = DirectCast(lambda.Body, MethodCallExpression)
-    '  Dim isEntity = False
-    '  Dim isJoinedEntity = False
+      Dim node = DirectCast(lambda.Body, MethodCallExpression)
+      Dim isEntity = False
+      Dim isJoinedEntity = False
 
-    '  If node.Method.IsSpecialName AndAlso node.Object IsNot Nothing AndAlso node.Method.Name.StartsWith("set_") Then
-    '    isEntity = Me.IsEntity(node.Object)
-    '    isJoinedEntity = Me.IsJoinedEntity(node.Object)
-    '  End If
+      If node.Method.IsSpecialName AndAlso node.Object IsNot Nothing AndAlso node.Method.Name.StartsWith("set_") Then
+        isEntity = Me.IsEntity(node.Object)
+        isJoinedEntity = Me.IsJoinedEntity(node.Object)
+      End If
 
-    '  Dim entityIndex As Int32
+      Dim entityIndex As Int32
 
-    '  If isEntity Then
-    '    entityIndex = GetEntityIndex(DirectCast(node.Object, ParameterExpression))
-    '  ElseIf isJoinedEntity Then
-    '    entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(DirectCast(node.Object, MemberExpression).Member.Name)
-    '  Else
-    '    Throw New Exception("Cannot process the expression.")
-    '  End If
+      If isEntity Then
+        entityIndex = GetEntityIndex(DirectCast(node.Object, ParameterExpression))
+      ElseIf isJoinedEntity Then
+        entityIndex = Helpers.Common.GetEntityIndexFromJoinMemberName(DirectCast(node.Object, MemberExpression).Member.Name)
+      Else
+        Throw New Exception("Cannot process the expression.")
+      End If
 
-    '  Dim propertyName = node.Method.Name.Substring(4) ' trim "set_"
+      Dim propertyName = node.Method.Name.Substring(4) ' trim "set_"
 
+      Dim valueNode = node.Arguments(0)
 
+      If valueNode.Type Is GetType(Object) AndAlso (valueNode.NodeType = ExpressionType.Convert OrElse valueNode.NodeType = ExpressionType.ConvertChecked) Then
+        ' get correct type in cases of assigning to property of type Object (ignore implicit cast)
+        valueNode = DirectCast(valueNode, UnaryExpression).Operand
+      End If
 
-    '  Dim arg = node.Arguments(0)
+      VisitInCustomSelectOrIncludeMode(valueNode)
 
+      m_ExpressionParameters = Nothing
 
+      Return (New SqlString(m_Sql.ToString(), m_Parameters), entityIndex, propertyName, m_CustomSqlResult)
+    End Function
 
+    ''' <summary>
+    ''' Translates custom column(s) include value selector expression.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="expression"></param>
+    ''' <param name="entityIndexHints"></param>
+    ''' <param name="parameterIndex"></param>
+    ''' <param name="includeIndex"></param>
+    ''' <returns></returns>
+    Public Function TranslateIncludeValueSelector(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, includeIndex As Int32) As (SqlString As SqlString, Result As SqlResultBase)
+      If TypeOf expression IsNot LambdaExpression Then
+        Throw New ArgumentException("Expression must be of type LambdaExpression.")
+      End If
 
+      Dim lambda = DirectCast(expression, LambdaExpression)
 
-    '  VisitInCustomSelectMode(lambda.Body)
+      Initialize(lambda, ExpressionTranslateMode.Include, entityIndexHints, parameterIndex, includeIndex, True, True)
 
-    '  m_ExpressionParameters = Nothing
+      Dim node = lambda.Body
 
-    '  CustomResultReaderCache.CreateResultFactoryIfNotExists(m_Model.Model, lambda.Body, m_CustomEntities)
+      If node.Type Is GetType(Object) AndAlso (node.NodeType = ExpressionType.Convert OrElse node.NodeType = ExpressionType.ConvertChecked) Then
+        ' get correct type in cases of assigning to property of type Object (ignore implicit cast)
+        node = DirectCast(node, UnaryExpression).Operand
+      End If
 
-    '  Return (New SqlString(m_Sql.ToString(), m_Parameters), m_CustomEntities)
-    'End Function
+      VisitInCustomSelectOrIncludeMode(node)
+
+      m_ExpressionParameters = Nothing
+
+      Return (New SqlString(m_Sql.ToString(), m_Parameters), m_CustomSqlResult)
+    End Function
 
     ''' <summary>
     ''' Visits expression.<br/>
@@ -931,7 +976,10 @@ Namespace Internal
       Dim count = args.Count
       Dim items As SqlResultBase() = Nothing
 
-      If m_Mode = ExpressionTranslateMode.CustomSelect Then
+      Dim isInCustomSelectMode = m_Mode = ExpressionTranslateMode.CustomSelect
+      Dim isInIncludeMode = m_Mode = ExpressionTranslateMode.Include
+
+      If isInCustomSelectMode OrElse isInIncludeMode Then
         items = New SqlResultBase(count - 1) {}
       End If
 
@@ -947,11 +995,11 @@ Namespace Internal
 
         Visit(arg)
 
-        If m_Mode = ExpressionTranslateMode.CustomSelect Then
+        If isInCustomSelectMode OrElse isInIncludeMode Then
           If isEntity Then
             items(i) = New EntitySqlResult(entity)
           Else
-            Dim columnAlias = CreateColumnAlias(i)
+            Dim columnAlias = If(isInCustomSelectMode, CreateColumnAlias(i), CreateIncludeColumnAlias(i))
             m_Sql.Append(" ")
             m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
             items(i) = New ScalarValueSqlResult(type)
@@ -1009,11 +1057,11 @@ Namespace Internal
     End Sub
 
     ''' <summary>
-    ''' Visits in custom select mode.
+    ''' Visits in custom select or include mode.
     ''' </summary>
     ''' <param name="node"></param>
     ''' <returns></returns>
-    Private Function VisitInCustomSelectMode(node As Expression) As Expression
+    Private Function VisitInCustomSelectOrIncludeMode(node As Expression) As Expression
       If node.NodeType = ExpressionType.New Then
         ' anonymous type, value tuple
         Return Visit(node)
@@ -1023,14 +1071,14 @@ Namespace Internal
         Dim type = node.Type
         Dim entity = m_Model.GetEntities().FirstOrDefault(Function(x) x.Entity.EntityType = type)
 
+        Dim isInCustomSelectMode = m_Mode = ExpressionTranslateMode.CustomSelect
+
         If entity Is Nothing Then
           ' simple scalar value
-
-          Dim columnAlias = CreateColumnAlias(0)
+          Dim columnAlias = If(isInCustomSelectMode, CreateColumnAlias(0), CreateIncludeColumnAlias(0))
           m_Sql.Append(" ")
           m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
           m_CustomSqlResult = New ScalarValueSqlResult(type)
-
         Else
           ' whole entity
           m_CustomSqlResult = New EntitySqlResult(entity)
@@ -1172,6 +1220,15 @@ Namespace Internal
     End Function
 
     ''' <summary>
+    ''' Creates column alias for included column.
+    ''' </summary>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    Private Function CreateIncludeColumnAlias(index As Int32) As String
+      Return "CI_" & m_IncludeIndex.ToString(Globalization.CultureInfo.InvariantCulture) & "_" & index.ToString(Globalization.CultureInfo.InvariantCulture)
+    End Function
+
+    ''' <summary>
     ''' Creates column alias.
     ''' </summary>
     ''' <param name="index1"></param>
@@ -1179,6 +1236,16 @@ Namespace Internal
     ''' <returns></returns>
     Private Function CreateColumnAlias(index1 As Int32, index2 As Int32) As String
       Return "C" & index1.ToString(Globalization.CultureInfo.InvariantCulture) & "_" & index2.ToString(Globalization.CultureInfo.InvariantCulture)
+    End Function
+
+    ''' <summary>
+    ''' Creates column alias for included column.
+    ''' </summary>
+    ''' <param name="index1"></param>
+    ''' <param name="index2"></param>
+    ''' <returns></returns>
+    Private Function CreateIncludeColumnAlias(index1 As Int32, index2 As Int32) As String
+      Return "CI_" & m_IncludeIndex.ToString(Globalization.CultureInfo.InvariantCulture) & "_" & index1.ToString(Globalization.CultureInfo.InvariantCulture) & "_" & index2.ToString(Globalization.CultureInfo.InvariantCulture)
     End Function
 
     ''' <summary>
@@ -1233,10 +1300,14 @@ Namespace Internal
       ' NOTE: excluding columns is not (yet) supported in this scenario, but column enumeration belows already supports it.
       ' In case exclusion is added, test this! Also, if whole table is excluded, entity.GetColumnCount() returns 0 (and we'll
       ' most likely get exception later). In this case we propably shouldn't support excluding whole table (it doesn't make sense anyway)!
+      ' Also, think about supporting included results here.
+
+      Dim isInCustomSelectMode = m_Mode = ExpressionTranslateMode.CustomSelect
+      Dim isInIncludeMode = m_Mode = ExpressionTranslateMode.Include
 
       Dim isIgnored = entity.IsIgnored
       Dim properties = entity.Entity.GetProperties()
-      Dim columnCount = entity.GetColumnCount()
+      Dim columnCount = entity.GetColumnCount(isInIncludeMode)
       Dim columnIndex = 0
 
       For propertyIndex = 0 To properties.Count - 1
@@ -1251,8 +1322,12 @@ Namespace Internal
             m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, properties(propertyIndex).ColumnName)
           End If
 
-          If m_Mode = ExpressionTranslateMode.CustomSelect Then
+          If isInCustomSelectMode Then
             Dim columnAlias = CreateColumnAlias(m_CustomSqlResultItemIndex, columnIndex)
+            m_Sql.Append(" ")
+            m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
+          ElseIf isInIncludeMode Then
+            Dim columnAlias = CreateIncludeColumnAlias(m_CustomSqlResultItemIndex, columnIndex)
             m_Sql.Append(" ")
             m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
           End If

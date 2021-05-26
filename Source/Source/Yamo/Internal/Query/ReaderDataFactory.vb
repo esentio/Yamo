@@ -57,6 +57,7 @@ Namespace Internal.Query
       Dim readerIndex = 0
 
       For index = 0 To entities.Length - 1
+        Dim entityReaderIndex = readerIndex
         Dim entity = entities(index)
         Dim entityType = entity.Entity.EntityType
 
@@ -84,13 +85,65 @@ Namespace Internal.Query
           relationshipSetter = EntityMemberSetterCache.GetSetter(model, entity.Relationship.DeclaringEntity.Entity.EntityType, entity.Relationship.RelationshipNavigation)
         End If
 
-        Dim readerData = New EntitySqlResultReaderData(readerIndex, entity, entityReader, containsPKReader, pkOffsets, pkReader, relatedEntities, collectionInitializers, relationshipSetter)
-        readerDataItems(index) = readerData
-
         readerIndex += entity.GetColumnCount()
+
+        Dim includedSqlResultsReaderData As IncludedSqlResultReaderData() = Nothing
+        Dim entityIncludedSqlResults = entity.IncludedSqlResults
+
+        If entityIncludedSqlResults IsNot Nothing Then
+          includedSqlResultsReaderData = New IncludedSqlResultReaderData(entityIncludedSqlResults.Count - 1) {}
+
+          ' LINQ not used for performance and allocation reasons
+          For j = 0 To entityIncludedSqlResults.Count - 1
+            Dim entityIncludedSqlResult = entityIncludedSqlResults(j)
+            Dim setter = EntityMemberSetterCache.GetSetter(model, entityType, entityIncludedSqlResult.PropertyName, entityIncludedSqlResult.Result.ResultType)
+            Dim readData = Create(dialectProvider, model, entityIncludedSqlResult.Result, readerIndex)
+            includedSqlResultsReaderData(j) = New IncludedSqlResultReaderData(setter, readData)
+            readerIndex += readData.GetColumnCount()
+          Next
+        End If
+
+        Dim readerData = New EntitySqlResultReaderData(New EntitySqlResult(entity), entityReaderIndex, entityReader, containsPKReader, pkOffsets, pkReader, relatedEntities, collectionInitializers, relationshipSetter, includedSqlResultsReaderData)
+        readerDataItems(index) = readerData
       Next
 
       Return New EntitySqlResultReaderDataCollection(readerDataItems)
+    End Function
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="EntitySqlResultReaderData"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="dialectProvider"></param>
+    ''' <param name="model"></param>
+    ''' <param name="entity"></param>
+    ''' <returns></returns>
+    Public Shared Function Create(dialectProvider As SqlDialectProvider, model As Model, entity As SqlEntity) As EntitySqlResultReaderData
+      Dim readerIndex = 0
+      Dim entityReaderIndex = 0
+      Dim entityType = entity.Entity.EntityType
+
+      Dim entityReader = EntityReaderCache.GetReader(dialectProvider, model, entityType)
+
+      readerIndex += entity.GetColumnCount()
+
+      Dim includedSqlResultsReaderData As IncludedSqlResultReaderData() = Nothing
+      Dim entityIncludedSqlResults = entity.IncludedSqlResults
+
+      If entityIncludedSqlResults IsNot Nothing Then
+        includedSqlResultsReaderData = New IncludedSqlResultReaderData(entityIncludedSqlResults.Count - 1) {}
+
+        ' LINQ not used for performance and allocation reasons
+        For j = 0 To entityIncludedSqlResults.Count - 1
+          Dim entityIncludedSqlResult = entityIncludedSqlResults(j)
+          Dim setter = EntityMemberSetterCache.GetSetter(model, entityType, entityIncludedSqlResult.PropertyName, entityIncludedSqlResult.Result.ResultType)
+          Dim readData = Create(dialectProvider, model, entityIncludedSqlResult.Result, readerIndex)
+          includedSqlResultsReaderData(j) = New IncludedSqlResultReaderData(setter, readData)
+          readerIndex += readData.GetColumnCount()
+        Next
+      End If
+
+      Return New EntitySqlResultReaderData(New EntitySqlResult(entity), entityReaderIndex, entityReader, includedSqlResultsReaderData)
     End Function
 
     ''' <summary>
@@ -106,14 +159,15 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Creates new instance of <see cref="ReaderDataBase"/>.
+    ''' Creates new instance of <see cref="ReaderDataBase"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="dialectProvider"></param>
     ''' <param name="model"></param>
     ''' <param name="sqlResult"></param>
     ''' <param name="readerIndex"></param>
     ''' <returns></returns>
-    Private Shared Function Create(dialectProvider As SqlDialectProvider, model As Model, sqlResult As SqlResultBase, readerIndex As Int32) As ReaderDataBase
+    Public Shared Function Create(dialectProvider As SqlDialectProvider, model As Model, sqlResult As SqlResultBase, readerIndex As Int32) As ReaderDataBase
       If TypeOf sqlResult Is AnonymousTypeSqlResult Then
         Return Create(dialectProvider, model, DirectCast(sqlResult, AnonymousTypeSqlResult), readerIndex)
       ElseIf TypeOf sqlResult Is ValueTupleSqlResult Then
@@ -137,7 +191,7 @@ Namespace Internal.Query
     ''' <returns></returns>
     Private Shared Function Create(dialectProvider As SqlDialectProvider, model As Model, sqlResult As AnonymousTypeSqlResult, readerIndex As Int32) As AnonymousTypeSqlResultReaderData
       Dim items = Create(dialectProvider, model, sqlResult.Items, readerIndex)
-      Return New AnonymousTypeSqlResultReaderData(readerIndex, items)
+      Return New AnonymousTypeSqlResultReaderData(sqlResult, readerIndex, items)
     End Function
 
     ''' <summary>
@@ -150,7 +204,7 @@ Namespace Internal.Query
     ''' <returns></returns>
     Private Shared Function Create(dialectProvider As SqlDialectProvider, model As Model, sqlResult As ValueTupleSqlResult, readerIndex As Int32) As ValueTupleSqlResultReaderData
       Dim items = Create(dialectProvider, model, sqlResult.Items, readerIndex)
-      Return New ValueTupleSqlResultReaderData(readerIndex, items)
+      Return New ValueTupleSqlResultReaderData(sqlResult, readerIndex, items)
     End Function
 
     ''' <summary>
@@ -167,7 +221,7 @@ Namespace Internal.Query
       Dim containsPKReader = EntityReaderCache.GetContainsPKReader(dialectProvider, model, entity.Entity.EntityType)
       Dim pkOffsets = GetPKOffsets(entity)
 
-      Return New EntitySqlResultReaderData(readerIndex, entity, entityReader, containsPKReader, pkOffsets)
+      Return New EntitySqlResultReaderData(sqlResult, readerIndex, entityReader, containsPKReader, pkOffsets)
     End Function
 
     ''' <summary>
@@ -180,7 +234,7 @@ Namespace Internal.Query
     ''' <returns></returns>
     Private Shared Function Create(dialectProvider As SqlDialectProvider, model As Model, sqlResult As ScalarValueSqlResult, readerIndex As Int32) As ScalarValueSqlResultReaderData
       Dim reader = ValueTypeReaderCache.GetReader(dialectProvider, model, sqlResult.ResultType)
-      Return New ScalarValueSqlResultReaderData(readerIndex, reader)
+      Return New ScalarValueSqlResultReaderData(sqlResult, readerIndex, reader)
     End Function
 
     ''' <summary>
@@ -192,13 +246,12 @@ Namespace Internal.Query
     ''' <param name="readerIndex"></param>
     ''' <returns></returns>
     Private Shared Function Create(dialectProvider As SqlDialectProvider, model As Model, sqlResults As SqlResultBase(), readerIndex As Int32) As ReaderDataBase()
-      Dim sqlResultReaderIndex = 0
       Dim result = New ReaderDataBase(sqlResults.Length - 1) {}
 
       For i = 0 To sqlResults.Length - 1
-        Dim readerData = Create(dialectProvider, model, sqlResults(i), sqlResultReaderIndex)
+        Dim readerData = Create(dialectProvider, model, sqlResults(i), readerIndex)
         result(i) = readerData
-        sqlResultReaderIndex += readerData.GetColumnCount()
+        readerIndex += readerData.GetColumnCount()
       Next
 
       Return result
