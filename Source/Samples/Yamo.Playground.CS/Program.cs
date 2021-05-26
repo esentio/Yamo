@@ -71,6 +71,7 @@ namespace Yamo.Playground.CS
             Test48();
             Test49();
             Test50();
+            Test51();
         }
 
         public static MyContext CreateContext()
@@ -957,6 +958,19 @@ namespace Yamo.Playground.CS
                              .SelectAll()
                              .ExcludeT2()
                              .Include(j => j.T1.LabelDescription, j => j.T2.Description)
+                             .ToList();
+            }
+        }
+
+        public static void Test51()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From<Article>()
+                             .LeftJoin<Label>(j => j.T1.Id == j.T2.Id)
+                             .SelectAll()
+                             .ExcludeT2()
+                             .Include(j => j.T1.Tag, j => j.T2)
                              .ToList();
             }
         }

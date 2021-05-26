@@ -17,6 +17,6 @@ namespace Yamo.Playground.CS.Model
         public List<Category> Categories { get; set; }
         public decimal PriceWithDiscount { get; set; }
         public string LabelDescription { get; set; }
-
+        public object Tag { get; set; }
     }
 }
