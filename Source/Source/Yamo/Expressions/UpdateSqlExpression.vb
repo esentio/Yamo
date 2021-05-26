@@ -18,8 +18,7 @@ Namespace Expressions
     ''' <param name="context"></param>
     ''' <param name="tableNameOverride"></param>
     Friend Sub New(context As DbContext, Optional tableNameOverride As String = Nothing)
-      MyBase.New(context, New UpdateSqlExpressionBuilder(context, tableNameOverride), New QueryExecutor(context))
-      Me.Builder.SetMainTable(Of T)()
+      MyBase.New(context, New UpdateSqlExpressionBuilder(context, GetType(T), tableNameOverride), New QueryExecutor(context))
     End Sub
 
     ''' <summary>

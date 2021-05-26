@@ -10,6 +10,8 @@
 
     Public Property Label As Label
 
+    Public Property PriceWithDiscount As Decimal
+
     Public Overrides Function Equals(obj As Object) As Boolean
       If obj Is Nothing OrElse TypeOf obj IsNot ArticlePart Then
         Return False

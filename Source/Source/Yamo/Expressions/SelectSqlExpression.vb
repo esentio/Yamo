@@ -17,8 +17,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="context"></param>
     Friend Sub New(context As DbContext)
-      MyBase.New(New SelectSqlExpressionBuilder(context), New QueryExecutor(context))
-      Me.Builder.SetMainTable(Of T)()
+      MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), New QueryExecutor(context))
     End Sub
 
     ''' <summary>
@@ -27,8 +26,7 @@ Namespace Expressions
     ''' <param name="context"></param>
     ''' <param name="tableSource"></param>
     Friend Sub New(context As DbContext, tableSource As FormattableString)
-      MyBase.New(New SelectSqlExpressionBuilder(context), New QueryExecutor(context))
-      Me.Builder.SetMainTable(Of T)()
+      MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), New QueryExecutor(context))
       Me.Builder.SetMainTableSource(tableSource)
     End Sub
 
@@ -39,8 +37,7 @@ Namespace Expressions
     ''' <param name="tableSource"></param>
     ''' <param name="parameters"></param>
     Friend Sub New(context As DbContext, tableSource As RawSqlString, ParamArray parameters() As Object)
-      MyBase.New(New SelectSqlExpressionBuilder(context), New QueryExecutor(context))
-      Me.Builder.SetMainTable(Of T)()
+      MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), New QueryExecutor(context))
       Me.Builder.SetMainTableSource(tableSource, parameters)
     End Sub
 

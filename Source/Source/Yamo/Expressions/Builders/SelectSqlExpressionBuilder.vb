@@ -18,7 +18,7 @@ Namespace Expressions.Builders
     ''' <summary>
     ''' Stores SQL model.
     ''' </summary>
-    Private m_Model As SqlModel
+    Private m_Model As SelectSqlModel
 
     ''' <summary>
     ''' Stores SQL expression visitor.
@@ -86,6 +86,11 @@ Namespace Expressions.Builders
     Private m_SelectExpression As String
 
     ''' <summary>
+    ''' Stores included select expressions counter.
+    ''' </summary>
+    Private m_IncludedExpressionsCount As Int32
+
+    ''' <summary>
     ''' Stores whether distincs is used.
     ''' </summary>
     Private m_UseDistinct As Boolean
@@ -100,9 +105,10 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="context"></param>
-    Public Sub New(context As DbContext)
+    ''' <param name="mainEntityType"></param>
+    Public Sub New(context As DbContext, mainEntityType As Type)
       MyBase.New(context)
-      m_Model = New SqlModel(Me.DbContext.Model)
+      m_Model = New SelectSqlModel(Me.DbContext.Model, mainEntityType)
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       ' lists are created only when necessary
       m_MainTableSourceExpression = Nothing
@@ -117,17 +123,9 @@ Namespace Expressions.Builders
       m_LimitExpression = Nothing
       m_UseTopForLimit = False
       m_SelectExpression = Nothing
+      m_IncludedExpressionsCount = 0
       m_UseDistinct = False
       m_Parameters = New List(Of SqlParameter)
-    End Sub
-
-    ''' <summary>
-    ''' Sets main table.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <typeparam name="T"></typeparam>
-    Public Sub SetMainTable(Of T)()
-      m_Model.SetMainTable(Of T)()
     End Sub
 
     ''' <summary>
@@ -254,7 +252,9 @@ Namespace Expressions.Builders
         relationship = TryGetRelationship(Of TJoined)(entityIndexHints)
       End If
 
-      m_Model.AddJoinedTable(Of TJoined)(relationship)
+      Dim sqlEntity = m_Model.AddJoin(Of TJoined)(relationship)
+      Dim entity = sqlEntity.Entity
+      Dim tableAlias = sqlEntity.TableAlias
 
       Dim sql As String
       Dim joinTypeString As String
@@ -273,9 +273,6 @@ Namespace Expressions.Builders
         Case Else
           Throw New NotSupportedException($"Unsupported join type '{joinInfo.JoinType}'.")
       End Select
-
-      Dim entity = m_Model.Model.GetEntity(GetType(TJoined))
-      Dim tableAlias = m_Model.GetLastTableAlias()
 
       If predicate Is Nothing Then
         If joinInfo.TableSource Is Nothing Then
@@ -305,7 +302,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="entityType"></param>
     Public Sub AddIgnoredJoin(entityType As Type)
-      m_Model.AddIgnoredJoinedTable(entityType)
+      m_Model.AddIgnoredJoin(entityType)
     End Sub
 
     ''' <summary>
@@ -392,57 +389,36 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="relationship">Lambda expression with one parameter is expected.</param>
     Public Sub SetLastJoinRelationship(relationship As Expression)
-      Dim lambda = DirectCast(relationship, LambdaExpression)
-      Dim parameterType = lambda.Parameters(0).Type
+      Dim result = GetEntityAndProperty(relationship, True)
 
-      Dim index As Int32
-      Dim propertyName As String = Nothing
-
-      If GetType(IJoin).IsAssignableFrom(parameterType) Then
-        If lambda.Body.NodeType = ExpressionType.MemberAccess Then
-          Dim node = DirectCast(lambda.Body, MemberExpression)
-
-          If node.Expression.NodeType = ExpressionType.MemberAccess Then
-            index = Helpers.Common.GetEntityIndexFromJoinMemberName(DirectCast(node.Expression, MemberExpression).Member.Name)
-            propertyName = node.Member.Name
-          End If
-        End If
-
-      Else
-        Dim entities = m_Model.GetEntities()
-        Dim possibleDeclaringEntities = entities.Take(entities.Length - 1).Where(Function(x) x.Entity.EntityType Is parameterType).ToArray()
-
-        If possibleDeclaringEntities.Length = 0 Then
-          Throw New Exception($"Cannot infer relationship, because there are no joined entities of type '{parameterType}'.")
-        ElseIf possibleDeclaringEntities.Length = 1 Then
-          index = possibleDeclaringEntities(0).Index
-
-          If lambda.Body.NodeType = ExpressionType.MemberAccess Then
-            propertyName = DirectCast(lambda.Body, MemberExpression).Member.Name
-          End If
-        Else
-          Throw New Exception($"Cannot infer relationship, because there are multiple joined entities of type '{parameterType}'. Use {NameOf(IJoin)} in relationship predicate to avoid unambiguous match.")
-        End If
+      If result.NotFound Then
+        Throw New Exception($"Cannot infer relationship, because there are no joined entities of type '{result.EntityType}'.")
       End If
 
-      If propertyName Is Nothing Then
+      If result.MultipleResults Then
+        Throw New Exception($"Cannot infer relationship, because there are multiple joined entities of type '{result.EntityType}'. Use {NameOf(IJoin)} in relationship predicate to avoid unambiguous match.")
+      End If
+
+      If result.PropertyName Is Nothing Then
         Throw New Exception("Cannot infer relationship. Use expression that contains relationship property only.")
       End If
 
-      Dim declaringSqlEntity = m_Model.GetEntity(index)
+      Dim declaringSqlEntity = result.Entity
+      Dim propertyType = result.PropertyType
+      Dim propertyName = result.PropertyName
 
-      If GetType(IList).IsAssignableFrom(lambda.ReturnType) Then
-        Dim genericTypes = lambda.ReturnType.GetGenericArguments()
+      If GetType(IList).IsAssignableFrom(propertyType) Then
+        Dim genericTypes = propertyType.GetGenericArguments()
 
         If Not genericTypes.Count = 1 Then
-          Throw New Exception($"Unable to infer item type from '{lambda.ReturnType}'.")
+          Throw New Exception($"Unable to infer item type from '{propertyType}'.")
         End If
 
         ' there is still small possibility that item type is not genericTypes(0) type, but in most cases like List(Of) we should be ok
 
-        m_Model.GetLastEntity().SetRelationship(New SqlEntityRelationship(declaringSqlEntity, New CollectionNavigation(propertyName, genericTypes(0), lambda.ReturnType)))
+        m_Model.GetLastEntity().SetRelationship(New SqlEntityRelationship(declaringSqlEntity, New CollectionNavigation(propertyName, genericTypes(0), propertyType)))
       Else
-        m_Model.GetLastEntity().SetRelationship(New SqlEntityRelationship(declaringSqlEntity, New ReferenceNavigation(propertyName, lambda.ReturnType)))
+        m_Model.GetLastEntity().SetRelationship(New SqlEntityRelationship(declaringSqlEntity, New ReferenceNavigation(propertyName, propertyType)))
       End If
     End Sub
 
@@ -606,46 +582,22 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="propertyExpression">Lambda expression with one parameter is expected.</param>
     Public Sub ExcludeSelected(propertyExpression As Expression)
-      ' TODO: SIP - refactor and combine with SetLastJoinRelationship
+      Dim result = GetEntityAndProperty(propertyExpression)
 
-      Dim lambda = DirectCast(propertyExpression, LambdaExpression)
-      Dim parameterType = lambda.Parameters(0).Type
-
-      Dim index As Int32
-      Dim propertyName As String = Nothing
-
-      If GetType(IJoin).IsAssignableFrom(parameterType) Then
-        If lambda.Body.NodeType = ExpressionType.MemberAccess Then
-          Dim node = DirectCast(lambda.Body, MemberExpression)
-
-          If node.Expression.NodeType = ExpressionType.MemberAccess Then
-            index = Helpers.Common.GetEntityIndexFromJoinMemberName(DirectCast(node.Expression, MemberExpression).Member.Name)
-            propertyName = node.Member.Name
-          End If
-        End If
-
-      Else
-        Dim possibleEntities = m_Model.GetEntities().Where(Function(x) x.Entity.EntityType Is parameterType).ToArray()
-
-        If possibleEntities.Length = 0 Then
-          Throw New Exception($"Cannot infer entity for column exclude, because there are no joined entities of type '{parameterType}'.")
-        ElseIf possibleEntities.Length = 1 Then
-          index = possibleEntities(0).Index
-
-          If lambda.Body.NodeType = ExpressionType.MemberAccess Then
-            propertyName = DirectCast(lambda.Body, MemberExpression).Member.Name
-          End If
-        Else
-          Throw New Exception($"Cannot infer entity for column exclude, because there are multiple joined entities of type '{parameterType}'. Use {NameOf(IJoin)} in exclude expression to avoid unambiguous match.")
-        End If
+      If result.NotFound Then
+        Throw New Exception($"Cannot infer entity for column exclude, because there are no joined entities of type '{result.EntityType}'.")
       End If
 
-      If propertyName Is Nothing Then
+      If result.MultipleResults Then
+        Throw New Exception($"Cannot infer entity for column exclude, because there are multiple joined entities of type '{result.EntityType}'. Use {NameOf(IJoin)} in exclude expression to avoid unambiguous match.")
+      End If
+
+      If result.PropertyName Is Nothing Then
         Throw New Exception("Cannot infer excluded column. Use expression that contains entity property only.")
       End If
 
-      Dim entity = m_Model.GetEntity(index)
-      Dim prop = entity.Entity.GetProperty(propertyName)
+      Dim entity = result.Entity
+      Dim prop = entity.Entity.GetProperty(result.PropertyName)
 
       If prop.IsKey Then
         Throw New ArgumentException("Primary key columns cannot be excluded from the query.")
@@ -661,6 +613,52 @@ Namespace Expressions.Builders
     ''' <param name="entityIndex"></param>
     Public Sub ExcludeSelected(entityIndex As Int32)
       m_Model.GetEntity(entityIndex).Exclude()
+    End Sub
+
+    ''' <summary>
+    ''' Includes selected property.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <param name="entityIndexHints"></param>
+    Public Sub IncludeToSelected(action As Expression, entityIndexHints As Int32())
+      Dim result = m_Visitor.TranslateIncludeAction(action, entityIndexHints, m_Parameters.Count, m_IncludedExpressionsCount)
+      m_Parameters.AddRange(result.SqlString.Parameters)
+      m_IncludedExpressionsCount += 1
+
+      Dim sqlEntity = m_Model.GetEntity(result.EntityIndex)
+      sqlEntity.AddIncludedSqlResult(New SqlEntityIncludedResult(result.SqlString.Sql, result.PropertyName, result.Result))
+    End Sub
+
+    ''' <summary>
+    ''' Includes selected property.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <param name="keySelectorEntityIndexHints"></param>
+    ''' <param name="valueSelectorEntityIndexHints"></param>
+    Public Sub IncludeToSelected(keySelector As Expression, valueSelector As Expression, keySelectorEntityIndexHints As Int32(), valueSelectorEntityIndexHints As Int32())
+      Dim keyResult = GetEntityAndProperty(keySelector)
+
+      If keyResult.NotFound Then
+        Throw New Exception($"Cannot infer entity for column include, because there are no joined entities of type '{keyResult.EntityType}'.")
+      End If
+
+      If keyResult.MultipleResults Then
+        Throw New Exception($"Cannot infer entity for column include, because there are multiple joined entities of type '{keyResult.EntityType}'. Use {NameOf(IJoin)} in include expression to avoid unambiguous match.")
+      End If
+
+      If keyResult.PropertyName Is Nothing Then
+        Throw New Exception("Cannot infer included column. Use expression that contains entity property only.")
+      End If
+
+      Dim valueResult = m_Visitor.TranslateIncludeValueSelector(valueSelector, valueSelectorEntityIndexHints, m_Parameters.Count, m_IncludedExpressionsCount)
+      m_Parameters.AddRange(valueResult.SqlString.Parameters)
+      m_IncludedExpressionsCount += 1
+
+      Dim sqlEntity = keyResult.Entity
+      sqlEntity.AddIncludedSqlResult(New SqlEntityIncludedResult(valueResult.SqlString.Sql, keyResult.PropertyName, valueResult.Result))
     End Sub
 
     ''' <summary>
@@ -681,7 +679,7 @@ Namespace Expressions.Builders
       Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, m_Parameters.Count)
       m_SelectExpression = result.SqlString.Sql
       m_Parameters.AddRange(result.SqlString.Parameters)
-      m_Model.SetCustomEntities(result.CustomEntities)
+      m_Model.CustomSqlResult = result.SqlResult
     End Sub
 
     ''' <summary>
@@ -719,6 +717,15 @@ Namespace Expressions.Builders
               Me.DialectProvider.Formatter.AppendIdentifier(sql, properties(j).ColumnName)
             End If
           Next
+
+          Dim includedSqlResults = entity.IncludedSqlResults
+
+          If includedSqlResults IsNot Nothing Then
+            For j = 0 To includedSqlResults.Count - 1
+              sql.Append(", ") ' there should be at least one column already
+              sql.Append(includedSqlResults(j).Sql)
+            Next
+          End If
         End If
       Next
     End Sub
@@ -750,14 +757,14 @@ Namespace Expressions.Builders
       sql.Append(" FROM ")
 
       If m_MainTableSourceExpression Is Nothing Then
-        Dim entity = m_Model.GetFirstEntity().Entity
+        Dim entity = m_Model.MainEntity.Entity
         Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       Else
         sql.Append(m_MainTableSourceExpression)
       End If
 
       sql.Append(" ")
-      Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.GetFirstTableAlias())
+      Me.DialectProvider.Formatter.AppendIdentifier(sql, m_Model.MainEntity.TableAlias)
 
       If m_MainTableHints IsNot Nothing Then
         sql.Append(" ")
@@ -796,6 +803,74 @@ Namespace Expressions.Builders
       End If
 
       Return New SelectQuery(sql.ToString(), m_Parameters, m_Model)
+    End Function
+
+    ''' <summary>
+    ''' Gets entity and property name from an expression.
+    ''' </summary>
+    ''' <param name="propertyExpression"></param>
+    ''' <param name="excludeLastModelEntity"></param>
+    ''' <returns></returns>
+    Private Function GetEntityAndProperty(propertyExpression As Expression, Optional excludeLastModelEntity As Boolean = False) As (EntityType As Type, Entity As SqlEntity, PropertyType As Type, PropertyName As String, NotFound As Boolean, MultipleResults As Boolean)
+      If TypeOf propertyExpression IsNot LambdaExpression Then
+        Throw New ArgumentException("Expression must be of type LambdaExpression.")
+      End If
+
+      Dim lambda = DirectCast(propertyExpression, LambdaExpression)
+
+      Dim parameterType = lambda.Parameters(0).Type
+      Dim returnType = lambda.ReturnType
+      Dim entity As SqlEntity = Nothing
+      Dim propertyName As String = Nothing
+      Dim notFound = False
+      Dim multipleResults = False
+
+      If GetType(IJoin).IsAssignableFrom(parameterType) Then
+        If lambda.Body.NodeType = ExpressionType.MemberAccess Then
+          Dim node = DirectCast(lambda.Body, MemberExpression)
+
+          If node.Expression.NodeType = ExpressionType.MemberAccess Then
+            Dim index = Helpers.Common.GetEntityIndexFromJoinMemberName(DirectCast(node.Expression, MemberExpression).Member.Name)
+
+            If excludeLastModelEntity AndAlso index = m_Model.GetEntityCount() - 1 Then
+              ' this should never happen, because we only use excludeLastModelEntity in SetLastJoinRelationship and there the IJoin doesn't contain the last entity
+            Else
+              entity = m_Model.GetEntity(index)
+              propertyName = node.Member.Name
+            End If
+          End If
+        End If
+
+      Else
+        ' LINQ not used for performance and allocation reasons
+
+        Dim entities = m_Model.GetEntities()
+        Dim count = entities.Length - If(excludeLastModelEntity, 1, 0)
+
+        For i = 0 To count - 1
+          Dim item = entities(i)
+
+          If item.Entity.EntityType Is parameterType Then
+            If entity Is Nothing Then
+              entity = item
+
+              If lambda.Body.NodeType = ExpressionType.MemberAccess Then
+                propertyName = DirectCast(lambda.Body, MemberExpression).Member.Name
+              End If
+            Else
+              entity = Nothing
+              multipleResults = True
+              Exit For
+            End If
+          End If
+        Next
+
+        If entity Is Nothing AndAlso Not multipleResults Then
+          notFound = True
+        End If
+      End If
+
+      Return (parameterType, entity, returnType, propertyName, notFound, multipleResults)
     End Function
 
   End Class

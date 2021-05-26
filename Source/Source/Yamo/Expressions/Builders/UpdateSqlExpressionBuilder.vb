@@ -16,7 +16,7 @@ Namespace Expressions.Builders
     ''' <summary>
     ''' Stores SQL model.
     ''' </summary>
-    Private m_Model As SqlModel
+    Private m_Model As UpdateSqlModel
 
     ''' <summary>
     ''' Stores table name override.
@@ -53,24 +53,17 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="context"></param>
-    Public Sub New(context As DbContext, tableNameOverride As String)
+    ''' <param name="mainEntityType"></param>
+    ''' <param name="tableNameOverride"></param>
+    Public Sub New(context As DbContext, mainEntityType As Type, tableNameOverride As String)
       MyBase.New(context)
-      m_Model = New SqlModel(Me.DbContext.Model)
+      m_Model = New UpdateSqlModel(Me.DbContext.Model, mainEntityType)
       m_TableNameOverride = tableNameOverride
       m_TableHints = Nothing
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       m_SetExpressions = New List(Of String)
       m_WhereExpressions = New List(Of String)
       m_Parameters = New List(Of SqlParameter)
-    End Sub
-
-    ''' <summary>
-    ''' Sets main table.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <typeparam name="T"></typeparam>
-    Public Sub SetMainTable(Of T)()
-      m_Model.SetMainTable(Of T)()
     End Sub
 
     ''' <summary>
@@ -171,7 +164,7 @@ Namespace Expressions.Builders
     ''' <param name="setAutoFields"></param>
     ''' <returns></returns>
     Public Function CreateQuery(setAutoFields As Boolean) As Query
-      Dim entity = m_Model.GetFirstEntity().Entity
+      Dim entity = m_Model.MainEntity.Entity
 
       Dim sql = New StringBuilder
 
@@ -228,7 +221,7 @@ Namespace Expressions.Builders
       Dim table As String
 
       If m_TableNameOverride Is Nothing Then
-        Dim entity = m_Model.GetFirstEntity().Entity
+        Dim entity = m_Model.MainEntity.Entity
         table = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema)
       Else
         table = m_TableNameOverride

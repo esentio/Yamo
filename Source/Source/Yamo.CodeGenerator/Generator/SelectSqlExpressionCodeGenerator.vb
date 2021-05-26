@@ -89,8 +89,7 @@
         AddComment(builder, comment, params:=params)
 
         builder.Indent().AppendLine("Friend Sub New(context As DbContext)").PushIndent()
-        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context), New QueryExecutor(context))")
-        builder.Indent().AppendLine("Me.Builder.SetMainTable(Of T)()").PopIndent()
+        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), New QueryExecutor(context))").PopIndent()
         builder.Indent().AppendLine("End Sub")
 
         builder.AppendLine()
@@ -100,8 +99,7 @@
         AddComment(builder, comment, params:=params)
 
         builder.Indent().AppendLine("Friend Sub New(context As DbContext, tableSource As FormattableString)").PushIndent()
-        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context), New QueryExecutor(context))")
-        builder.Indent().AppendLine("Me.Builder.SetMainTable(Of T)()")
+        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), New QueryExecutor(context))")
         builder.Indent().AppendLine("Me.Builder.SetMainTableSource(tableSource)").PopIndent()
         builder.Indent().AppendLine("End Sub")
 
@@ -112,8 +110,7 @@
         AddComment(builder, comment, params:=params)
 
         builder.Indent().AppendLine("Friend Sub New(context As DbContext, tableSource As RawSqlString, ParamArray parameters() As Object)").PushIndent()
-        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context), New QueryExecutor(context))")
-        builder.Indent().AppendLine("Me.Builder.SetMainTable(Of T)()")
+        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), New QueryExecutor(context))")
         builder.Indent().AppendLine("Me.Builder.SetMainTableSource(tableSource, parameters)").PopIndent()
         builder.Indent().AppendLine("End Sub")
       Else

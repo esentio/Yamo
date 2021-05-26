@@ -10,5 +10,7 @@ namespace Yamo.Playground.CS.Model
     {
         public int Id { get; set; }
         public Label Label { get; set; }
+        
+        public int ArticleCount { get; set; }
     }
 }

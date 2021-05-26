@@ -80,6 +80,112 @@ Namespace Expressions
     End Function
 
     ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <returns></returns>
+    Public Function Include(action As Expression(Of Action(Of T1))) As SelectedSelectSqlExpression(Of T1, T2)
+      Return InternalInclude(action, {0})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <returns></returns>
+    Public Function Include(action As Expression(Of Action(Of T2))) As SelectedSelectSqlExpression(Of T1, T2)
+      Return InternalInclude(action, {1})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2)
+      Return InternalInclude(keySelector, valueSelector, {0}, {0})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2)
+      Return InternalInclude(keySelector, valueSelector, {0}, {1})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2)
+      Return InternalInclude(keySelector, valueSelector, {1}, {0})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2)
+      Return InternalInclude(keySelector, valueSelector, {1}, {1})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <returns></returns>
+    Public Function Include(action As Expression(Of Action(Of Join(Of T1, T2)))) As SelectedSelectSqlExpression(Of T1, T2)
+      Return InternalInclude(action, Nothing)
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of Join(Of T1, T2), TProperty)), valueSelector As Expression(Of Func(Of Join(Of T1, T2), TProperty))) As SelectedSelectSqlExpression(Of T1, T2)
+      Return InternalInclude(keySelector, valueSelector, Nothing, Nothing)
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <param name="entityIndexHints"></param>
+    ''' <returns></returns>
+    Private Function InternalInclude(action As Expression, entityIndexHints As Int32()) As SelectedSelectSqlExpression(Of T1, T2)
+      Me.Builder.IncludeToSelected(action, entityIndexHints)
+      Return Me
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <param name="keySelectorEntityIndexHints"></param>
+    ''' <param name="valueSelectorEntityIndexHints"></param>
+    ''' <returns></returns>
+    Private Function InternalInclude(keySelector As Expression, valueSelector As Expression, keySelectorEntityIndexHints As Int32(), valueSelectorEntityIndexHints As Int32()) As SelectedSelectSqlExpression(Of T1, T2)
+      Me.Builder.IncludeToSelected(keySelector, valueSelector, keySelectorEntityIndexHints, valueSelectorEntityIndexHints)
+      Return Me
+    End Function
+
+    ''' <summary>
     ''' Adds DISTINCT clause.
     ''' </summary>
     ''' <returns></returns>

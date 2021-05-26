@@ -67,7 +67,11 @@ namespace Yamo.Playground.CS
             //Test44();
             //Test45();
             //Test46();
-            Test47();
+            //Test47();
+            Test48();
+            Test49();
+            Test50();
+            Test51();
         }
 
         public static MyContext CreateContext()
@@ -847,7 +851,7 @@ namespace Yamo.Playground.CS
         {
             using (var db = CreateContext())
             {
-                var blog = new Blog() { Title = "Lorem ipsum", Content = ""};
+                var blog = new Blog() { Title = "Lorem ipsum", Content = "" };
 
                 db.Insert<Blog>().WithHints("WITH (TABLOCK)").Execute(blog);
 
@@ -920,6 +924,55 @@ namespace Yamo.Playground.CS
                 //Assert.AreEqual(15, result3.Parts[2].Price);
             }
         }
-    }
+        public static void Test48()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From<Category>()
+                             .LeftJoin<ArticleCategory>(j => j.T1.Id == j.T2.CategoryId)
+                             .GroupBy(j => j.T1)
+                             .SelectAll()
+                             .ExcludeT2()
+                             .Include(j => j.T1.ArticleCount, j => Yamo.Sql.Aggregate.Count(j.T2.ArticleId))
+                             .ToList();
+            }
+        }
 
+        public static void Test49()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From<Article>()
+                             .SelectAll()
+                             .Include(x => x.PriceWithDiscount, x => x.Price * 0.9m)
+                             .ToList();
+            }
+        }
+
+        public static void Test50()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From<Article>()
+                             .LeftJoin<Label>(j => j.T1.Id == j.T2.Id)
+                             .SelectAll()
+                             .ExcludeT2()
+                             .Include(j => j.T1.LabelDescription, j => j.T2.Description)
+                             .ToList();
+            }
+        }
+
+        public static void Test51()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From<Article>()
+                             .LeftJoin<Label>(j => j.T1.Id == j.T2.Id)
+                             .SelectAll()
+                             .ExcludeT2()
+                             .Include(j => j.T1.Tag, j => j.T2)
+                             .ToList();
+            }
+        }
+    }
 }

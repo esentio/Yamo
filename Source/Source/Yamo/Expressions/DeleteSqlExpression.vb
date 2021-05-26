@@ -24,8 +24,7 @@ Namespace Expressions
     ''' <param name="softDelete"></param>
     ''' <param name="tableNameOverride"></param>
     Friend Sub New(context As DbContext, softDelete As Boolean, Optional tableNameOverride As String = Nothing)
-      MyBase.New(context, New DeleteSqlExpressionBuilder(context, softDelete, tableNameOverride), New QueryExecutor(context))
-      Me.Builder.SetMainTable(Of T)()
+      MyBase.New(context, New DeleteSqlExpressionBuilder(context, GetType(T), softDelete, tableNameOverride), New QueryExecutor(context))
       m_SoftDelete = softDelete
     End Sub
 
