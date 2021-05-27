@@ -93,7 +93,7 @@ class MyContext : DbContext
 }
 ```
 
-There is also possibility to pass  `Func<DbConnection>` factory in `UseSqlServer` and `UseSQLite` methods. Yamo will then create new connection for every context.
+There is also possibility to pass `Func<DbConnection>` factory in `UseSqlServer` and `UseSQLite` methods. Yamo will then create new connection for every context.
 
 For brevity, in all following samples assume that `CreateContext` is a factory method that creates new `DbContext` instance.
 
@@ -357,7 +357,7 @@ public interface IHasDbPropertyModifiedTracking {
 }
 ```
 
-If we modify `User` class to implement `IHasDbPropertyModifiedTracking`,  following update statement will be generated instead:
+If we modify `User` class to implement `IHasDbPropertyModifiedTracking`, following update statement will be generated instead:
 
 ```sql
 UPDATE [User] SET
@@ -370,7 +370,7 @@ If you need to override this behavior, just set `forceUpdateAllFields` parameter
 
 After operations like insert, update or select, `ResetDbPropertyModifiedTracking` is called automatically, so you don't need to worry about that.
 
-Note that if  `IsAnyDbPropertyModified` call returns `false`, no SQL `UPDATE` statement is executed.
+Note that if `IsAnyDbPropertyModified` call returns `false`, no SQL `UPDATE` statement is executed.
 
 Parameterless `Update` method returns an instance of `UpdateSqlExpression`, which allows you to build `UPDATE` command and update more than one record at once. Just don't forget to call `Execute` method at the end.
 
@@ -954,7 +954,7 @@ modelBuilder.Entity<Article>().HasMany((x) => x.Parts);
 modelBuilder.Entity<Article>().HasMany((x) => x.Categories);
 ```
 
-Yamo detects that we are joining table `Label` and tries to determine where that entity belongs in the model. Algorithm is pretty straightforward: is there any navigation property defined on previously used entities that points to currently joined one? Is it unambigous? If yes, we set the value accordingly. If not, value is ignored (maybe it is just a junction table in M:N relationship we are not interested in returning).
+Yamo detects that we are joining table `Label` and tries to determine where that entity belongs in the model. Algorithm is pretty straightforward: is there any navigation property defined on previously used entities that points to currently joined one? Is it unambigous? If yes, we set the value accordingly. If not, value is ignored (maybe it is just a junction table in M:N relationship we are not interested in returning it).
 
 In case the relationship is not defined in the model or if the match is unambigous, we can still instruct Yamo to fill the correct property using `As` method. Here is an updated example:
 
@@ -1065,9 +1065,81 @@ We just queried data using three 1:1 relationships (`Label`), one 1:N relationsh
 
 You can nest 1:N and M:N relationships - Yamo will group records correctly based on their primary key values. This is important to know the consequences. For example if we drop `j.T2.Language == lang` condition in the example above and our database contains english and german translations, `Article` result set will be doubled, because half of them will have english `Label` set and half of them german. But every `Article` will contain the same `Categories` and `Parts`. If we dropped `j.T4.Language == lang` condition instead, `Article` and `Categories` will remain the same, but all `Parts` in every `Article` will contain twice as many records - half of them with english `Label` and half of them with german.
 
-Note that if the resultset contains multiple copies of the same entity (same = same primary key value), Yamo always creates new object instance for each processed row. If in our example two `Article`s  belong to the same `Category`, both will contain the same `Category` in their `Categories` property. But it won't be the same object instance.
+Note that if the resultset contains multiple copies of the same entity (same = same primary key value), Yamo always creates new object instance for each processed row. If in our example two `Article`s belong to the same `Category`, both will contain the same `Category` in their `Categories` property. But it won't be the same object instance.
 
 Of course, instances are only created when necessary. From 2 rows containing the same `Article`, just one `Article` object is created.
+
+How does 1:N and M:N relationships grouping work with `FirstOrDefault`? Are the collection navigation properties always filled only with one record or with all records related to the first main entity? Actually, it does what you need!
+
+You can pass an optional `CollectionNavigationFillBehavior` parameter to `FirstOrDefault` method to define how the resultset should be processed. Parameter has no effect if there is no joined table or all joined tables are configured to fill purely reference navigation properties (1:1 relationship). Shall any joined table fill a collection navigation property (1:N or M:N relationship), behavior will control when to stop processing the resultset.
+
+`CollectionNavigationFillBehavior` has following enum members:
+
+- `ProcessOnlyFirstRow`: process only first row from the resultset. Any collection navigation property will contain maximum 1 item. This is the default behavior.
+- `ProcessUntilMainEntityChange`: process the resultset until it contains the same main entity. If resultset is sorted properly and all rows related to main entity are grouped together, all collection navigation properties will be filled with all related items.
+- `ProcessAllRows`: process the whole resultset. All collection navigation properties will be filled with all related items, no matter how the resultset is sorted. **This always processes all the rows in the resultset**, so if you don't limit the records, there might be a negative performance impact (but Yamo is smart enough to read only primary keys and not to create all the entities when not necessary).
+
+For example, let's imagine joining our `Article` and `ArticlePart` tables and getting following resultset:
+
+| Article.Id | ...  | ArticlePart.Price |
+| ---------- | ---- | ----------------- |
+| 1          | ...  | 10                |
+| 1          | ...  | 11                |
+| 2          | ...  | 12                |
+| 2          | ...  | 13                |
+| 3          | ...  | 14                |
+| 1          | ...  | 15                |
+
+This is how the processing will behave using different `CollectionNavigationFillBehavior` values:
+
+```cs
+using (var db = CreateContext())
+{
+    // processes only first row
+    var result1 = db.From<Article>()
+                    .LeftJoin<ArticlePart>((a, ap) => a.Id == ap.ArticleId)
+                    .OrderBy((ArticlePart ap) => ap.Price)
+                    .SelectAll().FirstOrDefault();
+
+    Assert.AreEqual(1, result1.Id);
+    Assert.AreEqual(1, result1.Parts.Count);
+    Assert.AreEqual(10, result1.Parts[0].Price);
+
+    var result2 = db.From<Article>()
+                    .LeftJoin<ArticlePart>((a, ap) => a.Id == ap.ArticleId)
+                    .OrderBy((ArticlePart ap) => ap.Price)
+                    .SelectAll().FirstOrDefault(CollectionNavigationFillBehavior.ProcessOnlyFirstRow);
+
+    // result2 is same as result1
+
+    // -----------------------------------
+
+    // processes only first 2 rows
+    var result3 = db.From<Article>()
+                    .LeftJoin<ArticlePart>((a, ap) => a.Id == ap.ArticleId)
+                    .OrderBy((ArticlePart ap) => ap.Price)
+                    .SelectAll().FirstOrDefault(CollectionNavigationFillBehavior.ProcessUntilMainEntityChange);
+
+    Assert.AreEqual(1, result3.Id);
+    Assert.AreEqual(2, result3.Parts.Count);
+    Assert.AreEqual(10, result3.Parts[0].Price);
+    Assert.AreEqual(11, result3.Parts[1].Price);
+
+    // -----------------------------------
+
+    // processes all rows
+    var result4 = db.From<Article>()
+                    .LeftJoin<ArticlePart>((a, ap) => a.Id == ap.ArticleId)
+                    .OrderBy((ArticlePart ap) => ap.Price)
+                    .SelectAll().FirstOrDefault(CollectionNavigationFillBehavior.ProcessAllRows);
+
+    Assert.AreEqual(1, result4.Id);
+    Assert.AreEqual(3, result4.Parts.Count);
+    Assert.AreEqual(10, result3.Parts[0].Price);
+    Assert.AreEqual(11, result3.Parts[1].Price);
+    Assert.AreEqual(15, result3.Parts[2].Price);
+}
+```
 
 ###### Planned features:
 
@@ -1075,9 +1147,22 @@ Of course, instances are only created when necessary. From 2 rows containing the
 
 #### Select
 
+It is important to remark that calling `SelectAll` doesn't hit the database yet. You need to call `ToList` or `FirstOrDefault` methods.
+
+To return number of rows in the resultset, use `SelectCount` method which translates to `SELECT COUNT(*)`. 
+
+```c#
+using (var db = CreateContext())
+{
+    var articlesCount = db.From<Article>().SelectCount();
+}
+```
+
+#####Excluding columns
+
 So far we only showed limited selecting possibilities using `SelectAll`, which translates to `SELECT <all_column_from_all_queried_tables>`. However, it is possible to exclude certain columns or tables with `Exclude` and `ExcludeTX` methods.
 
-In the example above, it is actually not necessary to select columns from `ArticleCategory` junction table. Here is simplified query, where columns of this table are excluded in the select statement:
+In one the examples above, it is actually not necessary to select columns from `ArticleCategory` junction table. Here is a simplified query, where columns of this junction table are excluded from the select statement:
 
 ```c#
 using (var db = CreateContext())
@@ -1090,22 +1175,91 @@ using (var db = CreateContext())
 }
 ```
 
-Column with price was excluded as well, so every returned `Article` record will have price set to `default(decimal)`. Useful when you need to exclude large BLOB values, etc.
+Column with price is excluded as well, so every returned `Article` record will have price set to `default(decimal)`. Useful when you need to exclude large BLOB values, etc.
 
-It is important to remark that calling `SelectAll` doesn't hit the database yet. You need to call `ToList` or `FirstOrDefault` methods.
+##### Including columns
 
-Also, currently there is a limitation: calling `FirstOrDefault` when joining table using 1:N relationship will raise an exception. So right now either don't use join or call `ToList` and then `FirstOrDefault` LINQ method instead.
+You can also include columns and fill properties of the entities not defined in the model using `Include` method.
 
-To return number of rows in resultset, use `SelectCount` method which translates to `SELECT COUNT(*)`. 
+This for example adds a new column to SQL resultset with `Price * 0.9` value and assign that value to `Article.PriceWithDiscount` property:
 
-````c#
+```cs
 using (var db = CreateContext())
 {
-    var articlesCount = db.From<Article>().SelectCount();
+    var list = db.From<Article>()
+                 .SelectAll()
+                 .Include(x => x.PriceWithDiscount, x => x.Price * 0.9m)
+                 .ToList();
 }
-````
+```
 
-Returning just POCOs or simple count would be very limiting. For these scenarios use custom selects.
+VB.NET allows to use event nicer assignment syntax:
+
+```vbnet
+Using db = CreateDbContext()
+  Dim list = db.From(Of Article).
+                SelectAll().
+                Include(Sub(x) x.PriceWithDiscount = x.Price * 0.9D).
+                ToList()
+End Using
+```
+
+Every expression used in `Include` method will be added as an additional column (or multiple columns) to the `SELECT` statement. If you don't need columns automatically added by `SelectAll` method, you need to exclude them, like in the following examples:
+
+```cs
+// Exclude ArticleCategory columns to make GROUP BY work:
+using (var db = CreateContext())
+{
+    var list = db.From<Category>()
+                 .LeftJoin<ArticleCategory>(j => j.T1.Id == j.T2.CategoryId)
+                 .GroupBy(j => j.T1)
+                 .SelectAll()
+                 .ExcludeT2()
+                 .Include(j => j.T1.ArticleCount, j => Yamo.Sql.Aggregate.Count(j.T2.ArticleId))
+                 .ToList();
+}
+```
+```cs
+// Assuming: modelBuilder.Entity<Article>().HasOne(x => x.Label);
+// Exclude Label columns to not create Label object and to not assign it to Article.Label property.
+// Only Article columns and Label.Description column will be in the resultset.
+using (var db = CreateContext())
+{
+    var list = db.From<Article>()
+                 .LeftJoin<Label>(j => j.T1.Id == j.T2.Id)
+                 .SelectAll()
+                 .ExcludeT2()
+                 .Include(j => j.T1.LabelDescription, j => j.T2.Description)
+                 .ToList();
+}
+```
+```cs
+// If ExcludeT2() were not called, Label columns would be included twice (and Article.Label property would be filled).
+using (var db = CreateContext())
+{
+    var list = db.From<Article>()
+                 .LeftJoin<Label>(j => j.T1.Id == j.T2.Id)
+                 .SelectAll()
+                 .ExcludeT2()
+                 .Include(j => j.T1.Tag, j => j.T2)
+                 .ToList();
+}
+```
+You can include simple scalar values like, whole entity, `ValueTuple` (although only VB.NET [supports this](https://github.com/dotnet/roslyn/issues/12897)) and anonymous object (probably useful only in limited number of use cases due to casting issues).
+
+**Important note:** if whole entity is included, it's always a "detached copy" unrelated to what would normally work using `SelectAll` method. This means:
+
+- any `Exclude` method on that entity is ignored for `Include` entity instance (it always contains all columns defined in model configuration)
+- no relationships are set for `Include` entity instance
+- `Include` entity instance is not used in any relationship
+
+If you don't need a "detached copy", it's probably just better to use `As` method to define an ad hoc relationship.
+
+**Important note:** `Include` is only available when `SelectAll()` is used. It's not supported in custom selects, i.e. when `Select(<expression>)` is used!
+
+#####Custom selects
+
+Returning just entity POCOs or simple count would be very limiting. But you can use custom selects.
 
 You can return simple value(s):
 
@@ -1119,7 +1273,7 @@ using (var db = CreateContext())
 }
 ```
 
-POCOs:
+Entity POCOs:
 
 ````c#
 using (var db = CreateContext())
@@ -1165,7 +1319,7 @@ Using db = CreateDbContext()
 End Using
 ````
 
-**Important note:** when custom select is used, Yamo doesn't set any relationship properties. You can return multiple entities with anonymous type (or `ValueTuple`), but you have to build entity hierarchy by yourself in postprocessing (only if you need that). Number of returned objects matches number of rows in resultset. So be aware that any 1:N relationship join will result to copies of parent entity.
+**Important note:** when custom select is used, Yamo doesn't set any relationship properties. You can return multiple entities with anonymous type (or `ValueTuple`), but you have to build entity hierarchy by yourself in postprocessing (if you need that). Number of returned objects matches number of rows in resultset. So be aware that any 1:N relationship join will result to copies of parent entity.
 
 #### Distinct
 
@@ -1388,7 +1542,7 @@ using (var db = CreateContext())
 }
 ```
 
-**Important note:** similarly to `Select` method,  `Query` and `QueryFirstOrDefault` don't set any relationship properties and you have to do it by yourself in postprocessing (if you need to).
+**Important note:** similarly to `Select` method, `Query` and `QueryFirstOrDefault` don't set any relationship properties and you have to do it by yourself in postprocessing (if you need to).
 
 ### Overriding table name
 
@@ -1428,6 +1582,37 @@ using (var db = CreateContext())
 ```
 
 In the future it should be possible to write nested selects also with managed API.
+
+### Table hints
+
+If you need to specify table hints in your queries, you can do so using `WithHints` method.
+
+Hints are supported in `SELECT` statements:
+
+```cs
+using (var db = CreateContext())
+{
+    var list = db.From<Article>().WithHints("WITH (TABLOCK)")
+                 .Join<Label>().WithHints("WITH (NOLOCK)").On((a, l) => l.Id == a.Id)
+                 .SelectAll().ToList();
+}
+```
+
+And also in `INSERT`, `UPDATE` and `DELETE` statements:
+
+```cs
+using (var db = CreateContext())
+{
+    var blog = new Blog() { Title = "Lorem ipsum", Content = ""};
+
+    db.Insert<Blog>().WithHints("WITH (TABLOCK)").Execute(blog);
+
+    blog.Content = "TODO";
+    db.Update<Blog>().WithHints("WITH (TABLOCK)").Execute(blog);
+
+    db.Delete<Blog>().WithHints("WITH (TABLOCK)").Execute(blog);
+}
+```
 
 ### Logging
 
