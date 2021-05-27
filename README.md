@@ -1158,7 +1158,7 @@ using (var db = CreateContext())
 }
 ```
 
-#####Excluding columns
+##### Excluding columns
 
 So far we only showed limited selecting possibilities using `SelectAll`, which translates to `SELECT <all_column_from_all_queried_tables>`. However, it is possible to exclude certain columns or tables with `Exclude` and `ExcludeTX` methods.
 
@@ -1257,7 +1257,7 @@ If you don't need a "detached copy", it's probably just better to use `As` metho
 
 **Important note:** `Include` is only available when `SelectAll()` is used. It's not supported in custom selects, i.e. when `Select(<expression>)` is used!
 
-#####Custom selects
+##### Custom selects
 
 Returning just entity POCOs or simple count would be very limiting. But you can use custom selects.
 
