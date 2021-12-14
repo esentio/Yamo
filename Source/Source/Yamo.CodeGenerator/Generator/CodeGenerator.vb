@@ -69,6 +69,8 @@ Namespace Generator
           Return "CustomSelectSqlExpression"
         Case GeneratedClass.CustomDistinctSelectSqlExpression
           Return "CustomDistinctSelectSqlExpression"
+        Case GeneratedClass.Join
+          Return "Join"
         Case Else
           Throw New NotSupportedException()
       End Select
@@ -78,6 +80,10 @@ Namespace Generator
 
     Protected Function GetFullClassName(entityCount As Int32) As String
       Return GetClassName() & GetGenericOfDefinition(entityCount)
+    End Function
+
+    Protected Function GetFullClassName(className As String, entityCount As Int32) As String
+      Return GetClassName() & GetGenericOfDefinition(className, entityCount)
     End Function
 
     Protected Function GetFilename(entityCount As Int32) As String

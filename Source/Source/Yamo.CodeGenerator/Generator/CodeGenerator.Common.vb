@@ -33,18 +33,26 @@
     End Sub
 
     Protected Function GetGenericName(index As Int32, Optional trimIndexOnFirstEntity As Boolean = False) As String
+      Return GetGenericName("T", index, trimIndexOnFirstEntity)
+    End Function
+
+    Protected Function GetGenericName(className As String, index As Int32, Optional trimIndexOnFirstEntity As Boolean = False) As String
       If trimIndexOnFirstEntity AndAlso index = 1 Then
-        Return "T"
+        Return className
       Else
-        Return "T" & index.ToInvariantString()
+        Return className & index.ToInvariantString()
       End If
     End Function
 
     Protected Function GetGenericNames(entityCount As Int32) As String()
+      Return GetGenericNames("T", entityCount)
+    End Function
+
+    Protected Function GetGenericNames(className As String, entityCount As Int32) As String()
       If entityCount = 1 Then
-        Return {"T"}
+        Return {className}
       Else
-        Return Enumerable.Range(1, entityCount).Select(Function(x) GetGenericName(x)).ToArray()
+        Return Enumerable.Range(1, entityCount).Select(Function(x) GetGenericName(className, x)).ToArray()
       End If
     End Function
 
@@ -62,6 +70,10 @@
 
     Protected Function GetGenericOfDefinition(entityCount As Int32) As String
       Return "(Of " & String.Join(", ", GetGenericNames(entityCount)) & ")"
+    End Function
+
+    Protected Function GetGenericOfDefinition(className As String, entityCount As Int32) As String
+      Return "(Of " & String.Join(", ", GetGenericNames(className, entityCount)) & ")"
     End Function
 
     Protected Function GetGenericOfDefinitionWithoutTypes(entityCount As Int32) As String

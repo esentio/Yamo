@@ -50,6 +50,26 @@
           Return 13
         Case "T15"
           Return 14
+        Case "T16"
+          Return 15
+        Case "T17"
+          Return 16
+        Case "T18"
+          Return 17
+        Case "T19"
+          Return 18
+        Case "T20"
+          Return 19
+        Case "T21"
+          Return 20
+        Case "T22"
+          Return 21
+        Case "T23"
+          Return 22
+        Case "T24"
+          Return 23
+        Case "T25"
+          Return 24
         Case Else
           Throw New NotSupportedException($"There is no entity index mapping for '{name}' member name.")
       End Select
