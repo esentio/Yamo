@@ -3,26 +3,20 @@
   Partial Public Class CodeGenerator
 
     Protected Sub GenerateThenBy(builder As CodeBuilder, entityCount As Int32)
-      Dim limit = 8
-
-      If entityCount < limit Then
-        For i = 1 To entityCount
-          GenerateThenByWithPredicateWithOneEntity(builder, i, entityCount)
-          builder.AppendLine()
-        Next
-      End If
+      For i = 1 To entityCount
+        GenerateThenByWithPredicateWithOneEntity(builder, i, entityCount)
+        builder.AppendLine()
+      Next
 
       If 1 < entityCount Then
         GenerateThenByWithPredicateWithIJoin(builder, entityCount)
         builder.AppendLine()
       End If
 
-      If entityCount < limit Then
-        For i = 1 To entityCount
-          GenerateThenByDescendingWithPredicateWithOneEntity(builder, i, entityCount)
-          builder.AppendLine()
-        Next
-      End If
+      For i = 1 To entityCount
+        GenerateThenByDescendingWithPredicateWithOneEntity(builder, i, entityCount)
+        builder.AppendLine()
+      Next
 
       If 1 < entityCount Then
         GenerateThenByDescendingWithPredicateWithIJoin(builder, entityCount)

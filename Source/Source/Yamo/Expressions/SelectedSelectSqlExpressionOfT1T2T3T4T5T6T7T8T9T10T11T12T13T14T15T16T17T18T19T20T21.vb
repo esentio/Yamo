@@ -46,6 +46,216 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
     Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21), TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
       Return InternalExclude(propertyExpression)
     End Function

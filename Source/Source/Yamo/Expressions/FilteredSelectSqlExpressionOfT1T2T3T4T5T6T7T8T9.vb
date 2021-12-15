@@ -33,6 +33,168 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T1, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {0})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T1, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {0})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T2, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {1})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T2, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {1})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T3, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {2})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T3, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {2})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T4, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {3})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T4, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {3})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T5, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {4})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T5, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {4})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T6, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {5})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T6, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {5})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T7, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {6})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T7, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {6})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T8, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {7})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T8, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {7})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T9, Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {8})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
+    Public Function [And](predicate As Expression(Of Func(Of T9, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalWhere(predicate, {8})
+    End Function
+
+    ''' <summary>
+    ''' Adds AND condition to WHERE clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <returns></returns>
     Public Function [And](predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9), Boolean))) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
       Return InternalWhere(predicate, Nothing)
     End Function
@@ -74,6 +236,96 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalGroupBy(Of TKey)(keySelector, {0})
+    End Function
+
+    ''' <summary>
+    ''' Adds GROUP BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalGroupBy(Of TKey)(keySelector, {1})
+    End Function
+
+    ''' <summary>
+    ''' Adds GROUP BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T3, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalGroupBy(Of TKey)(keySelector, {2})
+    End Function
+
+    ''' <summary>
+    ''' Adds GROUP BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T4, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalGroupBy(Of TKey)(keySelector, {3})
+    End Function
+
+    ''' <summary>
+    ''' Adds GROUP BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T5, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalGroupBy(Of TKey)(keySelector, {4})
+    End Function
+
+    ''' <summary>
+    ''' Adds GROUP BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T6, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalGroupBy(Of TKey)(keySelector, {5})
+    End Function
+
+    ''' <summary>
+    ''' Adds GROUP BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T7, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalGroupBy(Of TKey)(keySelector, {6})
+    End Function
+
+    ''' <summary>
+    ''' Adds GROUP BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T8, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalGroupBy(Of TKey)(keySelector, {7})
+    End Function
+
+    ''' <summary>
+    ''' Adds GROUP BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T9, TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalGroupBy(Of TKey)(keySelector, {8})
+    End Function
+
+    ''' <summary>
+    ''' Adds GROUP BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
     Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9), TKey))) As GroupedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
       Return InternalGroupBy(Of TKey)(keySelector, Nothing)
     End Function
@@ -96,8 +348,188 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
+    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {0}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {1}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T3, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {2}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T4, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {3}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T5, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {4}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T6, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {5}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T7, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {6}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T8, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {7}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T9, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {8}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
     Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9), TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
       Return InternalOrderBy(Of TKey)(keySelector, Nothing, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {0}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {1}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T3, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {2}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T4, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {3}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T5, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {4}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T6, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {5}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T7, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {6}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T8, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {7}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
+    ''' <typeparam name="TKey"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T9, TKey))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Return InternalOrderBy(Of TKey)(keySelector, {8}, False)
     End Function
 
     ''' <summary>
@@ -170,6 +602,96 @@ Namespace Expressions
       Me.Builder.AddSelectCount()
       Dim query = Me.Builder.CreateQuery()
       Return Me.Executor.QueryFirstOrDefault(Of Int32)(query)
+    End Function
+
+    ''' <summary>
+    ''' Adds SELECT clause with custom columns selection.
+    ''' </summary>
+    ''' <typeparam name="TResult"></typeparam>
+    ''' <param name="selector"></param>
+    ''' <returns></returns>
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T1, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {0})
+    End Function
+
+    ''' <summary>
+    ''' Adds SELECT clause with custom columns selection.
+    ''' </summary>
+    ''' <typeparam name="TResult"></typeparam>
+    ''' <param name="selector"></param>
+    ''' <returns></returns>
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T2, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {1})
+    End Function
+
+    ''' <summary>
+    ''' Adds SELECT clause with custom columns selection.
+    ''' </summary>
+    ''' <typeparam name="TResult"></typeparam>
+    ''' <param name="selector"></param>
+    ''' <returns></returns>
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T3, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {2})
+    End Function
+
+    ''' <summary>
+    ''' Adds SELECT clause with custom columns selection.
+    ''' </summary>
+    ''' <typeparam name="TResult"></typeparam>
+    ''' <param name="selector"></param>
+    ''' <returns></returns>
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T4, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {3})
+    End Function
+
+    ''' <summary>
+    ''' Adds SELECT clause with custom columns selection.
+    ''' </summary>
+    ''' <typeparam name="TResult"></typeparam>
+    ''' <param name="selector"></param>
+    ''' <returns></returns>
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T5, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {4})
+    End Function
+
+    ''' <summary>
+    ''' Adds SELECT clause with custom columns selection.
+    ''' </summary>
+    ''' <typeparam name="TResult"></typeparam>
+    ''' <param name="selector"></param>
+    ''' <returns></returns>
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T6, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {5})
+    End Function
+
+    ''' <summary>
+    ''' Adds SELECT clause with custom columns selection.
+    ''' </summary>
+    ''' <typeparam name="TResult"></typeparam>
+    ''' <param name="selector"></param>
+    ''' <returns></returns>
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T7, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {6})
+    End Function
+
+    ''' <summary>
+    ''' Adds SELECT clause with custom columns selection.
+    ''' </summary>
+    ''' <typeparam name="TResult"></typeparam>
+    ''' <param name="selector"></param>
+    ''' <returns></returns>
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T8, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {7})
+    End Function
+
+    ''' <summary>
+    ''' Adds SELECT clause with custom columns selection.
+    ''' </summary>
+    ''' <typeparam name="TResult"></typeparam>
+    ''' <param name="selector"></param>
+    ''' <returns></returns>
+    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T9, TResult))) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {8})
     End Function
 
     ''' <summary>

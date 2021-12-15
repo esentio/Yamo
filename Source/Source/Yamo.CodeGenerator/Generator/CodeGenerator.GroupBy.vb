@@ -3,14 +3,10 @@
   Partial Public Class CodeGenerator
 
     Protected Sub GenerateGroupBy(builder As CodeBuilder, entityCount As Int32)
-      Dim limit = 8
-
-      If entityCount < limit Then
-        For i = 1 To entityCount
-          GenerateGroupByWithPredicateWithOneEntity(builder, i, entityCount)
-          builder.AppendLine()
-        Next
-      End If
+      For i = 1 To entityCount
+        GenerateGroupByWithPredicateWithOneEntity(builder, i, entityCount)
+        builder.AppendLine()
+      Next
 
       If 1 < entityCount Then
         If entityCount < 8 Then

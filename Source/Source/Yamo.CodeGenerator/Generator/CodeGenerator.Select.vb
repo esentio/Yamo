@@ -3,20 +3,16 @@
   Partial Public Class CodeGenerator
 
     Protected Sub GenerateSelect(builder As CodeBuilder, entityCount As Int32)
-      Dim limit = 8
-
       GenerateSelectAll(builder, entityCount)
       builder.AppendLine()
 
       GenerateSelectCount(builder, entityCount)
       builder.AppendLine()
 
-      If entityCount < limit Then
-        For i = 1 To entityCount
-          GenerateSelectWithPredicateWithOneEntity(builder, i, entityCount)
-          builder.AppendLine()
-        Next
-      End If
+      For i = 1 To entityCount
+        GenerateSelectWithPredicateWithOneEntity(builder, i, entityCount)
+        builder.AppendLine()
+      Next
 
       If 1 < entityCount Then
         If entityCount < 8 Then

@@ -3,26 +3,20 @@
   Partial Public Class CodeGenerator
 
     Protected Sub GenerateOrderBy(builder As CodeBuilder, entityCount As Int32)
-      Dim limit = 8
-
-      If entityCount < limit Then
-        For i = 1 To entityCount
-          GenerateOrderByWithPredicateWithOneEntity(builder, i, entityCount)
-          builder.AppendLine()
-        Next
-      End If
+      For i = 1 To entityCount
+        GenerateOrderByWithPredicateWithOneEntity(builder, i, entityCount)
+        builder.AppendLine()
+      Next
 
       If 1 < entityCount Then
         GenerateOrderByWithPredicateWithIJoin(builder, entityCount)
         builder.AppendLine()
       End If
 
-      If entityCount < limit Then
-        For i = 1 To entityCount
-          GenerateOrderByDescendingWithPredicateWithOneEntity(builder, i, entityCount)
-          builder.AppendLine()
-        Next
-      End If
+      For i = 1 To entityCount
+        GenerateOrderByDescendingWithPredicateWithOneEntity(builder, i, entityCount)
+        builder.AppendLine()
+      Next
 
       If 1 < entityCount Then
         GenerateOrderByDescendingWithPredicateWithIJoin(builder, entityCount)
