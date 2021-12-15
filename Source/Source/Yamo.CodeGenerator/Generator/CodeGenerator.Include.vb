@@ -3,21 +3,17 @@
   Partial Public Class CodeGenerator
 
     Protected Sub GenerateInclude(builder As CodeBuilder, entityCount As Int32)
-      Dim limit = 5
+      For i = 1 To entityCount
+        GenerateIncludeWithActionWithOneEntity(builder, i, entityCount)
+        builder.AppendLine()
+      Next
 
-      If entityCount < limit Then
-        For i = 1 To entityCount
-          GenerateIncludeWithActionWithOneEntity(builder, i, entityCount)
+      For i = 1 To entityCount
+        For j = 1 To entityCount
+          GenerateIncludeWithKeyValueSelectorsWithOneEntity(builder, i, j, entityCount)
           builder.AppendLine()
         Next
-
-        For i = 1 To entityCount
-          For j = 1 To entityCount
-            GenerateIncludeWithKeyValueSelectorsWithOneEntity(builder, i, j, entityCount)
-            builder.AppendLine()
-          Next
-        Next
-      End If
+      Next
 
       If 1 < entityCount Then
         GenerateIncludeWithActionWithIJoin(builder, entityCount)
