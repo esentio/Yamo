@@ -33,6 +33,86 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
+    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalExclude(propertyExpression)
+    End Function
+
+    ''' <summary>
+    ''' Excludes &lt;column&gt; from SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="propertyExpression"></param>
+    ''' <returns></returns>
     Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8), TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
       Return InternalExclude(propertyExpression)
     End Function
@@ -111,6 +191,782 @@ Namespace Expressions
     Private Function InternalExclude(entityIndex As Int32) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
       Me.Builder.ExcludeSelected(entityIndex)
       Return Me
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <returns></returns>
+    Public Function Include(action As Expression(Of Action(Of T1))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(action, {0})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <returns></returns>
+    Public Function Include(action As Expression(Of Action(Of T2))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(action, {1})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <returns></returns>
+    Public Function Include(action As Expression(Of Action(Of T3))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(action, {2})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <returns></returns>
+    Public Function Include(action As Expression(Of Action(Of T4))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(action, {3})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <returns></returns>
+    Public Function Include(action As Expression(Of Action(Of T5))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(action, {4})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <returns></returns>
+    Public Function Include(action As Expression(Of Action(Of T6))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(action, {5})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <returns></returns>
+    Public Function Include(action As Expression(Of Action(Of T7))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(action, {6})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <param name="action"></param>
+    ''' <returns></returns>
+    Public Function Include(action As Expression(Of Action(Of T8))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(action, {7})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {0}, {0})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {0}, {1})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {0}, {2})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {0}, {3})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {0}, {4})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {0}, {5})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {0}, {6})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {0}, {7})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {1}, {0})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {1}, {1})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {1}, {2})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {1}, {3})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {1}, {4})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {1}, {5})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {1}, {6})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {1}, {7})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T3, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {2}, {0})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T3, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {2}, {1})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T3, TProperty)), valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {2}, {2})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T3, TProperty)), valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {2}, {3})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T3, TProperty)), valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {2}, {4})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T3, TProperty)), valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {2}, {5})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T3, TProperty)), valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {2}, {6})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T3, TProperty)), valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {2}, {7})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T4, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {3}, {0})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T4, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {3}, {1})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T4, TProperty)), valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {3}, {2})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T4, TProperty)), valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {3}, {3})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T4, TProperty)), valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {3}, {4})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T4, TProperty)), valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {3}, {5})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T4, TProperty)), valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {3}, {6})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T4, TProperty)), valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {3}, {7})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T5, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {4}, {0})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T5, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {4}, {1})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T5, TProperty)), valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {4}, {2})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T5, TProperty)), valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {4}, {3})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T5, TProperty)), valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {4}, {4})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T5, TProperty)), valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {4}, {5})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T5, TProperty)), valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {4}, {6})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T5, TProperty)), valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {4}, {7})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T6, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {5}, {0})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T6, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {5}, {1})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T6, TProperty)), valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {5}, {2})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T6, TProperty)), valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {5}, {3})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T6, TProperty)), valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {5}, {4})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T6, TProperty)), valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {5}, {5})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T6, TProperty)), valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {5}, {6})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T6, TProperty)), valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {5}, {7})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T7, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {6}, {0})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T7, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {6}, {1})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T7, TProperty)), valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {6}, {2})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T7, TProperty)), valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {6}, {3})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T7, TProperty)), valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {6}, {4})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T7, TProperty)), valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {6}, {5})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T7, TProperty)), valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {6}, {6})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T7, TProperty)), valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {6}, {7})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T8, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {7}, {0})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T8, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {7}, {1})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T8, TProperty)), valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {7}, {2})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T8, TProperty)), valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {7}, {3})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T8, TProperty)), valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {7}, {4})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T8, TProperty)), valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {7}, {5})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T8, TProperty)), valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {7}, {6})
+    End Function
+
+    ''' <summary>
+    ''' Includes &lt;column(s)&gt; to SELECT clause.
+    ''' </summary>
+    ''' <typeparam name="TProperty"></typeparam>
+    ''' <param name="keySelector"></param>
+    ''' <param name="valueSelector"></param>
+    ''' <returns></returns>
+    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T8, TProperty)), valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+      Return InternalInclude(keySelector, valueSelector, {7}, {7})
     End Function
 
     ''' <summary>

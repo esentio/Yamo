@@ -27,7 +27,27 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function ThenBy(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
-      Return InternalOrderBy(Of TKey)(keySelector, True)
+      Return InternalOrderBy(keySelector, {0}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds &lt;column&gt; to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function ThenBy(keySelector As Expression(Of Func(Of T, FormattableString))) As OrderedSelectSqlExpression(Of T)
+      Return InternalOrderBy(keySelector, {0}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds &lt;column&gt; to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
+    ''' <returns></returns>
+    Public Function ThenBy(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T)
+      Me.Builder.AddOrderBy(predicate, True, parameters)
+      Return Me
     End Function
 
     ''' <summary>
@@ -37,18 +57,38 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function ThenByDescending(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
-      Return InternalOrderBy(Of TKey)(keySelector, False)
+      Return InternalOrderBy(keySelector, {0}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds &lt;column&gt; DESC to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function ThenByDescending(keySelector As Expression(Of Func(Of T, FormattableString))) As OrderedSelectSqlExpression(Of T)
+      Return InternalOrderBy(keySelector, {0}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds &lt;column&gt; DESC to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
+    ''' <returns></returns>
+    Public Function ThenByDescending(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T)
+      Me.Builder.AddOrderBy(predicate, False, parameters)
+      Return Me
     End Function
 
     ''' <summary>
     ''' Adds ORDER BY clause.
     ''' </summary>
-    ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
+    ''' <param name="entityIndexHints"></param>
     ''' <param name="ascending"></param>
     ''' <returns></returns>
-    Private Function InternalOrderBy(Of TKey)(keySelector As Expression(Of Func(Of T, TKey)), ascending As Boolean) As OrderedSelectSqlExpression(Of T)
-      Me.Builder.AddOrderBy(keySelector, {0}, ascending)
+    Private Function InternalOrderBy(keySelector As Expression, entityIndexHints As Int32(), ascending As Boolean) As OrderedSelectSqlExpression(Of T)
+      Me.Builder.AddOrderBy(keySelector, entityIndexHints, ascending)
       Return Me
     End Function
 

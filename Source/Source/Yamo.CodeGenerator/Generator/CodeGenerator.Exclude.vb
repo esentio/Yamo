@@ -3,14 +3,10 @@
   Partial Public Class CodeGenerator
 
     Protected Sub GenerateExclude(builder As CodeBuilder, entityCount As Int32)
-      Dim limit = 8
-
-      If entityCount < limit Then
-        For i = 1 To entityCount
-          GenerateExcludeWithPredicateWithOneEntity(builder, i, entityCount)
-          builder.AppendLine()
-        Next
-      End If
+      For i = 1 To entityCount
+        GenerateExcludeWithPredicateWithOneEntity(builder, i, entityCount)
+        builder.AppendLine()
+      Next
 
       If 1 < entityCount Then
         GenerateExcludeWithPredicateWithIJoin(builder, entityCount)

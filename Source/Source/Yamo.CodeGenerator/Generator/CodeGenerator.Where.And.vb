@@ -3,17 +3,13 @@
   Partial Public Class CodeGenerator
 
     Protected Sub GenerateWhereAnd(builder As CodeBuilder, entityCount As Int32)
-      Dim limit = 8
+      For i = 1 To entityCount
+        GenerateWhereAndWithPredicateWithOneEntity(builder, i, entityCount)
+        builder.AppendLine()
 
-      If entityCount < limit Then
-        For i = 1 To entityCount
-          GenerateWhereAndWithPredicateWithOneEntity(builder, i, entityCount)
-          builder.AppendLine()
-
-          GenerateWhereAndWithPredicateWithOneEntityReturningFormattableString(builder, i, entityCount)
-          builder.AppendLine()
-        Next
-      End If
+        GenerateWhereAndWithPredicateWithOneEntityReturningFormattableString(builder, i, entityCount)
+        builder.AppendLine()
+      Next
 
       If 1 < entityCount Then
         If entityCount < 4 Then
