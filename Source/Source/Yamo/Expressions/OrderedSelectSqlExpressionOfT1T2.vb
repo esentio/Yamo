@@ -28,7 +28,16 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function ThenBy(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
-      Return InternalOrderBy(Of TKey)(keySelector, {0}, True)
+      Return InternalOrderBy(keySelector, {0}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds &lt;column&gt; to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function ThenBy(keySelector As Expression(Of Func(Of T1, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+      Return InternalOrderBy(keySelector, {0}, True)
     End Function
 
     ''' <summary>
@@ -38,7 +47,16 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function ThenBy(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
-      Return InternalOrderBy(Of TKey)(keySelector, {1}, True)
+      Return InternalOrderBy(keySelector, {1}, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds &lt;column&gt; to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function ThenBy(keySelector As Expression(Of Func(Of T2, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+      Return InternalOrderBy(keySelector, {1}, True)
     End Function
 
     ''' <summary>
@@ -48,7 +66,16 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function ThenBy(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As OrderedSelectSqlExpression(Of T1, T2)
-      Return InternalOrderBy(Of TKey)(keySelector, Nothing, True)
+      Return InternalOrderBy(keySelector, Nothing, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds &lt;column&gt; to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function ThenBy(keySelector As Expression(Of Func(Of Join(Of T1, T2), FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+      Return InternalOrderBy(keySelector, Nothing, True)
     End Function
 
     ''' <summary>
@@ -58,7 +85,16 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function ThenByDescending(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
-      Return InternalOrderBy(Of TKey)(keySelector, {0}, False)
+      Return InternalOrderBy(keySelector, {0}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds &lt;column&gt; DESC to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function ThenByDescending(keySelector As Expression(Of Func(Of T1, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+      Return InternalOrderBy(keySelector, {0}, False)
     End Function
 
     ''' <summary>
@@ -68,7 +104,16 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function ThenByDescending(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
-      Return InternalOrderBy(Of TKey)(keySelector, {1}, False)
+      Return InternalOrderBy(keySelector, {1}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds &lt;column&gt; DESC to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function ThenByDescending(keySelector As Expression(Of Func(Of T2, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+      Return InternalOrderBy(keySelector, {1}, False)
     End Function
 
     ''' <summary>
@@ -78,18 +123,26 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
     Public Function ThenByDescending(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As OrderedSelectSqlExpression(Of T1, T2)
-      Return InternalOrderBy(Of TKey)(keySelector, Nothing, False)
+      Return InternalOrderBy(keySelector, Nothing, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds &lt;column&gt; DESC to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="keySelector"></param>
+    ''' <returns></returns>
+    Public Function ThenByDescending(keySelector As Expression(Of Func(Of Join(Of T1, T2), FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+      Return InternalOrderBy(keySelector, Nothing, False)
     End Function
 
     ''' <summary>
     ''' Adds ORDER BY clause.
     ''' </summary>
-    ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="entityIndexHints"></param>
     ''' <param name="ascending"></param>
     ''' <returns></returns>
-    Private Function InternalOrderBy(Of TKey)(keySelector As Expression, entityIndexHints As Int32(), ascending As Boolean) As OrderedSelectSqlExpression(Of T1, T2)
+    Private Function InternalOrderBy(keySelector As Expression, entityIndexHints As Int32(), ascending As Boolean) As OrderedSelectSqlExpression(Of T1, T2)
       Me.Builder.AddOrderBy(keySelector, entityIndexHints, ascending)
       Return Me
     End Function
