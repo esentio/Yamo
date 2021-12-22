@@ -90,6 +90,17 @@ Namespace Expressions
     ''' <summary>
     ''' Adds ORDER BY DESC clause.
     ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T)
+      Me.Builder.AddOrderBy(predicate, True, parameters)
+      Return New OrderedSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
@@ -104,6 +115,17 @@ Namespace Expressions
     ''' <returns></returns>
     Public Function OrderByDescending(keySelector As Expression(Of Func(Of T, FormattableString))) As OrderedSelectSqlExpression(Of T)
       Return InternalOrderBy(keySelector, {0}, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
+    ''' <returns></returns>
+    Public Function OrderByDescending(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T)
+      Me.Builder.AddOrderBy(predicate, False, parameters)
+      Return New OrderedSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
     End Function
 
     ''' <summary>

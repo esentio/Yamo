@@ -359,6 +359,17 @@ Namespace Expressions
     End Function
 
     ''' <summary>
+    ''' Adds &lt;column&gt; to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
+    ''' <returns></returns>
+    Public Function ThenBy(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)
+      Me.Builder.AddOrderBy(predicate, True, parameters)
+      Return Me
+    End Function
+
+    ''' <summary>
     ''' Adds &lt;column&gt; DESC to ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
@@ -679,6 +690,17 @@ Namespace Expressions
     ''' <returns></returns>
     Public Function ThenByDescending(keySelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16), FormattableString))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)
       Return InternalOrderBy(keySelector, Nothing, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds &lt;column&gt; DESC to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
+    ''' <returns></returns>
+    Public Function ThenByDescending(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)
+      Me.Builder.AddOrderBy(predicate, False, parameters)
+      Return Me
     End Function
 
     ''' <summary>

@@ -19,6 +19,9 @@
         builder.AppendLine()
       End If
 
+      GenerateOrderByWithString(builder, entityCount)
+      builder.AppendLine()
+
       For i = 1 To entityCount
         GenerateOrderByDescendingWithPredicateWithOneEntity(builder, i, entityCount)
         builder.AppendLine()
@@ -34,6 +37,9 @@
         GenerateOrderByDescendingWithPredicateWithIJoinReturningFormattableString(builder, entityCount)
         builder.AppendLine()
       End If
+
+      GenerateOrderByDescendingWithString(builder, entityCount)
+      builder.AppendLine()
 
       GenerateInternalOrderBy(builder, entityCount)
     End Sub
@@ -90,6 +96,19 @@
       builder.Indent().AppendLine("End Function")
     End Sub
 
+    Protected Sub GenerateOrderByWithString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds ORDER BY DESC clause."
+      Dim params = {"predicate", "parameters"}
+      AddComment(builder, comment, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function OrderBy(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine("Me.Builder.AddOrderBy(predicate, True, parameters)")
+      builder.Indent().AppendLine($"Return New OrderedSelectSqlExpression(Of {generics})(Me.Builder, Me.Executor)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
     Protected Sub GenerateOrderByDescendingWithPredicateWithOneEntity(builder As CodeBuilder, index As Int32, entityCount As Int32)
       Dim comment = "Adds ORDER BY DESC clause."
       Dim typeParams = {"TKey"}
@@ -139,6 +158,19 @@
 
       builder.Indent().AppendLine($"Public Function OrderByDescending(keySelector As Expression(Of Func(Of Join(Of {generics}), FormattableString))) As OrderedSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine("Return InternalOrderBy(keySelector, Nothing, False)").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateOrderByDescendingWithString(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds ORDER BY DESC clause."
+      Dim params = {"predicate", "parameters"}
+      AddComment(builder, comment, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function OrderByDescending(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine("Me.Builder.AddOrderBy(predicate, False, parameters)")
+      builder.Indent().AppendLine($"Return New OrderedSelectSqlExpression(Of {generics})(Me.Builder, Me.Executor)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
 

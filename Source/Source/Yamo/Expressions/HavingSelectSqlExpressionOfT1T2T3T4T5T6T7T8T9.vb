@@ -423,6 +423,17 @@ Namespace Expressions
     ''' <summary>
     ''' Adds ORDER BY DESC clause.
     ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Me.Builder.AddOrderBy(predicate, True, parameters)
+      Return New OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)(Me.Builder, Me.Executor)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
@@ -608,6 +619,17 @@ Namespace Expressions
     ''' <returns></returns>
     Public Function OrderByDescending(keySelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9), FormattableString))) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
       Return InternalOrderBy(keySelector, Nothing, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY DESC clause.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="parameters"></param>
+    ''' <returns></returns>
+    Public Function OrderByDescending(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
+      Me.Builder.AddOrderBy(predicate, False, parameters)
+      Return New OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)(Me.Builder, Me.Executor)
     End Function
 
     ''' <summary>

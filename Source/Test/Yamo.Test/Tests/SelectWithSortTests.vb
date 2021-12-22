@@ -234,5 +234,97 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub SelectWithOrderByRawSqlString()
+      Dim label1En = Me.ModelFactory.CreateLabel("aaa", 1, English, "a")
+      Dim label2En = Me.ModelFactory.CreateLabel("aaa", 2, English, "b")
+      Dim label3En = Me.ModelFactory.CreateLabel("aaa", 3, English, "c")
+      Dim label4En = Me.ModelFactory.CreateLabel("bbb", 4, English, "a")
+      Dim label5En = Me.ModelFactory.CreateLabel("bbb", 5, English, "b")
+      Dim label6En = Me.ModelFactory.CreateLabel("bbb", 6, English, "c")
+
+      InsertItems(label1En, label2En, label3En, label4En, label5En, label6En)
+
+      Using db = CreateDbContext()
+        ' NOTE: DirectCast is needed (VB.NET compiler bug/feature?)
+        Dim result = db.From(Of Label).
+                        OrderBy("TableId DESC").
+                        ThenBy("Id * -1").
+                        SelectAll().ToList()
+
+        Assert.AreEqual(6, result.Count)
+        Assert.AreEqual(label6En, result(0))
+        Assert.AreEqual(label5En, result(1))
+        Assert.AreEqual(label4En, result(2))
+        Assert.AreEqual(label3En, result(3))
+        Assert.AreEqual(label2En, result(4))
+        Assert.AreEqual(label1En, result(5))
+      End Using
+
+      Using db = CreateDbContext()
+        ' NOTE: DirectCast is needed (VB.NET compiler bug/feature?)
+        Dim result = db.From(Of Label).
+                        OrderByDescending("TableId").
+                        ThenByDescending("Id * -1").
+                        SelectAll().ToList()
+
+        Assert.AreEqual(6, result.Count)
+        Assert.AreEqual(label4En, result(0))
+        Assert.AreEqual(label5En, result(1))
+        Assert.AreEqual(label6En, result(2))
+        Assert.AreEqual(label1En, result(3))
+        Assert.AreEqual(label2En, result(4))
+        Assert.AreEqual(label3En, result(5))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithOrderByRawSqlStringWithParameters()
+      Dim label1En = Me.ModelFactory.CreateLabel("aaa", 1, English, "a")
+      Dim label2En = Me.ModelFactory.CreateLabel("aaa", 2, English, "b")
+      Dim label3En = Me.ModelFactory.CreateLabel("aaa", 3, English, "c")
+      Dim label4En = Me.ModelFactory.CreateLabel("bbb", 4, English, "a")
+      Dim label5En = Me.ModelFactory.CreateLabel("bbb", 5, English, "b")
+      Dim label6En = Me.ModelFactory.CreateLabel("bbb", 6, English, "c")
+
+      InsertItems(label1En, label2En, label3En, label4En, label5En, label6En)
+
+      Using db = CreateDbContext()
+        Dim tableIdColumn = db.Model.GetEntity(GetType(Label)).GetProperty(NameOf(Label.TableId)).ColumnName
+        Dim idColumn = db.Model.GetEntity(GetType(Label)).GetProperty(NameOf(Label.Id)).ColumnName
+
+        Dim result = db.From(Of Label).
+                        OrderBy("{0} DESC", RawSqlString.Create(tableIdColumn)).
+                        ThenBy("{0} * {1}", RawSqlString.Create(idColumn), -1).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(6, result.Count)
+        Assert.AreEqual(label6En, result(0))
+        Assert.AreEqual(label5En, result(1))
+        Assert.AreEqual(label4En, result(2))
+        Assert.AreEqual(label3En, result(3))
+        Assert.AreEqual(label2En, result(4))
+        Assert.AreEqual(label1En, result(5))
+      End Using
+
+      Using db = CreateDbContext()
+        Dim tableIdColumn = db.Model.GetEntity(GetType(Label)).GetProperty(NameOf(Label.TableId)).ColumnName
+        Dim idColumn = db.Model.GetEntity(GetType(Label)).GetProperty(NameOf(Label.Id)).ColumnName
+
+        Dim result = db.From(Of Label).
+                        OrderByDescending("{0}", RawSqlString.Create(tableIdColumn)).
+                        ThenByDescending("{0} * {1}", RawSqlString.Create(idColumn), -1).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(6, result.Count)
+        Assert.AreEqual(label4En, result(0))
+        Assert.AreEqual(label5En, result(1))
+        Assert.AreEqual(label6En, result(2))
+        Assert.AreEqual(label1En, result(3))
+        Assert.AreEqual(label2En, result(4))
+        Assert.AreEqual(label3En, result(5))
+      End Using
+    End Sub
+
   End Class
 End Namespace

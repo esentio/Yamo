@@ -534,6 +534,37 @@ Namespace Expressions.Builders
     End Sub
 
     ''' <summary>
+    ''' Adds order by.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="predicate"></param>
+    ''' <param name="ascending"></param>
+    ''' <param name="parameters"></param>
+    Public Sub AddOrderBy(predicate As String, ascending As Boolean, ParamArray parameters() As Object)
+      If m_OrderByExpressions Is Nothing Then
+        m_OrderByExpressions = New List(Of String)
+      End If
+
+      If parameters Is Nothing OrElse parameters.Length = 0 Then
+        If ascending Then
+          m_OrderByExpressions.Add(predicate)
+        Else
+          m_OrderByExpressions.Add(predicate & " DESC")
+        End If
+      Else
+        Dim sql = ConvertToSqlString(predicate, parameters, m_Parameters.Count)
+
+        If ascending Then
+          m_OrderByExpressions.Add(sql.Sql)
+        Else
+          m_OrderByExpressions.Add(sql.Sql & " DESC")
+        End If
+
+        m_Parameters.AddRange(sql.Parameters)
+      End If
+    End Sub
+
+    ''' <summary>
     ''' Adds clause to limit rows returned by the query.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
