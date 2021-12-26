@@ -48,4 +48,8 @@ Public Class SqlServerTestEnvironment
     Next
   End Sub
 
+  Public Function CreateRawValueComparer() As RawValueComparer Implements ITestEnvironment.CreateRawValueComparer
+    Return New RawValueComparer()
+  End Function
+
 End Class

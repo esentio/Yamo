@@ -889,5 +889,32 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub QueryOfObjectArray()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 1
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMinValues()
+      item2.IntColumn = 2
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMaxValues()
+      item3.IntColumn = 3
+
+      InsertItems(item1, item2, item3)
+
+      Dim comparer = Me.TestEnvironment.CreateRawValueComparer()
+
+      Using db = CreateDbContext()
+        Dim result1 = db.Query(Of Object())($"SELECT {Sql.Model.Columns(Of ItemWithAllSupportedValues)} FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result1.Count)
+
+        Dim result2 = db.Query(Of Object())($"SELECT {Sql.Model.Columns(Of ItemWithAllSupportedValues)} FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result2.Count)
+        comparer.AreRawValuesEqual(item1.ToRawValues(), result2(0))
+        comparer.AreRawValuesEqual(item2.ToRawValues(), result2(1))
+        comparer.AreRawValuesEqual(item3.ToRawValues(), result2(2))
+      End Using
+    End Sub
+
   End Class
 End Namespace
