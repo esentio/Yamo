@@ -68,10 +68,11 @@ namespace Yamo.Playground.CS
             //Test45();
             //Test46();
             //Test47();
-            Test48();
-            Test49();
-            Test50();
-            Test51();
+            //Test48();
+            //Test49();
+            //Test50();
+            //Test51();
+            Test52();
         }
 
         public static MyContext CreateContext()
@@ -972,6 +973,16 @@ namespace Yamo.Playground.CS
                              .ExcludeT2()
                              .Include(j => j.T1.Tag, j => j.T2)
                              .ToList();
+            }
+        }
+
+        public static void Test52()
+        {
+            using (var db = CreateContext())
+            {
+                var login = "foo";
+                var data = db.QueryFirstOrDefault<Object[]>($"SELECT Id, Login FROM [User] WHERE Login = {login}");
+                var list = db.Query<Object[]>("SELECT Id, Login FROM [User]");
             }
         }
     }

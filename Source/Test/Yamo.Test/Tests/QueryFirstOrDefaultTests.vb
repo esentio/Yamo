@@ -734,5 +734,22 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub QueryFirstOrDefaultOfObjectArray()
+      Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMaxValues()
+
+      InsertItems(item)
+
+      Dim comparer = Me.TestEnvironment.CreateRawValueComparer()
+
+      Using db = CreateDbContext()
+        Dim result1 = db.QueryFirstOrDefault(Of Object())($"SELECT {Sql.Model.Columns(Of ItemWithAllSupportedValues)} FROM ItemWithAllSupportedValues WHERE 1 = 2")
+        Assert.IsNull(result1)
+
+        Dim result2 = db.QueryFirstOrDefault(Of Object())($"SELECT {Sql.Model.Columns(Of ItemWithAllSupportedValues)} FROM ItemWithAllSupportedValues WHERE Id = {item.Id}")
+        comparer.AreRawValuesEqual(item.ToRawValues(), result2)
+      End Using
+    End Sub
+
   End Class
 End Namespace

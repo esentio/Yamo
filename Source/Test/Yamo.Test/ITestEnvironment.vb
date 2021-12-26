@@ -6,4 +6,6 @@
 
   Sub UninitializeDatabase()
 
+  Function CreateRawValueComparer() As RawValueComparer
+
 End Interface

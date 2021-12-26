@@ -17,4 +17,8 @@
     Throw New NotSupportedException()
   End Sub
 
+  Public Function CreateRawValueComparer() As RawValueComparer Implements ITestEnvironment.CreateRawValueComparer
+    Return New RawValueComparer()
+  End Function
+
 End Class

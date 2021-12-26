@@ -66,6 +66,7 @@
       Else
         Dim o = DirectCast(obj, ItemWithAllSupportedValues)
 
+        If Not Object.Equals(Me.Id, o.Id) Then Return False
         If Not Object.Equals(Me.UniqueidentifierColumn, o.UniqueidentifierColumn) Then Return False
         If Not Object.Equals(Me.UniqueidentifierColumnNull, o.UniqueidentifierColumnNull) Then Return False
         If Not Object.Equals(Me.Nvarchar50Column, o.Nvarchar50Column) Then Return False
@@ -161,6 +162,48 @@
       End If
 
       Return hashCode.ToHashCode()
+    End Function
+
+    Public Function ToRawValues() As Object()
+      Dim value = New Object() {
+        Me.Id,
+        Me.UniqueidentifierColumn,
+        Me.UniqueidentifierColumnNull,
+        Me.Nvarchar50Column,
+        Me.Nvarchar50ColumnNull,
+        Me.NvarcharMaxColumn,
+        Me.NvarcharMaxColumnNull,
+        Me.BitColumn,
+        Me.BitColumnNull,
+        Me.SmallintColumn,
+        Me.SmallintColumnNull,
+        Me.IntColumn,
+        Me.IntColumnNull,
+        Me.BigintColumn,
+        Me.BigintColumnNull,
+        Me.RealColumn,
+        Me.RealColumnNull,
+        Me.FloatColumn,
+        Me.FloatColumnNull,
+        Me.Numeric10and3Column,
+        Me.Numeric10and3ColumnNull,
+        Me.Numeric15and0Column,
+        Me.Numeric15and0ColumnNull,
+        Me.DatetimeColumn,
+        Me.DatetimeColumnNull,
+        Me.Varbinary50Column,
+        Me.Varbinary50ColumnNull,
+        Me.VarbinaryMaxColumn,
+        Me.VarbinaryMaxColumnNull
+      }
+
+      For i = 0 To value.Length - 1
+        If value(i) Is Nothing Then
+          value(i) = DBNull.Value
+        End If
+      Next
+
+      Return value
     End Function
 
   End Class

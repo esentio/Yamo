@@ -48,4 +48,8 @@ Public Class SQLiteTestEnvironment
     Next
   End Sub
 
+  Public Function CreateRawValueComparer() As RawValueComparer Implements ITestEnvironment.CreateRawValueComparer
+    Return New SQliteRawValueComparer()
+  End Function
+
 End Class

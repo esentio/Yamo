@@ -93,6 +93,7 @@ Namespace Internal.Query
     Public Function QueryFirstOrDefault(Of T)(query As Query) As T
       Dim value As T = Nothing
       Dim resultType = GetType(T)
+      Dim isObjectArray = resultType Is GetType(Object())
       Dim sqlResult = TryCreateSqlResult(m_DbContext.Model, resultType)
       Dim isValueTupleOrEntity = TypeOf sqlResult Is ValueTupleSqlResult OrElse TypeOf sqlResult Is EntitySqlResult
 
@@ -105,6 +106,16 @@ Namespace Internal.Query
               value = DirectCast(reader(dataReader, readerData), T)
             End If
           End Using
+
+        ElseIf isObjectArray Then
+          Using dataReader = command.ExecuteReader()
+            If dataReader.Read() Then
+              Dim data = New Object(dataReader.FieldCount - 1) {}
+              dataReader.GetValues(data)
+              value = DirectCast(DirectCast(data, Object), T)
+            End If
+          End Using
+
         Else
           ' we could use ValueType reader to avoid (un)boxing, but creating it might take more time/resources (TryCreateSqlResult would need to return ScalarValueSqlResult)
           value = m_DialectProvider.DbValueConversion.FromDbValue(Of T)(command.ExecuteScalar())
@@ -124,6 +135,7 @@ Namespace Internal.Query
     Public Function QueryList(Of T)(query As Query) As List(Of T)
       Dim values = New List(Of T)
       Dim resultType = GetType(T)
+      Dim isObjectArray = resultType Is GetType(Object())
       Dim sqlResult = TryCreateSqlResult(m_DbContext.Model, resultType)
       Dim isValueTupleOrEntity = TypeOf sqlResult Is ValueTupleSqlResult OrElse TypeOf sqlResult Is EntitySqlResult
 
@@ -137,16 +149,26 @@ Namespace Internal.Query
 
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
-          While dataReader.Read()
-            If isValueTupleOrEntity Then
+          If isValueTupleOrEntity Then
+            While dataReader.Read()
               Dim value = DirectCast(reader(dataReader, readerData), T)
               values.Add(value)
-            Else
+            End While
+
+          ElseIf isObjectArray Then
+            While dataReader.Read()
+              Dim data = New Object(dataReader.FieldCount - 1) {}
+              dataReader.GetValues(data)
+              values.Add(DirectCast(DirectCast(data, Object), T))
+            End While
+
+          Else
+            While dataReader.Read()
               ' we could use ValueType reader to avoid (un)boxing, but creating it might take more time/resources (TryCreateSqlResult would need to return ScalarValueSqlResult)
               Dim value = m_DialectProvider.DbValueConversion.FromDbValue(Of T)(dataReader.GetValue(0))
               values.Add(value)
-            End If
-          End While
+            End While
+          End If
         End Using
       End Using
 

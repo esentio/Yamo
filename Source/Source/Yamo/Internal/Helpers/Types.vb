@@ -197,6 +197,7 @@ Namespace Internal.Helpers
       If type.IsValueType Then Return False
       If type Is GetType(String) Then Return False
       If type Is GetType(Byte()) Then Return False
+      If type Is GetType(Object()) Then Return False
       Return True
     End Function
 
