@@ -1,14 +1,13 @@
 ﻿Imports Yamo.Test
-Imports Yamo.Test.Model
 
 Namespace Tests
 
   <TestClass()>
-  Public Class DataTests
-    Inherits Yamo.Test.Tests.DataTests
+  Public Class SqlStringParametersTests
+    Inherits Yamo.Test.Tests.SqlStringParametersTests
 
     Protected Overrides Function CreateTestEnvironment() As ITestEnvironment
-      Return SQLiteTestEnvironment.Create()
+      Return SqlServerTestEnvironment.Create()
     End Function
 
   End Class

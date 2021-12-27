@@ -524,6 +524,56 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub QueryOfDate()
+      Dim today = Helpers.Calendar.Now().Date
+
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 1
+      item1.DateColumn = today
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 2
+      item1.DateColumn = today.AddDays(1)
+
+      InsertItems(item1, item2)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.Query(Of DateTime)("SELECT DateColumn FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result1.Count)
+
+        Dim result2 = db.Query(Of DateTime)("SELECT DateColumn FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(2, result2.Count)
+        Assert.AreEqual(item1.DateColumn, result2(0))
+        Assert.AreEqual(item2.DateColumn, result2(1))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub QueryOfNullableDate()
+      Dim today = Helpers.Calendar.Now().Date
+
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 1
+      item1.DateColumnNull = Nothing
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 2
+      item2.DateColumnNull = today
+
+      InsertItems(item1, item2)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.Query(Of DateTime?)("SELECT DateColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result1.Count)
+
+        Dim result2 = db.Query(Of DateTime?)("SELECT DateColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(2, result2.Count)
+        Assert.AreEqual(item1.DateColumnNull, result2(0))
+        Assert.AreEqual(item2.DateColumnNull, result2(1))
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub QueryOfDateTime()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.IntColumn = 1
@@ -743,7 +793,6 @@ Namespace Tests
         Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50ColumnNull, result6null(2).Value.Item6))
         Assert.AreEqual(item3.Id, result6null(2).Value.Item7)
 
-
         Dim result6 = db.Query(Of (Decimal, Decimal?, DateTime, DateTime?, Byte(), Byte(), Guid))("SELECT Numeric15and0Column, Numeric15and0ColumnNull, DatetimeColumn, DatetimeColumnNull, Varbinary50Column, Varbinary50ColumnNull, Id FROM ItemWithAllSupportedValues ORDER BY IntColumn")
         Assert.AreEqual(3, result6.Count)
         Assert.AreEqual(item1.Numeric15and0Column, result6(0).Item1)
@@ -767,6 +816,22 @@ Namespace Tests
         Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50Column, result6(2).Item5))
         Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50ColumnNull, result6(2).Item6))
         Assert.AreEqual(item3.Id, result6(2).Item7)
+
+
+        Dim result7empty = db.Query(Of (DateTime, DateTime?))("SELECT DateColumn, DateColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result7empty.Count)
+
+        Dim result7null = db.Query(Of (DateTime, DateTime?)?)("SELECT DateColumn, DateColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result7null.Count)
+        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull), result7null(0).Value)
+        Assert.AreEqual((item2.DateColumn, item2.DateColumnNull), result7null(1).Value)
+        Assert.AreEqual((item3.DateColumn, item3.DateColumnNull), result7null(2).Value)
+
+        Dim result7 = db.Query(Of (DateTime, DateTime?))("SELECT DateColumn, DateColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result7.Count)
+        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull), result7(0))
+        Assert.AreEqual((item2.DateColumn, item2.DateColumnNull), result7(1))
+        Assert.AreEqual((item3.DateColumn, item3.DateColumnNull), result7(2))
       End Using
     End Sub
 

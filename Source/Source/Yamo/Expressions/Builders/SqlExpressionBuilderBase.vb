@@ -1,4 +1,5 @@
-﻿Imports System.Text
+﻿Imports System.Data.Common
+Imports System.Text
 Imports Yamo.Infrastructure
 Imports Yamo.Internal.Query
 Imports Yamo.Sql
@@ -88,6 +89,12 @@ Namespace Expressions.Builders
         ElseIf TypeOf value Is RawSqlString Then
           Dim s = DirectCast(value, RawSqlString)
           formatArgs(i) = s.Value
+        ElseIf TypeOf value Is DbParameter Then
+          Dim p = DirectCast(value, DbParameter)
+          Dim paramName = CreateParameter(parameterIndex + parametersCount)
+          formatArgs(i) = paramName
+          parameters.Add(New SqlParameter(paramName, p.Value, p.DbType))
+          parametersCount += 1
         Else
           Dim paramName = CreateParameter(parameterIndex + parametersCount)
           formatArgs(i) = paramName

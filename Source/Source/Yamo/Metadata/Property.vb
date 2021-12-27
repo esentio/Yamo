@@ -1,4 +1,7 @@
-﻿Namespace Metadata
+﻿Imports System.Data
+Imports Yamo.Internal
+
+Namespace Metadata
 
   ''' <summary>
   ''' Represents a property of an entity.
@@ -47,6 +50,12 @@
     ''' </summary>
     ''' <returns></returns>
     Public Property IsRequired As Boolean
+
+    ''' <summary>
+    ''' Gets or sets the data type used for values of this column.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property DbType As DbType?
 
     ''' <summary>
     ''' Gets property index.
@@ -121,6 +130,7 @@
       Me.IsIdentity = False
       Me.HasDefaultValue = False
       Me.IsRequired = GetIsRequiredDefault(propertyType)
+      Me.DbType = Helpers.Types.GetDbTypeForClrType(propertyType)
       m_Index = -1
       m_OnInsertFactory = Nothing
       m_OnUpdateFactory = Nothing
