@@ -1,4 +1,6 @@
-﻿Imports System.IO
+﻿Imports System.Data
+Imports System.Data.Common
+Imports System.IO
 Imports System.Text.RegularExpressions
 Imports Microsoft.Data.SqlClient
 Imports Yamo.Test
@@ -47,6 +49,13 @@ Public Class SqlServerTestEnvironment
       db.Execute(s)
     Next
   End Sub
+
+  Public Function CreateDbParameter(value As Object, dbType As DbType) As DbParameter Implements ITestEnvironment.CreateDbParameter
+    Return New SqlParameter() With {
+      .Value = value,
+      .DbType = dbType
+    }
+  End Function
 
   Public Function CreateRawValueComparer() As RawValueComparer Implements ITestEnvironment.CreateRawValueComparer
     Return New RawValueComparer()

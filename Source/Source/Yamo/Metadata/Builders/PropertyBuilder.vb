@@ -1,4 +1,6 @@
-﻿Namespace Metadata.Builders
+﻿Imports System.Data
+
+Namespace Metadata.Builders
 
   ''' <summary>
   ''' Provides an API for configuring a <see cref="[Property]"/>.
@@ -70,6 +72,16 @@
     ''' <returns></returns>
     Public Function IsRequired() As PropertyBuilder(Of TProperty)
       m_Property.SetIsRequired()
+      Return Me
+    End Function
+
+    ''' <summary>
+    ''' Configures the data type used for values of this column.
+    ''' </summary>
+    ''' <param name="dbType"></param>
+    ''' <returns></returns>
+    Public Function UseDbType(dbType As DbType) As PropertyBuilder(Of TProperty)
+      m_Property.DbType = dbType
       Return Me
     End Function
 

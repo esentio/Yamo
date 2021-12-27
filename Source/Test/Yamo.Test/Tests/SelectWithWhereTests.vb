@@ -752,10 +752,88 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub SelectRecordByDate()
+      Dim items = CreateItems()
+
+      Dim today = Helpers.Calendar.Now().Date
+
+      items(0).DateColumn = DateTime.MinValue.Date
+      items(1).DateColumn = today.AddDays(-42)
+      items(2).DateColumn = today
+      items(3).DateColumn = today.AddDays(42)
+      items(4).DateColumn = DateTime.MaxValue.Date
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.DateColumn = today).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(2), result(0))
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) today < x.DateColumn).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) today <= x.DateColumn).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) today > x.DateColumn).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) today >= x.DateColumn).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2)}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectRecordByNullableDate()
+      Dim items = CreateItems()
+
+      Dim today = Helpers.Calendar.Now().Date
+
+      items(0).DateColumnNull = DateTime.MinValue.Date
+      items(1).DateColumnNull = Nothing
+      items(2).DateColumnNull = today
+      items(3).DateColumnNull = today.AddDays(42)
+      items(4).DateColumnNull = DateTime.MaxValue.Date
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.DateColumnNull.Value = today).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(2), result(0))
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.DateColumnNull.HasValue).SelectAll().ToList()
+        Assert.AreEqual(4, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Not x.DateColumnNull.HasValue).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(1), result(0))
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub SelectRecordByDateTime()
       Dim items = CreateItems()
 
-      Dim now = Helpers.Calendar.Now
+      Dim now = Helpers.Calendar.Now()
 
       items(0).DatetimeColumn = Helpers.Calendar.GetSqlServerMinDate()
       items(1).DatetimeColumn = now.AddDays(-42)
@@ -800,7 +878,7 @@ Namespace Tests
     Public Overridable Sub SelectRecordByNullableDateTime()
       Dim items = CreateItems()
 
-      Dim now = Helpers.Calendar.Now
+      Dim now = Helpers.Calendar.Now()
 
       items(0).DatetimeColumnNull = Helpers.Calendar.GetSqlServerMinDate()
       items(1).DatetimeColumnNull = Nothing
@@ -833,7 +911,7 @@ Namespace Tests
     Public Overridable Sub SelectRecordByByteArray()
       Dim items = CreateItems()
 
-      Dim now = Helpers.Calendar.Now
+      Dim now = Helpers.Calendar.Now()
 
       items(0).Varbinary50Column = Helpers.Data.CreateRandomByteArray(50)
       items(1).Varbinary50Column = Helpers.Data.CreateRandomByteArray(50)
@@ -860,7 +938,7 @@ Namespace Tests
     Public Overridable Sub SelectRecordByNullableByteArray()
       Dim items = CreateItems()
 
-      Dim now = Helpers.Calendar.Now
+      Dim now = Helpers.Calendar.Now()
 
       items(0).Varbinary50ColumnNull = Helpers.Data.CreateRandomByteArray(50)
       items(1).Varbinary50ColumnNull = Nothing

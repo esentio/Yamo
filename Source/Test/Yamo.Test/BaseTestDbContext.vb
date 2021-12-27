@@ -1,4 +1,5 @@
-﻿Imports System.Data.Common
+﻿Imports System.Data
+Imports System.Data.Common
 Imports Yamo.Test.Model
 
 Public Class BaseTestDbContext
@@ -123,6 +124,8 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.Numeric10and3ColumnNull)
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.Numeric15and0Column)
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.Numeric15and0ColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.DateColumn).UseDbType(DbType.Date)
+    modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.DateColumnNull).UseDbType(DbType.Date)
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.DatetimeColumn)
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.DatetimeColumnNull)
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.Varbinary50Column).IsRequired()
@@ -157,6 +160,8 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Numeric10and3ColumnNull)
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Numeric15and0Column)
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Numeric15and0ColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.DateColumn).UseDbType(DbType.Date)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.DateColumnNull).UseDbType(DbType.Date)
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.DatetimeColumn)
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.DatetimeColumnNull)
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Varbinary50Column).IsRequired()
