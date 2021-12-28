@@ -52,6 +52,10 @@
 
     Public Property DateColumnNull As DateTime?
 
+    Public Property TimeColumn As TimeSpan
+
+    Public Property TimeColumnNull As TimeSpan?
+
     Public Property DatetimeColumn As DateTime
 
     Public Property DatetimeColumnNull As DateTime?
@@ -95,6 +99,8 @@
         If Not Object.Equals(Me.Numeric15and0ColumnNull, o.Numeric15and0ColumnNull) Then Return False
         If Not Object.Equals(Me.DateColumn, o.DateColumn) Then Return False
         If Not Object.Equals(Me.DateColumnNull, o.DateColumnNull) Then Return False
+        If Not Object.Equals(Me.TimeColumn, o.TimeColumn) Then Return False
+        If Not Object.Equals(Me.TimeColumnNull, o.TimeColumnNull) Then Return False
         If Not Object.Equals(Me.DatetimeColumn, o.DatetimeColumn) Then Return False
         If Not Object.Equals(Me.DatetimeColumnNull, o.DatetimeColumnNull) Then Return False
         If Not Helpers.Compare.AreByteArraysEqual(Me.Varbinary50Column, o.Varbinary50Column) Then Return False
@@ -134,6 +140,8 @@
       hashCode.Add(Me.Numeric15and0ColumnNull)
       hashCode.Add(Me.DateColumn)
       hashCode.Add(Me.DateColumnNull)
+      hashCode.Add(Me.TimeColumn)
+      hashCode.Add(Me.TimeColumnNull)
       hashCode.Add(Me.DatetimeColumn)
       hashCode.Add(Me.DatetimeColumnNull)
 
@@ -199,6 +207,8 @@
         Me.Numeric15and0ColumnNull,
         Me.DateColumn,
         Me.DateColumnNull,
+        Me.TimeColumn,
+        Me.TimeColumnNull,
         Me.DatetimeColumn,
         Me.DatetimeColumnNull,
         Me.Varbinary50Column,

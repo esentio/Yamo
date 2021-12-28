@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Data.Common
 Imports System.Linq.Expressions
 Imports Yamo.Infrastructure
 Imports Yamo.Internal.Query
@@ -20,15 +21,15 @@ Namespace Internal
 
     ''' <summary>
     ''' Stores cached reader instances.<br/>
-    ''' Instance type is actually Func(Of IDataReader, ReaderDataBase, T).
+    ''' Instance type is actually Func(Of DbDataReader, ReaderDataBase, T).
     ''' </summary>
     Private m_Readers As Dictionary(Of Type, Object)
 
     ''' <summary>
-    ''' Stores cached reader instances that are wrapped as Func(Of IDataReader, ReaderDataBase, Object).<br/>
-    ''' Instance type is actually Func(Of IDataReader, ReaderDataBase, Object).
+    ''' Stores cached reader instances that are wrapped as Func(Of DbDataReader, ReaderDataBase, Object).<br/>
+    ''' Instance type is actually Func(Of DbDataReader, ReaderDataBase, Object).
     ''' </summary>
-    Private m_ValueTypeWrappedReaders As Dictionary(Of Type, Func(Of IDataReader, ReaderDataBase, Object))
+    Private m_ValueTypeWrappedReaders As Dictionary(Of Type, Func(Of DbDataReader, ReaderDataBase, Object))
 
     ''' <summary>
     ''' Initializes <see cref="SqlResultReaderCache"/> related static data.
@@ -42,7 +43,7 @@ Namespace Internal
     ''' </summary>
     Private Sub New()
       m_Readers = New Dictionary(Of Type, Object)
-      m_ValueTypeWrappedReaders = New Dictionary(Of Type, Func(Of IDataReader, ReaderDataBase, Object))
+      m_ValueTypeWrappedReaders = New Dictionary(Of Type, Func(Of DbDataReader, ReaderDataBase, Object))
     End Sub
 
     ''' <summary>
@@ -52,11 +53,11 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
-    Public Shared Function GetReader(model As Model, sqlResult As SqlResultBase) As Func(Of IDataReader, ReaderDataBase, Object)
+    Public Shared Function GetReader(model As Model, sqlResult As SqlResultBase) As Func(Of DbDataReader, ReaderDataBase, Object)
       If sqlResult.ResultType.IsValueType Then
         Return GetInstance(model).GetOrCreateValueTypeToObjectWrappedReader(model, sqlResult)
       Else
-        Return DirectCast(GetInstance(model).GetOrCreateReader(model, sqlResult), Func(Of IDataReader, ReaderDataBase, Object))
+        Return DirectCast(GetInstance(model).GetOrCreateReader(model, sqlResult), Func(Of DbDataReader, ReaderDataBase, Object))
       End If
     End Function
 
@@ -68,8 +69,8 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
-    Public Shared Function GetReader(Of T)(model As Model, sqlResult As SqlResultBase) As Func(Of IDataReader, ReaderDataBase, T)
-      Return DirectCast(GetInstance(model).GetOrCreateReader(model, sqlResult), Func(Of IDataReader, ReaderDataBase, T))
+    Public Shared Function GetReader(Of T)(model As Model, sqlResult As SqlResultBase) As Func(Of DbDataReader, ReaderDataBase, T)
+      Return DirectCast(GetInstance(model).GetOrCreateReader(model, sqlResult), Func(Of DbDataReader, ReaderDataBase, T))
     End Function
 
     ''' <summary>
@@ -127,12 +128,12 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
-    Private Function GetOrCreateValueTypeToObjectWrappedReader(model As Model, sqlResult As SqlResultBase) As Func(Of IDataReader, ReaderDataBase, Object)
-      Dim reader As Func(Of IDataReader, ReaderDataBase, Object) = Nothing
+    Private Function GetOrCreateValueTypeToObjectWrappedReader(model As Model, sqlResult As SqlResultBase) As Func(Of DbDataReader, ReaderDataBase, Object)
+      Dim reader As Func(Of DbDataReader, ReaderDataBase, Object) = Nothing
       Dim resultType = sqlResult.ResultType
 
       SyncLock m_ValueTypeWrappedReaders
-        Dim value As Func(Of IDataReader, ReaderDataBase, Object) = Nothing
+        Dim value As Func(Of DbDataReader, ReaderDataBase, Object) = Nothing
 
         If m_ValueTypeWrappedReaders.TryGetValue(resultType, value) Then
           reader = value

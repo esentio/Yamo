@@ -10,7 +10,6 @@ Public Class UnitTestDialectProvider
     Me.EntitySqlStringProviderFactory = New EntitySqlStringProviderFactory
     Me.ValueTypeReaderFactory = New ValueTypeReaderFactory
     Me.EntityReaderFactory = New EntityReaderFactory
-    Me.DbValueConversion = New DbValueConversion
     Me.SupportedLimitType = LimitType.Top Or LimitType.OffsetFetch
   End Sub
 

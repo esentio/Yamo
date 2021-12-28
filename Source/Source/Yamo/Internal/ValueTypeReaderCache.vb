@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Data.Common
 Imports Yamo.Infrastructure
 Imports Yamo.Metadata
 
@@ -13,11 +14,11 @@ Namespace Internal
     ''' <summary>
     ''' Stores cache instances.
     ''' </summary>
-    Private Shared m_Instances As Dictionary(Of (SqlDialectProvider, Model), ValueTypeReaderCache)
+    Private Shared m_Instances As Dictionary(Of (Type, SqlDialectProvider, Model), ValueTypeReaderCache)
 
     ''' <summary>
     ''' Stores cached reader instances.<br/>
-    ''' Instance type is actually Func(Of IDataReader, Int32, T).
+    ''' Instance type is actually Func(Of DbDataReader, Int32, T).
     ''' </summary>
     Private m_Readers As Dictionary(Of Type, Object)
 
@@ -25,7 +26,7 @@ Namespace Internal
     ''' Initializes <see cref="ValueTypeReaderCache"/> related static data.
     ''' </summary>
     Shared Sub New()
-      m_Instances = New Dictionary(Of (SqlDialectProvider, Model), ValueTypeReaderCache)
+      m_Instances = New Dictionary(Of (Type, SqlDialectProvider, Model), ValueTypeReaderCache)
     End Sub
 
     ''' <summary>
@@ -40,35 +41,38 @@ Namespace Internal
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
+    ''' <param name="dataReaderType"></param>
     ''' <param name="dialectProvider"></param>
     ''' <param name="model"></param>
     ''' <returns></returns>
-    Public Shared Function GetReader(Of T)(dialectProvider As SqlDialectProvider, model As Model) As Func(Of IDataReader, Int32, T)
-      Return DirectCast(GetInstance(dialectProvider, model).GetOrCreateReader(dialectProvider, GetType(T)), Func(Of IDataReader, Integer, T))
+    Public Shared Function GetReader(Of T)(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model) As Func(Of DbDataReader, Int32, T)
+      Return DirectCast(GetInstance(dataReaderType, dialectProvider, model).GetOrCreateReader(dataReaderType, dialectProvider, GetType(T)), Func(Of DbDataReader, Int32, T))
     End Function
 
     ''' <summary>
     ''' Gets reader.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
+    ''' <param name="dataReaderType"></param>
     ''' <param name="dialectProvider"></param>
     ''' <param name="model"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetReader(dialectProvider As SqlDialectProvider, model As Model, type As Type) As Object
-      Return GetInstance(dialectProvider, model).GetOrCreateReader(dialectProvider, type)
+    Public Shared Function GetReader(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, type As Type) As Object
+      Return GetInstance(dataReaderType, dialectProvider, model).GetOrCreateReader(dataReaderType, dialectProvider, type)
     End Function
 
     ''' <summary>
     ''' Gets <see cref="ValueTypeReaderCache"/> cache instance. If it doesn't exist, it is created.
     ''' </summary>
+    ''' <param name="dataReaderType"></param>
     ''' <param name="dialectProvider"></param>
     ''' <param name="model"></param>
     ''' <returns></returns>
-    Private Shared Function GetInstance(dialectProvider As SqlDialectProvider, model As Model) As ValueTypeReaderCache
+    Private Shared Function GetInstance(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model) As ValueTypeReaderCache
       Dim instance As ValueTypeReaderCache = Nothing
 
-      Dim key = (dialectProvider, model)
+      Dim key = (dataReaderType, dialectProvider, model)
 
       SyncLock m_Instances
         If Not m_Instances.TryGetValue(key, instance) Then
@@ -83,10 +87,11 @@ Namespace Internal
     ''' <summary>
     ''' Gets or creates reader.
     ''' </summary>
+    ''' <param name="dataReaderType"></param>
     ''' <param name="dialectProvider"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Private Function GetOrCreateReader(dialectProvider As SqlDialectProvider, type As Type) As Object
+    Private Function GetOrCreateReader(dataReaderType As Type, dialectProvider As SqlDialectProvider, type As Type) As Object
       Dim reader As Object = Nothing
 
       SyncLock m_Readers
@@ -94,7 +99,7 @@ Namespace Internal
       End SyncLock
 
       If reader Is Nothing Then
-        reader = dialectProvider.ValueTypeReaderFactory.CreateReader(type)
+        reader = dialectProvider.ValueTypeReaderFactory.CreateReader(dataReaderType, type)
       Else
         Return reader
       End If

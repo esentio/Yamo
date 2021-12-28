@@ -56,6 +56,8 @@ Namespace Tests
         ,Numeric15and0ColumnNull
         ,DateColumn
         ,DateColumnNull
+        ,TimeColumn
+        ,TimeColumnNull
         ,DatetimeColumn
         ,DatetimeColumnNull
         ,Varbinary50Column
@@ -88,6 +90,8 @@ Namespace Tests
         ,{item.Numeric15and0ColumnNull}
         ,{Me.TestEnvironment.CreateDbParameter(item.DateColumn, DbType.Date)}
         ,{Me.TestEnvironment.CreateDbParameter(item.DateColumnNull, DbType.Date)}
+        ,{item.TimeColumn}
+        ,{item.TimeColumnNull}
         ,{item.DatetimeColumn}
         ,{item.DatetimeColumnNull}
         ,{item.Varbinary50Column}

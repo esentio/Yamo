@@ -68,11 +68,11 @@ Namespace Internal.Query
     ''' <param name="query"></param>
     ''' <returns></returns>
     Private Function ExecuteAndReadDbGeneratedValues(query As InsertQuery) As Int32
-      Dim reader = EntityReaderCache.GetDbGeneratedValuesReader(m_DialectProvider, m_DbContext.Model, query.Entity.GetType())
-
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
           If dataReader.Read() Then
+            Dim dataReaderType = dataReader.GetType()
+            Dim reader = EntityReaderCache.GetDbGeneratedValuesReader(dataReaderType, m_DialectProvider, m_DbContext.Model, query.Entity.GetType())
             reader(dataReader, 0, query.Entity)
           Else
             Throw New Exception($"Unable to read DB generated values for '{query.Entity.GetType()}' entity.")
@@ -98,28 +98,27 @@ Namespace Internal.Query
       Dim isValueTupleOrEntity = TypeOf sqlResult Is ValueTupleSqlResult OrElse TypeOf sqlResult Is EntitySqlResult
 
       Using command = CreateCommand(query)
-        If isValueTupleOrEntity Then
-          Using dataReader = command.ExecuteReader()
-            If dataReader.Read() Then
+        Using dataReader = command.ExecuteReader()
+          If dataReader.Read() Then
+            If isValueTupleOrEntity Then
+              Dim dataReaderType = dataReader.GetType()
               Dim reader = SqlResultReaderCache.GetReader(Of T)(m_DbContext.Model, sqlResult)
-              Dim readerData = ReaderDataFactory.Create(m_DialectProvider, m_DbContext.Model, sqlResult)
+              Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, sqlResult)
               value = DirectCast(reader(dataReader, readerData), T)
-            End If
-          End Using
 
-        ElseIf isObjectArray Then
-          Using dataReader = command.ExecuteReader()
-            If dataReader.Read() Then
+            ElseIf isObjectArray Then
               Dim data = New Object(dataReader.FieldCount - 1) {}
               dataReader.GetValues(data)
               value = DirectCast(DirectCast(data, Object), T)
-            End If
-          End Using
 
-        Else
-          ' we could use ValueType reader to avoid (un)boxing, but creating it might take more time/resources (TryCreateSqlResult would need to return ScalarValueSqlResult)
-          value = m_DialectProvider.DbValueConversion.FromDbValue(Of T)(command.ExecuteScalar())
-        End If
+            Else
+              ' as a performance optimization, TryCreateSqlResult doesn't return ScalarValueSqlResult, we don't use ScalarValueSqlResultReaderData and access the reader directly
+              Dim dataReaderType = dataReader.GetType()
+              Dim reader = ValueTypeReaderCache.GetReader(Of T)(dataReaderType, m_DialectProvider, m_DbContext.Model)
+              value = reader(dataReader, 0)
+            End If
+          End If
+        End Using
       End Using
 
       Return value
@@ -139,17 +138,13 @@ Namespace Internal.Query
       Dim sqlResult = TryCreateSqlResult(m_DbContext.Model, resultType)
       Dim isValueTupleOrEntity = TypeOf sqlResult Is ValueTupleSqlResult OrElse TypeOf sqlResult Is EntitySqlResult
 
-      Dim reader As Func(Of IDataReader, ReaderDataBase, T) = Nothing
-      Dim readerData As ReaderDataBase = Nothing
-
-      If isValueTupleOrEntity Then
-        reader = SqlResultReaderCache.GetReader(Of T)(m_DbContext.Model, sqlResult)
-        readerData = ReaderDataFactory.Create(m_DialectProvider, m_DbContext.Model, sqlResult)
-      End If
-
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
           If isValueTupleOrEntity Then
+            Dim dataReaderType = dataReader.GetType()
+            Dim reader = SqlResultReaderCache.GetReader(Of T)(m_DbContext.Model, sqlResult)
+            Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, sqlResult)
+
             While dataReader.Read()
               Dim value = DirectCast(reader(dataReader, readerData), T)
               values.Add(value)
@@ -163,9 +158,12 @@ Namespace Internal.Query
             End While
 
           Else
+            ' as a performance optimization, TryCreateSqlResult doesn't return ScalarValueSqlResult, we don't use ScalarValueSqlResultReaderData and access the reader directly
+            Dim dataReaderType = dataReader.GetType()
+            Dim reader = ValueTypeReaderCache.GetReader(Of T)(dataReaderType, m_DialectProvider, m_DbContext.Model)
+
             While dataReader.Read()
-              ' we could use ValueType reader to avoid (un)boxing, but creating it might take more time/resources (TryCreateSqlResult would need to return ScalarValueSqlResult)
-              Dim value = m_DialectProvider.DbValueConversion.FromDbValue(Of T)(dataReader.GetValue(0))
+              Dim value = reader(dataReader, 0)
               values.Add(value)
             End While
           End If
@@ -185,13 +183,7 @@ Namespace Internal.Query
     ''' <returns></returns>
     Public Function ReadFirstOrDefault(Of T)(query As SelectQuery, behavior As CollectionNavigationFillBehavior) As T
       If query.Model.ContainsJoins() Then
-        Dim readerDataCollection = ReaderDataFactory.Create(m_DialectProvider, m_DbContext.Model, query.Model.GetEntities())
-
-        If readerDataCollection.HasCollectionNavigation Then
-          Return ReadJoinedFirstOrDefaultWithCollectionNavigation(Of T)(query, readerDataCollection, behavior)
-        Else
-          Return ReadJoinedFirstOrDefaultWithoutCollectionNavigation(Of T)(query, readerDataCollection)
-        End If
+        Return ReadJoinedFirstOrDefault(Of T)(query, behavior)
       Else
         Return ReadSimpleFirstOrDefault(Of T)(query)
       End If
@@ -206,13 +198,7 @@ Namespace Internal.Query
     ''' <returns></returns>
     Public Function ReadList(Of T)(query As SelectQuery) As List(Of T)
       If query.Model.ContainsJoins() Then
-        Dim readerDataCollection = ReaderDataFactory.Create(m_DialectProvider, m_DbContext.Model, query.Model.GetEntities())
-
-        If readerDataCollection.HasCollectionNavigation Then
-          Return ReadJoinedListWithCollectionNavigation(Of T)(query, readerDataCollection)
-        Else
-          Return ReadJoinedListWithoutCollectionNavigation(Of T)(query, readerDataCollection)
-        End If
+        Return ReadJoinedList(Of T)(query)
       Else
         Return ReadSimpleList(Of T)(query)
       End If
@@ -226,14 +212,15 @@ Namespace Internal.Query
     ''' <param name="query"></param>
     ''' <returns></returns>
     Public Function ReadCustomFirstOrDefault(Of T)(query As SelectQuery) As T
-      Dim reader = SqlResultReaderCache.GetReader(Of T)(m_DbContext.Model, query.Model.CustomSqlResult)
-      Dim readerData = ReaderDataFactory.Create(m_DialectProvider, m_DbContext.Model, query.Model.CustomSqlResult)
-
       Dim value As T = Nothing
 
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
           If dataReader.Read() Then
+            Dim dataReaderType = dataReader.GetType()
+            Dim reader = SqlResultReaderCache.GetReader(Of T)(m_DbContext.Model, query.Model.CustomSqlResult)
+            Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, query.Model.CustomSqlResult)
+
             value = DirectCast(reader(dataReader, readerData), T)
             ' NOTE - ResetDbPropertyModifiedTracking is called in reader
           End If
@@ -250,16 +237,17 @@ Namespace Internal.Query
     ''' <param name="query"></param>
     ''' <returns></returns>
     Private Function ReadSimpleFirstOrDefault(Of T)(query As SelectQuery) As T
-      Dim entity = query.Model.MainEntity
-      Dim readerData = ReaderDataFactory.Create(m_DialectProvider, m_DbContext.Model, entity)
-      Dim reader = readerData.Reader
-      Dim includedColumns = entity.IncludedColumns
-
       Dim value As T = Nothing
 
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
           If dataReader.Read() Then
+            Dim dataReaderType = dataReader.GetType()
+            Dim entity = query.Model.MainEntity
+            Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, entity)
+            Dim reader = readerData.Reader
+            Dim includedColumns = entity.IncludedColumns
+
             value = DirectCast(reader(dataReader, 0, includedColumns), T)
             FillIncluded(readerData, dataReader, value)
             ResetDbPropertyModifiedTracking(value)
@@ -271,22 +259,40 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and returns first record or a default value. Only 1:1 joins are present in the query.
+    ''' Executes query and returns first record or a default value. Joins are present in the query.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="query"></param>
-    ''' <param name="readerDataCollection"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Private Function ReadJoinedFirstOrDefaultWithoutCollectionNavigation(Of T)(query As SelectQuery, readerDataCollection As EntitySqlResultReaderDataCollection) As T
-      Dim value As T = Nothing
-
+    Private Function ReadJoinedFirstOrDefault(Of T)(query As SelectQuery, behavior As CollectionNavigationFillBehavior) As T
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
-          If dataReader.Read() Then
-            value = DirectCast(Read(readerDataCollection, readerDataCollection.Items(0), dataReader, Nothing), T)
+          Dim dataReaderType = dataReader.GetType()
+          Dim readerDataCollection = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, query.Model.GetEntities())
+
+          If readerDataCollection.HasCollectionNavigation Then
+            Return ReadJoinedFirstOrDefaultWithCollectionNavigation(Of T)(dataReader, readerDataCollection, behavior)
+          Else
+            Return ReadJoinedFirstOrDefaultWithoutCollectionNavigation(Of T)(dataReader, readerDataCollection)
           End If
         End Using
       End Using
+    End Function
+
+    ''' <summary>
+    ''' Executes query and returns first record or a default value. Only 1:1 joins are present in the query.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="dataReader"></param>
+    ''' <param name="readerDataCollection"></param>
+    ''' <returns></returns>
+    Private Function ReadJoinedFirstOrDefaultWithoutCollectionNavigation(Of T)(dataReader As DbDataReader, readerDataCollection As EntitySqlResultReaderDataCollection) As T
+      Dim value As T = Nothing
+
+      If dataReader.Read() Then
+        value = DirectCast(Read(readerDataCollection, readerDataCollection.Items(0), dataReader, Nothing), T)
+      End If
 
       Return value
     End Function
@@ -295,42 +301,37 @@ Namespace Internal.Query
     ''' Executes query and returns first record or a default value. 1:N joins are present in the query.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
-    ''' <param name="query"></param>
+    ''' <param name="dataReader"></param>
     ''' <param name="readerDataCollection"></param>
     ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Private Function ReadJoinedFirstOrDefaultWithCollectionNavigation(Of T)(query As SelectQuery, readerDataCollection As EntitySqlResultReaderDataCollection, behavior As CollectionNavigationFillBehavior) As T
+    Private Function ReadJoinedFirstOrDefaultWithCollectionNavigation(Of T)(dataReader As DbDataReader, readerDataCollection As EntitySqlResultReaderDataCollection, behavior As CollectionNavigationFillBehavior) As T
       Dim cache = New ReaderEntityValueCache(readerDataCollection.Count)
       Dim pks = New Object(readerDataCollection.Count - 1) {}
 
       Dim value As T = Nothing
 
-      Using command = CreateCommand(query)
-        Using dataReader = command.ExecuteReader()
-          If dataReader.Read() Then
-            readerDataCollection.FillPks(dataReader, pks)
-            value = DirectCast(Read(readerDataCollection, readerDataCollection.Items(0), cache, pks, dataReader, Nothing), T)
+      If dataReader.Read() Then
+        readerDataCollection.FillPks(dataReader, pks)
+        value = DirectCast(Read(readerDataCollection, readerDataCollection.Items(0), cache, pks, dataReader, Nothing), T)
+      End If
+
+      If value IsNot Nothing AndAlso Not behavior = CollectionNavigationFillBehavior.ProcessOnlyFirstRow Then
+        Dim key = readerDataCollection.GetChainKey(0, pks)
+        Dim processUntilMainEntityChange = behavior = CollectionNavigationFillBehavior.ProcessUntilMainEntityChange
+
+        While dataReader.Read()
+          readerDataCollection.FillPks(dataReader, pks)
+
+          Dim sameMainEntity = key = readerDataCollection.GetChainKey(0, pks)
+
+          If sameMainEntity Then
+            Read(readerDataCollection, readerDataCollection.Items(0), cache, pks, dataReader, Nothing)
+          ElseIf processUntilMainEntityChange Then
+            Exit While
           End If
-
-          Dim key = readerDataCollection.GetChainKey(0, pks)
-
-          If value IsNot Nothing AndAlso Not behavior = CollectionNavigationFillBehavior.ProcessOnlyFirstRow Then
-            Dim processUntilMainEntityChange = behavior = CollectionNavigationFillBehavior.ProcessUntilMainEntityChange
-
-            While dataReader.Read()
-              readerDataCollection.FillPks(dataReader, pks)
-
-              Dim sameMainEntity = key = readerDataCollection.GetChainKey(0, pks)
-
-              If sameMainEntity Then
-                Read(readerDataCollection, readerDataCollection.Items(0), cache, pks, dataReader, Nothing)
-              ElseIf processUntilMainEntityChange Then
-                Exit While
-              End If
-            End While
-          End If
-        End Using
-      End Using
+        End While
+      End If
 
       Return value
     End Function
@@ -343,13 +344,14 @@ Namespace Internal.Query
     ''' <param name="query"></param>
     ''' <returns></returns>
     Public Function ReadCustomList(Of T)(query As SelectQuery) As List(Of T)
-      Dim reader = SqlResultReaderCache.GetReader(Of T)(m_DbContext.Model, query.Model.CustomSqlResult)
-      Dim readerData = ReaderDataFactory.Create(m_DialectProvider, m_DbContext.Model, query.Model.CustomSqlResult)
-
       Dim values = New List(Of T)
 
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
+          Dim dataReaderType = dataReader.GetType()
+          Dim reader = SqlResultReaderCache.GetReader(Of T)(m_DbContext.Model, query.Model.CustomSqlResult)
+          Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, query.Model.CustomSqlResult)
+
           While dataReader.Read()
             Dim value = DirectCast(reader(dataReader, readerData), T)
             ' NOTE - ResetDbPropertyModifiedTracking is called in reader
@@ -368,15 +370,16 @@ Namespace Internal.Query
     ''' <param name="query"></param>
     ''' <returns></returns>
     Private Function ReadSimpleList(Of T)(query As SelectQuery) As List(Of T)
-      Dim entity = query.Model.MainEntity
-      Dim readerData = ReaderDataFactory.Create(m_DialectProvider, m_DbContext.Model, entity)
-      Dim reader = readerData.Reader
-      Dim includedColumns = entity.IncludedColumns
-
       Dim values = New List(Of T)
 
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
+          Dim dataReaderType = dataReader.GetType()
+          Dim entity = query.Model.MainEntity
+          Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, entity)
+          Dim reader = readerData.Reader
+          Dim includedColumns = entity.IncludedColumns
+
           While dataReader.Read()
             Dim value = DirectCast(reader(dataReader, 0, includedColumns), T)
             FillIncluded(readerData, dataReader, value)
@@ -390,26 +393,47 @@ Namespace Internal.Query
     End Function
 
     ''' <summary>
-    ''' Executes query and returns lists of records. Only 1:1 joins are present in the query.
+    ''' Executes query and returns lists of records. Joins are present in the query.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
     ''' <param name="query"></param>
-    ''' <param name="readerDataCollection"></param>
     ''' <returns></returns>
-    Private Function ReadJoinedListWithoutCollectionNavigation(Of T)(query As SelectQuery, readerDataCollection As EntitySqlResultReaderDataCollection) As List(Of T)
-      Dim values = New List(Of T)
+    Private Function ReadJoinedList(Of T)(query As SelectQuery) As List(Of T)
+      Dim values As List(Of T)
 
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
-          While dataReader.Read()
-            Dim masterValue = Read(readerDataCollection, readerDataCollection.Items(0), dataReader, Nothing)
+          Dim dataReaderType = dataReader.GetType()
+          Dim readerDataCollection = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, query.Model.GetEntities())
 
-            If masterValue IsNot Nothing Then
-              values.Add(DirectCast(masterValue, T))
-            End If
-          End While
+          If readerDataCollection.HasCollectionNavigation Then
+            Return ReadJoinedListWithCollectionNavigation(Of T)(dataReader, readerDataCollection)
+          Else
+            Return ReadJoinedListWithoutCollectionNavigation(Of T)(dataReader, readerDataCollection)
+          End If
         End Using
       End Using
+
+      Return values
+    End Function
+
+    ''' <summary>
+    ''' Executes query and returns lists of records. Only 1:1 joins are present in the query.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="dataReader"></param>
+    ''' <param name="readerDataCollection"></param>
+    ''' <returns></returns>
+    Private Function ReadJoinedListWithoutCollectionNavigation(Of T)(dataReader As DbDataReader, readerDataCollection As EntitySqlResultReaderDataCollection) As List(Of T)
+      Dim values = New List(Of T)
+
+      While dataReader.Read()
+        Dim masterValue = Read(readerDataCollection, readerDataCollection.Items(0), dataReader, Nothing)
+
+        If masterValue IsNot Nothing Then
+          values.Add(DirectCast(masterValue, T))
+        End If
+      End While
 
       Return values
     End Function
@@ -418,28 +442,24 @@ Namespace Internal.Query
     ''' Executes query and returns lists of records. 1:N joins are present in the query.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
-    ''' <param name="query"></param>
+    ''' <param name="dataReader"></param>
     ''' <param name="readerDataCollection"></param>
     ''' <returns></returns>
-    Private Function ReadJoinedListWithCollectionNavigation(Of T)(query As SelectQuery, readerDataCollection As EntitySqlResultReaderDataCollection) As List(Of T)
+    Private Function ReadJoinedListWithCollectionNavigation(Of T)(dataReader As DbDataReader, readerDataCollection As EntitySqlResultReaderDataCollection) As List(Of T)
       Dim cache = New ReaderEntityValueCache(readerDataCollection.Count)
       Dim pks = New Object(readerDataCollection.Count - 1) {}
 
       Dim values = New List(Of T)
 
-      Using command = CreateCommand(query)
-        Using dataReader = command.ExecuteReader()
-          While dataReader.Read()
-            readerDataCollection.FillPks(dataReader, pks)
+      While dataReader.Read()
+        readerDataCollection.FillPks(dataReader, pks)
 
-            Dim masterValue = Read(readerDataCollection, readerDataCollection.Items(0), cache, pks, dataReader, Nothing)
+        Dim masterValue = Read(readerDataCollection, readerDataCollection.Items(0), cache, pks, dataReader, Nothing)
 
-            If masterValue IsNot Nothing Then
-              values.Add(DirectCast(masterValue, T))
-            End If
-          End While
-        End Using
-      End Using
+        If masterValue IsNot Nothing Then
+          values.Add(DirectCast(masterValue, T))
+        End If
+      End While
 
       Return values
     End Function
@@ -452,7 +472,7 @@ Namespace Internal.Query
     ''' <param name="dataReader"></param>
     ''' <param name="declaringEntity"></param>
     ''' <returns></returns>
-    Private Function Read(readerDataCollection As EntitySqlResultReaderDataCollection, readerData As EntitySqlResultReaderData, dataReader As IDataReader, declaringEntity As Object) As Object
+    Private Function Read(readerDataCollection As EntitySqlResultReaderDataCollection, readerData As EntitySqlResultReaderData, dataReader As DbDataReader, declaringEntity As Object) As Object
       Dim value As Object
       Dim entityIndex = readerData.Entity.Index
 
@@ -491,7 +511,7 @@ Namespace Internal.Query
     ''' <param name="dataReader"></param>
     ''' <param name="declaringEntity"></param>
     ''' <returns></returns>
-    Private Function Read(readerDataCollection As EntitySqlResultReaderDataCollection, readerData As EntitySqlResultReaderData, cache As ReaderEntityValueCache, pks As Object(), dataReader As IDataReader, declaringEntity As Object) As Object
+    Private Function Read(readerDataCollection As EntitySqlResultReaderDataCollection, readerData As EntitySqlResultReaderData, cache As ReaderEntityValueCache, pks As Object(), dataReader As DbDataReader, declaringEntity As Object) As Object
       Dim value As Object = Nothing
       Dim entityIndex = readerData.Entity.Index
       Dim valueFromCache = False
@@ -565,7 +585,7 @@ Namespace Internal.Query
     ''' <param name="entityReaderData"></param>
     ''' <param name="dataReader"></param>
     ''' <param name="declaringEntity"></param>
-    Private Sub FillIncluded(entityReaderData As EntitySqlResultReaderData, dataReader As IDataReader, declaringEntity As Object)
+    Private Sub FillIncluded(entityReaderData As EntitySqlResultReaderData, dataReader As DbDataReader, declaringEntity As Object)
       If entityReaderData.HasIncludedSqlResults Then
         For i = 0 To entityReaderData.IncludedSqlResultsReaderData.Count - 1
           Dim includedSqlResultsReaderData = entityReaderData.IncludedSqlResultsReaderData(i)

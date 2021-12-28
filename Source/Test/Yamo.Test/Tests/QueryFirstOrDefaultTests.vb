@@ -496,6 +496,42 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub QueryFirstOrDefaultOfTime()
+      Dim time = New TimeSpan(0, 10, 20, 30, 500)
+
+      Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item.TimeColumn = time
+
+      InsertItems(item)
+
+      Using db = CreateDbContext()
+        Dim result = db.QueryFirstOrDefault(Of TimeSpan)($"SELECT TimeColumn FROM ItemWithAllSupportedValues WHERE Id = {item.Id}")
+        Assert.AreEqual(item.TimeColumn, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub QueryFirstOrDefaultOfNullableTime()
+      Dim time = New TimeSpan(0, 10, 20, 30, 500)
+
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.TimeColumnNull = Nothing
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.TimeColumnNull = time
+
+      InsertItems(item1, item2)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.QueryFirstOrDefault(Of TimeSpan?)($"SELECT TimeColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Assert.AreEqual(item1.TimeColumnNull, result1)
+
+        Dim result2 = db.QueryFirstOrDefault(Of TimeSpan?)($"SELECT TimeColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Assert.AreEqual(item2.TimeColumnNull, result2)
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub QueryFirstOrDefaultOfDateTime()
       Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item.DatetimeColumn = Helpers.Calendar.Now()
@@ -665,17 +701,17 @@ Namespace Tests
         Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50ColumnNull, result6.Item6))
         Assert.AreEqual(item3.Id, result6.Item7)
 
-        Dim result7null = db.QueryFirstOrDefault(Of (DateTime, DateTime?)?)("SELECT DateColumn, DateColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
-        Assert.AreEqual(New ValueTuple(Of Guid, Guid?)?, result7null)
+        Dim result7null = db.QueryFirstOrDefault(Of (DateTime, DateTime?, TimeSpan, TimeSpan?)?)("SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of DateTime, DateTime?, TimeSpan, TimeSpan?)?, result7null)
 
-        Dim result7nullWithValue = db.QueryFirstOrDefault(Of (DateTime, DateTime?)?)($"SELECT DateColumn, DateColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
-        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull), result7nullWithValue.Value)
+        Dim result7nullWithValue = db.QueryFirstOrDefault(Of (DateTime, DateTime?, TimeSpan, TimeSpan?)?)($"SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull, item1.TimeColumn, item1.TimeColumnNull), result7nullWithValue.Value)
 
-        Dim result7empty = db.QueryFirstOrDefault(Of (DateTime, DateTime?))("SELECT DateColumn, DateColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
-        Assert.AreEqual(New ValueTuple(Of DateTime, DateTime?), result7empty)
+        Dim result7empty = db.QueryFirstOrDefault(Of (DateTime, DateTime?, TimeSpan, TimeSpan?))("SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of DateTime, DateTime?, TimeSpan, TimeSpan?), result7empty)
 
-        Dim result7 = db.QueryFirstOrDefault(Of (DateTime, DateTime?))($"SELECT DateColumn, DateColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
-        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull), result7)
+        Dim result7 = db.QueryFirstOrDefault(Of (DateTime, DateTime?, TimeSpan, TimeSpan?))($"SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull, item1.TimeColumn, item1.TimeColumnNull), result7)
 
       End Using
     End Sub

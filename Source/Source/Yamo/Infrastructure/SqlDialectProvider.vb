@@ -68,21 +68,6 @@ Namespace Infrastructure
       End Set
     End Property
 
-    Private m_DbValueConversion As DbValueConversion
-    ''' <summary>
-    ''' Gets or sets database value conversion.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property DbValueConversion() As DbValueConversion
-      Get
-        Return m_DbValueConversion
-      End Get
-      Protected Set(ByVal value As DbValueConversion)
-        m_DbValueConversion = value
-      End Set
-    End Property
-
     Private m_SupportedLimitType As LimitType
     ''' <summary>
     ''' Gets or sets supported limit clause type

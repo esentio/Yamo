@@ -1,54 +1,124 @@
-﻿Imports Yamo.SQLite.Infrastructure
-
-Public Class SQliteRawValueComparer
+﻿Public Class SQliteRawValueComparer
   Inherits RawValueComparer
-
-  Private m_Conversion As SQLiteDbValueConversion
-
-  Sub New()
-    m_Conversion = New SQLiteDbValueConversion
-  End Sub
 
   Public Overrides Sub AreRawValuesEqual(expected As Object, actual As Object)
     If actual IsNot DBNull.Value Then
       If TypeOf expected Is Guid Then
-        actual = m_Conversion.FromDbValue(Of Guid)(actual)
+        actual = FromRawValue(Of Guid)(actual)
       ElseIf TypeOf expected Is Guid? Then
-        actual = m_Conversion.FromDbValue(Of Guid?)(actual)
+        actual = FromRawValue(Of Guid?)(actual)
 
       ElseIf TypeOf expected Is Boolean Then
-        actual = m_Conversion.FromDbValue(Of Boolean)(actual)
+        actual = FromRawValue(Of Boolean)(actual)
       ElseIf TypeOf expected Is Boolean? Then
-        actual = m_Conversion.FromDbValue(Of Boolean?)(actual)
+        actual = FromRawValue(Of Boolean?)(actual)
 
       ElseIf TypeOf expected Is Int16 Then
-        actual = m_Conversion.FromDbValue(Of Int16)(actual)
+        actual = FromRawValue(Of Int16)(actual)
       ElseIf TypeOf expected Is Int16? Then
-        actual = m_Conversion.FromDbValue(Of Int16?)(actual)
+        actual = FromRawValue(Of Int16?)(actual)
 
       ElseIf TypeOf expected Is Int32 Then
-        actual = m_Conversion.FromDbValue(Of Int32)(actual)
+        actual = FromRawValue(Of Int32)(actual)
       ElseIf TypeOf expected Is Int32? Then
-        actual = m_Conversion.FromDbValue(Of Int32?)(actual)
+        actual = FromRawValue(Of Int32?)(actual)
 
       ElseIf TypeOf expected Is Single Then
-        actual = m_Conversion.FromDbValue(Of Single)(actual)
+        actual = FromRawValue(Of Single)(actual)
       ElseIf TypeOf expected Is Single? Then
-        actual = m_Conversion.FromDbValue(Of Single?)(actual)
+        actual = FromRawValue(Of Single?)(actual)
 
       ElseIf TypeOf expected Is Decimal Then
-        actual = m_Conversion.FromDbValue(Of Decimal)(actual)
+        actual = FromRawValue(Of Decimal)(actual)
       ElseIf TypeOf expected Is Decimal? Then
-        actual = m_Conversion.FromDbValue(Of Decimal?)(actual)
+        actual = FromRawValue(Of Decimal?)(actual)
 
       ElseIf TypeOf expected Is DateTime Then
-        actual = m_Conversion.FromDbValue(Of DateTime)(actual)
+        actual = FromRawValue(Of DateTime)(actual)
       ElseIf TypeOf expected Is DateTime? Then
-        actual = m_Conversion.FromDbValue(Of DateTime?)(actual)
+        actual = FromRawValue(Of DateTime?)(actual)
+
+      ElseIf TypeOf expected Is TimeSpan Then
+        actual = FromRawValue(Of TimeSpan)(actual)
+      ElseIf TypeOf expected Is TimeSpan? Then
+        actual = FromRawValue(Of TimeSpan?)(actual)
       End If
     End If
 
     MyBase.AreRawValuesEqual(expected, actual)
   End Sub
+
+  Private Function FromRawValue(Of T)(value As Object) As T
+    If value Is DBNull.Value Then
+      Return Nothing
+    End If
+
+    If GetType(T) Is GetType(Guid) Then
+      If TypeOf value Is String Then
+        value = New Guid(DirectCast(value, String))
+      ElseIf TypeOf value Is Byte() Then
+        value = New Guid(DirectCast(value, Byte()))
+      End If
+    ElseIf GetType(T) Is GetType(Guid?) Then
+      If TypeOf value Is String Then
+        value = New Guid?(New Guid(DirectCast(value, String)))
+      ElseIf TypeOf value Is Byte() Then
+        value = New Guid?(New Guid(DirectCast(value, Byte())))
+      End If
+
+    ElseIf GetType(T) Is GetType(Boolean) Then
+      ' value is Int64
+      Return CType(value, T)
+    ElseIf GetType(T) Is GetType(Boolean?) Then
+      ' value is Int64
+      value = New Boolean?(CType(value, Boolean))
+
+    ElseIf GetType(T) Is GetType(Int16) Then
+      ' value is Int64
+      Return CType(value, T)
+    ElseIf GetType(T) Is GetType(Int16?) Then
+      ' value is Int64
+      value = New Int16?(CType(value, Int16))
+
+    ElseIf GetType(T) Is GetType(Int32) Then
+      ' value is Int64
+      Return CType(value, T)
+    ElseIf GetType(T) Is GetType(Int32?) Then
+      ' value is Int64
+      value = New Int32?(CType(value, Int32))
+
+    ElseIf GetType(T) Is GetType(Single) Then
+      ' value is Double
+      Return CType(value, T)
+    ElseIf GetType(T) Is GetType(Single?) Then
+      ' value is Double
+      value = New Single?(CType(value, Single))
+
+    ElseIf GetType(T) Is GetType(Decimal) Then
+      ' value is Int64 or Double
+      Return CType(value, T)
+    ElseIf GetType(T) Is GetType(Decimal?) Then
+      ' value is Int64 or Double
+      value = New Decimal?(CType(value, Decimal))
+
+    ElseIf GetType(T) Is GetType(DateTime) Then
+      ' value is String
+      Return CType(value, T)
+    ElseIf GetType(T) Is GetType(DateTime?) Then
+      ' value is String
+      value = New DateTime?(CType(value, DateTime))
+
+    ElseIf GetType(T) Is GetType(TimeSpan) Then
+      If TypeOf value Is String Then
+        value = TimeSpan.Parse(DirectCast(value, String))
+      End If
+    ElseIf GetType(T) Is GetType(TimeSpan?) Then
+      If TypeOf value Is String Then
+        value = New TimeSpan?(TimeSpan.Parse(DirectCast(value, String)))
+      End If
+    End If
+
+    Return DirectCast(value, T)
+  End Function
 
 End Class
