@@ -14,11 +14,27 @@
     End Function
 
     Public Shared Function GetSqlServerMinDate() As DateTime
-      Return New DateTime(1753, 1, 1, 0, 0, 0)
+      Return DateTime.MinValue.Date
     End Function
 
     Public Shared Function GetSqlServerMaxDate() As DateTime
-      Return New DateTime(9999, 12, 31, 0, 0, 0)
+      Return DateTime.MaxValue.Date
+    End Function
+
+    Public Shared Function GetSqlServerMinDateTime() As DateTime
+      Return New DateTime(1753, 1, 1, 0, 0, 0)
+    End Function
+
+    Public Shared Function GetSqlServerMaxDateTime() As DateTime
+      Return New DateTime(9999, 12, 31, 23, 59, 59, 997)
+    End Function
+
+    Public Shared Function GetSqlServerMinTime() As TimeSpan
+      Return TimeSpan.Zero
+    End Function
+
+    Public Shared Function GetSqlServerMaxTime() As TimeSpan
+      Return TimeSpan.FromHours(24) - TimeSpan.FromMilliseconds(1)
     End Function
 
   End Class

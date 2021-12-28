@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Data.Common
 Imports System.Linq.Expressions
 Imports System.Reflection
 Imports Yamo.Internal
@@ -47,15 +48,15 @@ Namespace Infrastructure
     ''' <param name="resultType"></param>
     ''' <param name="readerFunction"></param>
     ''' <returns></returns>
-    Public Shared Function CreateValueTypeToObjectResultFactoryWrapper(resultType As Type, readerFunction As Object) As Func(Of IDataReader, ReaderDataBase, Object)
-      Dim readerParam = Expression.Parameter(GetType(IDataReader), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
+    Public Shared Function CreateValueTypeToObjectResultFactoryWrapper(resultType As Type, readerFunction As Object) As Func(Of DbDataReader, ReaderDataBase, Object)
+      Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
       Dim readerDataParam = Expression.Parameter(GetType(ReaderDataBase), "readerData")
       Dim parameters = {readerParam, readerDataParam}
 
       Dim variables = New List(Of ParameterExpression)
       Dim expressions = New List(Of Expression)
 
-      Dim readerFunctionType = GetType(Func(Of , , )).MakeGenericType(GetType(IDataReader), GetType(ReaderDataBase), resultType)
+      Dim readerFunctionType = GetType(Func(Of , , )).MakeGenericType(GetType(DbDataReader), GetType(ReaderDataBase), resultType)
       Dim readerFuncVar = Expression.Variable(readerFunctionType, "readerFunc")
       variables.Add(readerFuncVar)
       expressions.Add(Expression.Assign(readerFuncVar, Expression.Convert(Expression.Constant(readerFunction), readerFunctionType)))
@@ -68,7 +69,7 @@ Namespace Infrastructure
       Dim body = Expression.Block(variables, expressions)
 
       Dim wrapper = Expression.Lambda(body, parameters)
-      Return DirectCast(wrapper.Compile(), Func(Of IDataReader, ReaderDataBase, Object))
+      Return DirectCast(wrapper.Compile(), Func(Of DbDataReader, ReaderDataBase, Object))
     End Function
 
     ''' <summary>
@@ -77,7 +78,7 @@ Namespace Infrastructure
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
     Private Shared Function CreateResultFactory(sqlResult As AnonymousTypeSqlResult) As Object
-      Dim readerParam = Expression.Parameter(GetType(IDataReader), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
+      Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
       Dim readerDataParam = Expression.Parameter(GetType(ReaderDataBase), "readerData")
       Dim parameters = {readerParam, readerDataParam}
 
@@ -116,7 +117,7 @@ Namespace Infrastructure
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
     Private Shared Function CreateResultFactory(sqlResult As ValueTupleSqlResult) As Object
-      Dim readerParam = Expression.Parameter(GetType(IDataReader), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
+      Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
       Dim readerDataParam = Expression.Parameter(GetType(ReaderDataBase), "readerData")
       Dim parameters = {readerParam, readerDataParam}
 
@@ -156,7 +157,7 @@ Namespace Infrastructure
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
     Private Shared Function CreateResultFactory(sqlResult As EntitySqlResult) As Object
-      Dim readerParam = Expression.Parameter(GetType(IDataReader), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
+      Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
       Dim readerDataParam = Expression.Parameter(GetType(ReaderDataBase), "readerData")
       Dim parameters = {readerParam, readerDataParam}
 
@@ -185,7 +186,7 @@ Namespace Infrastructure
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
     Private Shared Function CreateResultFactory(sqlResult As ScalarValueSqlResult) As Object
-      Dim readerParam = Expression.Parameter(GetType(IDataReader), "reader") ' this has to be IDataRecord, otherwise Expression.Call() cannot find the method
+      Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
       Dim readerDataParam = Expression.Parameter(GetType(ReaderDataBase), "readerData")
       Dim parameters = {readerParam, readerDataParam}
 
@@ -267,12 +268,12 @@ Namespace Infrastructure
         Dim pkOffsetsProp = Expression.Property(readerDataVar, NameOf(EntitySqlResultReaderData.PKOffsets))
 
         Dim containsPKReaderProp = Expression.Property(readerDataVar, NameOf(EntitySqlResultReaderData.ContainsPKReader))
-        Dim containsPKReaderType = GetType(Func(Of, , ,)).MakeGenericType(GetType(IDataReader), GetType(Int32), GetType(Int32()), GetType(Boolean))
+        Dim containsPKReaderType = GetType(Func(Of, , ,)).MakeGenericType(GetType(DbDataReader), GetType(Int32), GetType(Int32()), GetType(Boolean))
         Dim containsPKReaderInvokeMethodInfo = containsPKReaderType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance)
         Dim containsPKReaderCall = Expression.Call(containsPKReaderProp, containsPKReaderInvokeMethodInfo, readerParam, readerIndexProp, pkOffsetsProp)
 
         Dim entityReaderProp = Expression.Property(readerDataVar, NameOf(EntitySqlResultReaderData.Reader))
-        Dim entityReaderType = GetType(Func(Of, , ,)).MakeGenericType(GetType(IDataReader), GetType(Int32), GetType(Boolean()), GetType(Object))
+        Dim entityReaderType = GetType(Func(Of, , ,)).MakeGenericType(GetType(DbDataReader), GetType(Int32), GetType(Boolean()), GetType(Object))
         Dim entityReaderInvokeMethodInfo = entityReaderType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance)
         Dim entityReaderCall = Expression.Call(entityReaderProp, entityReaderInvokeMethodInfo, readerParam, readerIndexProp, includedColumnsProp)
         Dim entityReaderCallCast = Expression.Convert(entityReaderCall, type)
@@ -296,7 +297,7 @@ Namespace Infrastructure
         expressions.Add(Expression.IfThenElse(containsPKReaderCall, valueAssignBlock, valueAssignNull))
       ElseIf TypeOf sqlResult Is ScalarValueSqlResult Then
         Dim scalarValueReaderProp = Expression.Property(readerDataVar, NameOf(ScalarValueSqlResultReaderData.Reader))
-        Dim scalarValueReaderType = GetType(Func(Of, , )).MakeGenericType(GetType(IDataReader), GetType(Int32), type)
+        Dim scalarValueReaderType = GetType(Func(Of, , )).MakeGenericType(GetType(DbDataReader), GetType(Int32), type)
         Dim scalarValueReaderCast = Expression.Convert(scalarValueReaderProp, scalarValueReaderType)
         Dim scalarValueReaderInvokeMethodInfo = scalarValueReaderType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance)
         Dim scalarValueReaderCall = Expression.Call(scalarValueReaderCast, scalarValueReaderInvokeMethodInfo, readerParam, readerIndexProp)

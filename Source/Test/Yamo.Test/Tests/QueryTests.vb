@@ -574,6 +574,56 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub QueryOfTime()
+      Dim time = New TimeSpan(0, 10, 20, 30, 500)
+
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 1
+      item1.TimeColumn = time
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 2
+      item1.TimeColumn = time.Add(TimeSpan.FromHours(1))
+
+      InsertItems(item1, item2)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.Query(Of TimeSpan)("SELECT TimeColumn FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result1.Count)
+
+        Dim result2 = db.Query(Of TimeSpan)("SELECT TimeColumn FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(2, result2.Count)
+        Assert.AreEqual(item1.TimeColumn, result2(0))
+        Assert.AreEqual(item2.TimeColumn, result2(1))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub QueryOfNullableTime()
+      Dim time = New TimeSpan(0, 10, 20, 30, 500)
+
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 1
+      item1.TimeColumnNull = Nothing
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 2
+      item2.TimeColumnNull = time
+
+      InsertItems(item1, item2)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.Query(Of TimeSpan?)("SELECT TimeColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result1.Count)
+
+        Dim result2 = db.Query(Of TimeSpan?)("SELECT TimeColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(2, result2.Count)
+        Assert.AreEqual(item1.TimeColumnNull, result2(0))
+        Assert.AreEqual(item2.TimeColumnNull, result2(1))
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub QueryOfDateTime()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.IntColumn = 1
@@ -818,20 +868,20 @@ Namespace Tests
         Assert.AreEqual(item3.Id, result6(2).Item7)
 
 
-        Dim result7empty = db.Query(Of (DateTime, DateTime?))("SELECT DateColumn, DateColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Dim result7empty = db.Query(Of (DateTime, DateTime?, TimeSpan, TimeSpan?))("SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
         Assert.AreEqual(0, result7empty.Count)
 
-        Dim result7null = db.Query(Of (DateTime, DateTime?)?)("SELECT DateColumn, DateColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Dim result7null = db.Query(Of (DateTime, DateTime?, TimeSpan, TimeSpan?)?)("SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
         Assert.AreEqual(3, result7null.Count)
-        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull), result7null(0).Value)
-        Assert.AreEqual((item2.DateColumn, item2.DateColumnNull), result7null(1).Value)
-        Assert.AreEqual((item3.DateColumn, item3.DateColumnNull), result7null(2).Value)
+        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull, item1.TimeColumn, item1.TimeColumnNull), result7null(0).Value)
+        Assert.AreEqual((item2.DateColumn, item2.DateColumnNull, item2.TimeColumn, item2.TimeColumnNull), result7null(1).Value)
+        Assert.AreEqual((item3.DateColumn, item3.DateColumnNull, item3.TimeColumn, item3.TimeColumnNull), result7null(2).Value)
 
-        Dim result7 = db.Query(Of (DateTime, DateTime?))("SELECT DateColumn, DateColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Dim result7 = db.Query(Of (DateTime, DateTime?, TimeSpan, TimeSpan?))("SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
         Assert.AreEqual(3, result7.Count)
-        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull), result7(0))
-        Assert.AreEqual((item2.DateColumn, item2.DateColumnNull), result7(1))
-        Assert.AreEqual((item3.DateColumn, item3.DateColumnNull), result7(2))
+        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull, item1.TimeColumn, item1.TimeColumnNull), result7(0))
+        Assert.AreEqual((item2.DateColumn, item2.DateColumnNull, item2.TimeColumn, item2.TimeColumnNull), result7(1))
+        Assert.AreEqual((item3.DateColumn, item3.DateColumnNull, item3.TimeColumn, item3.TimeColumnNull), result7(2))
       End Using
     End Sub
 

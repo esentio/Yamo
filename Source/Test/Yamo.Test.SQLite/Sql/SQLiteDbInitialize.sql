@@ -137,6 +137,8 @@ CREATE TABLE [ItemWithAllSupportedValues] (
 , [Numeric15and0ColumnNull] numeric(15,0)  NULL
 , [DateColumn] [date] NOT NULL
 , [DateColumnNull] [date] NULL
+, [TimeColumn] [time](7) NOT NULL
+, [TimeColumnNull] [time](7) NULL
 , [DatetimeColumn] datetime NOT NULL
 , [DatetimeColumnNull] datetime NULL
 , [Varbinary50Column] varbinary(50)  NOT NULL
@@ -172,6 +174,8 @@ CREATE TABLE [ItemWithAllSupportedValuesArchive] (
 , [Numeric15and0ColumnNull] numeric(15,0)  NULL
 , [DateColumn] [date] NOT NULL
 , [DateColumnNull] [date] NULL
+, [TimeColumn] [time](7) NOT NULL
+, [TimeColumnNull] [time](7) NULL
 , [DatetimeColumn] datetime NOT NULL
 , [DatetimeColumnNull] datetime NULL
 , [Varbinary50Column] varbinary(50)  NOT NULL
