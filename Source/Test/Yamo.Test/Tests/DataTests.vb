@@ -60,6 +60,8 @@ Namespace Tests
         ,TimeColumnNull
         ,DatetimeColumn
         ,DatetimeColumnNull
+        ,Datetime2Column
+        ,Datetime2ColumnNull
         ,Varbinary50Column
         ,Varbinary50ColumnNull
         ,VarbinaryMaxColumn
@@ -94,6 +96,8 @@ Namespace Tests
         ,{item.TimeColumnNull}
         ,{item.DatetimeColumn}
         ,{item.DatetimeColumnNull}
+        ,{Me.TestEnvironment.CreateDbParameter(item.Datetime2Column, DbType.DateTime2)}
+        ,{Me.TestEnvironment.CreateDbParameter(item.Datetime2ColumnNull, DbType.DateTime2)}
         ,{item.Varbinary50Column}
         ,{Me.TestEnvironment.CreateDbParameter(item.Varbinary50ColumnNull, DbType.Binary)}
         ,{item.VarbinaryMaxColumn}
