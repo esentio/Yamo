@@ -53,6 +53,10 @@ Namespace Infrastructure
           Return CreateTimeSpanReader(dataReaderType)
         Case GetType(TimeSpan?)
           Return CreateNullableTimeSpanReader(dataReaderType)
+        Case GetType(DateTimeOffset)
+          Return CreateDateTimeOffsetReader(dataReaderType)
+        Case GetType(DateTimeOffset?)
+          Return CreateNullableDateTimeOffsetReader(dataReaderType)
         Case GetType(Decimal)
           Return DirectCast(AddressOf ReadDecimal, Func(Of DbDataReader, Int32, Decimal))
         Case GetType(Decimal?)
@@ -429,6 +433,26 @@ Namespace Infrastructure
     ''' <returns></returns>
     Protected Overridable Function CreateNullableTimeSpanReader(dataReaderType As Type) As Func(Of DbDataReader, Int32, TimeSpan?)
       Return CreateReader(Of TimeSpan?)(dataReaderType, "GetTimeSpan")
+    End Function
+
+    ''' <summary>
+    ''' Creates reader function for <see cref="DateTimeOffset"/> value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="dataReaderType"></param>
+    ''' <returns></returns>
+    Protected Overridable Function CreateDateTimeOffsetReader(dataReaderType As Type) As Func(Of DbDataReader, Int32, DateTimeOffset)
+      Return CreateReader(Of DateTimeOffset)(dataReaderType, "GetDateTimeOffset")
+    End Function
+
+    ''' <summary>
+    ''' Creates reader function for <see cref="Nullable(Of DateTimeOffset)"/> value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="dataReaderType"></param>
+    ''' <returns></returns>
+    Protected Overridable Function CreateNullableDateTimeOffsetReader(dataReaderType As Type) As Func(Of DbDataReader, Int32, DateTimeOffset?)
+      Return CreateReader(Of DateTimeOffset?)(dataReaderType, "GetDateTimeOffset")
     End Function
 
     ''' <summary>

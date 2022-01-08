@@ -716,6 +716,52 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub QueryOfDateTimeOffset()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 1
+      item1.DatetimeoffsetColumn = Helpers.Calendar.OffsetNow()
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 2
+      item1.DatetimeoffsetColumn = item1.DatetimeoffsetColumn.AddDays(1).AddHours(1)
+
+      InsertItems(item1, item2)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.Query(Of DateTimeOffset)("SELECT DatetimeoffsetColumn FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result1.Count)
+
+        Dim result2 = db.Query(Of DateTimeOffset)("SELECT DatetimeoffsetColumn FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(2, result2.Count)
+        Assert.AreEqual(item1.DatetimeoffsetColumn, result2(0))
+        Assert.AreEqual(item2.DatetimeoffsetColumn, result2(1))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub QueryOfNullableDateTimeOffset()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.IntColumn = 1
+      item1.DatetimeoffsetColumnNull = Nothing
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.IntColumn = 2
+      item2.DatetimeoffsetColumnNull = Helpers.Calendar.OffsetNow()
+
+      InsertItems(item1, item2)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.Query(Of DateTimeOffset?)("SELECT DatetimeoffsetColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result1.Count)
+
+        Dim result2 = db.Query(Of DateTimeOffset?)("SELECT DatetimeoffsetColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(2, result2.Count)
+        Assert.AreEqual(item1.DatetimeoffsetColumnNull, result2(0))
+        Assert.AreEqual(item2.DatetimeoffsetColumnNull, result2(1))
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub QueryOfByteArray()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.IntColumn = 1
@@ -928,6 +974,22 @@ Namespace Tests
         Assert.AreEqual((item1.DateColumn, item1.DateColumnNull, item1.TimeColumn, item1.TimeColumnNull, item1.Datetime2Column, item1.Datetime2ColumnNull), result7(0))
         Assert.AreEqual((item2.DateColumn, item2.DateColumnNull, item2.TimeColumn, item2.TimeColumnNull, item2.Datetime2Column, item2.Datetime2ColumnNull), result7(1))
         Assert.AreEqual((item3.DateColumn, item3.DateColumnNull, item3.TimeColumn, item3.TimeColumnNull, item3.Datetime2Column, item3.Datetime2ColumnNull), result7(2))
+
+
+        Dim result8empty = db.Query(Of (DateTimeOffset, DateTimeOffset?))("SELECT DatetimeoffsetColumn, DatetimeoffsetColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2 ORDER BY IntColumn")
+        Assert.AreEqual(0, result8empty.Count)
+
+        Dim result8null = db.Query(Of (DateTimeOffset, DateTimeOffset?)?)("SELECT DatetimeoffsetColumn, DatetimeoffsetColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result8null.Count)
+        Assert.AreEqual((item1.DatetimeoffsetColumn, item1.DatetimeoffsetColumnNull), result8null(0).Value)
+        Assert.AreEqual((item2.DatetimeoffsetColumn, item2.DatetimeoffsetColumnNull), result8null(1).Value)
+        Assert.AreEqual((item3.DatetimeoffsetColumn, item3.DatetimeoffsetColumnNull), result8null(2).Value)
+
+        Dim result8 = db.Query(Of (DateTimeOffset, DateTimeOffset?))("SELECT DatetimeoffsetColumn, DatetimeoffsetColumnNull FROM ItemWithAllSupportedValues ORDER BY IntColumn")
+        Assert.AreEqual(3, result8.Count)
+        Assert.AreEqual((item1.DatetimeoffsetColumn, item1.DatetimeoffsetColumnNull), result8(0))
+        Assert.AreEqual((item2.DatetimeoffsetColumn, item2.DatetimeoffsetColumnNull), result8(1))
+        Assert.AreEqual((item3.DatetimeoffsetColumn, item3.DatetimeoffsetColumnNull), result8(2))
       End Using
     End Sub
 
