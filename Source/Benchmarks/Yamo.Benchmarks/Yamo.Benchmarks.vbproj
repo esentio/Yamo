@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>Yamo.Benchmarks</RootNamespace>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OptionStrict>On</OptionStrict>
     <Version>0.7.0</Version>
     <Authors>Peter Šimno</Authors>

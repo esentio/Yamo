@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>Yamo.Test.SqlServer</RootNamespace>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
 
