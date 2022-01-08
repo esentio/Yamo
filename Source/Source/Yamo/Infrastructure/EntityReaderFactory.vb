@@ -367,6 +367,8 @@ Namespace Infrastructure
           Return ("GetDateTime", False)
         Case GetType(TimeSpan), GetType(TimeSpan?)
           Return ("GetTimeSpan", False)
+        Case GetType(DateTimeOffset), GetType(DateTimeOffset?)
+          Return ("GetDateTimeOffset", False)
         Case GetType(Decimal), GetType(Decimal?)
           Return ("GetDecimal", False)
         Case GetType(Double), GetType(Double?)

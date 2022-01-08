@@ -9,6 +9,10 @@
       Return TruncateMilliseconds(DateTime.Now)
     End Function
 
+    Public Shared Function OffsetNow() As DateTimeOffset
+      Return DateTimeOffset.Now
+    End Function
+
     Public Shared Function TruncateMilliseconds(value As DateTime) As DateTime
       Return New DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute, value.Second, 0, value.Kind)
     End Function
@@ -43,6 +47,14 @@
 
     Public Shared Function GetSqlServerMaxDateTime2() As DateTime
       Return DateTime.MaxValue
+    End Function
+
+    Public Shared Function GetSqlServerMinDateTimeOffset() As DateTimeOffset
+      Return DateTimeOffset.MinValue
+    End Function
+
+    Public Shared Function GetSqlServerMaxDateTimeOffset() As DateTimeOffset
+      Return DateTimeOffset.MaxValue
     End Function
 
   End Class

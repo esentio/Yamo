@@ -42,6 +42,11 @@
         actual = FromRawValue(Of TimeSpan)(actual)
       ElseIf TypeOf expected Is TimeSpan? Then
         actual = FromRawValue(Of TimeSpan?)(actual)
+
+      ElseIf TypeOf expected Is DateTimeOffset Then
+        actual = FromRawValue(Of DateTimeOffset)(actual)
+      ElseIf TypeOf expected Is DateTimeOffset? Then
+        actual = FromRawValue(Of DateTimeOffset?)(actual)
       End If
     End If
 
@@ -115,6 +120,15 @@
     ElseIf GetType(T) Is GetType(TimeSpan?) Then
       If TypeOf value Is String Then
         value = New TimeSpan?(TimeSpan.Parse(DirectCast(value, String)))
+      End If
+
+    ElseIf GetType(T) Is GetType(DateTimeOffset) Then
+      If TypeOf value Is String Then
+        value = DateTimeOffset.Parse(DirectCast(value, String))
+      End If
+    ElseIf GetType(T) Is GetType(DateTimeOffset?) Then
+      If TypeOf value Is String Then
+        value = New DateTimeOffset?(DateTimeOffset.Parse(DirectCast(value, String)))
       End If
     End If
 
