@@ -1091,6 +1091,99 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub CustomSelectOfDateTime2()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.Datetime2Column = Helpers.Calendar.Now()
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.Datetime2Column = Helpers.Calendar.Now().AddHours(42)
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.Datetime2Column = Helpers.Calendar.Now().AddDays(-42)
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select value
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) x.Datetime2Column).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.Datetime2Column, result1)
+
+        ' select value, but no row is returned
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.Datetime2Column).
+                         FirstOrDefault()
+        Assert.AreEqual(DateTime.MinValue, result2)
+
+        ' select values
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.Datetime2Column).
+                         ToList()
+        CollectionAssert.AreEquivalent({item1.Datetime2Column, item2.Datetime2Column, item3.Datetime2Column}, result3)
+
+        ' select values, but no row is returned
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.Datetime2Column).
+                         ToList()
+        Assert.AreEqual(0, result4.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfNullableDateTime2()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.Datetime2ColumnNull = Helpers.Calendar.Now()
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.Datetime2ColumnNull = Helpers.Calendar.Now().AddHours(42)
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.Datetime2ColumnNull = Nothing
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select value
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) x.Datetime2ColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.Datetime2ColumnNull, result1)
+
+        ' select null value
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item3.Id).
+                         Select(Function(x) x.Datetime2ColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(item3.Datetime2ColumnNull, result2)
+
+        ' select value, but no row is returned
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.Datetime2ColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(Nothing, result3)
+
+        ' select values
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.Datetime2ColumnNull).
+                         ToList()
+        CollectionAssert.AreEquivalent({item1.Datetime2ColumnNull, item2.Datetime2ColumnNull, item3.Datetime2ColumnNull}, result4)
+
+        ' select values, but no row is returned
+        Dim result5 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.Datetime2ColumnNull).
+                         ToList()
+        Assert.AreEqual(0, result5.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub CustomSelectOfByteArray()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
       item1.Varbinary50ColumnNull = New Byte() {}

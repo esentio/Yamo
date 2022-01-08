@@ -141,6 +141,8 @@ CREATE TABLE [ItemWithAllSupportedValues] (
 , [TimeColumnNull] [time](7) NULL
 , [DatetimeColumn] datetime NOT NULL
 , [DatetimeColumnNull] datetime NULL
+, [Datetime2Column] [datetime2](7) NOT NULL
+, [Datetime2ColumnNull] [datetime2](7) NULL
 , [Varbinary50Column] varbinary(50)  NOT NULL
 , [Varbinary50ColumnNull] varbinary(50)  NULL
 , [VarbinaryMaxColumn] image NOT NULL
@@ -178,6 +180,8 @@ CREATE TABLE [ItemWithAllSupportedValuesArchive] (
 , [TimeColumnNull] [time](7) NULL
 , [DatetimeColumn] datetime NOT NULL
 , [DatetimeColumnNull] datetime NULL
+, [Datetime2Column] [datetime2](7) NOT NULL
+, [Datetime2ColumnNull] [datetime2](7) NULL
 , [Varbinary50Column] varbinary(50)  NOT NULL
 , [Varbinary50ColumnNull] varbinary(50)  NULL
 , [VarbinaryMaxColumn] image NOT NULL

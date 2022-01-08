@@ -60,6 +60,10 @@
 
     Public Property DatetimeColumnNull As DateTime?
 
+    Public Property Datetime2Column As DateTime
+
+    Public Property Datetime2ColumnNull As DateTime?
+
     Public Property Varbinary50Column As Byte()
 
     Public Property Varbinary50ColumnNull As Byte()
@@ -103,6 +107,8 @@
         If Not Object.Equals(Me.TimeColumnNull, o.TimeColumnNull) Then Return False
         If Not Object.Equals(Me.DatetimeColumn, o.DatetimeColumn) Then Return False
         If Not Object.Equals(Me.DatetimeColumnNull, o.DatetimeColumnNull) Then Return False
+        If Not Object.Equals(Me.Datetime2Column, o.Datetime2Column) Then Return False
+        If Not Object.Equals(Me.Datetime2ColumnNull, o.Datetime2ColumnNull) Then Return False
         If Not Helpers.Compare.AreByteArraysEqual(Me.Varbinary50Column, o.Varbinary50Column) Then Return False
         If Not Helpers.Compare.AreByteArraysEqual(Me.Varbinary50ColumnNull, o.Varbinary50ColumnNull) Then Return False
         If Not Helpers.Compare.AreByteArraysEqual(Me.VarbinaryMaxColumn, o.VarbinaryMaxColumn) Then Return False
@@ -144,6 +150,8 @@
       hashCode.Add(Me.TimeColumnNull)
       hashCode.Add(Me.DatetimeColumn)
       hashCode.Add(Me.DatetimeColumnNull)
+      hashCode.Add(Me.Datetime2Column)
+      hashCode.Add(Me.Datetime2ColumnNull)
 
       If Me.Varbinary50Column Is Nothing Then
         hashCode.Add(Of Byte())(Nothing)
@@ -211,6 +219,8 @@
         Me.TimeColumnNull,
         Me.DatetimeColumn,
         Me.DatetimeColumnNull,
+        Me.Datetime2Column,
+        Me.Datetime2ColumnNull,
         Me.Varbinary50Column,
         Me.Varbinary50ColumnNull,
         Me.VarbinaryMaxColumn,

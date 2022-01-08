@@ -564,6 +564,38 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub QueryFirstOrDefaultOfDateTime2()
+      Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item.Datetime2Column = Helpers.Calendar.Now()
+
+      InsertItems(item)
+
+      Using db = CreateDbContext()
+        Dim result = db.QueryFirstOrDefault(Of DateTime)($"SELECT Datetime2Column FROM ItemWithAllSupportedValues WHERE Id = {item.Id}")
+        Assert.AreEqual(item.Datetime2Column, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub QueryFirstOrDefaultOfNullableDateTime2()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item1.Datetime2ColumnNull = Nothing
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item2.Datetime2ColumnNull = Helpers.Calendar.Now()
+
+      InsertItems(item1, item2)
+
+      Using db = CreateDbContext()
+        Dim result1 = db.QueryFirstOrDefault(Of DateTime?)($"SELECT Datetime2ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Assert.AreEqual(item1.Datetime2ColumnNull, result1)
+
+        Dim result2 = db.QueryFirstOrDefault(Of DateTime?)($"SELECT Datetime2ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item2.Id}")
+        Assert.AreEqual(item2.Datetime2ColumnNull, result2)
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub QueryFirstOrDefaultOfByteArray()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item1.Varbinary50ColumnNull = Nothing
@@ -701,17 +733,17 @@ Namespace Tests
         Assert.IsTrue(Helpers.Compare.AreByteArraysEqual(item3.Varbinary50ColumnNull, result6.Item6))
         Assert.AreEqual(item3.Id, result6.Item7)
 
-        Dim result7null = db.QueryFirstOrDefault(Of (DateTime, DateTime?, TimeSpan, TimeSpan?)?)("SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
-        Assert.AreEqual(New ValueTuple(Of DateTime, DateTime?, TimeSpan, TimeSpan?)?, result7null)
+        Dim result7null = db.QueryFirstOrDefault(Of (DateTime, DateTime?, TimeSpan, TimeSpan?, DateTime, DateTime?)?)("SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull, Datetime2Column, Datetime2ColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of DateTime, DateTime?, TimeSpan, TimeSpan?, DateTime, DateTime?)?, result7null)
 
-        Dim result7nullWithValue = db.QueryFirstOrDefault(Of (DateTime, DateTime?, TimeSpan, TimeSpan?)?)($"SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
-        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull, item1.TimeColumn, item1.TimeColumnNull), result7nullWithValue.Value)
+        Dim result7nullWithValue = db.QueryFirstOrDefault(Of (DateTime, DateTime?, TimeSpan, TimeSpan?, DateTime, DateTime?)?)($"SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull, Datetime2Column, Datetime2ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull, item1.TimeColumn, item1.TimeColumnNull, item1.Datetime2Column, item1.Datetime2ColumnNull), result7nullWithValue.Value)
 
-        Dim result7empty = db.QueryFirstOrDefault(Of (DateTime, DateTime?, TimeSpan, TimeSpan?))("SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
-        Assert.AreEqual(New ValueTuple(Of DateTime, DateTime?, TimeSpan, TimeSpan?), result7empty)
+        Dim result7empty = db.QueryFirstOrDefault(Of (DateTime, DateTime?, TimeSpan, TimeSpan?, DateTime, DateTime?))("SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull, Datetime2Column, Datetime2ColumnNull FROM ItemWithAllSupportedValues WHERE 1 = 2")
+        Assert.AreEqual(New ValueTuple(Of DateTime, DateTime?, TimeSpan, TimeSpan?, DateTime, DateTime?), result7empty)
 
-        Dim result7 = db.QueryFirstOrDefault(Of (DateTime, DateTime?, TimeSpan, TimeSpan?))($"SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
-        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull, item1.TimeColumn, item1.TimeColumnNull), result7)
+        Dim result7 = db.QueryFirstOrDefault(Of (DateTime, DateTime?, TimeSpan, TimeSpan?, DateTime, DateTime?))($"SELECT DateColumn, DateColumnNull, TimeColumn, TimeColumnNull, Datetime2Column, Datetime2ColumnNull FROM ItemWithAllSupportedValues WHERE Id = {item1.Id}")
+        Assert.AreEqual((item1.DateColumn, item1.DateColumnNull, item1.TimeColumn, item1.TimeColumnNull, item1.Datetime2Column, item1.Datetime2ColumnNull), result7)
 
       End Using
     End Sub
