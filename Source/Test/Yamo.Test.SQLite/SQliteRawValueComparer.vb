@@ -47,6 +47,16 @@
         actual = FromRawValue(Of DateTimeOffset)(actual)
       ElseIf TypeOf expected Is DateTimeOffset? Then
         actual = FromRawValue(Of DateTimeOffset?)(actual)
+
+      ElseIf TypeOf expected Is DateOnly Then
+        actual = FromRawValue(Of DateOnly)(actual)
+      ElseIf TypeOf expected Is DateOnly? Then
+        actual = FromRawValue(Of DateOnly?)(actual)
+
+      ElseIf TypeOf expected Is TimeOnly Then
+        actual = FromRawValue(Of TimeOnly)(actual)
+      ElseIf TypeOf expected Is TimeOnly? Then
+        actual = FromRawValue(Of TimeOnly?)(actual)
       End If
     End If
 
@@ -129,6 +139,24 @@
     ElseIf GetType(T) Is GetType(DateTimeOffset?) Then
       If TypeOf value Is String Then
         value = New DateTimeOffset?(DateTimeOffset.Parse(DirectCast(value, String)))
+      End If
+
+    ElseIf GetType(T) Is GetType(DateOnly) Then
+      If TypeOf value Is String Then
+        value = DateOnly.Parse(DirectCast(value, String))
+      End If
+    ElseIf GetType(T) Is GetType(DateOnly?) Then
+      If TypeOf value Is String Then
+        value = New DateOnly?(DateOnly.Parse(DirectCast(value, String)))
+      End If
+
+    ElseIf GetType(T) Is GetType(TimeOnly) Then
+      If TypeOf value Is String Then
+        value = TimeOnly.Parse(DirectCast(value, String))
+      End If
+    ElseIf GetType(T) Is GetType(TimeOnly?) Then
+      If TypeOf value Is String Then
+        value = New TimeOnly?(TimeOnly.Parse(DirectCast(value, String)))
       End If
     End If
 

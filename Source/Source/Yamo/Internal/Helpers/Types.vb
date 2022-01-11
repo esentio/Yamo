@@ -68,7 +68,7 @@ Namespace Internal.Helpers
              genericType Is GetType(ValueTuple(Of ,,,,)) OrElse
              genericType Is GetType(ValueTuple(Of ,,,,,)) OrElse
              genericType Is GetType(ValueTuple(Of ,,,,,,)) OrElse
-             genericType Is GetType(ValueTuple(Of ,,,,,,,)) AndAlso IsValueTuple(type.GetGenericArguments(7))
+             genericType Is GetType(ValueTuple(Of ,,,,,,,)) AndAlso IsValueTuple(type.GetGenericArguments()(7))
     End Function
 
     ''' <summary>
@@ -234,6 +234,12 @@ Namespace Internal.Helpers
           Return DbType.Time
         Case GetType(DateTimeOffset), GetType(DateTimeOffset?)
           Return DbType.DateTimeOffset
+#If NET6_0_OR_GREATER Then
+        Case GetType(DateOnly), GetType(DateOnly?)
+          Return DbType.Date
+        Case GetType(TimeOnly), GetType(TimeOnly?)
+          Return DbType.Time
+#End If
         Case GetType(Decimal), GetType(Decimal?)
           Return DbType.Decimal
         Case GetType(Double), GetType(Double?)

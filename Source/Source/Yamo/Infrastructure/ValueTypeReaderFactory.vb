@@ -57,6 +57,16 @@ Namespace Infrastructure
           Return CreateDateTimeOffsetReader(dataReaderType)
         Case GetType(DateTimeOffset?)
           Return CreateNullableDateTimeOffsetReader(dataReaderType)
+#If NET6_0_OR_GREATER Then
+        Case GetType(DateOnly)
+          Return DirectCast(AddressOf ReadDateOnly, Func(Of DbDataReader, Int32, DateOnly))
+        Case GetType(DateOnly?)
+          Return DirectCast(AddressOf ReadNullableDateOnly, Func(Of DbDataReader, Int32, DateOnly?))
+        Case GetType(TimeOnly)
+          Return DirectCast(AddressOf ReadTimeOnly, Func(Of DbDataReader, Int32, TimeOnly))
+        Case GetType(TimeOnly?)
+          Return DirectCast(AddressOf ReadNullableTimeOnly, Func(Of DbDataReader, Int32, TimeOnly?))
+#End If
         Case GetType(Decimal)
           Return DirectCast(AddressOf ReadDecimal, Func(Of DbDataReader, Int32, Decimal))
         Case GetType(Decimal?)
@@ -279,6 +289,68 @@ Namespace Infrastructure
         Return reader.GetDateTime(index)
       End If
     End Function
+
+#If NET6_0_OR_GREATER Then
+    ''' <summary>
+    ''' Reads <see cref="DateOnly"/> value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="reader"></param>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    Protected Shared Function ReadDateOnly(reader As DbDataReader, index As Int32) As DateOnly
+      If reader.IsDBNull(index) Then
+        Return Nothing
+      Else
+        Return reader.GetFieldValue(Of DateOnly)(index)
+      End If
+    End Function
+
+    ''' <summary>
+    ''' Reads <see cref="Nullable(Of DateOnly)"/> value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="reader"></param>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    Protected Shared Function ReadNullableDateOnly(reader As DbDataReader, index As Int32) As DateOnly?
+      If reader.IsDBNull(index) Then
+        Return Nothing
+      Else
+        Return reader.GetFieldValue(Of DateOnly)(index)
+      End If
+    End Function
+    
+    ''' <summary>
+    ''' Reads <see cref="TimeOnly"/> value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="reader"></param>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    Protected Shared Function ReadTimeOnly(reader As DbDataReader, index As Int32) As TimeOnly
+      If reader.IsDBNull(index) Then
+        Return Nothing
+      Else
+        Return reader.GetFieldValue(Of TimeOnly)(index)
+      End If
+    End Function
+
+    ''' <summary>
+    ''' Reads <see cref="Nullable(Of TimeOnly)"/> value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="reader"></param>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    Protected Shared Function ReadNullableTimeOnly(reader As DbDataReader, index As Int32) As TimeOnly?
+      If reader.IsDBNull(index) Then
+        Return Nothing
+      Else
+        Return reader.GetFieldValue(Of TimeOnly)(index)
+      End If
+    End Function
+#End If
 
     ''' <summary>
     ''' Reads <see cref="Decimal"/> value.<br/>

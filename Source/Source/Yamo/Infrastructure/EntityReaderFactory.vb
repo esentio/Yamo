@@ -43,10 +43,17 @@ Namespace Infrastructure
 
         Dim varProp = Expression.Property(entityVariable, prop.Name)
 
-        Dim getMethodForType = GetDbDataReaderGetMethodForType(dataReaderType, prop.PropertyType)
-        Dim getValueCall As Expression = Expression.Call(readerVariable, getMethodForType.Method, Nothing, indexParam)
-
         Dim underlyingNullableType = Nullable.GetUnderlyingType(prop.PropertyType)
+
+        Dim getMethodForType = GetDbDataReaderGetMethodForType(dataReaderType, prop.PropertyType)
+        Dim getValueCall As Expression
+
+        If getMethodForType.IsGeneric Then
+          Dim genericType = If(underlyingNullableType Is Nothing, prop.PropertyType, underlyingNullableType)
+          getValueCall = Expression.Call(readerVariable, getMethodForType.Method, {genericType}, indexParam)
+        Else
+          getValueCall = Expression.Call(readerVariable, getMethodForType.Method, Nothing, indexParam)
+        End If
 
         If getMethodForType.Convert Then
           If underlyingNullableType Is Nothing Then
@@ -284,10 +291,17 @@ Namespace Infrastructure
         Dim getIndexArg = Expression.Add(indexParam, Expression.Constant(i))
         Dim varProp = Expression.Property(entityVariable, prop.Name)
 
-        Dim getMethodForType = GetDbDataReaderGetMethodForType(dataReaderType, prop.PropertyType)
-        Dim getValueCall As Expression = Expression.Call(readerVariable, getMethodForType.Method, Nothing, getIndexArg)
-
         Dim underlyingNullableType = Nullable.GetUnderlyingType(prop.PropertyType)
+
+        Dim getMethodForType = GetDbDataReaderGetMethodForType(dataReaderType, prop.PropertyType)
+        Dim getValueCall As Expression
+
+        If getMethodForType.IsGeneric Then
+          Dim genericType = If(underlyingNullableType Is Nothing, prop.PropertyType, underlyingNullableType)
+          getValueCall = Expression.Call(readerVariable, getMethodForType.Method, {genericType}, getIndexArg)
+        Else
+          getValueCall = Expression.Call(readerVariable, getMethodForType.Method, Nothing, getIndexArg)
+        End If
 
         If getMethodForType.Convert Then
           If underlyingNullableType Is Nothing Then
@@ -349,36 +363,42 @@ Namespace Infrastructure
     ''' <param name="dataReaderType"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Protected Overridable Function GetDbDataReaderGetMethodForType(dataReaderType As Type, type As Type) As (Method As String, Convert As Boolean)
+    Protected Overridable Function GetDbDataReaderGetMethodForType(dataReaderType As Type, type As Type) As (Method As String, IsGeneric As Boolean, Convert As Boolean)
       Select Case type
         Case GetType(String)
-          Return ("GetString", False)
+          Return ("GetString", False, False)
         Case GetType(Int16), GetType(Int16?)
-          Return ("GetInt16", False)
+          Return ("GetInt16", False, False)
         Case GetType(Int32), GetType(Int32?)
-          Return ("GetInt32", False)
+          Return ("GetInt32", False, False)
         Case GetType(Int64), GetType(Int64?)
-          Return ("GetInt64", False)
+          Return ("GetInt64", False, False)
         Case GetType(Boolean), GetType(Boolean?)
-          Return ("GetBoolean", False)
+          Return ("GetBoolean", False, False)
         Case GetType(Guid), GetType(Guid?)
-          Return ("GetGuid", False)
+          Return ("GetGuid", False, False)
         Case GetType(DateTime), GetType(DateTime?)
-          Return ("GetDateTime", False)
+          Return ("GetDateTime", False, False)
         Case GetType(TimeSpan), GetType(TimeSpan?)
-          Return ("GetTimeSpan", False)
+          Return ("GetTimeSpan", False, False)
         Case GetType(DateTimeOffset), GetType(DateTimeOffset?)
-          Return ("GetDateTimeOffset", False)
+          Return ("GetDateTimeOffset", False, False)
+#If NET6_0_OR_GREATER Then
+        Case GetType(DateOnly), GetType(DateOnly?)
+          Return ("GetFieldValue", True, False)
+        Case GetType(TimeOnly), GetType(TimeOnly?)
+          Return ("GetFieldValue", True, False)
+#End If
         Case GetType(Decimal), GetType(Decimal?)
-          Return ("GetDecimal", False)
+          Return ("GetDecimal", False, False)
         Case GetType(Double), GetType(Double?)
-          Return ("GetDouble", False)
+          Return ("GetDouble", False, False)
         Case GetType(Single), GetType(Single?)
-          Return ("GetFloat", False)
+          Return ("GetFloat", False, False)
         Case GetType(Byte())
-          Return ("GetValue", True)
+          Return ("GetValue", False, True)
         Case GetType(Byte), GetType(Byte?)
-          Return ("GetByte", False)
+          Return ("GetByte", False, False)
         Case Else
           Throw New NotSupportedException($"Reading value of type '{type}' is not supported.")
       End Select

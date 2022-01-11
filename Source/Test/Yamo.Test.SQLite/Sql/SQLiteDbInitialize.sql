@@ -195,6 +195,26 @@ CREATE TABLE [ItemWithAllSupportedValuesArchive] (
 
 
 
+CREATE TABLE [ItemWithDateAndTimeOnlyFields] (
+  [Id] INTEGER  NOT NULL
+, [DateOnlyColumn] [date] NOT NULL
+, [DateOnlyColumnNull] [date] NULL
+, [TimeOnlyColumn] [time](7) NOT NULL
+, [TimeOnlyColumnNull] [time](7) NULL
+, CONSTRAINT [PK_ItemWithDateAndTimeOnlyFields] PRIMARY KEY ([Id])
+);
+
+CREATE TABLE [ItemWithDateAndTimeOnlyFieldsArchive] (
+  [Id] INTEGER  NOT NULL
+, [DateOnlyColumn] [date] NOT NULL
+, [DateOnlyColumnNull] [date] NULL
+, [TimeOnlyColumn] [time](7) NOT NULL
+, [TimeOnlyColumnNull] [time](7) NULL
+, CONSTRAINT [PK_ItemWithDateAndTimeOnlyFieldsArchive] PRIMARY KEY ([Id])
+);
+
+
+
 CREATE TABLE [Category] (
   [Id] int  NOT NULL
 , CONSTRAINT [PK_Category] PRIMARY KEY ([Id])

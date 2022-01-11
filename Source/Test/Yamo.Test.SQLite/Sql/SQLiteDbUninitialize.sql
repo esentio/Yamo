@@ -12,6 +12,8 @@ DROP TABLE IF EXISTS ItemWithAllSupportedValues;
 DROP TABLE IF EXISTS ItemWithAllSupportedValuesArchive;
 DROP TABLE IF EXISTS ItemWithAuditFields;
 DROP TABLE IF EXISTS ItemWithAuditFieldsArchive;
+DROP TABLE IF EXISTS ItemWithDateAndTimeOnlyFields;
+DROP TABLE IF EXISTS ItemWithDateAndTimeOnlyFieldsArchive;
 DROP TABLE IF EXISTS ItemWithDefaultValueId;
 DROP TABLE IF EXISTS ItemWithDefaultValueIdArchive;
 DROP TABLE IF EXISTS ItemWithIdentityId;
