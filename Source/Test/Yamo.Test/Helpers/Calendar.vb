@@ -9,16 +9,76 @@
       Return TruncateMilliseconds(DateTime.Now)
     End Function
 
+    Public Shared Function OffsetNow() As DateTimeOffset
+      Return DateTimeOffset.Now
+    End Function
+
+    Public Shared Function DateOnlyNow() As DateOnly
+      Return DateOnly.FromDateTime(DateTime.Now)
+    End Function
+
+    Public Shared Function TimeOnlyNow() As TimeOnly
+      Return TimeOnly.FromDateTime(DateTime.Now)
+    End Function
+
     Public Shared Function TruncateMilliseconds(value As DateTime) As DateTime
       Return New DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute, value.Second, 0, value.Kind)
     End Function
 
     Public Shared Function GetSqlServerMinDate() As DateTime
-      Return New DateTime(1753, 1, 1, 0, 0, 0)
+      Return DateTime.MinValue.Date
     End Function
 
     Public Shared Function GetSqlServerMaxDate() As DateTime
-      Return New DateTime(9999, 12, 31, 0, 0, 0)
+      Return DateTime.MaxValue.Date
+    End Function
+
+    Public Shared Function GetSqlServerMinDateAsDateOnly() As DateOnly
+      Return DateOnly.FromDateTime(GetSqlServerMinDate())
+    End Function
+
+    Public Shared Function GetSqlServerMaxDateAsDateOnly() As DateOnly
+      Return DateOnly.FromDateTime(GetSqlServerMaxDate())
+    End Function
+
+    Public Shared Function GetSqlServerMinTime() As TimeSpan
+      Return TimeSpan.Zero
+    End Function
+
+    Public Shared Function GetSqlServerMaxTime() As TimeSpan
+      Return TimeSpan.FromHours(24) - TimeSpan.FromMilliseconds(1)
+    End Function
+
+    Public Shared Function GetSqlServerMinTimeAsTimeOnly() As TimeOnly
+      Return TimeOnly.FromTimeSpan(GetSqlServerMinTime())
+    End Function
+
+    Public Shared Function GetSqlServerMaxTimeAsTimeOnly() As TimeOnly
+      Return TimeOnly.FromTimeSpan(GetSqlServerMaxTime())
+    End Function
+
+    Public Shared Function GetSqlServerMinDateTime() As DateTime
+      Return New DateTime(1753, 1, 1, 0, 0, 0)
+    End Function
+
+    Public Shared Function GetSqlServerMaxDateTime() As DateTime
+      Return New DateTime(9999, 12, 31, 23, 59, 59, 997)
+    End Function
+
+    Public Shared Function GetSqlServerMinDateTime2() As DateTime
+      Return DateTime.MinValue
+    End Function
+
+    Public Shared Function GetSqlServerMaxDateTime2() As DateTime
+      Return DateTime.MaxValue
+    End Function
+
+    Public Shared Function GetSqlServerMinDateTimeOffset() As DateTimeOffset
+      Return DateTimeOffset.MinValue
+    End Function
+
+    Public Shared Function GetSqlServerMaxDateTimeOffset() As DateTimeOffset
+      Return DateTimeOffset.MaxValue
     End Function
 
   End Class

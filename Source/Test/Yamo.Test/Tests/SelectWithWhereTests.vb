@@ -752,16 +752,172 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub SelectRecordByDate()
+      Dim items = CreateItems()
+
+      Dim today = Helpers.Calendar.Now().Date
+
+      items(0).DateColumn = Helpers.Calendar.GetSqlServerMinDate()
+      items(1).DateColumn = today.AddDays(-42)
+      items(2).DateColumn = today
+      items(3).DateColumn = today.AddDays(42)
+      items(4).DateColumn = Helpers.Calendar.GetSqlServerMaxDate()
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.DateColumn = today).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(2), result(0))
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) today < x.DateColumn).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) today <= x.DateColumn).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) today > x.DateColumn).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) today >= x.DateColumn).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2)}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectRecordByNullableDate()
+      Dim items = CreateItems()
+
+      Dim today = Helpers.Calendar.Now().Date
+
+      items(0).DateColumnNull = Helpers.Calendar.GetSqlServerMinDate()
+      items(1).DateColumnNull = Nothing
+      items(2).DateColumnNull = today
+      items(3).DateColumnNull = today.AddDays(42)
+      items(4).DateColumnNull = Helpers.Calendar.GetSqlServerMaxDate()
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.DateColumnNull.Value = today).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(2), result(0))
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.DateColumnNull.HasValue).SelectAll().ToList()
+        Assert.AreEqual(4, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Not x.DateColumnNull.HasValue).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(1), result(0))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectRecordByTime()
+      Dim items = CreateItems()
+
+      Dim time = New TimeSpan(0, 10, 20, 30, 500)
+
+      items(0).TimeColumn = Helpers.Calendar.GetSqlServerMinTime()
+      items(1).TimeColumn = time.Subtract(TimeSpan.FromHours(1))
+      items(2).TimeColumn = time
+      items(3).TimeColumn = time.Add(TimeSpan.FromHours(1))
+      items(4).TimeColumn = Helpers.Calendar.GetSqlServerMaxTime()
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.TimeColumn = time).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(2), result(0))
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) time < x.TimeColumn).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) time <= x.TimeColumn).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) time > x.TimeColumn).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) time >= x.TimeColumn).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2)}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectRecordByNullableTime()
+      Dim items = CreateItems()
+
+      Dim time = New TimeSpan(0, 10, 20, 30, 500)
+
+      items(0).TimeColumnNull = Helpers.Calendar.GetSqlServerMinTime()
+      items(1).TimeColumnNull = Nothing
+      items(2).TimeColumnNull = time
+      items(3).TimeColumnNull = time.Add(TimeSpan.FromHours(1))
+      items(4).TimeColumnNull = Helpers.Calendar.GetSqlServerMaxTime()
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.TimeColumnNull.Value = time).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(2), result(0))
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.TimeColumnNull.HasValue).SelectAll().ToList()
+        Assert.AreEqual(4, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Not x.TimeColumnNull.HasValue).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(1), result(0))
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub SelectRecordByDateTime()
       Dim items = CreateItems()
 
-      Dim now = Helpers.Calendar.Now
+      Dim now = Helpers.Calendar.Now()
 
-      items(0).DatetimeColumn = Helpers.Calendar.GetSqlServerMinDate()
+      items(0).DatetimeColumn = Helpers.Calendar.GetSqlServerMinDateTime()
       items(1).DatetimeColumn = now.AddDays(-42)
       items(2).DatetimeColumn = now
       items(3).DatetimeColumn = now.AddDays(42)
-      items(4).DatetimeColumn = Helpers.Calendar.GetSqlServerMaxDate()
+      items(4).DatetimeColumn = Helpers.Calendar.GetSqlServerMaxDateTime()
 
       InsertItems(items)
 
@@ -800,13 +956,13 @@ Namespace Tests
     Public Overridable Sub SelectRecordByNullableDateTime()
       Dim items = CreateItems()
 
-      Dim now = Helpers.Calendar.Now
+      Dim now = Helpers.Calendar.Now()
 
-      items(0).DatetimeColumnNull = Helpers.Calendar.GetSqlServerMinDate()
+      items(0).DatetimeColumnNull = Helpers.Calendar.GetSqlServerMinDateTime()
       items(1).DatetimeColumnNull = Nothing
       items(2).DatetimeColumnNull = now
       items(3).DatetimeColumnNull = now.AddDays(42)
-      items(4).DatetimeColumnNull = Helpers.Calendar.GetSqlServerMaxDate()
+      items(4).DatetimeColumnNull = Helpers.Calendar.GetSqlServerMaxDateTime()
 
       InsertItems(items)
 
@@ -830,10 +986,166 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub SelectRecordByDateTime2()
+      Dim items = CreateItems()
+
+      Dim now = Helpers.Calendar.Now()
+
+      items(0).Datetime2Column = Helpers.Calendar.GetSqlServerMinDateTime2()
+      items(1).Datetime2Column = now.AddDays(-42)
+      items(2).Datetime2Column = now
+      items(3).Datetime2Column = now.AddDays(42)
+      items(4).Datetime2Column = Helpers.Calendar.GetSqlServerMaxDateTime2()
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.Datetime2Column = now).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(2), result(0))
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) now < x.Datetime2Column).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) now <= x.Datetime2Column).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) now > x.Datetime2Column).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) now >= x.Datetime2Column).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2)}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectRecordByNullableDateTime2()
+      Dim items = CreateItems()
+
+      Dim now = Helpers.Calendar.Now()
+
+      items(0).Datetime2ColumnNull = Helpers.Calendar.GetSqlServerMinDateTime2()
+      items(1).Datetime2ColumnNull = Nothing
+      items(2).Datetime2ColumnNull = now
+      items(3).Datetime2ColumnNull = now.AddDays(42)
+      items(4).Datetime2ColumnNull = Helpers.Calendar.GetSqlServerMaxDateTime2()
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.Datetime2ColumnNull.Value = now).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(2), result(0))
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.Datetime2ColumnNull.HasValue).SelectAll().ToList()
+        Assert.AreEqual(4, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Not x.Datetime2ColumnNull.HasValue).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(1), result(0))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectRecordByDateTimeOffset()
+      Dim items = CreateItems()
+
+      Dim now = Helpers.Calendar.OffsetNow()
+
+      items(0).DatetimeoffsetColumn = Helpers.Calendar.GetSqlServerMinDateTimeOffset()
+      items(1).DatetimeoffsetColumn = now.AddDays(-42)
+      items(2).DatetimeoffsetColumn = now
+      items(3).DatetimeoffsetColumn = now.AddDays(42)
+      items(4).DatetimeoffsetColumn = Helpers.Calendar.GetSqlServerMaxDateTimeOffset()
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.DatetimeoffsetColumn = now).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(2), result(0))
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) now < x.DatetimeoffsetColumn).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) now <= x.DatetimeoffsetColumn).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) now > x.DatetimeoffsetColumn).SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) now >= x.DatetimeoffsetColumn).SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2)}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectRecordByNullableDateTimeOffset()
+      Dim items = CreateItems()
+
+      Dim now = Helpers.Calendar.OffsetNow()
+
+      items(0).DatetimeoffsetColumnNull = Helpers.Calendar.GetSqlServerMinDateTimeOffset()
+      items(1).DatetimeoffsetColumnNull = Nothing
+      items(2).DatetimeoffsetColumnNull = now
+      items(3).DatetimeoffsetColumnNull = now.AddDays(42)
+      items(4).DatetimeoffsetColumnNull = Helpers.Calendar.GetSqlServerMaxDateTimeOffset()
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.DatetimeoffsetColumnNull.Value = now).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(2), result(0))
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) x.DatetimeoffsetColumnNull.HasValue).SelectAll().ToList()
+        Assert.AreEqual(4, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(2), items(3), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).Where(Function(x) Not x.DatetimeoffsetColumnNull.HasValue).SelectAll().ToList()
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(items(1), result(0))
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub SelectRecordByByteArray()
       Dim items = CreateItems()
 
-      Dim now = Helpers.Calendar.Now
+      Dim now = Helpers.Calendar.Now()
 
       items(0).Varbinary50Column = Helpers.Data.CreateRandomByteArray(50)
       items(1).Varbinary50Column = Helpers.Data.CreateRandomByteArray(50)
@@ -860,7 +1172,7 @@ Namespace Tests
     Public Overridable Sub SelectRecordByNullableByteArray()
       Dim items = CreateItems()
 
-      Dim now = Helpers.Calendar.Now
+      Dim now = Helpers.Calendar.Now()
 
       items(0).Varbinary50ColumnNull = Helpers.Data.CreateRandomByteArray(50)
       items(1).Varbinary50ColumnNull = Nothing

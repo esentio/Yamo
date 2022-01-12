@@ -804,6 +804,200 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub CustomSelectOfDate()
+      Dim today = Helpers.Calendar.Now().Date
+
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.DateColumn = today
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.DateColumn = today.AddDays(42)
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.DateColumn = today.AddDays(-42)
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select value
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) x.DateColumn).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.DateColumn, result1)
+
+        ' select value, but no row is returned
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.DateColumn).
+                         FirstOrDefault()
+        Assert.AreEqual(DateTime.MinValue, result2)
+
+        ' select values
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.DateColumn).
+                         ToList()
+        CollectionAssert.AreEquivalent({item1.DateColumn, item2.DateColumn, item3.DateColumn}, result3)
+
+        ' select values, but no row is returned
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.DateColumn).
+                         ToList()
+        Assert.AreEqual(0, result4.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfNullableDate()
+      Dim today = Helpers.Calendar.Now().Date
+
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.DateColumnNull = today
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.DateColumnNull = today.AddDays(42)
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.DateColumnNull = Nothing
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select value
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) x.DateColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.DateColumnNull, result1)
+
+        ' select null value
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item3.Id).
+                         Select(Function(x) x.DateColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(item3.DateColumnNull, result2)
+
+        ' select value, but no row is returned
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.DateColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(Nothing, result3)
+
+        ' select values
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.DateColumnNull).
+                         ToList()
+        CollectionAssert.AreEquivalent({item1.DateColumnNull, item2.DateColumnNull, item3.DateColumnNull}, result4)
+
+        ' select values, but no row is returned
+        Dim result5 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.DateColumnNull).
+                         ToList()
+        Assert.AreEqual(0, result5.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfTime()
+      Dim time = New TimeSpan(0, 10, 20, 30, 500)
+
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.TimeColumn = time
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.TimeColumn = time.Add(TimeSpan.FromHours(1))
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.TimeColumn = time.Subtract(TimeSpan.FromHours(1))
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select value
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) x.TimeColumn).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.TimeColumn, result1)
+
+        ' select value, but no row is returned
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.TimeColumn).
+                         FirstOrDefault()
+        Assert.AreEqual(TimeSpan.Zero, result2)
+
+        ' select values
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.TimeColumn).
+                         ToList()
+        CollectionAssert.AreEquivalent({item1.TimeColumn, item2.TimeColumn, item3.TimeColumn}, result3)
+
+        ' select values, but no row is returned
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.TimeColumn).
+                         ToList()
+        Assert.AreEqual(0, result4.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfNullableTime()
+      Dim time = New TimeSpan(0, 10, 20, 30, 500)
+
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.TimeColumnNull = time
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.TimeColumnNull = time.Add(TimeSpan.FromHours(1))
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.TimeColumnNull = Nothing
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select value
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) x.TimeColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.TimeColumnNull, result1)
+
+        ' select null value
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item3.Id).
+                         Select(Function(x) x.TimeColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(item3.TimeColumnNull, result2)
+
+        ' select value, but no row is returned
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.TimeColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(Nothing, result3)
+
+        ' select values
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.TimeColumnNull).
+                         ToList()
+        CollectionAssert.AreEquivalent({item1.TimeColumnNull, item2.TimeColumnNull, item3.TimeColumnNull}, result4)
+
+        ' select values, but no row is returned
+        Dim result5 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.TimeColumnNull).
+                         ToList()
+        Assert.AreEqual(0, result5.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub CustomSelectOfDateTime()
       Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
       item1.DatetimeColumn = Helpers.Calendar.Now()
@@ -891,6 +1085,192 @@ Namespace Tests
         Dim result5 = db.From(Of ItemWithAllSupportedValues).
                          Where(Function(x) x.Id = Guid.NewGuid).
                          Select(Function(x) x.DatetimeColumnNull).
+                         ToList()
+        Assert.AreEqual(0, result5.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfDateTime2()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.Datetime2Column = Helpers.Calendar.Now()
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.Datetime2Column = Helpers.Calendar.Now().AddHours(42)
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.Datetime2Column = Helpers.Calendar.Now().AddDays(-42)
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select value
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) x.Datetime2Column).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.Datetime2Column, result1)
+
+        ' select value, but no row is returned
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.Datetime2Column).
+                         FirstOrDefault()
+        Assert.AreEqual(DateTime.MinValue, result2)
+
+        ' select values
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.Datetime2Column).
+                         ToList()
+        CollectionAssert.AreEquivalent({item1.Datetime2Column, item2.Datetime2Column, item3.Datetime2Column}, result3)
+
+        ' select values, but no row is returned
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.Datetime2Column).
+                         ToList()
+        Assert.AreEqual(0, result4.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfNullableDateTime2()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.Datetime2ColumnNull = Helpers.Calendar.Now()
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.Datetime2ColumnNull = Helpers.Calendar.Now().AddHours(42)
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.Datetime2ColumnNull = Nothing
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select value
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) x.Datetime2ColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.Datetime2ColumnNull, result1)
+
+        ' select null value
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item3.Id).
+                         Select(Function(x) x.Datetime2ColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(item3.Datetime2ColumnNull, result2)
+
+        ' select value, but no row is returned
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.Datetime2ColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(Nothing, result3)
+
+        ' select values
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.Datetime2ColumnNull).
+                         ToList()
+        CollectionAssert.AreEquivalent({item1.Datetime2ColumnNull, item2.Datetime2ColumnNull, item3.Datetime2ColumnNull}, result4)
+
+        ' select values, but no row is returned
+        Dim result5 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.Datetime2ColumnNull).
+                         ToList()
+        Assert.AreEqual(0, result5.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfDateTimeOffset()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.DatetimeoffsetColumn = Helpers.Calendar.OffsetNow()
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.DatetimeoffsetColumn = Helpers.Calendar.OffsetNow().AddHours(42)
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.DatetimeoffsetColumn = Helpers.Calendar.OffsetNow().AddDays(-42)
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select value
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) x.DatetimeoffsetColumn).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.DatetimeoffsetColumn, result1)
+
+        ' select value, but no row is returned
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.DatetimeoffsetColumn).
+                         FirstOrDefault()
+        Assert.AreEqual(DateTimeOffset.MinValue, result2)
+
+        ' select values
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.DatetimeoffsetColumn).
+                         ToList()
+        CollectionAssert.AreEquivalent({item1.DatetimeoffsetColumn, item2.DatetimeoffsetColumn, item3.DatetimeoffsetColumn}, result3)
+
+        ' select values, but no row is returned
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.DatetimeoffsetColumn).
+                         ToList()
+        Assert.AreEqual(0, result4.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfNullableDateTimeOffset()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.DatetimeoffsetColumnNull = Helpers.Calendar.OffsetNow()
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.DatetimeoffsetColumnNull = Helpers.Calendar.OffsetNow().AddHours(42)
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.DatetimeoffsetColumnNull = Nothing
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select value
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) x.DatetimeoffsetColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(item2.DatetimeoffsetColumnNull, result1)
+
+        ' select null value
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item3.Id).
+                         Select(Function(x) x.DatetimeoffsetColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(item3.DatetimeoffsetColumnNull, result2)
+
+        ' select value, but no row is returned
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.DatetimeoffsetColumnNull).
+                         FirstOrDefault()
+        Assert.AreEqual(Nothing, result3)
+
+        ' select values
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Select(Function(x) x.DatetimeoffsetColumnNull).
+                         ToList()
+        CollectionAssert.AreEquivalent({item1.DatetimeoffsetColumnNull, item2.DatetimeoffsetColumnNull, item3.DatetimeoffsetColumnNull}, result4)
+
+        ' select values, but no row is returned
+        Dim result5 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) x.DatetimeoffsetColumnNull).
                          ToList()
         Assert.AreEqual(0, result5.Count)
       End Using

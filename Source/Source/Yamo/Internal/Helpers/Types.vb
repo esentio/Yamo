@@ -1,4 +1,5 @@
-﻿Imports System.Reflection
+﻿Imports System.Data
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 
 Namespace Internal.Helpers
@@ -67,7 +68,7 @@ Namespace Internal.Helpers
              genericType Is GetType(ValueTuple(Of ,,,,)) OrElse
              genericType Is GetType(ValueTuple(Of ,,,,,)) OrElse
              genericType Is GetType(ValueTuple(Of ,,,,,,)) OrElse
-             genericType Is GetType(ValueTuple(Of ,,,,,,,)) AndAlso IsValueTuple(type.GetGenericArguments(7))
+             genericType Is GetType(ValueTuple(Of ,,,,,,,)) AndAlso IsValueTuple(type.GetGenericArguments()(7))
     End Function
 
     ''' <summary>
@@ -199,6 +200,77 @@ Namespace Internal.Helpers
       If type Is GetType(Byte()) Then Return False
       If type Is GetType(Object()) Then Return False
       Return True
+    End Function
+
+    ''' <summary>
+    ''' Gets <see cref="DbType"/> for CLR type.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
+    Public Shared Function GetDbTypeForClrType(type As Type) As DbType?
+      ' See also:
+      ' https://referencesource.microsoft.com/#System.Data.Entity/System/Data/Metadata/TypeHelpers.cs,6da27ae495b4be68
+      ' https://referencesource.microsoft.com/#System.Data/fx/src/data/System/Data/SqlClient/SqlEnums.cs,b80e3c28640e1801
+      ' https://stackoverflow.com/questions/7952142/how-to-resolve-system-type-to-system-data-dbtype
+      ' https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql-server-data-type-mappings
+
+      Select Case type
+        Case GetType(String)
+          Return DbType.String
+        Case GetType(Int16), GetType(Int16?)
+          Return DbType.Int16
+        Case GetType(Int32), GetType(Int32?)
+          Return DbType.Int32
+        Case GetType(Int64), GetType(Int64?)
+          Return DbType.Int64
+        Case GetType(Boolean), GetType(Boolean?)
+          Return DbType.Boolean
+        Case GetType(Guid), GetType(Guid?)
+          Return DbType.Guid
+        Case GetType(DateTime), GetType(DateTime?)
+          Return DbType.DateTime
+        Case GetType(TimeSpan), GetType(TimeSpan?)
+          Return DbType.Time
+        Case GetType(DateTimeOffset), GetType(DateTimeOffset?)
+          Return DbType.DateTimeOffset
+#If NET6_0_OR_GREATER Then
+        Case GetType(DateOnly), GetType(DateOnly?)
+          Return DbType.Date
+        Case GetType(TimeOnly), GetType(TimeOnly?)
+          Return DbType.Time
+#End If
+        Case GetType(Decimal), GetType(Decimal?)
+          Return DbType.Decimal
+        Case GetType(Double), GetType(Double?)
+          Return DbType.Double
+        Case GetType(Single), GetType(Single?)
+          Return DbType.Single
+        Case GetType(Byte())
+          Return DbType.Binary
+        Case GetType(Byte), GetType(Byte?)
+          Return DbType.Byte
+        Case GetType(Char())
+          Return DbType.String
+        Case GetType(DBNull)
+          Return DbType.Object
+        Case GetType(SByte), GetType(SByte?)
+          Return DbType.SByte
+        Case GetType(Char), GetType(Byte?)
+          Return DbType.String
+        Case GetType(UInt16), GetType(UInt16?)
+          Return DbType.UInt16
+        Case GetType(UInt32), GetType(UInt32?)
+          Return DbType.UInt32
+        Case GetType(UInt64), GetType(UInt64?)
+          Return DbType.UInt64
+        Case Else
+          If Type.GetTypeCode(type) = TypeCode.Object Then
+            Return DbType.Object
+          End If
+      End Select
+
+      Return Nothing
     End Function
 
   End Class

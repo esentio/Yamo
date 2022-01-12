@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Data.Common
 Imports Yamo.Internal.Query.Metadata
 
 Namespace Internal.Query
@@ -22,7 +23,7 @@ Namespace Internal.Query
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property Reader As Func(Of IDataReader, Int32, Boolean(), Object)
+    Public ReadOnly Property Reader As Func(Of DbDataReader, Int32, Boolean(), Object)
 
     ''' <summary>
     ''' Gets contains primary key reader.<br/>
@@ -30,7 +31,7 @@ Namespace Internal.Query
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property ContainsPKReader As Func(Of IDataReader, Int32, Int32(), Boolean)
+    Public ReadOnly Property ContainsPKReader As Func(Of DbDataReader, Int32, Int32(), Boolean)
 
     ''' <summary>
     ''' Gets primary key offsets.<br/>
@@ -46,7 +47,7 @@ Namespace Internal.Query
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property PKReader As Func(Of IDataReader, Int32, Int32(), Object)
+    Public ReadOnly Property PKReader As Func(Of DbDataReader, Int32, Int32(), Object)
 
     ''' <summary>
     ''' Gets whether there are other entities to which this entity is declaring entity.<br/>
@@ -116,7 +117,7 @@ Namespace Internal.Query
     ''' <param name="readerIndex"></param>
     ''' <param name="entityReader"></param>
     ''' <param name="includedSqlResultsReaderData"></param>
-    Public Sub New(sqlResult As EntitySqlResult, readerIndex As Int32, entityReader As Func(Of IDataReader, Int32, Boolean(), Object), includedSqlResultsReaderData As IReadOnlyList(Of IncludedSqlResultReaderData))
+    Public Sub New(sqlResult As EntitySqlResult, readerIndex As Int32, entityReader As Func(Of DbDataReader, Int32, Boolean(), Object), includedSqlResultsReaderData As IReadOnlyList(Of IncludedSqlResultReaderData))
       MyBase.New(sqlResult, readerIndex)
       Me.Entity = sqlResult.Entity
       Me.Reader = entityReader
@@ -142,7 +143,7 @@ Namespace Internal.Query
     ''' <param name="entityReader"></param>
     ''' <param name="containsPKReader"></param>
     ''' <param name="pkOffsets"></param>
-    Public Sub New(sqlResult As EntitySqlResult, readerIndex As Int32, entityReader As Func(Of IDataReader, Int32, Boolean(), Object), containsPKReader As Func(Of IDataReader, Int32, Int32(), Boolean), pkOffsets As Int32())
+    Public Sub New(sqlResult As EntitySqlResult, readerIndex As Int32, entityReader As Func(Of DbDataReader, Int32, Boolean(), Object), containsPKReader As Func(Of DbDataReader, Int32, Int32(), Boolean), pkOffsets As Int32())
       MyBase.New(sqlResult, readerIndex)
       Me.Entity = sqlResult.Entity
       Me.Reader = entityReader
@@ -173,7 +174,7 @@ Namespace Internal.Query
     ''' <param name="collectionInitializers"></param>
     ''' <param name="relationshipSetter"></param>
     ''' <param name="includedSqlResultsReaderData"></param>
-    Public Sub New(sqlResult As EntitySqlResult, readerIndex As Int32, entityReader As Func(Of IDataReader, Int32, Boolean(), Object), containsPKReader As Func(Of IDataReader, Int32, Int32(), Boolean), pkOffsets As Int32(), pkReader As Func(Of IDataReader, Int32, Int32(), Object), relatedEntities As IReadOnlyList(Of Int32), collectionInitializers As IReadOnlyList(Of Action(Of Object)), relationshipSetter As Action(Of Object, Object), includedSqlResultsReaderData As IReadOnlyList(Of IncludedSqlResultReaderData))
+    Public Sub New(sqlResult As EntitySqlResult, readerIndex As Int32, entityReader As Func(Of DbDataReader, Int32, Boolean(), Object), containsPKReader As Func(Of DbDataReader, Int32, Int32(), Boolean), pkOffsets As Int32(), pkReader As Func(Of DbDataReader, Int32, Int32(), Object), relatedEntities As IReadOnlyList(Of Int32), collectionInitializers As IReadOnlyList(Of Action(Of Object)), relationshipSetter As Action(Of Object, Object), includedSqlResultsReaderData As IReadOnlyList(Of IncludedSqlResultReaderData))
       MyBase.New(sqlResult, readerIndex)
       Me.Entity = sqlResult.Entity
       Me.Reader = entityReader

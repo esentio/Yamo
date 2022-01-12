@@ -1,4 +1,5 @@
-﻿Imports Yamo.Test.Model
+﻿Imports System.Data
+Imports Yamo.Test.Model
 
 Namespace Tests
 
@@ -53,8 +54,16 @@ Namespace Tests
         ,Numeric10and3ColumnNull
         ,Numeric15and0Column
         ,Numeric15and0ColumnNull
+        ,DateColumn
+        ,DateColumnNull
+        ,TimeColumn
+        ,TimeColumnNull
         ,DatetimeColumn
         ,DatetimeColumnNull
+        ,Datetime2Column
+        ,Datetime2ColumnNull
+        ,DatetimeoffsetColumn
+        ,DatetimeoffsetColumnNull
         ,Varbinary50Column
         ,Varbinary50ColumnNull
         ,VarbinaryMaxColumn
@@ -83,16 +92,21 @@ Namespace Tests
         ,{item.Numeric10and3ColumnNull}
         ,{item.Numeric15and0Column}
         ,{item.Numeric15and0ColumnNull}
+        ,{Me.TestEnvironment.CreateDbParameter(item.DateColumn, DbType.Date)}
+        ,{Me.TestEnvironment.CreateDbParameter(item.DateColumnNull, DbType.Date)}
+        ,{item.TimeColumn}
+        ,{item.TimeColumnNull}
         ,{item.DatetimeColumn}
         ,{item.DatetimeColumnNull}
+        ,{Me.TestEnvironment.CreateDbParameter(item.Datetime2Column, DbType.DateTime2)}
+        ,{Me.TestEnvironment.CreateDbParameter(item.Datetime2ColumnNull, DbType.DateTime2)}
+        ,{item.DatetimeoffsetColumn}
+        ,{item.DatetimeoffsetColumnNull}
         ,{item.Varbinary50Column}
-        ,CAST({item.Varbinary50ColumnNull} AS varbinary(50))
+        ,{Me.TestEnvironment.CreateDbParameter(item.Varbinary50ColumnNull, DbType.Binary)}
         ,{item.VarbinaryMaxColumn}
-        ,CAST({item.VarbinaryMaxColumnNull} AS varbinary(max))
+        ,{Me.TestEnvironment.CreateDbParameter(item.VarbinaryMaxColumnNull, DbType.Binary)}
       )"
-      ' NOTE: cast is here, because there are problems with inserting NULL values.
-      ' Decribed e.g. here: https://stackoverflow.com/questions/11411854/implicit-conversion-from-data-type-nvarchar-to-varbinarymax-is-not-allowed.
-      ' Providing correct SqlDbType is not possible, (at least not with current design). Main reason is that we don't know the type when null/Nothing is passed as a parameter.
 
       Using db = CreateDbContext()
         db.Execute(sql)

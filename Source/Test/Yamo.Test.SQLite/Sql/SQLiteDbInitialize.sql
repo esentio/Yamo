@@ -135,8 +135,16 @@ CREATE TABLE [ItemWithAllSupportedValues] (
 , [Numeric10and3ColumnNull] numeric(10,3)  NULL
 , [Numeric15and0Column] numeric(15,0)  NOT NULL
 , [Numeric15and0ColumnNull] numeric(15,0)  NULL
+, [DateColumn] [date] NOT NULL
+, [DateColumnNull] [date] NULL
+, [TimeColumn] [time](7) NOT NULL
+, [TimeColumnNull] [time](7) NULL
 , [DatetimeColumn] datetime NOT NULL
 , [DatetimeColumnNull] datetime NULL
+, [Datetime2Column] [datetime2](7) NOT NULL
+, [Datetime2ColumnNull] [datetime2](7) NULL
+, [DatetimeoffsetColumn] [datetimeoffset](7) NOT NULL
+, [DatetimeoffsetColumnNull] [datetimeoffset](7) NULL
 , [Varbinary50Column] varbinary(50)  NOT NULL
 , [Varbinary50ColumnNull] varbinary(50)  NULL
 , [VarbinaryMaxColumn] image NOT NULL
@@ -168,13 +176,41 @@ CREATE TABLE [ItemWithAllSupportedValuesArchive] (
 , [Numeric10and3ColumnNull] numeric(10,3)  NULL
 , [Numeric15and0Column] numeric(15,0)  NOT NULL
 , [Numeric15and0ColumnNull] numeric(15,0)  NULL
+, [DateColumn] [date] NOT NULL
+, [DateColumnNull] [date] NULL
+, [TimeColumn] [time](7) NOT NULL
+, [TimeColumnNull] [time](7) NULL
 , [DatetimeColumn] datetime NOT NULL
 , [DatetimeColumnNull] datetime NULL
+, [Datetime2Column] [datetime2](7) NOT NULL
+, [Datetime2ColumnNull] [datetime2](7) NULL
+, [DatetimeoffsetColumn] [datetimeoffset](7) NOT NULL
+, [DatetimeoffsetColumnNull] [datetimeoffset](7) NULL
 , [Varbinary50Column] varbinary(50)  NOT NULL
 , [Varbinary50ColumnNull] varbinary(50)  NULL
 , [VarbinaryMaxColumn] image NOT NULL
 , [VarbinaryMaxColumnNull] image NULL
 , CONSTRAINT [PK_ItemWithAllSupportedValuesArchive] PRIMARY KEY ([Id])
+);
+
+
+
+CREATE TABLE [ItemWithDateAndTimeOnlyFields] (
+  [Id] INTEGER  NOT NULL
+, [DateOnlyColumn] [date] NOT NULL
+, [DateOnlyColumnNull] [date] NULL
+, [TimeOnlyColumn] [time](7) NOT NULL
+, [TimeOnlyColumnNull] [time](7) NULL
+, CONSTRAINT [PK_ItemWithDateAndTimeOnlyFields] PRIMARY KEY ([Id])
+);
+
+CREATE TABLE [ItemWithDateAndTimeOnlyFieldsArchive] (
+  [Id] INTEGER  NOT NULL
+, [DateOnlyColumn] [date] NOT NULL
+, [DateOnlyColumnNull] [date] NULL
+, [TimeOnlyColumn] [time](7) NOT NULL
+, [TimeOnlyColumnNull] [time](7) NULL
+, CONSTRAINT [PK_ItemWithDateAndTimeOnlyFieldsArchive] PRIMARY KEY ([Id])
 );
 
 

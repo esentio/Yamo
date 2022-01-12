@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Yamo.Metadata.Builders;
 using Yamo.Playground.CS.Model;
 using Yamo.SqlServer;
+using System.Data;
 
 namespace Yamo.Playground.CS
 {
@@ -34,6 +35,7 @@ namespace Yamo.Playground.CS
             CreateArticleSubstitutionModel(modelBuilder);
             CreateCategoryModel(modelBuilder);
             CreateLabelModel(modelBuilder);
+            CreatePersonModel(modelBuilder);
         }
 
         private void CreateUserModel(ModelBuilder modelBuilder)
@@ -133,6 +135,15 @@ namespace Yamo.Playground.CS
             modelBuilder.Entity<Label>().Property(x => x.Id).IsKey();
             modelBuilder.Entity<Label>().Property(x => x.Language).IsKey().IsRequired();
             modelBuilder.Entity<Label>().Property(x => x.Description).IsRequired();
+        }
+
+        private void CreatePersonModel(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Person>();
+            modelBuilder.Entity<Person>().Property(x => x.Id).IsKey().IsIdentity();
+            modelBuilder.Entity<Person>().Property(x => x.FirstName).IsRequired();
+            modelBuilder.Entity<Person>().Property(x => x.LastName).IsRequired();
+            modelBuilder.Entity<Person>().Property(x => x.BirthDate).UseDbType(DbType.Date);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

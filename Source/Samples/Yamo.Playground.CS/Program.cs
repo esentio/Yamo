@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yamo.Playground.CS.Model;
+using System.Data;
 
 namespace Yamo.Playground.CS
 {
@@ -15,7 +16,7 @@ namespace Yamo.Playground.CS
 
         static void Main(string[] args)
         {
-            m_Connection = new SqlConnection("Server=localhost;Database=YamoTest;User Id=dbuser;Password=dbpassword;");
+            m_Connection = new SqlConnection("Server=localhost;Database=YamoTest;User Id=dbuser;Password=dbpassword;TrustServerCertificate=True;");
             m_Connection.Open();
 
             //Test1();
@@ -72,7 +73,8 @@ namespace Yamo.Playground.CS
             //Test49();
             //Test50();
             //Test51();
-            Test52();
+            //Test52();
+            Test53();
         }
 
         public static MyContext CreateContext()
@@ -983,6 +985,25 @@ namespace Yamo.Playground.CS
                 var login = "foo";
                 var data = db.QueryFirstOrDefault<Object[]>($"SELECT Id, Login FROM [User] WHERE Login = {login}");
                 var list = db.Query<Object[]>("SELECT Id, Login FROM [User]");
+            }
+        }
+
+        public static void Test53()
+        {
+            using (var db = CreateContext())
+            {
+                var name = new SqlParameter()
+                {
+                    Value = "da Vinci"
+                };
+
+                var birth = new SqlParameter()
+                {
+                    Value = new DateTime(1452, 4, 15),
+                    DbType = DbType.Date
+                };
+
+                var leonardo = db.QueryFirstOrDefault<Person>($"SELECT {Yamo.Sql.Model.Columns<Person>()} FROM Person WHERE LastName = {name} AND BirthDate = {birth}");
             }
         }
     }

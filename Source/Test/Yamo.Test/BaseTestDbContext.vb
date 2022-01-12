@@ -1,4 +1,5 @@
-﻿Imports System.Data.Common
+﻿Imports System.Data
+Imports System.Data.Common
 Imports Yamo.Test.Model
 
 Public Class BaseTestDbContext
@@ -123,8 +124,16 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.Numeric10and3ColumnNull)
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.Numeric15and0Column)
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.Numeric15and0ColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.DateColumn).UseDbType(DbType.Date)
+    modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.DateColumnNull).UseDbType(DbType.Date)
+    modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.TimeColumn)
+    modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.TimeColumnNull)
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.DatetimeColumn)
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.DatetimeColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.Datetime2Column).UseDbType(DbType.DateTime2)
+    modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.Datetime2ColumnNull).UseDbType(DbType.DateTime2)
+    modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.DatetimeoffsetColumn)
+    modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.DatetimeoffsetColumnNull)
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.Varbinary50Column).IsRequired()
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.Varbinary50ColumnNull)
     modelBuilder.Entity(Of ItemWithAllSupportedValues).Property(Function(x) x.VarbinaryMaxColumn).IsRequired()
@@ -157,8 +166,16 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Numeric10and3ColumnNull)
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Numeric15and0Column)
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Numeric15and0ColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.DateColumn).UseDbType(DbType.Date)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.DateColumnNull).UseDbType(DbType.Date)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.TimeColumn)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.TimeColumnNull)
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.DatetimeColumn)
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.DatetimeColumnNull)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Datetime2Column).UseDbType(DbType.DateTime2)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Datetime2ColumnNull).UseDbType(DbType.DateTime2)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.DatetimeoffsetColumn)
+    modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.DatetimeoffsetColumnNull)
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Varbinary50Column).IsRequired()
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.Varbinary50ColumnNull)
     modelBuilder.Entity(Of ItemWithAllSupportedValuesArchive).Property(Function(x) x.VarbinaryMaxColumn).IsRequired()

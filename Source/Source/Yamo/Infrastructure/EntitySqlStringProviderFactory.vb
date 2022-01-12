@@ -622,7 +622,8 @@ SELECT * FROM @InsertedValues", GetType(String))
 
       Dim parameterAddCall As Expression
 
-      Dim dbTypeValue = GetDbType(prop.PropertyType)
+      Dim dbTypeValue = prop.DbType
+
       If dbTypeValue.HasValue Then
         Dim dbType = Expression.Constant(dbTypeValue.Value, GetType(DbType))
         Dim parameterConstructor = GetType(SqlParameter).GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {GetType(String), GetType(Object), GetType(DbType)}, Array.Empty(Of ParameterModifier)())
@@ -635,20 +636,6 @@ SELECT * FROM @InsertedValues", GetType(String))
       End If
 
       Return (parameterNameValue, parameterAddCall)
-    End Function
-
-    ''' <summary>
-    ''' Gets database type.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <param name="type"></param>
-    ''' <returns></returns>
-    Protected Overridable Function GetDbType(type As Type) As DbType?
-      If type Is GetType(Byte()) Then
-        Return DbType.Binary
-      Else
-        Return Nothing
-      End If
     End Function
 
     ''' <summary>
