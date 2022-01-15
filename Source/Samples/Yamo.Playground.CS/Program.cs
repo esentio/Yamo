@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Yamo.Playground.CS.Model;
 using System.Data;
+using System.Linq.Expressions;
 
 namespace Yamo.Playground.CS
 {
@@ -74,7 +75,8 @@ namespace Yamo.Playground.CS
             //Test50();
             //Test51();
             //Test52();
-            Test53();
+            //Test53();
+            Test54();
         }
 
         public static MyContext CreateContext()
@@ -1005,6 +1007,32 @@ namespace Yamo.Playground.CS
 
                 var leonardo = db.QueryFirstOrDefault<Person>($"SELECT {Yamo.Sql.Model.Columns<Person>()} FROM Person WHERE LastName = {name} AND BirthDate = {birth}");
             }
+        }
+
+        public static void Test54()
+        {
+            var bornBefore = DateTime.Now;
+            var names = new string[] { "Leonardo", "Raffaello" };
+
+            using (var db = CreateContext())
+            {
+                var bornBeforeFilter = GetBornBeforeFilter(bornBefore);
+                var nameFilters = names.Select(x => GetNameFilter(x)).ToArray();
+
+                var filter = PredicateBuilder.And(bornBeforeFilter, PredicateBuilder.Or(nameFilters));
+
+                var people = db.From<Person>().Where(filter).SelectAll().ToList();
+            }
+        }
+
+        private static Expression<Func<Person, bool>> GetNameFilter(string value)
+        {
+            return x => x.FirstName == value;
+        }
+
+        private static Expression<Func<Person, bool>> GetBornBeforeFilter(DateTime value)
+        {
+            return x => x.BirthDate < value;
         }
     }
 }
