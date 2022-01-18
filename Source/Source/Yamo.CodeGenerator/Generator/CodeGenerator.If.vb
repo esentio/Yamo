@@ -18,7 +18,7 @@
       Dim params = {"condition", "[then]", "otherwise"}
       AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
 
-      builder.Indent().AppendLine($"Public{If(useOverloads, " Overloads", "")} Function [If](Of TResult)(condition As Boolean, [then] As Func(Of {GetFullClassName(entityCount)}, TResult), Optional otherwise As Func(Of {GetFullClassName(entityCount)}, TResult) = Nothing) As TResult").PushIndent()
+      builder.Indent().AppendLine($"Public{If(useOverloads, " Overloads", "")} Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of {GetFullClassName(entityCount)}, TResult), Optional otherwise As Func(Of {GetFullClassName(entityCount)}, TResult) = Nothing) As TResult").PushIndent()
       builder.Indent().AppendLine("If condition Then").PushIndent()
       builder.Indent().AppendLine("Return [then].Invoke(Me)").PopIndent()
       builder.Indent().AppendLine("ElseIf otherwise Is Nothing Then").PushIndent()
@@ -35,7 +35,7 @@
       Dim params = {"condition", "[then]", "otherwise"}
       AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
 
-      builder.Indent().AppendLine($"Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of {GetFullClassName(entityCount)}, TResult), otherwise As Func(Of {GetFullClassName(entityCount)}, TResult)) As TResult").PushIndent()
+      builder.Indent().AppendLine($"Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of {GetFullClassName(entityCount)}, TResult), <DisallowNull> otherwise As Func(Of {GetFullClassName(entityCount)}, TResult)) As TResult").PushIndent()
       builder.Indent().AppendLine("If condition Then").PushIndent()
       builder.Indent().AppendLine("Return [then].Invoke(Me)").PopIndent()
       builder.Indent().AppendLine("Else").PushIndent()

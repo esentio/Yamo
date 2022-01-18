@@ -12,6 +12,9 @@
     End Function
 
     Protected Overrides Sub Generate(builder As CodeBuilder, entityCount As Int32)
+      builder.Indent().AppendLine("Imports System.Diagnostics.CodeAnalysis")
+      builder.AppendLine()
+
       Dim comment = $"Metadata defining {entityCount.ToInvariantString()} entities used in JOIN statements."
       Dim typeParams = GetGenericNames("TTable", entityCount)
       AddComment(builder, comment, typeParams:=typeParams)
@@ -37,9 +40,9 @@
       builder.Indent().Append("Sub New(")
 
       For i = 1 To entityCount - 1
-        builder.Append($"table{i.ToInvariantString()} As TTable{i.ToInvariantString()}, ")
+        builder.Append($"<DisallowNull> table{i.ToInvariantString()} As TTable{i.ToInvariantString()}, ")
       Next
-      builder.AppendLine($"table{entityCount.ToInvariantString()} As TTable{entityCount.ToInvariantString()})").PushIndent()
+      builder.AppendLine($"<DisallowNull> table{entityCount.ToInvariantString()} As TTable{entityCount.ToInvariantString()})").PushIndent()
 
       For i = 1 To entityCount
         builder.Indent().AppendLine($"Me.T{i.ToInvariantString()} = table{i.ToInvariantString()}")

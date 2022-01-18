@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports System.Reflection
 Imports Yamo.Infrastructure
 
@@ -29,7 +30,7 @@ Namespace Sql
     ''' <typeparam name="T"></typeparam>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Shared Function Count(Of T)(expression As T) As Int32
+    Public Shared Function Count(Of T)(<DisallowNull> expression As T) As Int32
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -40,7 +41,7 @@ Namespace Sql
     ''' <typeparam name="T"></typeparam>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Shared Function CountDistinct(Of T)(expression As T) As Int32
+    Public Shared Function CountDistinct(Of T)(<DisallowNull> expression As T) As Int32
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -51,7 +52,7 @@ Namespace Sql
     ''' <typeparam name="T"></typeparam>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Shared Function Sum(Of T)(expression As T) As T
+    Public Shared Function Sum(Of T)(<DisallowNull> expression As T) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -62,7 +63,7 @@ Namespace Sql
     ''' <typeparam name="T"></typeparam>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Shared Function SumDistinct(Of T)(expression As T) As T
+    Public Shared Function SumDistinct(Of T)(<DisallowNull> expression As T) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -73,7 +74,7 @@ Namespace Sql
     ''' <typeparam name="T"></typeparam>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Shared Function Avg(Of T)(expression As T) As T
+    Public Shared Function Avg(Of T)(<DisallowNull> expression As T) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -84,7 +85,7 @@ Namespace Sql
     ''' <typeparam name="T"></typeparam>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Shared Function AvgDistinct(Of T)(expression As T) As T
+    Public Shared Function AvgDistinct(Of T)(<DisallowNull> expression As T) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -95,7 +96,7 @@ Namespace Sql
     ''' <typeparam name="T"></typeparam>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Shared Function Stdev(Of T)(expression As T) As Double
+    Public Shared Function Stdev(Of T)(<DisallowNull> expression As T) As Double
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -106,7 +107,7 @@ Namespace Sql
     ''' <typeparam name="T"></typeparam>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Shared Function StdevDistinct(Of T)(expression As T) As Double
+    Public Shared Function StdevDistinct(Of T)(<DisallowNull> expression As T) As Double
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -117,7 +118,7 @@ Namespace Sql
     ''' <typeparam name="T"></typeparam>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Shared Function Min(Of T)(expression As T) As T
+    Public Shared Function Min(Of T)(<DisallowNull> expression As T) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -128,7 +129,7 @@ Namespace Sql
     ''' <typeparam name="T"></typeparam>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Shared Function Max(Of T)(expression As T) As T
+    Public Shared Function Max(Of T)(<DisallowNull> expression As T) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -139,7 +140,7 @@ Namespace Sql
     ''' <param name="method"></param>
     ''' <param name="dialectProvider"></param>
     ''' <returns></returns>
-    Public Overloads Shared Function GetSqlFormat(method As MethodCallExpression, dialectProvider As SqlDialectProvider) As SqlFormat
+    Public Overloads Shared Function GetSqlFormat(<DisallowNull> method As MethodCallExpression, <DisallowNull> dialectProvider As SqlDialectProvider) As SqlFormat
       Select Case method.Method.Name
         Case NameOf(Aggregate.Count)
           If method.Method.IsGenericMethod Then

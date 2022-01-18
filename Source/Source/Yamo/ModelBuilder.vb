@@ -1,4 +1,5 @@
-﻿Imports Yamo.Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Metadata
 Imports Yamo.Metadata.Builders
 
 ' NOTE: not in Metadata.Builders namespace, so we don't need to use imports in custom DbContext classes
@@ -38,7 +39,7 @@ Public Class ModelBuilder
   ''' <typeparam name="TEntity"></typeparam>
   ''' <param name="buildAction"></param>
   ''' <returns></returns>
-  Public Function Entity(Of TEntity As Class)(buildAction As Action(Of EntityBuilder(Of TEntity))) As ModelBuilder
+  Public Function Entity(Of TEntity As Class)(<DisallowNull> buildAction As Action(Of EntityBuilder(Of TEntity))) As ModelBuilder
     buildAction(Entity(Of TEntity)())
     Return Me
   End Function

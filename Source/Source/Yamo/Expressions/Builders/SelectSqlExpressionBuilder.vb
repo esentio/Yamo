@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports System.Text
 Imports Yamo.Infrastructure
 Imports Yamo.Internal
@@ -106,7 +107,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="context"></param>
     ''' <param name="mainEntityType"></param>
-    Public Sub New(context As DbContext, mainEntityType As Type)
+    Public Sub New(<DisallowNull> context As DbContext, <DisallowNull> mainEntityType As Type)
       MyBase.New(context)
       m_Model = New SelectSqlModel(Me.DbContext.Model, mainEntityType)
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
@@ -133,7 +134,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="tableSource"></param>
-    Public Sub SetMainTableSource(tableSource As FormattableString)
+    Public Sub SetMainTableSource(<DisallowNull> tableSource As FormattableString)
       Dim sql = ConvertToSqlString(tableSource, m_Parameters.Count)
       m_MainTableSourceExpression = sql.Sql
       m_Parameters.AddRange(sql.Parameters)
@@ -145,7 +146,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="tableSource"></param>
     ''' <param name="parameters"></param>
-    Public Sub SetMainTableSource(tableSource As RawSqlString, ParamArray parameters() As Object)
+    Public Sub SetMainTableSource(<DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object)
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_MainTableSourceExpression = tableSource.Value
       Else
@@ -160,7 +161,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="tableHints"></param>
-    Public Sub SetMainTableHints(tableHints As String)
+    Public Sub SetMainTableHints(<DisallowNull> tableHints As String)
       m_MainTableHints = tableHints
     End Sub
 
@@ -169,7 +170,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="tableHints"></param>
-    Public Sub SetLastJoinTableHints(tableHints As String)
+    Public Sub SetLastJoinTableHints(<DisallowNull> tableHints As String)
       If Not m_CurrentJoinInfo.HasValue Then
         ' join has been conditionally ignored
         Exit Sub
@@ -184,7 +185,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="joinType"></param>
-    Public Sub AddJoin(Of TJoined)(joinType As JoinType)
+    Public Sub AddJoin(Of TJoined)(<DisallowNull> joinType As JoinType)
       m_CurrentJoinInfo = New JoinInfo(joinType)
     End Sub
 
@@ -195,7 +196,7 @@ Namespace Expressions.Builders
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="joinType"></param>
     ''' <param name="tableSource"></param>
-    Public Sub AddJoin(Of TJoined)(joinType As JoinType, tableSource As FormattableString)
+    Public Sub AddJoin(Of TJoined)(joinType As JoinType, <DisallowNull> tableSource As FormattableString)
       Dim sql = ConvertToSqlString(tableSource, m_Parameters.Count)
       m_CurrentJoinInfo = New JoinInfo(joinType, sql.Sql)
       m_Parameters.AddRange(sql.Parameters)
@@ -209,7 +210,7 @@ Namespace Expressions.Builders
     ''' <param name="joinType"></param>
     ''' <param name="tableSource"></param>
     ''' <param name="parameters"></param>
-    Public Sub AddJoin(Of TJoined)(joinType As JoinType, tableSource As RawSqlString, ParamArray parameters() As Object)
+    Public Sub AddJoin(Of TJoined)(joinType As JoinType, <DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object)
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_CurrentJoinInfo = New JoinInfo(joinType, tableSource.Value)
       Else
@@ -227,7 +228,7 @@ Namespace Expressions.Builders
     ''' <param name="joinType"></param>
     ''' <param name="predicate"></param>
     ''' <param name="entityIndexHints"></param>
-    Public Sub AddJoin(Of TJoined)(joinType As JoinType, predicate As Expression, entityIndexHints As Int32())
+    Public Sub AddJoin(Of TJoined)(joinType As JoinType, <DisallowNull> predicate As Expression, entityIndexHints As Int32())
       AddJoin(Of TJoined)(New JoinInfo(joinType), Nothing, predicate, entityIndexHints)
     End Sub
 
@@ -312,7 +313,7 @@ Namespace Expressions.Builders
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <param name="entityIndexHints"></param>
-    Public Sub AddOn(Of TJoined)(predicate As Expression, entityIndexHints As Int32())
+    Public Sub AddOn(Of TJoined)(<DisallowNull> predicate As Expression, entityIndexHints As Int32())
       If Not m_CurrentJoinInfo.HasValue Then
         ' join has been conditionally ignored
         Exit Sub
@@ -388,7 +389,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="relationship">Lambda expression with one parameter is expected.</param>
-    Public Sub SetLastJoinRelationship(relationship As Expression)
+    Public Sub SetLastJoinRelationship(<DisallowNull> relationship As Expression)
       Dim result = GetEntityAndProperty(relationship, True)
 
       If result.NotFound Then
@@ -428,7 +429,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="entityIndexHints"></param>
-    Public Sub AddWhere(predicate As Expression, entityIndexHints As Int32())
+    Public Sub AddWhere(<DisallowNull> predicate As Expression, entityIndexHints As Int32())
       If m_WhereExpressions Is Nothing Then
         m_WhereExpressions = New List(Of String)
       End If
@@ -444,7 +445,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
-    Public Sub AddWhere(predicate As String, ParamArray parameters() As Object)
+    Public Sub AddWhere(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object)
       If m_WhereExpressions Is Nothing Then
         m_WhereExpressions = New List(Of String)
       End If
@@ -464,7 +465,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <param name="entityIndexHints"></param>
-    Public Sub AddGroupBy(keySelector As Expression, entityIndexHints As Int32())
+    Public Sub AddGroupBy(<DisallowNull> keySelector As Expression, entityIndexHints As Int32())
       If m_GroupByExpressions Is Nothing Then
         m_GroupByExpressions = New List(Of String)
       End If
@@ -480,7 +481,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="entityIndexHints"></param>
-    Public Sub AddHaving(predicate As Expression, entityIndexHints As Int32())
+    Public Sub AddHaving(<DisallowNull> predicate As Expression, entityIndexHints As Int32())
       If m_HavingExpressions Is Nothing Then
         m_HavingExpressions = New List(Of String)
       End If
@@ -496,7 +497,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
-    Public Sub AddHaving(predicate As String, ParamArray parameters() As Object)
+    Public Sub AddHaving(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object)
       If m_HavingExpressions Is Nothing Then
         m_HavingExpressions = New List(Of String)
       End If
@@ -517,7 +518,7 @@ Namespace Expressions.Builders
     ''' <param name="keySelector"></param>
     ''' <param name="entityIndexHints"></param>
     ''' <param name="ascending"></param>
-    Public Sub AddOrderBy(keySelector As Expression, entityIndexHints As Int32(), ascending As Boolean)
+    Public Sub AddOrderBy(<DisallowNull> keySelector As Expression, entityIndexHints As Int32(), ascending As Boolean)
       If m_OrderByExpressions Is Nothing Then
         m_OrderByExpressions = New List(Of String)
       End If
@@ -540,7 +541,7 @@ Namespace Expressions.Builders
     ''' <param name="predicate"></param>
     ''' <param name="ascending"></param>
     ''' <param name="parameters"></param>
-    Public Sub AddOrderBy(predicate As String, ascending As Boolean, ParamArray parameters() As Object)
+    Public Sub AddOrderBy(<DisallowNull> predicate As String, ascending As Boolean, <DisallowNull> ParamArray parameters() As Object)
       If m_OrderByExpressions Is Nothing Then
         m_OrderByExpressions = New List(Of String)
       End If
@@ -603,7 +604,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="entityTypes"></param>
-    Public Sub AddSelectAll(ParamArray entityTypes As Type())
+    Public Sub AddSelectAll(<DisallowNull> ParamArray entityTypes As Type())
       ' right now this does nothing; refactor?
     End Sub
 
@@ -612,7 +613,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="propertyExpression">Lambda expression with one parameter is expected.</param>
-    Public Sub ExcludeSelected(propertyExpression As Expression)
+    Public Sub ExcludeSelected(<DisallowNull> propertyExpression As Expression)
       Dim result = GetEntityAndProperty(propertyExpression)
 
       If result.NotFound Then
@@ -652,7 +653,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="action"></param>
     ''' <param name="entityIndexHints"></param>
-    Public Sub IncludeToSelected(action As Expression, entityIndexHints As Int32())
+    Public Sub IncludeToSelected(<DisallowNull> action As Expression, entityIndexHints As Int32())
       Dim result = m_Visitor.TranslateIncludeAction(action, entityIndexHints, m_Parameters.Count, m_IncludedExpressionsCount)
       m_Parameters.AddRange(result.SqlString.Parameters)
       m_IncludedExpressionsCount += 1
@@ -669,7 +670,7 @@ Namespace Expressions.Builders
     ''' <param name="valueSelector"></param>
     ''' <param name="keySelectorEntityIndexHints"></param>
     ''' <param name="valueSelectorEntityIndexHints"></param>
-    Public Sub IncludeToSelected(keySelector As Expression, valueSelector As Expression, keySelectorEntityIndexHints As Int32(), valueSelectorEntityIndexHints As Int32())
+    Public Sub IncludeToSelected(<DisallowNull> keySelector As Expression, <DisallowNull> valueSelector As Expression, keySelectorEntityIndexHints As Int32(), valueSelectorEntityIndexHints As Int32())
       Dim keyResult = GetEntityAndProperty(keySelector)
 
       If keyResult.NotFound Then
@@ -706,7 +707,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="selector"></param>
     ''' <param name="entityIndexHints"></param>
-    Public Sub AddSelect(selector As Expression, entityIndexHints As Int32())
+    Public Sub AddSelect(<DisallowNull> selector As Expression, entityIndexHints As Int32())
       Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, m_Parameters.Count)
       m_SelectExpression = result.SqlString.Sql
       m_Parameters.AddRange(result.SqlString.Parameters)

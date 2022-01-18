@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports System.Reflection
 Imports Yamo.Infrastructure
 
@@ -21,7 +22,7 @@ Namespace Infrastructure
     ''' <param name="columnNames"></param>
     ''' <param name="parameterNames"></param>
     ''' <returns></returns>
-    Protected Overrides Function GetInsertWhenUseDbIdentityAndDefaults(tableName As Expression, declareColumns As List(Of String), outputColumnNames As List(Of String), columnNames As List(Of String), parameterNames As List(Of String)) As Expression
+    Protected Overrides Function GetInsertWhenUseDbIdentityAndDefaults(<DisallowNull> tableName As Expression, <DisallowNull> declareColumns As List(Of String), <DisallowNull> outputColumnNames As List(Of String), <DisallowNull> columnNames As List(Of String), <DisallowNull> parameterNames As List(Of String)) As Expression
       Dim part1 = Expression.Constant("INSERT INTO ", GetType(String))
       Dim part3 = Expression.Constant($" ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)});
 SELECT last_insert_rowid()", GetType(String))
@@ -39,7 +40,7 @@ SELECT last_insert_rowid()", GetType(String))
     ''' <param name="columnNames"></param>
     ''' <param name="parameterNames"></param>
     ''' <returns></returns>
-    Protected Overrides Function GetInsertWhenNotUseDbIdentityAndDefaults(tableName As Expression, hasIdentityColumn As Boolean, columnNames As List(Of String), parameterNames As List(Of String)) As Expression
+    Protected Overrides Function GetInsertWhenNotUseDbIdentityAndDefaults(<DisallowNull> tableName As Expression, hasIdentityColumn As Boolean, <DisallowNull> columnNames As List(Of String), <DisallowNull> parameterNames As List(Of String)) As Expression
       Dim part1 = Expression.Constant("INSERT INTO ", GetType(String))
       Dim part3 = Expression.Constant($" ({String.Join(", ", columnNames)}) VALUES ({String.Join(", ", parameterNames)})", GetType(String))
 

@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
 
@@ -25,7 +26,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function [And](predicate As Expression(Of Func(Of T, Boolean))) As HavingSelectSqlExpression(Of T)
+    Public Function [And](<DisallowNull> predicate As Expression(Of Func(Of T, Boolean))) As HavingSelectSqlExpression(Of T)
       Return InternalHaving(predicate, {0})
     End Function
 
@@ -34,7 +35,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function [And](predicate As Expression(Of Func(Of T, FormattableString))) As HavingSelectSqlExpression(Of T)
+    Public Function [And](<DisallowNull> predicate As Expression(Of Func(Of T, FormattableString))) As HavingSelectSqlExpression(Of T)
       Return InternalHaving(predicate, {0})
     End Function
 
@@ -44,7 +45,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function [And](predicate As String, ParamArray parameters() As Object) As HavingSelectSqlExpression(Of T)
+    Public Function [And](<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As HavingSelectSqlExpression(Of T)
       Me.Builder.AddHaving(predicate, parameters)
       Return Me
     End Function
@@ -66,7 +67,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
+    Public Function OrderBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
       Return InternalOrderBy(keySelector, {0}, True)
     End Function
 
@@ -75,7 +76,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderBy(keySelector As Expression(Of Func(Of T, FormattableString))) As OrderedSelectSqlExpression(Of T)
+    Public Function OrderBy(<DisallowNull> keySelector As Expression(Of Func(Of T, FormattableString))) As OrderedSelectSqlExpression(Of T)
       Return InternalOrderBy(keySelector, {0}, True)
     End Function
 
@@ -85,7 +86,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function OrderBy(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T)
+    Public Function OrderBy(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T)
       Me.Builder.AddOrderBy(predicate, True, parameters)
       Return New OrderedSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
     End Function
@@ -96,7 +97,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
+    Public Function OrderByDescending(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T, TKey))) As OrderedSelectSqlExpression(Of T)
       Return InternalOrderBy(keySelector, {0}, False)
     End Function
 
@@ -105,7 +106,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderByDescending(keySelector As Expression(Of Func(Of T, FormattableString))) As OrderedSelectSqlExpression(Of T)
+    Public Function OrderByDescending(<DisallowNull> keySelector As Expression(Of Func(Of T, FormattableString))) As OrderedSelectSqlExpression(Of T)
       Return InternalOrderBy(keySelector, {0}, False)
     End Function
 
@@ -115,7 +116,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function OrderByDescending(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T)
+    Public Function OrderByDescending(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T)
       Me.Builder.AddOrderBy(predicate, False, parameters)
       Return New OrderedSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
     End Function
@@ -187,7 +188,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {0})
     End Function
 
@@ -211,7 +212,7 @@ Namespace Expressions
     ''' <param name="[then]"></param>
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
-    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of HavingSelectSqlExpression(Of T), TResult), Optional otherwise As Func(Of HavingSelectSqlExpression(Of T), TResult) = Nothing) As TResult
+    Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of HavingSelectSqlExpression(Of T), TResult), Optional otherwise As Func(Of HavingSelectSqlExpression(Of T), TResult) = Nothing) As TResult
       If condition Then
         Return [then].Invoke(Me)
       ElseIf otherwise Is Nothing Then

@@ -1,4 +1,5 @@
-﻿Imports Yamo.Sql
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Sql
 
 Namespace Infrastructure
 
@@ -18,7 +19,7 @@ Namespace Infrastructure
       Get
         Return m_Formatter
       End Get
-      Protected Set(ByVal value As SqlFormatter)
+      Protected Set(<DisallowNull> ByVal value As SqlFormatter)
         m_Formatter = value
       End Set
     End Property
@@ -33,7 +34,7 @@ Namespace Infrastructure
       Get
         Return m_EntitySqlStringProviderFactory
       End Get
-      Protected Set(ByVal value As EntitySqlStringProviderFactory)
+      Protected Set(<DisallowNull> ByVal value As EntitySqlStringProviderFactory)
         m_EntitySqlStringProviderFactory = value
       End Set
     End Property
@@ -48,7 +49,7 @@ Namespace Infrastructure
       Get
         Return m_ValueTypeReaderFactory
       End Get
-      Protected Set(ByVal value As ValueTypeReaderFactory)
+      Protected Set(<DisallowNull> ByVal value As ValueTypeReaderFactory)
         m_ValueTypeReaderFactory = value
       End Set
     End Property
@@ -63,7 +64,7 @@ Namespace Infrastructure
       Get
         Return m_EntityReaderFactory
       End Get
-      Protected Set(ByVal value As EntityReaderFactory)
+      Protected Set(<DisallowNull> ByVal value As EntityReaderFactory)
         m_EntityReaderFactory = value
       End Set
     End Property
@@ -88,6 +89,22 @@ Namespace Infrastructure
     Private m_DialectSpecificSqlHelpers As Dictionary(Of Type, Type) = New Dictionary(Of Type, Type)
 
     ''' <summary>
+    ''' Creates new instance of <see cref="SqlDialectProvider"/>.
+    ''' </summary>
+    ''' <param name="formatter"></param>
+    ''' <param name="entitySqlStringProviderFactory"></param>
+    ''' <param name="valueTypeReaderFactory"></param>
+    ''' <param name="entityReaderFactory"></param>
+    ''' <param name="supportedLimitType"></param>
+    Protected Sub New(<DisallowNull> formatter As SqlFormatter, <DisallowNull> entitySqlStringProviderFactory As EntitySqlStringProviderFactory, <DisallowNull> valueTypeReaderFactory As ValueTypeReaderFactory, <DisallowNull> entityReaderFactory As EntityReaderFactory, supportedLimitType As LimitType)
+      Me.Formatter = formatter
+      Me.EntitySqlStringProviderFactory = entitySqlStringProviderFactory
+      Me.ValueTypeReaderFactory = valueTypeReaderFactory
+      Me.EntityReaderFactory = entityReaderFactory
+      Me.SupportedLimitType = supportedLimitType
+    End Sub
+
+    ''' <summary>
     ''' Registers dialect specific SQL helper.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -103,7 +120,7 @@ Namespace Infrastructure
     ''' </summary>
     ''' <param name="sqlHelperType"></param>
     ''' <returns></returns>
-    Public Function GetDialectSpecificSqlHelper(sqlHelperType As Type) As Type
+    Public Function GetDialectSpecificSqlHelper(<DisallowNull> sqlHelperType As Type) As Type
       If m_DialectSpecificSqlHelpers.ContainsKey(sqlHelperType) Then
         Return m_DialectSpecificSqlHelpers(sqlHelperType)
       Else

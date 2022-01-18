@@ -14,17 +14,13 @@ Namespace Infrastructure
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public Shared Shadows ReadOnly Property Instance As SQLiteDialectProvider = New SQLiteDialectProvider
+    Public Shared ReadOnly Property Instance As SQLiteDialectProvider = New SQLiteDialectProvider
 
     ''' <summary>
     ''' Creates new instance of <see cref="SQLiteDialectProvider"/>.
     ''' </summary>
     Private Sub New()
-      Me.Formatter = New SQLiteFormatter
-      Me.EntitySqlStringProviderFactory = New SQLiteEntitySqlStringProviderFactory
-      Me.ValueTypeReaderFactory = New ValueTypeReaderFactory
-      Me.EntityReaderFactory = New EntityReaderFactory
-      Me.SupportedLimitType = LimitType.Limit
+      MyBase.New(New SQLiteFormatter, New SQLiteEntitySqlStringProviderFactory, New ValueTypeReaderFactory, New EntityReaderFactory, LimitType.Limit)
       RegisterDialectSpecificSqlHelper(Of Yamo.Sql.Exp, Yamo.SQLite.Sql.Exp)()
       RegisterDialectSpecificSqlHelper(Of Yamo.Sql.DateTime, Yamo.SQLite.Sql.DateTime)()
     End Sub

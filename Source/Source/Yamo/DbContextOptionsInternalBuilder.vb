@@ -1,4 +1,5 @@
 ﻿Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 Imports Yamo.Infrastructure
 
 ''' <summary>
@@ -17,7 +18,7 @@ Public Class DbContextOptionsInternalBuilder
   ''' Creates new instance of <see cref="DbContextOptionsInternalBuilder"/>.
   ''' </summary>
   ''' <param name="options"></param>
-  Sub New(options As DbContextOptions)
+  Sub New(<DisallowNull> options As DbContextOptions)
     Me.Options = options
   End Sub
 
@@ -25,7 +26,7 @@ Public Class DbContextOptionsInternalBuilder
   ''' Sets SQL dialect provider.
   ''' </summary>
   ''' <param name="dialectProvider"></param>
-  Public Sub UseDialectProvider(dialectProvider As SqlDialectProvider)
+  Public Sub UseDialectProvider(<DisallowNull> dialectProvider As SqlDialectProvider)
     Me.Options.DialectProvider = dialectProvider
   End Sub
 
@@ -33,7 +34,7 @@ Public Class DbContextOptionsInternalBuilder
   ''' Sets externally created database connection.
   ''' </summary>
   ''' <param name="connection"></param>
-  Public Sub UseConnection(connection As DbConnection)
+  Public Sub UseConnection(<DisallowNull> connection As DbConnection)
     Me.Options.Connection = connection
   End Sub
 
@@ -41,7 +42,7 @@ Public Class DbContextOptionsInternalBuilder
   ''' Sets database connection factory method.
   ''' </summary>
   ''' <param name="connectionFactory"></param>
-  Public Sub UseConnection(connectionFactory As Func(Of DbConnection))
+  Public Sub UseConnection(<DisallowNull> connectionFactory As Func(Of DbConnection))
     Me.Options.ConnectionFactory = connectionFactory
   End Sub
 

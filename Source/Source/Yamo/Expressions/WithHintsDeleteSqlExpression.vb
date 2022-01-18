@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal
 Imports Yamo.Internal.Query
@@ -34,7 +35,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As Expression(Of Func(Of T, Boolean))) As FilteredDeleteSqlExpression(Of T)
+    Public Function Where(<DisallowNull> predicate As Expression(Of Func(Of T, Boolean))) As FilteredDeleteSqlExpression(Of T)
       Me.Builder.AddWhere(predicate)
       Return New FilteredDeleteSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
@@ -44,7 +45,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As Expression(Of Func(Of T, FormattableString))) As FilteredDeleteSqlExpression(Of T)
+    Public Function Where(<DisallowNull> predicate As Expression(Of Func(Of T, FormattableString))) As FilteredDeleteSqlExpression(Of T)
       Me.Builder.AddWhere(predicate)
       Return New FilteredDeleteSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
@@ -55,7 +56,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As String, ParamArray parameters() As Object) As FilteredDeleteSqlExpression(Of T)
+    Public Function Where(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As FilteredDeleteSqlExpression(Of T)
       Me.Builder.AddWhere(predicate, parameters)
       Return New FilteredDeleteSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
@@ -74,7 +75,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="obj"></param>
     ''' <returns></returns>
-    Public Function Execute(obj As T) As Int32
+    Public Function Execute(<DisallowNull> obj As T) As Int32
       If m_SoftDelete Then
         ' NOTE: this doesn't reset property modified tracking!
         Dim setter = EntityAutoFieldsSetterCache.GetOnDeleteSetter(Me.DbContext.Model, GetEntityType(obj))

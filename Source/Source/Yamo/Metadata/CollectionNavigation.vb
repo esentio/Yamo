@@ -1,4 +1,6 @@
-﻿Namespace Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Metadata
 
   ''' <summary>
   ''' Represent a 1:N relationship navigation between entities.
@@ -18,7 +20,7 @@
     ''' <param name="propertyName"></param>
     ''' <param name="relatedEntityType"></param>
     ''' <param name="collectionType"></param>
-    Sub New(propertyName As String, relatedEntityType As Type, collectionType As Type)
+    Sub New(<DisallowNull> propertyName As String, <DisallowNull> relatedEntityType As Type, <DisallowNull> collectionType As Type)
       MyBase.New(propertyName, relatedEntityType)
       Me.CollectionType = collectionType
     End Sub

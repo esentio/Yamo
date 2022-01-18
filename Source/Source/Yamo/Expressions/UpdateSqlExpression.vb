@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal
 Imports Yamo.Internal.Query
@@ -26,7 +27,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="tableHints"></param>
     ''' <returns></returns>
-    Public Function WithHints(tableHints As String) As WithHintsUpdateSqlExpression(Of T)
+    Public Function WithHints(<DisallowNull> tableHints As String) As WithHintsUpdateSqlExpression(Of T)
       Me.Builder.SetTableHints(tableHints)
       Return New WithHintsUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
@@ -36,7 +37,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="action"></param>
     ''' <returns></returns>
-    Public Function [Set](action As Expression(Of Action(Of T))) As SetUpdateSqlExpression(Of T)
+    Public Function [Set](<DisallowNull> action As Expression(Of Action(Of T))) As SetUpdateSqlExpression(Of T)
       Me.Builder.AddSet(action)
       Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
@@ -48,7 +49,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="value"></param>
     ''' <returns></returns>
-    Public Function [Set](Of TProperty)(keySelector As Expression(Of Func(Of T, TProperty)), value As TProperty) As SetUpdateSqlExpression(Of T)
+    Public Function [Set](Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T, TProperty)), value As TProperty) As SetUpdateSqlExpression(Of T)
       Me.Builder.AddSet(keySelector, value)
       Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
@@ -60,7 +61,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function [Set](Of TProperty)(keySelector As Expression(Of Func(Of T, TProperty)), valueSelector As Expression(Of Func(Of T, TProperty))) As SetUpdateSqlExpression(Of T)
+    Public Function [Set](Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T, TProperty))) As SetUpdateSqlExpression(Of T)
       Me.Builder.AddSet(keySelector, valueSelector)
       Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
@@ -70,7 +71,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function [Set](predicate As Expression(Of Func(Of T, FormattableString))) As SetUpdateSqlExpression(Of T)
+    Public Function [Set](<DisallowNull> predicate As Expression(Of Func(Of T, FormattableString))) As SetUpdateSqlExpression(Of T)
       Me.Builder.AddSet(predicate)
       Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
@@ -81,7 +82,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function [Set](predicate As String, ParamArray parameters() As Object) As SetUpdateSqlExpression(Of T)
+    Public Function [Set](<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As SetUpdateSqlExpression(Of T)
       Me.Builder.AddSet(predicate, parameters)
       Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
@@ -92,7 +93,7 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function SetNull(Of TProperty)(keySelector As Expression(Of Func(Of T, TProperty))) As SetUpdateSqlExpression(Of T)
+    Public Function SetNull(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T, TProperty))) As SetUpdateSqlExpression(Of T)
       Me.Builder.AddSet(keySelector, DirectCast(Nothing, Object))
       Return New SetUpdateSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
@@ -104,7 +105,7 @@ Namespace Expressions
     ''' <param name="setAutoFields"></param>
     ''' <param name="forceUpdateAllFields"></param>
     ''' <returns></returns>
-    Public Function Execute(obj As T, Optional setAutoFields As Boolean = True, Optional forceUpdateAllFields As Boolean = False) As Int32
+    Public Function Execute(<DisallowNull> obj As T, Optional setAutoFields As Boolean = True, Optional forceUpdateAllFields As Boolean = False) As Int32
       If Not forceUpdateAllFields And SkipUpdate(obj) Then
         Return 0
       End If

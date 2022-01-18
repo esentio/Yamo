@@ -1,4 +1,6 @@
-﻿Namespace Sql
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Sql
 
   ''' <summary>
   ''' Stores info about table of a model.<br/>
@@ -16,7 +18,7 @@
     ''' Creates new instance of <see cref="TableModelInfo"/>.
     ''' </summary>
     ''' <param name="model"></param>
-    Public Sub New(model As Type)
+    Public Sub New(<DisallowNull> model As Type)
       Me.Model = model
     End Sub
 

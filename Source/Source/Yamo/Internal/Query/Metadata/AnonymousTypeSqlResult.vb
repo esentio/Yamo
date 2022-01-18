@@ -1,4 +1,6 @@
-﻿Namespace Internal.Query.Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Internal.Query.Metadata
 
   ''' <summary>
   ''' Represents SQL result of an anonymous type.<br/>
@@ -20,7 +22,7 @@
     ''' </summary>
     ''' <param name="resultType"></param>
     ''' <param name="items"></param>
-    Public Sub New(resultType As Type, items As SqlResultBase())
+    Public Sub New(<DisallowNull> resultType As Type, <DisallowNull> items As SqlResultBase())
       MyBase.New(resultType)
       Me.Items = items
     End Sub

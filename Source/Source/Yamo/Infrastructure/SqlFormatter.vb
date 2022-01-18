@@ -1,4 +1,5 @@
-﻿Imports System.Text
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Text
 
 Namespace Infrastructure
 
@@ -115,7 +116,7 @@ Namespace Infrastructure
     ''' </summary>
     ''' <param name="name"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateParameter(name As String) As String
+    Public Overridable Function CreateParameter(<DisallowNull> name As String) As String
       Return "@" & name
     End Function
 
@@ -125,7 +126,7 @@ Namespace Infrastructure
     ''' </summary>
     ''' <param name="name"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateIdentifier(name As String) As String
+    Public Overridable Function CreateIdentifier(<DisallowNull> name As String) As String
       Return "[" & name & "]"
     End Function
 
@@ -136,7 +137,7 @@ Namespace Infrastructure
     ''' <param name="name"></param>
     ''' <param name="schema"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateIdentifier(name As String, schema As String) As String
+    Public Overridable Function CreateIdentifier(<DisallowNull> name As String, schema As String) As String
       If String.IsNullOrEmpty(schema) Then
         Return "[" & name & "]"
       Else
@@ -150,7 +151,7 @@ Namespace Infrastructure
     ''' </summary>
     ''' <param name="sql"></param>
     ''' <param name="name"></param>
-    Public Overridable Sub AppendIdentifier(sql As StringBuilder, name As String)
+    Public Overridable Sub AppendIdentifier(<DisallowNull> sql As StringBuilder, <DisallowNull> name As String)
       sql.Append("[")
       sql.Append(name)
       sql.Append("]")
@@ -163,7 +164,7 @@ Namespace Infrastructure
     ''' <param name="sql"></param>
     ''' <param name="name"></param>
     ''' <param name="schema"></param>
-    Public Overridable Sub AppendIdentifier(sql As StringBuilder, name As String, schema As String)
+    Public Overridable Sub AppendIdentifier(<DisallowNull> sql As StringBuilder, <DisallowNull> name As String, schema As String)
       If String.IsNullOrEmpty(schema) Then
         sql.Append("[")
         sql.Append(name)

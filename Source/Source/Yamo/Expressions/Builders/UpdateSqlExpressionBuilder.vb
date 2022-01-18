@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports System.Text
 Imports Yamo.Internal
 Imports Yamo.Internal.Query
@@ -55,7 +56,7 @@ Namespace Expressions.Builders
     ''' <param name="context"></param>
     ''' <param name="mainEntityType"></param>
     ''' <param name="tableNameOverride"></param>
-    Public Sub New(context As DbContext, mainEntityType As Type, tableNameOverride As String)
+    Public Sub New(<DisallowNull> context As DbContext, <DisallowNull> mainEntityType As Type, tableNameOverride As String)
       MyBase.New(context)
       m_Model = New UpdateSqlModel(Me.DbContext.Model, mainEntityType)
       m_TableNameOverride = tableNameOverride
@@ -71,7 +72,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="tableHints"></param>
-    Public Sub SetTableHints(tableHints As String)
+    Public Sub SetTableHints(<DisallowNull> tableHints As String)
       m_TableHints = tableHints
     End Sub
 
@@ -80,7 +81,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="predicate"></param>
-    Public Sub AddSet(predicate As Expression)
+    Public Sub AddSet(<DisallowNull> predicate As Expression)
       Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Set, {0}, m_Parameters.Count, False, False)
       m_SetExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
@@ -92,7 +93,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="value"></param>
-    Public Sub AddSet(predicate As Expression, value As Object)
+    Public Sub AddSet(<DisallowNull> predicate As Expression, value As Object)
       Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Set, {0}, m_Parameters.Count, False, False)
       m_Parameters.AddRange(result.Parameters)
       Dim parameterName = CreateParameter(m_Parameters.Count)
@@ -106,7 +107,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="valueSelector"></param>
-    Public Sub AddSet(predicate As Expression, valueSelector As Expression)
+    Public Sub AddSet(<DisallowNull> predicate As Expression, <DisallowNull> valueSelector As Expression)
       Dim result1 = m_Visitor.Translate(predicate, ExpressionTranslateMode.Set, {0}, m_Parameters.Count, False, False)
       m_Parameters.AddRange(result1.Parameters)
       Dim result2 = m_Visitor.Translate(valueSelector, ExpressionTranslateMode.Set, {0}, m_Parameters.Count, False, False)
@@ -120,7 +121,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
-    Public Sub AddSet(predicate As String, ParamArray parameters() As Object)
+    Public Sub AddSet(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object)
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_SetExpressions.Add(predicate)
       Else
@@ -135,7 +136,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="predicate"></param>
-    Public Sub AddWhere(predicate As Expression)
+    Public Sub AddWhere(<DisallowNull> predicate As Expression)
       Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, {0}, m_Parameters.Count, False, False)
       m_WhereExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
@@ -147,7 +148,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
-    Public Sub AddWhere(predicate As String, ParamArray parameters() As Object)
+    Public Sub AddWhere(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object)
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_WhereExpressions.Add(predicate)
       Else
@@ -217,7 +218,7 @@ Namespace Expressions.Builders
     ''' <param name="obj"></param>
     ''' <param name="forceUpdateAllFields"></param>
     ''' <returns></returns>
-    Public Function CreateQuery(obj As Object, forceUpdateAllFields As Boolean) As Query
+    Public Function CreateQuery(<DisallowNull> obj As Object, forceUpdateAllFields As Boolean) As Query
       Dim table As String
 
       If m_TableNameOverride Is Nothing Then

@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
 
@@ -36,7 +37,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function [On](predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)
+    Public Function [On](<DisallowNull> predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)
       Return InternalOn(predicate, Nothing)
     End Function
 
@@ -59,7 +60,7 @@ Namespace Expressions
     ''' <param name="[then]"></param>
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
-    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of JoinWithHintsSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12), TResult), otherwise As Func(Of JoinWithHintsSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12), TResult)) As TResult
+    Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of JoinWithHintsSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12), TResult), <DisallowNull> otherwise As Func(Of JoinWithHintsSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12), TResult)) As TResult
       If condition Then
         Return [then].Invoke(Me)
       Else

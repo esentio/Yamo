@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports System.Runtime.CompilerServices
 
 Namespace Internal.Extensions
@@ -19,7 +20,7 @@ Namespace Internal.Extensions
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
     <Extension>
-    Public Function GetPropertyName(Of T1, T2)(propertyExpression As Expression(Of Func(Of T1, T2))) As String
+    Public Function GetPropertyName(Of T1, T2)(<DisallowNull> propertyExpression As Expression(Of Func(Of T1, T2))) As String
       Dim expression As Expression
 
       If propertyExpression.Body.NodeType = ExpressionType.Convert Then
@@ -42,7 +43,7 @@ Namespace Internal.Extensions
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
     <Extension>
-    Public Function GetPropertyType(Of T1, T2)(propertyExpression As Expression(Of Func(Of T1, T2))) As Type
+    Public Function GetPropertyType(Of T1, T2)(<DisallowNull> propertyExpression As Expression(Of Func(Of T1, T2))) As Type
       Dim expression As Expression
 
       If propertyExpression.Body.NodeType = ExpressionType.Convert Then

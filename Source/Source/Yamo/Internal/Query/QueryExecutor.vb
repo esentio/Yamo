@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 Imports Yamo
 Imports Yamo.Infrastructure
 Imports Yamo.Internal.Helpers
@@ -31,7 +32,7 @@ Namespace Internal.Query
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="context"></param>
-    Sub New(context As DbContext)
+    Sub New(<DisallowNull> context As DbContext)
       m_DbContext = context
       m_DialectProvider = m_DbContext.Options.DialectProvider
     End Sub
@@ -42,7 +43,7 @@ Namespace Internal.Query
     ''' </summary>
     ''' <param name="query"></param>
     ''' <returns></returns>
-    Public Function Execute(query As Query) As Int32
+    Public Function Execute(<DisallowNull> query As Query) As Int32
       Using command = CreateCommand(query)
         Return command.ExecuteNonQuery()
       End Using
@@ -54,7 +55,7 @@ Namespace Internal.Query
     ''' </summary>
     ''' <param name="query"></param>
     ''' <returns></returns>
-    Public Function ExecuteInsert(query As InsertQuery) As Int32
+    Public Function ExecuteInsert(<DisallowNull> query As InsertQuery) As Int32
       If query.ReadDbGeneratedValues Then
         Return ExecuteAndReadDbGeneratedValues(query)
       Else
@@ -67,7 +68,7 @@ Namespace Internal.Query
     ''' </summary>
     ''' <param name="query"></param>
     ''' <returns></returns>
-    Private Function ExecuteAndReadDbGeneratedValues(query As InsertQuery) As Int32
+    Private Function ExecuteAndReadDbGeneratedValues(<DisallowNull> query As InsertQuery) As Int32
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
           If dataReader.Read() Then
@@ -90,7 +91,7 @@ Namespace Internal.Query
     ''' <typeparam name="T"></typeparam>
     ''' <param name="query"></param>
     ''' <returns></returns>
-    Public Function QueryFirstOrDefault(Of T)(query As Query) As T
+    Public Function QueryFirstOrDefault(Of T)(<DisallowNull> query As Query) As <MaybeNull> T
       Dim value As T = Nothing
       Dim resultType = GetType(T)
       Dim isObjectArray = resultType Is GetType(Object())
@@ -131,7 +132,7 @@ Namespace Internal.Query
     ''' <typeparam name="T"></typeparam>
     ''' <param name="query"></param>
     ''' <returns></returns>
-    Public Function QueryList(Of T)(query As Query) As List(Of T)
+    Public Function QueryList(Of T)(<DisallowNull> query As Query) As List(Of T)
       Dim values = New List(Of T)
       Dim resultType = GetType(T)
       Dim isObjectArray = resultType Is GetType(Object())
@@ -181,7 +182,7 @@ Namespace Internal.Query
     ''' <param name="query"></param>
     ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function ReadFirstOrDefault(Of T)(query As SelectQuery, behavior As CollectionNavigationFillBehavior) As T
+    Public Function ReadFirstOrDefault(Of T)(<DisallowNull> query As SelectQuery, behavior As CollectionNavigationFillBehavior) As <MaybeNull> T
       If query.Model.ContainsJoins() Then
         Return ReadJoinedFirstOrDefault(Of T)(query, behavior)
       Else
@@ -196,7 +197,7 @@ Namespace Internal.Query
     ''' <typeparam name="T"></typeparam>
     ''' <param name="query"></param>
     ''' <returns></returns>
-    Public Function ReadList(Of T)(query As SelectQuery) As List(Of T)
+    Public Function ReadList(Of T)(<DisallowNull> query As SelectQuery) As List(Of T)
       If query.Model.ContainsJoins() Then
         Return ReadJoinedList(Of T)(query)
       Else
@@ -211,7 +212,7 @@ Namespace Internal.Query
     ''' <typeparam name="T"></typeparam>
     ''' <param name="query"></param>
     ''' <returns></returns>
-    Public Function ReadCustomFirstOrDefault(Of T)(query As SelectQuery) As T
+    Public Function ReadCustomFirstOrDefault(Of T)(<DisallowNull> query As SelectQuery) As <MaybeNull> T
       Dim value As T = Nothing
 
       Using command = CreateCommand(query)
@@ -343,7 +344,7 @@ Namespace Internal.Query
     ''' <typeparam name="T"></typeparam>
     ''' <param name="query"></param>
     ''' <returns></returns>
-    Public Function ReadCustomList(Of T)(query As SelectQuery) As List(Of T)
+    Public Function ReadCustomList(Of T)(<DisallowNull> query As SelectQuery) As List(Of T)
       Dim values = New List(Of T)
 
       Using command = CreateCommand(query)

@@ -1,4 +1,5 @@
 ﻿Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 
 Namespace Internal.Query
 
@@ -39,7 +40,7 @@ Namespace Internal.Query
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="items"></param>
-    Public Sub New(items As EntitySqlResultReaderData())
+    Public Sub New(<DisallowNull> items As EntitySqlResultReaderData())
       Me.Items = items
       Me.Count = items.Length
       Me.HasCollectionNavigation = items.Any(Function(o) o.HasCollectionNavigation)
@@ -155,7 +156,7 @@ Namespace Internal.Query
     ''' </summary>
     ''' <param name="dataReader"></param>
     ''' <param name="pks"></param>
-    Public Sub FillPks(dataReader As DbDataReader, pks As Object())
+    Public Sub FillPks(<DisallowNull> dataReader As DbDataReader, <DisallowNull> pks As Object())
       For i = 0 To Me.Count - 1
         Dim readerData = Me.Items(i)
 
@@ -176,7 +177,7 @@ Namespace Internal.Query
     ''' <param name="entityIndex"></param>
     ''' <param name="pks"></param>
     ''' <returns></returns>
-    Public Function GetChainKey(entityIndex As Int32, pks As Object()) As ChainKey
+    Public Function GetChainKey(entityIndex As Int32, <DisallowNull> pks As Object()) As ChainKey
       Dim chainIndex = m_ChainIndexes(entityIndex)
 
       Select Case chainIndex.Count

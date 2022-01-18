@@ -1,4 +1,5 @@
-﻿Imports Yamo.Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Metadata
 
 Namespace Internal.Query.Metadata
 
@@ -9,13 +10,20 @@ Namespace Internal.Query.Metadata
   Public Class SelectSqlModel
     Inherits SqlModelBase
 
+    Private m_CustomSqlResult As SqlResultBase
     ''' <summary>
     ''' Gets or sets custom SQL result.<br/>
-    ''' Contains <see langword="Nothing"/> if the select is not custom.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <returns></returns>
-    Public Property CustomSqlResult As SqlResultBase
+    ''' <returns>Custom SQL result or <see langword="Nothing"/> if the select is not custom.</returns>
+    Public Property CustomSqlResult() As <MaybeNull> SqlResultBase
+      Get
+        Return m_CustomSqlResult
+      End Get
+      Set(<DisallowNull> ByVal value As SqlResultBase)
+        m_CustomSqlResult = value
+      End Set
+    End Property
 
     ''' <summary>
     ''' Creates new instance of <see cref="SelectSqlModel"/>.<br/>
@@ -23,7 +31,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="model"></param>
     ''' <param name="mainEntityType"></param>
-    Public Sub New(model As Model, mainEntityType As Type)
+    Public Sub New(<DisallowNull> model As Model, <DisallowNull> mainEntityType As Type)
       MyBase.New(model, mainEntityType)
     End Sub
 
@@ -44,7 +52,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Function AddIgnoredJoin(entityType As Type) As SqlEntity
+    Public Function AddIgnoredJoin(<DisallowNull> entityType As Type) As SqlEntity
       Return AddEntity(entityType, Nothing, True)
     End Function
 

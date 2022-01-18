@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports System.Reflection
 Imports Yamo.Infrastructure
 Imports Yamo.Sql
@@ -19,7 +20,7 @@ Namespace Sql
     ''' <param name="method"></param>
     ''' <param name="dialectProvider"></param>
     ''' <returns></returns>
-    Public Overloads Shared Function GetSqlFormat(method As MethodCallExpression, dialectProvider As SqlDialectProvider) As SqlFormat
+    Public Overloads Shared Function GetSqlFormat(<DisallowNull> method As MethodCallExpression, <DisallowNull> dialectProvider As SqlDialectProvider) As SqlFormat
       Select Case method.Method.Name
         Case NameOf(DateTime.GetCurrentDateTime)
           Return New SqlFormat("datetime('now', 'localtime')", method.Arguments)

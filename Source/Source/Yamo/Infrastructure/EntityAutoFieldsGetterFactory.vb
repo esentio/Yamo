@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Linq.Expressions
 Imports System.Reflection
 Imports Yamo.Metadata
@@ -18,7 +19,7 @@ Namespace Infrastructure
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Shared Function CreateOnUpdateGetter(model As Model, entityType As Type) As Func(Of DbContext, Object())
+    Public Shared Function CreateOnUpdateGetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type) As Func(Of DbContext, Object())
       Dim factories = model.GetEntity(entityType).GetSetOnUpdateProperties().Select(Function(p) p.GetOnUpdateFactory()).ToArray()
 
       If factories.Length = 0 Then
@@ -35,7 +36,7 @@ Namespace Infrastructure
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Shared Function CreateOnDeleteGetter(model As Model, entityType As Type) As Func(Of DbContext, Object())
+    Public Shared Function CreateOnDeleteGetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type) As Func(Of DbContext, Object())
       Dim factories = model.GetEntity(entityType).GetSetOnDeleteProperties().Select(Function(p) p.GetOnDeleteFactory()).ToArray()
 
       If factories.Length = 0 Then

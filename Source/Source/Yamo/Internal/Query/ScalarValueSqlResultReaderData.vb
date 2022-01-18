@@ -1,4 +1,5 @@
-﻿Imports Yamo.Internal.Query.Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Internal.Query.Metadata
 
 Namespace Internal.Query
 
@@ -23,7 +24,7 @@ Namespace Internal.Query
     ''' <param name="sqlResult"></param>
     ''' <param name="readerIndex"></param>
     ''' <param name="reader"></param>
-    Public Sub New(sqlResult As ScalarValueSqlResult, readerIndex As Int32, reader As Object)
+    Public Sub New(<DisallowNull> sqlResult As ScalarValueSqlResult, readerIndex As Int32, <DisallowNull> reader As Object)
       MyBase.New(sqlResult, readerIndex)
       Me.Reader = reader
     End Sub

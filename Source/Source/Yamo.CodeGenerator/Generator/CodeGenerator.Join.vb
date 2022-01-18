@@ -131,7 +131,7 @@
       Dim generic = GetGenericName(index, index = entityCount)
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Join(Of TJoined)(predicate As Expression(Of Func(Of {generic}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function Join(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of {generic}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine($"Return InternalJoin(Of TJoined)(JoinType.Inner, predicate, {GetEntityIndexHintsForEntities(index - 1, entityCount)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -144,7 +144,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Join(Of TJoined)(predicate As Expression(Of Func(Of {generics}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function Join(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of {generics}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine($"Return InternalJoin(Of TJoined)(JoinType.Inner, predicate, {GetEntityIndexHintsForAllEntities(entityCount + 1)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -157,7 +157,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Join(Of TJoined)(predicate As Expression(Of Func(Of Join(Of {generics}, TJoined), Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function Join(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of Join(Of {generics}, TJoined), Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.Inner, predicate, Nothing)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -182,7 +182,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Join(Of TJoined)(tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function Join(Of TJoined)(<DisallowNull> tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.Inner, tableSource)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -195,7 +195,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Join(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function Join(Of TJoined)(<DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.Inner, tableSource, parameters)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -209,7 +209,7 @@
       Dim generic = GetGenericName(index, index = entityCount)
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)(predicate As Expression(Of Func(Of {generic}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of {generic}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine($"Return InternalJoin(Of TJoined)(JoinType.LeftOuter, predicate, {GetEntityIndexHintsForEntities(index - 1, entityCount)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -222,7 +222,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)(predicate As Expression(Of Func(Of {generics}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of {generics}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine($"Return InternalJoin(Of TJoined)(JoinType.LeftOuter, predicate, {GetEntityIndexHintsForAllEntities(entityCount + 1)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -235,7 +235,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)(predicate As Expression(Of Func(Of Join(Of {generics}, TJoined), Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of Join(Of {generics}, TJoined), Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.LeftOuter, predicate, Nothing)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -260,7 +260,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)(tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)(<DisallowNull> tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.LeftOuter, tableSource)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -273,7 +273,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function LeftJoin(Of TJoined)(<DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.LeftOuter, tableSource, parameters)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -287,7 +287,7 @@
       Dim generic = GetGenericName(index, index = entityCount)
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(predicate As Expression(Of Func(Of {generic}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of {generic}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine($"Return InternalJoin(Of TJoined)(JoinType.RightOuter, predicate, {GetEntityIndexHintsForEntities(index - 1, entityCount)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -300,7 +300,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(predicate As Expression(Of Func(Of {generics}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of {generics}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine($"Return InternalJoin(Of TJoined)(JoinType.RightOuter, predicate, {GetEntityIndexHintsForAllEntities(entityCount + 1)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -313,7 +313,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(predicate As Expression(Of Func(Of Join(Of {generics}, TJoined), Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of Join(Of {generics}, TJoined), Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.RightOuter, predicate, Nothing)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -338,7 +338,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(<DisallowNull> tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.RightOuter, tableSource)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -351,7 +351,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function RightJoin(Of TJoined)(<DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.RightOuter, tableSource, parameters)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -365,7 +365,7 @@
       Dim generic = GetGenericName(index, index = entityCount)
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)(predicate As Expression(Of Func(Of {generic}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of {generic}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine($"Return InternalJoin(Of TJoined)(JoinType.FullOuter, predicate, {GetEntityIndexHintsForEntities(index - 1, entityCount)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -378,7 +378,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)(predicate As Expression(Of Func(Of {generics}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of {generics}, TJoined, Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine($"Return InternalJoin(Of TJoined)(JoinType.FullOuter, predicate, {GetEntityIndexHintsForAllEntities(entityCount + 1)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -391,7 +391,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)(predicate As Expression(Of Func(Of Join(Of {generics}, TJoined), Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of Join(Of {generics}, TJoined), Boolean))) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.FullOuter, predicate, Nothing)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -416,7 +416,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)(tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)(<DisallowNull> tableSource As FormattableString) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.FullOuter, tableSource)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -429,7 +429,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function FullJoin(Of TJoined)(<DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As JoinSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Return InternalJoin(Of TJoined)(JoinType.FullOuter, tableSource, parameters)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -454,7 +454,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function CrossJoin(Of TJoined)(tableSource As FormattableString) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function CrossJoin(Of TJoined)(<DisallowNull> tableSource As FormattableString) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Me.Builder.AddJoin(Of TJoined)(JoinType.CrossJoin, tableSource)")
       builder.Indent().AppendLine("Me.Builder.AddOn(Of TJoined)(Nothing, {0, 1})")
       builder.Indent().AppendLine($"Return New JoinedSelectSqlExpression(Of {generics}, TJoined)(Me.Builder, Me.Executor)").PopIndent()
@@ -469,7 +469,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function CrossJoin(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
+      builder.Indent().AppendLine($"Public Function CrossJoin(Of TJoined)(<DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As JoinedSelectSqlExpression(Of {generics}, TJoined)").PushIndent()
       builder.Indent().AppendLine("Me.Builder.AddJoin(Of TJoined)(JoinType.CrossJoin, tableSource, parameters)")
       builder.Indent().AppendLine("Me.Builder.AddOn(Of TJoined)(Nothing, {0, 1})")
       builder.Indent().AppendLine($"Return New JoinedSelectSqlExpression(Of {generics}, TJoined)(Me.Builder, Me.Executor)").PopIndent()

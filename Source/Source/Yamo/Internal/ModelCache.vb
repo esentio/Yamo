@@ -1,4 +1,5 @@
-﻿Imports Yamo.Infrastructure
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Infrastructure
 Imports Yamo.Metadata
 
 Namespace Internal
@@ -40,7 +41,7 @@ Namespace Internal
     ''' <param name="dialectProvider"></param>
     ''' <param name="context"></param>
     ''' <returns></returns>
-    Public Shared Function GetModel(dialectProvider As SqlDialectProvider, context As DbContext) As Model
+    Public Shared Function GetModel(<DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> context As DbContext) As Model
       Return GetInstance(dialectProvider).GetOrCreateModel(context)
     End Function
 

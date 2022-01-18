@@ -1,4 +1,5 @@
-﻿Imports Yamo.Expressions.Builders
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Expressions.Builders
 Imports Yamo.Internal
 Imports Yamo.Internal.Query
 
@@ -25,7 +26,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="tableHints"></param>
     ''' <returns></returns>
-    Public Function WithHints(tableHints As String) As WithHintsInsertSqlExpression(Of T)
+    Public Function WithHints(<DisallowNull> tableHints As String) As WithHintsInsertSqlExpression(Of T)
       Me.Builder.SetTableHints(tableHints)
       Return New WithHintsInsertSqlExpression(Of T)(Me.DbContext, Me.Builder, Me.Executor)
     End Function
@@ -37,7 +38,7 @@ Namespace Expressions
     ''' <param name="useDbIdentityAndDefaults"></param>
     ''' <param name="setAutoFields"></param>
     ''' <returns></returns>
-    Public Function Execute(obj As T, Optional useDbIdentityAndDefaults As Boolean = True, Optional setAutoFields As Boolean = True) As Int32
+    Public Function Execute(<DisallowNull> obj As T, Optional useDbIdentityAndDefaults As Boolean = True, Optional setAutoFields As Boolean = True) As Int32
       If setAutoFields Then
         Dim setter = EntityAutoFieldsSetterCache.GetOnInsertSetter(Me.DbContext.Model, GetEntityType(obj))
         setter(obj, Me.DbContext)

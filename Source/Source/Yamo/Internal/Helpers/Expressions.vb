@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 
 Namespace Internal.Helpers
 
@@ -20,7 +21,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="message"></param>
     ''' <returns></returns>
-    Public Shared Function CreateDebugWriteLine(message As String) As Expression
+    Public Shared Function CreateDebugWriteLine(<DisallowNull> message As String) As Expression
       Dim debugWriteLineMethodInfo = GetType(Diagnostics.Debug).GetMethod("WriteLine", {GetType(String)})
       Return Expression.Call(debugWriteLineMethodInfo, Expression.Constant(message))
     End Function

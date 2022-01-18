@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
 
@@ -42,7 +43,7 @@ Namespace Expressions
     ''' Executes SQL query and returns first record or a default value.
     ''' </summary>
     ''' <returns></returns>
-    Public Function FirstOrDefault() As T
+    Public Function FirstOrDefault() As <MaybeNull> T
       Dim query = Me.Builder.CreateQuery()
       Return Me.Executor.ReadCustomFirstOrDefault(Of T)(query)
     End Function

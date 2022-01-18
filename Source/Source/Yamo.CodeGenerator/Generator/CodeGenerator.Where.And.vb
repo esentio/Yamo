@@ -41,7 +41,7 @@
       Dim generic = GetGenericName(index, index = entityCount)
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [And](predicate As Expression(Of Func(Of {generic}, Boolean))) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function [And](<DisallowNull> predicate As Expression(Of Func(Of {generic}, Boolean))) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine($"Return InternalWhere(predicate, {GetEntityIndexHintsForEntity(index - 1)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -54,7 +54,7 @@
       Dim generic = GetGenericName(index, index = entityCount)
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [And](predicate As Expression(Of Func(Of {generic}, FormattableString))) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function [And](<DisallowNull> predicate As Expression(Of Func(Of {generic}, FormattableString))) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine($"Return InternalWhere(predicate, {GetEntityIndexHintsForEntity(index - 1)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -66,7 +66,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [And](predicate As Expression(Of Func(Of {generics}, Boolean))) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function [And](<DisallowNull> predicate As Expression(Of Func(Of {generics}, Boolean))) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine($"Return InternalWhere(predicate, {GetEntityIndexHintsForAllEntities(entityCount)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -78,7 +78,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [And](predicate As Expression(Of Func(Of {generics}, FormattableString))) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function [And](<DisallowNull> predicate As Expression(Of Func(Of {generics}, FormattableString))) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine($"Return InternalWhere(predicate, {GetEntityIndexHintsForAllEntities(entityCount)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -90,7 +90,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [And](predicate As Expression(Of Func(Of Join(Of {generics}), Boolean))) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function [And](<DisallowNull> predicate As Expression(Of Func(Of Join(Of {generics}), Boolean))) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine("Return InternalWhere(predicate, Nothing)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -102,7 +102,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [And](predicate As Expression(Of Func(Of Join(Of {generics}), FormattableString))) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function [And](<DisallowNull> predicate As Expression(Of Func(Of Join(Of {generics}), FormattableString))) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine("Return InternalWhere(predicate, Nothing)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -114,7 +114,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [And](predicate As String, ParamArray parameters() As Object) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function [And](<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine("Me.Builder.AddWhere(predicate, parameters)")
       builder.Indent().AppendLine("Return Me").PopIndent()
       builder.Indent().AppendLine("End Function")

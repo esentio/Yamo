@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Linq.Expressions
 Imports Yamo.Metadata
 
@@ -18,7 +19,7 @@ Namespace Infrastructure
     ''' <param name="propertyOrFieldName"></param>
     ''' <param name="valueType"></param>
     ''' <returns></returns>
-    Public Shared Function CreateSetter(entityType As Type, propertyOrFieldName As String, valueType As Type) As Action(Of Object, Object)
+    Public Shared Function CreateSetter(<DisallowNull> entityType As Type, <DisallowNull> propertyOrFieldName As String, <DisallowNull> valueType As Type) As Action(Of Object, Object)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim valueParam = Expression.Parameter(GetType(Object), "value")
       Dim parameters = {entityParam, valueParam}
@@ -42,7 +43,7 @@ Namespace Infrastructure
     ''' <param name="propertyOrFieldName"></param>
     ''' <param name="itemType"></param>
     ''' <returns></returns>
-    Public Shared Function CreateCollectionAddSetter(entityType As Type, propertyOrFieldName As String, itemType As Type) As Action(Of Object, Object)
+    Public Shared Function CreateCollectionAddSetter(<DisallowNull> entityType As Type, <DisallowNull> propertyOrFieldName As String, <DisallowNull> itemType As Type) As Action(Of Object, Object)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim valueParam = Expression.Parameter(GetType(Object), "value")
       Dim parameters = {entityParam, valueParam}
@@ -68,7 +69,7 @@ Namespace Infrastructure
     ''' <param name="collectionType"></param>
     ''' <param name="itemType"></param>
     ''' <returns></returns>
-    Public Shared Function CreateCollectionInitSetter(entityType As Type, propertyOrFieldName As String, collectionType As Type, itemType As Type) As Action(Of Object)
+    Public Shared Function CreateCollectionInitSetter(<DisallowNull> entityType As Type, <DisallowNull> propertyOrFieldName As String, <DisallowNull> collectionType As Type, <DisallowNull> itemType As Type) As Action(Of Object)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim parameters = {entityParam}
 

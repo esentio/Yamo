@@ -1,4 +1,5 @@
-﻿Imports Yamo.Infrastructure
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Infrastructure
 Imports Yamo.Metadata
 
 Namespace Internal
@@ -46,7 +47,7 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Shared Function GetOnUpdateGetter(model As Model, entityType As Type) As Func(Of DbContext, Object())
+    Public Shared Function GetOnUpdateGetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type) As Func(Of DbContext, Object())
       Return GetInstance(model).GetOrCreateOnUpdateGetter(model, entityType)
     End Function
 
@@ -57,7 +58,7 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Shared Function GetOnDeleteGetter(model As Model, entityType As Type) As Func(Of DbContext, Object())
+    Public Shared Function GetOnDeleteGetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type) As Func(Of DbContext, Object())
       Return GetInstance(model).GetOrCreateOnDeleteGetter(model, entityType)
     End Function
 

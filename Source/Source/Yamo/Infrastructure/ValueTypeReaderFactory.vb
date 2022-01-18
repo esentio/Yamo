@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Linq.Expressions
 Imports System.Reflection
 
@@ -21,7 +22,7 @@ Namespace Infrastructure
     ''' <param name="dataReaderType"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateReader(dataReaderType As Type, type As Type) As Object
+    Public Overridable Function CreateReader(<DisallowNull> dataReaderType As Type, <DisallowNull> type As Type) As Object
       Select Case type
         Case GetType(String)
           Return DirectCast(AddressOf ReadString, Func(Of DbDataReader, Int32, String))
@@ -102,7 +103,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadString(reader As DbDataReader, index As Int32) As String
+    Protected Shared Function ReadString(<DisallowNull> reader As DbDataReader, index As Int32) As String
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -117,7 +118,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadInt16(reader As DbDataReader, index As Int32) As Int16
+    Protected Shared Function ReadInt16(<DisallowNull> reader As DbDataReader, index As Int32) As Int16
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -132,7 +133,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadNullableInt16(reader As DbDataReader, index As Int32) As Int16?
+    Protected Shared Function ReadNullableInt16(<DisallowNull> reader As DbDataReader, index As Int32) As Int16?
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -147,7 +148,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadInt32(reader As DbDataReader, index As Int32) As Int32
+    Protected Shared Function ReadInt32(<DisallowNull> reader As DbDataReader, index As Int32) As Int32
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -162,7 +163,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadNullableInt32(reader As DbDataReader, index As Int32) As Int32?
+    Protected Shared Function ReadNullableInt32(<DisallowNull> reader As DbDataReader, index As Int32) As Int32?
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -177,7 +178,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadInt64(reader As DbDataReader, index As Int32) As Int64
+    Protected Shared Function ReadInt64(<DisallowNull> reader As DbDataReader, index As Int32) As Int64
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -192,7 +193,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadNullableInt64(reader As DbDataReader, index As Int32) As Int64?
+    Protected Shared Function ReadNullableInt64(<DisallowNull> reader As DbDataReader, index As Int32) As Int64?
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -207,7 +208,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadBoolean(reader As DbDataReader, index As Int32) As Boolean
+    Protected Shared Function ReadBoolean(<DisallowNull> reader As DbDataReader, index As Int32) As Boolean
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -222,7 +223,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadNullableBoolean(reader As DbDataReader, index As Int32) As Boolean?
+    Protected Shared Function ReadNullableBoolean(<DisallowNull> reader As DbDataReader, index As Int32) As Boolean?
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -237,7 +238,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadGuid(reader As DbDataReader, index As Int32) As Guid
+    Protected Shared Function ReadGuid(<DisallowNull> reader As DbDataReader, index As Int32) As Guid
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -252,7 +253,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadNullableGuid(reader As DbDataReader, index As Int32) As Guid?
+    Protected Shared Function ReadNullableGuid(<DisallowNull> reader As DbDataReader, index As Int32) As Guid?
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -267,7 +268,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadDateTime(reader As DbDataReader, index As Int32) As DateTime
+    Protected Shared Function ReadDateTime(<DisallowNull> reader As DbDataReader, index As Int32) As DateTime
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -282,7 +283,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadNullableDateTime(reader As DbDataReader, index As Int32) As DateTime?
+    Protected Shared Function ReadNullableDateTime(<DisallowNull> reader As DbDataReader, index As Int32) As DateTime?
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -298,7 +299,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadDateOnly(reader As DbDataReader, index As Int32) As DateOnly
+    Protected Shared Function ReadDateOnly(<DisallowNull> reader As DbDataReader, index As Int32) As DateOnly
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -313,7 +314,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadNullableDateOnly(reader As DbDataReader, index As Int32) As DateOnly?
+    Protected Shared Function ReadNullableDateOnly(<DisallowNull> reader As DbDataReader, index As Int32) As DateOnly?
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -328,7 +329,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadTimeOnly(reader As DbDataReader, index As Int32) As TimeOnly
+    Protected Shared Function ReadTimeOnly(<DisallowNull> reader As DbDataReader, index As Int32) As TimeOnly
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -343,7 +344,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadNullableTimeOnly(reader As DbDataReader, index As Int32) As TimeOnly?
+    Protected Shared Function ReadNullableTimeOnly(<DisallowNull> reader As DbDataReader, index As Int32) As TimeOnly?
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -359,7 +360,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadDecimal(reader As DbDataReader, index As Int32) As Decimal
+    Protected Shared Function ReadDecimal(<DisallowNull> reader As DbDataReader, index As Int32) As Decimal
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -374,7 +375,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadNullableDecimal(reader As DbDataReader, index As Int32) As Decimal?
+    Protected Shared Function ReadNullableDecimal(<DisallowNull> reader As DbDataReader, index As Int32) As Decimal?
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -389,7 +390,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadDouble(reader As DbDataReader, index As Int32) As Double
+    Protected Shared Function ReadDouble(<DisallowNull> reader As DbDataReader, index As Int32) As Double
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -404,7 +405,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadNullableDouble(reader As DbDataReader, index As Int32) As Double?
+    Protected Shared Function ReadNullableDouble(<DisallowNull> reader As DbDataReader, index As Int32) As Double?
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -419,7 +420,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadSingle(reader As DbDataReader, index As Int32) As Single
+    Protected Shared Function ReadSingle(<DisallowNull> reader As DbDataReader, index As Int32) As Single
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -434,7 +435,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadNullableSingle(reader As DbDataReader, index As Int32) As Single?
+    Protected Shared Function ReadNullableSingle(<DisallowNull> reader As DbDataReader, index As Int32) As Single?
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -449,7 +450,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadByteArray(reader As DbDataReader, index As Int32) As Byte()
+    Protected Shared Function ReadByteArray(<DisallowNull> reader As DbDataReader, index As Int32) As Byte()
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -464,7 +465,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadByte(reader As DbDataReader, index As Int32) As Byte
+    Protected Shared Function ReadByte(<DisallowNull> reader As DbDataReader, index As Int32) As Byte
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -479,7 +480,7 @@ Namespace Infrastructure
     ''' <param name="reader"></param>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Protected Shared Function ReadNullableByte(reader As DbDataReader, index As Int32) As Byte?
+    Protected Shared Function ReadNullableByte(<DisallowNull> reader As DbDataReader, index As Int32) As Byte?
       If reader.IsDBNull(index) Then
         Return Nothing
       Else
@@ -493,7 +494,7 @@ Namespace Infrastructure
     ''' </summary>
     ''' <param name="dataReaderType"></param>
     ''' <returns></returns>
-    Protected Overridable Function CreateTimeSpanReader(dataReaderType As Type) As Func(Of DbDataReader, Int32, TimeSpan)
+    Protected Overridable Function CreateTimeSpanReader(<DisallowNull> dataReaderType As Type) As Func(Of DbDataReader, Int32, TimeSpan)
       Return CreateReader(Of TimeSpan)(dataReaderType, "GetTimeSpan")
     End Function
 
@@ -503,7 +504,7 @@ Namespace Infrastructure
     ''' </summary>
     ''' <param name="dataReaderType"></param>
     ''' <returns></returns>
-    Protected Overridable Function CreateNullableTimeSpanReader(dataReaderType As Type) As Func(Of DbDataReader, Int32, TimeSpan?)
+    Protected Overridable Function CreateNullableTimeSpanReader(<DisallowNull> dataReaderType As Type) As Func(Of DbDataReader, Int32, TimeSpan?)
       Return CreateReader(Of TimeSpan?)(dataReaderType, "GetTimeSpan")
     End Function
 
@@ -513,7 +514,7 @@ Namespace Infrastructure
     ''' </summary>
     ''' <param name="dataReaderType"></param>
     ''' <returns></returns>
-    Protected Overridable Function CreateDateTimeOffsetReader(dataReaderType As Type) As Func(Of DbDataReader, Int32, DateTimeOffset)
+    Protected Overridable Function CreateDateTimeOffsetReader(<DisallowNull> dataReaderType As Type) As Func(Of DbDataReader, Int32, DateTimeOffset)
       Return CreateReader(Of DateTimeOffset)(dataReaderType, "GetDateTimeOffset")
     End Function
 
@@ -523,7 +524,7 @@ Namespace Infrastructure
     ''' </summary>
     ''' <param name="dataReaderType"></param>
     ''' <returns></returns>
-    Protected Overridable Function CreateNullableDateTimeOffsetReader(dataReaderType As Type) As Func(Of DbDataReader, Int32, DateTimeOffset?)
+    Protected Overridable Function CreateNullableDateTimeOffsetReader(<DisallowNull> dataReaderType As Type) As Func(Of DbDataReader, Int32, DateTimeOffset?)
       Return CreateReader(Of DateTimeOffset?)(dataReaderType, "GetDateTimeOffset")
     End Function
 
@@ -535,7 +536,7 @@ Namespace Infrastructure
     ''' <param name="dataReaderType"></param>
     ''' <param name="getMethod"></param>
     ''' <returns></returns>
-    Protected Overridable Function CreateReader(Of T)(dataReaderType As Type, getMethod As String) As Func(Of DbDataReader, Int32, T)
+    Protected Overridable Function CreateReader(Of T)(<DisallowNull> dataReaderType As Type, <DisallowNull> getMethod As String) As Func(Of DbDataReader, Int32, T)
       Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
       Dim indexParam = Expression.Parameter(GetType(Int32), "index")
       Dim parameters = {readerParam, indexParam}

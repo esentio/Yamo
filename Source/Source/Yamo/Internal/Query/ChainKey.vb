@@ -1,4 +1,6 @@
-﻿Namespace Internal.Query
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Internal.Query
 
   ''' <summary>
   ''' Represents chain key (contains all primary keys of all entities in resultset).<br/>
@@ -16,7 +18,7 @@
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="pks"></param>
-    Sub New(pks As Object())
+    Sub New(<DisallowNull> pks As Object())
       m_Pks = pks
     End Sub
 

@@ -1,4 +1,5 @@
-﻿Imports Yamo.Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Metadata
 
 Namespace Internal.Query.Metadata
 
@@ -15,7 +16,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="model"></param>
     ''' <param name="mainEntityType"></param>
-    Public Sub New(model As Model, mainEntityType As Type)
+    Public Sub New(<DisallowNull> model As Model, <DisallowNull> mainEntityType As Type)
       MyBase.New(model, mainEntityType)
     End Sub
 

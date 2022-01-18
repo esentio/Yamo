@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 Imports Yamo.Infrastructure
 Imports Yamo.Metadata
 
@@ -45,7 +46,7 @@ Namespace Internal
     ''' <param name="dialectProvider"></param>
     ''' <param name="model"></param>
     ''' <returns></returns>
-    Public Shared Function GetReader(Of T)(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model) As Func(Of DbDataReader, Int32, T)
+    Public Shared Function GetReader(Of T)(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model) As Func(Of DbDataReader, Int32, T)
       Return DirectCast(GetInstance(dataReaderType, dialectProvider, model).GetOrCreateReader(dataReaderType, dialectProvider, GetType(T)), Func(Of DbDataReader, Int32, T))
     End Function
 
@@ -58,7 +59,7 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetReader(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, type As Type) As Object
+    Public Shared Function GetReader(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> type As Type) As Object
       Return GetInstance(dataReaderType, dialectProvider, model).GetOrCreateReader(dataReaderType, dialectProvider, type)
     End Function
 

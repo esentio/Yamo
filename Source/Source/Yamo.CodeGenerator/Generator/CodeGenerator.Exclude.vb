@@ -37,7 +37,7 @@
       Dim generic = GetGenericName(index, index = entityCount)
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of {generic}, TProperty))) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function Exclude(Of TProperty)(<DisallowNull> propertyExpression As Expression(Of Func(Of {generic}, TProperty))) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine("Return InternalExclude(propertyExpression)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -50,7 +50,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of Join(Of {generics}), TProperty))) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function Exclude(Of TProperty)(<DisallowNull> propertyExpression As Expression(Of Func(Of Join(Of {generics}), TProperty))) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine("Return InternalExclude(propertyExpression)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub

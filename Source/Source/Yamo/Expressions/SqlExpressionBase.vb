@@ -1,4 +1,6 @@
-﻿Namespace Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Expressions
 
   ''' <summary>
   ''' Base class for SQL statements.<br/>
@@ -14,7 +16,7 @@
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="obj"></param>
-    Protected Sub ResetDbPropertyModifiedTracking(obj As Object)
+    Protected Sub ResetDbPropertyModifiedTracking(<DisallowNull> obj As Object)
       If TypeOf obj Is IHasDbPropertyModifiedTracking Then
         DirectCast(obj, IHasDbPropertyModifiedTracking).ResetDbPropertyModifiedTracking()
       End If
@@ -27,7 +29,7 @@
     ''' <typeparam name="T"></typeparam>
     ''' <param name="obj"></param>
     ''' <returns></returns>
-    Protected Function GetEntityType(Of T)(obj As T) As Type
+    Protected Function GetEntityType(Of T)(<DisallowNull> obj As T) As Type
       If GetType(T) Is GetType(Object) Then
         Return obj.GetType()
       Else

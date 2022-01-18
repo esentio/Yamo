@@ -1,4 +1,6 @@
-﻿Namespace Internal.Helpers
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Internal.Helpers
 
   ''' <summary>
   ''' Miscellaneous helpers.<br/>
@@ -18,7 +20,7 @@
     ''' </summary>
     ''' <param name="name"></param>
     ''' <returns></returns>
-    Public Shared Function GetEntityIndexFromJoinMemberName(name As String) As Int32
+    Public Shared Function GetEntityIndexFromJoinMemberName(<DisallowNull> name As String) As Int32
       Select Case name
         Case "T1"
           Return 0

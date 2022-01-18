@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Linq.Expressions
 Imports System.Reflection
 Imports Yamo.Metadata
@@ -18,7 +19,7 @@ Namespace Infrastructure
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Shared Function CreateOnInsertSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)
+    Public Shared Function CreateOnInsertSetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type) As Action(Of Object, DbContext)
       Dim properties = model.GetEntity(entityType).GetSetOnInsertProperties().Select(Function(p) (p, p.GetOnInsertFactory())).ToArray()
       Return CreateSetter(model, entityType, properties)
     End Function
@@ -30,7 +31,7 @@ Namespace Infrastructure
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Shared Function CreateOnUpdateSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)
+    Public Shared Function CreateOnUpdateSetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type) As Action(Of Object, DbContext)
       Dim properties = model.GetEntity(entityType).GetSetOnUpdateProperties().Select(Function(p) (p, p.GetOnUpdateFactory())).ToArray()
       Return CreateSetter(model, entityType, properties)
     End Function
@@ -42,7 +43,7 @@ Namespace Infrastructure
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Shared Function CreateOnDeleteSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)
+    Public Shared Function CreateOnDeleteSetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type) As Action(Of Object, DbContext)
       Dim properties = model.GetEntity(entityType).GetSetOnDeleteProperties().Select(Function(p) (p, p.GetOnDeleteFactory())).ToArray()
 
       If properties.Length = 0 Then
@@ -59,7 +60,7 @@ Namespace Infrastructure
     ''' <param name="entityType"></param>
     ''' <param name="properties"></param>
     ''' <returns></returns>
-    Private Shared Function CreateSetter(model As Model, entityType As Type, properties As (Prop As [Property], Factory As Object)()) As Action(Of Object, DbContext)
+    Private Shared Function CreateSetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type, <DisallowNull> properties As (Prop As [Property], Factory As Object)()) As Action(Of Object, DbContext)
       If properties.Length = 0 Then
         Return Sub(entity As Object, context As DbContext)
                End Sub

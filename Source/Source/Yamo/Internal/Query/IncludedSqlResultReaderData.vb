@@ -1,4 +1,6 @@
-﻿Namespace Internal.Query
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Internal.Query
 
   ''' <summary>
   ''' Represents reader data for included entity result values.<br/>
@@ -28,7 +30,7 @@
     ''' </summary>
     ''' <param name="setter"></param>
     ''' <param name="readerData"></param>
-    Public Sub New(setter As Action(Of Object, Object), readerData As ReaderDataBase)
+    Public Sub New(<DisallowNull> setter As Action(Of Object, Object), <DisallowNull> readerData As ReaderDataBase)
       Me.Setter = setter
       Me.ReaderData = readerData
     End Sub

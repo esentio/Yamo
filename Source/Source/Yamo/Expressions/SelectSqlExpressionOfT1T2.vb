@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
 Imports Yamo.Internal.Query.Metadata
@@ -28,7 +29,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Join(Of TJoined)(predicate As Expression(Of Func(Of T1, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function Join(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of T1, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.Inner, predicate, {0, 2})
     End Function
 
@@ -38,7 +39,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Join(Of TJoined)(predicate As Expression(Of Func(Of T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function Join(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.Inner, predicate, {1, 2})
     End Function
 
@@ -48,7 +49,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Join(Of TJoined)(predicate As Expression(Of Func(Of T1, T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function Join(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of T1, T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.Inner, predicate, {0, 1, 2})
     End Function
 
@@ -58,7 +59,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Join(Of TJoined)(predicate As Expression(Of Func(Of Join(Of T1, T2, TJoined), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function Join(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of Join(Of T1, T2, TJoined), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.Inner, predicate, Nothing)
     End Function
 
@@ -77,7 +78,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="tableSource"></param>
     ''' <returns></returns>
-    Public Function Join(Of TJoined)(tableSource As FormattableString) As JoinSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function Join(Of TJoined)(<DisallowNull> tableSource As FormattableString) As JoinSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.Inner, tableSource)
     End Function
 
@@ -88,7 +89,7 @@ Namespace Expressions
     ''' <param name="tableSource"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Join(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function Join(Of TJoined)(<DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As JoinSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.Inner, tableSource, parameters)
     End Function
 
@@ -98,7 +99,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function LeftJoin(Of TJoined)(predicate As Expression(Of Func(Of T1, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function LeftJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of T1, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.LeftOuter, predicate, {0, 2})
     End Function
 
@@ -108,7 +109,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function LeftJoin(Of TJoined)(predicate As Expression(Of Func(Of T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function LeftJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.LeftOuter, predicate, {1, 2})
     End Function
 
@@ -118,7 +119,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function LeftJoin(Of TJoined)(predicate As Expression(Of Func(Of T1, T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function LeftJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of T1, T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.LeftOuter, predicate, {0, 1, 2})
     End Function
 
@@ -128,7 +129,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function LeftJoin(Of TJoined)(predicate As Expression(Of Func(Of Join(Of T1, T2, TJoined), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function LeftJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of Join(Of T1, T2, TJoined), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.LeftOuter, predicate, Nothing)
     End Function
 
@@ -147,7 +148,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="tableSource"></param>
     ''' <returns></returns>
-    Public Function LeftJoin(Of TJoined)(tableSource As FormattableString) As JoinSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function LeftJoin(Of TJoined)(<DisallowNull> tableSource As FormattableString) As JoinSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.LeftOuter, tableSource)
     End Function
 
@@ -158,7 +159,7 @@ Namespace Expressions
     ''' <param name="tableSource"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function LeftJoin(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function LeftJoin(Of TJoined)(<DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As JoinSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.LeftOuter, tableSource, parameters)
     End Function
 
@@ -168,7 +169,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function RightJoin(Of TJoined)(predicate As Expression(Of Func(Of T1, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function RightJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of T1, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.RightOuter, predicate, {0, 2})
     End Function
 
@@ -178,7 +179,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function RightJoin(Of TJoined)(predicate As Expression(Of Func(Of T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function RightJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.RightOuter, predicate, {1, 2})
     End Function
 
@@ -188,7 +189,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function RightJoin(Of TJoined)(predicate As Expression(Of Func(Of T1, T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function RightJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of T1, T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.RightOuter, predicate, {0, 1, 2})
     End Function
 
@@ -198,7 +199,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function RightJoin(Of TJoined)(predicate As Expression(Of Func(Of Join(Of T1, T2, TJoined), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function RightJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of Join(Of T1, T2, TJoined), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.RightOuter, predicate, Nothing)
     End Function
 
@@ -217,7 +218,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="tableSource"></param>
     ''' <returns></returns>
-    Public Function RightJoin(Of TJoined)(tableSource As FormattableString) As JoinSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function RightJoin(Of TJoined)(<DisallowNull> tableSource As FormattableString) As JoinSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.RightOuter, tableSource)
     End Function
 
@@ -228,7 +229,7 @@ Namespace Expressions
     ''' <param name="tableSource"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function RightJoin(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function RightJoin(Of TJoined)(<DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As JoinSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.RightOuter, tableSource, parameters)
     End Function
 
@@ -238,7 +239,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function FullJoin(Of TJoined)(predicate As Expression(Of Func(Of T1, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function FullJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of T1, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.FullOuter, predicate, {0, 2})
     End Function
 
@@ -248,7 +249,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function FullJoin(Of TJoined)(predicate As Expression(Of Func(Of T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function FullJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.FullOuter, predicate, {1, 2})
     End Function
 
@@ -258,7 +259,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function FullJoin(Of TJoined)(predicate As Expression(Of Func(Of T1, T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function FullJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of T1, T2, TJoined, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.FullOuter, predicate, {0, 1, 2})
     End Function
 
@@ -268,7 +269,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function FullJoin(Of TJoined)(predicate As Expression(Of Func(Of Join(Of T1, T2, TJoined), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function FullJoin(Of TJoined)(<DisallowNull> predicate As Expression(Of Func(Of Join(Of T1, T2, TJoined), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.FullOuter, predicate, Nothing)
     End Function
 
@@ -287,7 +288,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="tableSource"></param>
     ''' <returns></returns>
-    Public Function FullJoin(Of TJoined)(tableSource As FormattableString) As JoinSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function FullJoin(Of TJoined)(<DisallowNull> tableSource As FormattableString) As JoinSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.FullOuter, tableSource)
     End Function
 
@@ -298,7 +299,7 @@ Namespace Expressions
     ''' <param name="tableSource"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function FullJoin(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function FullJoin(Of TJoined)(<DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As JoinSelectSqlExpression(Of T1, T2, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.FullOuter, tableSource, parameters)
     End Function
 
@@ -317,7 +318,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="tableSource"></param>
     ''' <returns></returns>
-    Public Function CrossJoin(Of TJoined)(tableSource As FormattableString) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function CrossJoin(Of TJoined)(<DisallowNull> tableSource As FormattableString) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Me.Builder.AddJoin(Of TJoined)(JoinType.CrossJoin, tableSource)
       Me.Builder.AddOn(Of TJoined)(Nothing, {0, 1})
       Return New JoinedSelectSqlExpression(Of T1, T2, TJoined)(Me.Builder, Me.Executor)
@@ -330,7 +331,7 @@ Namespace Expressions
     ''' <param name="tableSource"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function CrossJoin(Of TJoined)(tableSource As RawSqlString, ParamArray parameters() As Object) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
+    Public Function CrossJoin(Of TJoined)(<DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As JoinedSelectSqlExpression(Of T1, T2, TJoined)
       Me.Builder.AddJoin(Of TJoined)(JoinType.CrossJoin, tableSource, parameters)
       Me.Builder.AddOn(Of TJoined)(Nothing, {0, 1})
       Return New JoinedSelectSqlExpression(Of T1, T2, TJoined)(Me.Builder, Me.Executor)
@@ -390,7 +391,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As Expression(Of Func(Of T1, Boolean))) As FilteredSelectSqlExpression(Of T1, T2)
+    Public Function Where(<DisallowNull> predicate As Expression(Of Func(Of T1, Boolean))) As FilteredSelectSqlExpression(Of T1, T2)
       Return InternalWhere(predicate, {0})
     End Function
 
@@ -399,7 +400,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As Expression(Of Func(Of T1, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2)
+    Public Function Where(<DisallowNull> predicate As Expression(Of Func(Of T1, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2)
       Return InternalWhere(predicate, {0})
     End Function
 
@@ -408,7 +409,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As Expression(Of Func(Of T2, Boolean))) As FilteredSelectSqlExpression(Of T1, T2)
+    Public Function Where(<DisallowNull> predicate As Expression(Of Func(Of T2, Boolean))) As FilteredSelectSqlExpression(Of T1, T2)
       Return InternalWhere(predicate, {1})
     End Function
 
@@ -417,7 +418,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As Expression(Of Func(Of T2, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2)
+    Public Function Where(<DisallowNull> predicate As Expression(Of Func(Of T2, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2)
       Return InternalWhere(predicate, {1})
     End Function
 
@@ -426,7 +427,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As Expression(Of Func(Of T1, T2, Boolean))) As FilteredSelectSqlExpression(Of T1, T2)
+    Public Function Where(<DisallowNull> predicate As Expression(Of Func(Of T1, T2, Boolean))) As FilteredSelectSqlExpression(Of T1, T2)
       Return InternalWhere(predicate, {0, 1})
     End Function
 
@@ -435,7 +436,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As Expression(Of Func(Of T1, T2, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2)
+    Public Function Where(<DisallowNull> predicate As Expression(Of Func(Of T1, T2, FormattableString))) As FilteredSelectSqlExpression(Of T1, T2)
       Return InternalWhere(predicate, {0, 1})
     End Function
 
@@ -444,7 +445,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As Expression(Of Func(Of Join(Of T1, T2), Boolean))) As FilteredSelectSqlExpression(Of T1, T2)
+    Public Function Where(<DisallowNull> predicate As Expression(Of Func(Of Join(Of T1, T2), Boolean))) As FilteredSelectSqlExpression(Of T1, T2)
       Return InternalWhere(predicate, Nothing)
     End Function
 
@@ -453,7 +454,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As Expression(Of Func(Of Join(Of T1, T2), FormattableString))) As FilteredSelectSqlExpression(Of T1, T2)
+    Public Function Where(<DisallowNull> predicate As Expression(Of Func(Of Join(Of T1, T2), FormattableString))) As FilteredSelectSqlExpression(Of T1, T2)
       Return InternalWhere(predicate, Nothing)
     End Function
 
@@ -463,7 +464,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Where(predicate As String, ParamArray parameters() As Object) As FilteredSelectSqlExpression(Of T1, T2)
+    Public Function Where(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As FilteredSelectSqlExpression(Of T1, T2)
       Me.Builder.AddWhere(predicate, parameters)
       Return New FilteredSelectSqlExpression(Of T1, T2)(Me.Builder, Me.Executor)
     End Function
@@ -493,7 +494,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As GroupedSelectSqlExpression(Of T1, T2)
+    Public Function GroupBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TKey))) As GroupedSelectSqlExpression(Of T1, T2)
       Return InternalGroupBy(Of TKey)(keySelector, {0})
     End Function
 
@@ -503,7 +504,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As GroupedSelectSqlExpression(Of T1, T2)
+    Public Function GroupBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TKey))) As GroupedSelectSqlExpression(Of T1, T2)
       Return InternalGroupBy(Of TKey)(keySelector, {1})
     End Function
 
@@ -513,7 +514,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of T1, T2, TKey))) As GroupedSelectSqlExpression(Of T1, T2)
+    Public Function GroupBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T1, T2, TKey))) As GroupedSelectSqlExpression(Of T1, T2)
       Return InternalGroupBy(Of TKey)(keySelector, {0, 1})
     End Function
 
@@ -523,7 +524,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As GroupedSelectSqlExpression(Of T1, T2)
+    Public Function GroupBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As GroupedSelectSqlExpression(Of T1, T2)
       Return InternalGroupBy(Of TKey)(keySelector, Nothing)
     End Function
 
@@ -545,7 +546,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {0}, True)
     End Function
 
@@ -554,7 +555,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderBy(keySelector As Expression(Of Func(Of T1, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderBy(<DisallowNull> keySelector As Expression(Of Func(Of T1, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {0}, True)
     End Function
 
@@ -564,7 +565,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {1}, True)
     End Function
 
@@ -573,7 +574,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderBy(keySelector As Expression(Of Func(Of T2, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderBy(<DisallowNull> keySelector As Expression(Of Func(Of T2, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {1}, True)
     End Function
 
@@ -583,7 +584,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderBy(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, Nothing, True)
     End Function
 
@@ -592,7 +593,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderBy(keySelector As Expression(Of Func(Of Join(Of T1, T2), FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderBy(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of T1, T2), FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, Nothing, True)
     End Function
 
@@ -602,7 +603,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function OrderBy(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderBy(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2)
       Me.Builder.AddOrderBy(predicate, True, parameters)
       Return New OrderedSelectSqlExpression(Of T1, T2)(Me.Builder, Me.Executor)
     End Function
@@ -613,7 +614,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderByDescending(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {0}, False)
     End Function
 
@@ -622,7 +623,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderByDescending(keySelector As Expression(Of Func(Of T1, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderByDescending(<DisallowNull> keySelector As Expression(Of Func(Of T1, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {0}, False)
     End Function
 
@@ -632,7 +633,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderByDescending(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {1}, False)
     End Function
 
@@ -641,7 +642,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderByDescending(keySelector As Expression(Of Func(Of T2, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderByDescending(<DisallowNull> keySelector As Expression(Of Func(Of T2, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {1}, False)
     End Function
 
@@ -651,7 +652,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderByDescending(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderByDescending(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, Nothing, False)
     End Function
 
@@ -660,7 +661,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function OrderByDescending(keySelector As Expression(Of Func(Of Join(Of T1, T2), FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderByDescending(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of T1, T2), FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, Nothing, False)
     End Function
 
@@ -670,7 +671,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function OrderByDescending(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function OrderByDescending(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2)
       Me.Builder.AddOrderBy(predicate, False, parameters)
       Return New OrderedSelectSqlExpression(Of T1, T2)(Me.Builder, Me.Executor)
     End Function
@@ -742,7 +743,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T1, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T1, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {0})
     End Function
 
@@ -752,7 +753,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T2, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T2, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {1})
     End Function
 
@@ -762,7 +763,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T1, T2, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T1, T2, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {0, 1})
     End Function
 
@@ -772,7 +773,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of Join(Of T1, T2), TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of Join(Of T1, T2), TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, Nothing)
     End Function
 
@@ -796,7 +797,7 @@ Namespace Expressions
     ''' <param name="[then]"></param>
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
-    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of SelectSqlExpression(Of T1, T2), TResult), Optional otherwise As Func(Of SelectSqlExpression(Of T1, T2), TResult) = Nothing) As TResult
+    Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of SelectSqlExpression(Of T1, T2), TResult), Optional otherwise As Func(Of SelectSqlExpression(Of T1, T2), TResult) = Nothing) As TResult
       If condition Then
         Return [then].Invoke(Me)
       ElseIf otherwise Is Nothing Then

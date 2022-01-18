@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 
 Namespace Internal
 
@@ -27,7 +28,7 @@ Namespace Internal
     ''' </summary>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Function GetIndexesOfReferencedEntities(expression As Expression) As Int32()
+    Public Function GetIndexesOfReferencedEntities(<DisallowNull> expression As Expression) As Int32()
       m_UsedEntityIndexes = New HashSet(Of Int32)
 
       Visit(expression)

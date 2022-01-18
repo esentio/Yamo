@@ -1,4 +1,5 @@
 ﻿Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Text
 Imports Yamo.Infrastructure
 Imports Yamo.Internal.Query
@@ -29,7 +30,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="context"></param>
-    Public Sub New(context As DbContext)
+    Public Sub New(<DisallowNull> context As DbContext)
       Me.DialectProvider = context.Options.DialectProvider
       Me.DbContext = context
     End Sub
@@ -51,7 +52,7 @@ Namespace Expressions.Builders
     ''' <param name="sql"></param>
     ''' <param name="parameterIndex"></param>
     ''' <returns></returns>
-    Public Function ConvertToSqlString(sql As FormattableString, parameterIndex As Int32) As SqlString
+    Public Function ConvertToSqlString(<DisallowNull> sql As FormattableString, parameterIndex As Int32) As SqlString
       Dim args = sql.GetArguments()
 
       If args.Length = 0 Then
@@ -69,7 +70,7 @@ Namespace Expressions.Builders
     ''' <param name="args"></param>
     ''' <param name="parameterIndex"></param>
     ''' <returns></returns>
-    Public Function ConvertToSqlString(format As String, args() As Object, parameterIndex As Int32) As SqlString
+    Public Function ConvertToSqlString(<DisallowNull> format As String, <DisallowNull> args() As Object, parameterIndex As Int32) As SqlString
       Dim formatArgs = New String(args.Length - 1) {}
       Dim parameters = New List(Of SqlParameter)(args.Length)
       Dim parametersCount = 0

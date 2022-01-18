@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
 
@@ -32,7 +33,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="tableHints"></param>
     ''' <returns></returns>
-    Public Function WithHints(tableHints As String) As JoinWithHintsSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+    Public Function WithHints(<DisallowNull> tableHints As String) As JoinWithHintsSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
       Me.Builder.SetLastJoinTableHints(tableHints)
       Return New JoinWithHintsSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)(Me.Builder, Me.Executor)
     End Function
@@ -42,7 +43,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function [On](predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
+    Public Function [On](<DisallowNull> predicate As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8)
       Return InternalOn(predicate, Nothing)
     End Function
 
@@ -65,7 +66,7 @@ Namespace Expressions
     ''' <param name="[then]"></param>
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
-    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8), TResult), Optional otherwise As Func(Of JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8), TResult) = Nothing) As TResult
+    Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8), TResult), Optional otherwise As Func(Of JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8), TResult) = Nothing) As TResult
       If condition Then
         Return [then].Invoke(Me)
       ElseIf otherwise Is Nothing Then

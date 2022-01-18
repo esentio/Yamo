@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports System.Reflection
 Imports Yamo.Infrastructure
 
@@ -18,7 +19,7 @@ Namespace Sql
     ''' </summary>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Shared Function [As](Of T)(expression As Object) As T
+    Public Shared Function [As](Of T)(<DisallowNull> expression As Object) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -29,7 +30,7 @@ Namespace Sql
     ''' </summary>
     ''' <param name="expression"></param>
     ''' <returns></returns>
-    Public Shared Function Raw(Of T)(expression As FormattableString) As T
+    Public Shared Function Raw(Of T)(<DisallowNull> expression As FormattableString) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -41,7 +42,7 @@ Namespace Sql
     ''' <param name="expression"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Shared Function Raw(Of T)(expression As RawSqlString, ParamArray parameters() As Object) As T
+    Public Shared Function Raw(Of T)(<DisallowNull> expression As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -53,7 +54,7 @@ Namespace Sql
     ''' <param name="expression2"></param>
     ''' <param name="expressions"></param>
     ''' <returns></returns>
-    Public Shared Function Coalesce(Of T)(expression1 As Object, expression2 As Object, ParamArray expressions() As Object) As T
+    Public Shared Function Coalesce(Of T)(<DisallowNull> expression1 As Object, <DisallowNull> expression2 As Object, <DisallowNull> ParamArray expressions() As Object) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -64,7 +65,7 @@ Namespace Sql
     ''' <param name="expression"></param>
     ''' <param name="replacementValue"></param>
     ''' <returns></returns>
-    Public Shared Function IsNull(Of T)(expression As Object, replacementValue As Object) As T
+    Public Shared Function IsNull(Of T)(<DisallowNull> expression As Object, <DisallowNull> replacementValue As Object) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -75,7 +76,7 @@ Namespace Sql
     ''' <param name="expression"></param>
     ''' <param name="replacementValue"></param>
     ''' <returns></returns>
-    Public Shared Function IfNull(Of T)(expression As Object, replacementValue As Object) As T
+    Public Shared Function IfNull(Of T)(<DisallowNull> expression As Object, <DisallowNull> replacementValue As Object) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -86,7 +87,7 @@ Namespace Sql
     ''' <param name="expression1"></param>
     ''' <param name="expression2"></param>
     ''' <returns></returns>
-    Public Shared Function NullIf(Of T)(expression1 As Object, expression2 As Object) As T
+    Public Shared Function NullIf(Of T)(<DisallowNull> expression1 As Object, <DisallowNull> expression2 As Object) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -98,7 +99,7 @@ Namespace Sql
     ''' <param name="trueValue"></param>
     ''' <param name="falseValue"></param>
     ''' <returns></returns>
-    Public Shared Function IIf(Of T)(expression As Boolean, trueValue As Object, falseValue As Object) As T
+    Public Shared Function IIf(Of T)(expression As Boolean, <DisallowNull> trueValue As Object, <DisallowNull> falseValue As Object) As T
       Throw New Exception("This method is not intended to be called directly.")
     End Function
 
@@ -109,7 +110,7 @@ Namespace Sql
     ''' <param name="method"></param>
     ''' <param name="dialectProvider"></param>
     ''' <returns></returns>
-    Public Overloads Shared Function GetSqlFormat(method As MethodCallExpression, dialectProvider As SqlDialectProvider) As SqlFormat
+    Public Overloads Shared Function GetSqlFormat(<DisallowNull> method As MethodCallExpression, <DisallowNull> dialectProvider As SqlDialectProvider) As SqlFormat
       Select Case method.Method.Name
         Case NameOf(Exp.As)
           Return New SqlFormat("{0}", method.Arguments)

@@ -37,7 +37,7 @@
       Dim generic = GetGenericName(index, index = entityCount)
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Include(action As Expression(Of Action(Of {generic}))) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function Include(<DisallowNull> action As Expression(Of Action(Of {generic}))) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine($"Return InternalInclude(action, {GetEntityIndexHintsForEntity(index - 1)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -52,7 +52,7 @@
       Dim generic2 = GetGenericName(index2, index2 = entityCount)
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of {generic1}, TProperty)), valueSelector As Expression(Of Func(Of {generic2}, TProperty))) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of {generic1}, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of {generic2}, TProperty))) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine($"Return InternalInclude(keySelector, valueSelector, {GetEntityIndexHintsForEntity(index1 - 1)}, {GetEntityIndexHintsForEntity(index2 - 1)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -64,7 +64,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Include(action As Expression(Of Action(Of Join(Of {generics})))) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function Include(<DisallowNull> action As Expression(Of Action(Of Join(Of {generics})))) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine("Return InternalInclude(action, Nothing)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -77,7 +77,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of Join(Of {generics}), TProperty)), valueSelector As Expression(Of Func(Of Join(Of {generics}), TProperty))) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of {generics}), TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of Join(Of {generics}), TProperty))) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine("Return InternalInclude(keySelector, valueSelector, Nothing, Nothing)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub

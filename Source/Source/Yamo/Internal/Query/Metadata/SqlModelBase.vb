@@ -1,4 +1,5 @@
-﻿Imports Yamo.Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Metadata
 
 Namespace Internal.Query.Metadata
 
@@ -38,7 +39,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="model"></param>
     ''' <param name="mainEntityType"></param>
-    Public Sub New(model As Model, mainEntityType As Type)
+    Public Sub New(<DisallowNull> model As Model, <DisallowNull> mainEntityType As Type)
       Me.Model = model
       Me.Entities = New List(Of SqlEntity)
 
@@ -55,7 +56,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="relationship"></param>
     ''' <param name="isIgnored"></param>
     ''' <returns></returns>
-    Protected Function AddEntity(entityType As Type, relationship As SqlEntityRelationship, isIgnored As Boolean) As SqlEntity
+    Protected Function AddEntity(<DisallowNull> entityType As Type, relationship As SqlEntityRelationship, isIgnored As Boolean) As SqlEntity
       Dim entity = Me.Model.GetEntity(entityType)
       Dim index = Me.Entities.Count
       Dim tableAlias = "T" & index.ToString(Globalization.CultureInfo.InvariantCulture)

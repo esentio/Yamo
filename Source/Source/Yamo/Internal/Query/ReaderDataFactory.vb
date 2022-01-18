@@ -1,4 +1,5 @@
-﻿Imports Yamo.Infrastructure
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Infrastructure
 Imports Yamo.Internal.Query.Metadata
 Imports Yamo.Metadata
 
@@ -25,7 +26,7 @@ Namespace Internal.Query
     ''' <param name="model"></param>
     ''' <param name="entities"></param>
     ''' <returns></returns>
-    Public Shared Function Create(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, entities As SqlEntity()) As EntitySqlResultReaderDataCollection
+    Public Shared Function Create(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> entities As SqlEntity()) As EntitySqlResultReaderDataCollection
       Dim relationships = New(RelatedEntities As List(Of Int32), CollectionNavigations As List(Of CollectionNavigation))(entities.Length - 1) {}
 
       For index = 0 To entities.Length - 1
@@ -120,7 +121,7 @@ Namespace Internal.Query
     ''' <param name="model"></param>
     ''' <param name="entity"></param>
     ''' <returns></returns>
-    Public Shared Function Create(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, entity As SqlEntity) As EntitySqlResultReaderData
+    Public Shared Function Create(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> entity As SqlEntity) As EntitySqlResultReaderData
       Dim readerIndex = 0
       Dim entityReaderIndex = 0
       Dim entityType = entity.Entity.EntityType
@@ -157,7 +158,7 @@ Namespace Internal.Query
     ''' <param name="model"></param>
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
-    Public Shared Function Create(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, sqlResult As SqlResultBase) As ReaderDataBase
+    Public Shared Function Create(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> sqlResult As SqlResultBase) As ReaderDataBase
       Return Create(dataReaderType, dialectProvider, model, sqlResult, 0)
     End Function
 
@@ -171,7 +172,7 @@ Namespace Internal.Query
     ''' <param name="sqlResult"></param>
     ''' <param name="readerIndex"></param>
     ''' <returns></returns>
-    Public Shared Function Create(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, sqlResult As SqlResultBase, readerIndex As Int32) As ReaderDataBase
+    Public Shared Function Create(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> sqlResult As SqlResultBase, readerIndex As Int32) As ReaderDataBase
       If TypeOf sqlResult Is AnonymousTypeSqlResult Then
         Return Create(dataReaderType, dialectProvider, model, DirectCast(sqlResult, AnonymousTypeSqlResult), readerIndex)
       ElseIf TypeOf sqlResult Is ValueTupleSqlResult Then
