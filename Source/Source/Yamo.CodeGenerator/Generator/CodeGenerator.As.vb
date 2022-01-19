@@ -25,7 +25,7 @@
       Dim generic = GetGenericName(index, index = entityCount)
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [As](Of TProperty)(relationship As Expression(Of Func(Of {generic}, TProperty))) As SelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function [As](Of TProperty)(<DisallowNull> relationship As Expression(Of Func(Of {generic}, TProperty))) As SelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine("Return InternalAs(relationship)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -39,7 +39,7 @@
       Dim generics1 = String.Join(", ", GetGenericNames(entityCount - 1))
       Dim generics2 = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [As](Of TProperty)(relationship As Expression(Of Func(Of Join(Of {generics1}), TProperty))) As SelectSqlExpression(Of {generics2})").PushIndent()
+      builder.Indent().AppendLine($"Public Function [As](Of TProperty)(<DisallowNull> relationship As Expression(Of Func(Of Join(Of {generics1}), TProperty))) As SelectSqlExpression(Of {generics2})").PushIndent()
       builder.Indent().AppendLine("Return InternalAs(relationship)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub

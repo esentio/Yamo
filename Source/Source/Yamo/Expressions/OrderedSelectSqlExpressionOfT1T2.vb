@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
 
@@ -27,7 +28,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function ThenBy(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {0}, True)
     End Function
 
@@ -36,7 +37,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function ThenBy(keySelector As Expression(Of Func(Of T1, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenBy(<DisallowNull> keySelector As Expression(Of Func(Of T1, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {0}, True)
     End Function
 
@@ -46,7 +47,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function ThenBy(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {1}, True)
     End Function
 
@@ -55,7 +56,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function ThenBy(keySelector As Expression(Of Func(Of T2, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenBy(<DisallowNull> keySelector As Expression(Of Func(Of T2, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {1}, True)
     End Function
 
@@ -65,7 +66,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function ThenBy(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, Nothing, True)
     End Function
 
@@ -74,7 +75,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function ThenBy(keySelector As Expression(Of Func(Of Join(Of T1, T2), FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenBy(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of T1, T2), FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, Nothing, True)
     End Function
 
@@ -84,7 +85,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function ThenBy(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenBy(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2)
       Me.Builder.AddOrderBy(predicate, True, parameters)
       Return Me
     End Function
@@ -95,7 +96,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function ThenByDescending(Of TKey)(keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenByDescending(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {0}, False)
     End Function
 
@@ -104,7 +105,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function ThenByDescending(keySelector As Expression(Of Func(Of T1, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenByDescending(<DisallowNull> keySelector As Expression(Of Func(Of T1, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {0}, False)
     End Function
 
@@ -114,7 +115,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function ThenByDescending(Of TKey)(keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenByDescending(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {1}, False)
     End Function
 
@@ -123,7 +124,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function ThenByDescending(keySelector As Expression(Of Func(Of T2, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenByDescending(<DisallowNull> keySelector As Expression(Of Func(Of T2, FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, {1}, False)
     End Function
 
@@ -133,7 +134,7 @@ Namespace Expressions
     ''' <typeparam name="TKey"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function ThenByDescending(Of TKey)(keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenByDescending(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of T1, T2), TKey))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, Nothing, False)
     End Function
 
@@ -142,7 +143,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="keySelector"></param>
     ''' <returns></returns>
-    Public Function ThenByDescending(keySelector As Expression(Of Func(Of Join(Of T1, T2), FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenByDescending(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of T1, T2), FormattableString))) As OrderedSelectSqlExpression(Of T1, T2)
       Return InternalOrderBy(keySelector, Nothing, False)
     End Function
 
@@ -152,7 +153,7 @@ Namespace Expressions
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function ThenByDescending(predicate As String, ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2)
+    Public Function ThenByDescending(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2)
       Me.Builder.AddOrderBy(predicate, False, parameters)
       Return Me
     End Function
@@ -224,7 +225,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T1, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T1, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {0})
     End Function
 
@@ -234,7 +235,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T2, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T2, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {1})
     End Function
 
@@ -244,7 +245,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T1, T2, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T1, T2, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {0, 1})
     End Function
 
@@ -254,7 +255,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of Join(Of T1, T2), TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of Join(Of T1, T2), TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, Nothing)
     End Function
 
@@ -278,7 +279,7 @@ Namespace Expressions
     ''' <param name="[then]"></param>
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
-    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of OrderedSelectSqlExpression(Of T1, T2), TResult), Optional otherwise As Func(Of OrderedSelectSqlExpression(Of T1, T2), TResult) = Nothing) As TResult
+    Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of OrderedSelectSqlExpression(Of T1, T2), TResult), Optional otherwise As Func(Of OrderedSelectSqlExpression(Of T1, T2), TResult) = Nothing) As TResult
       If condition Then
         Return [then].Invoke(Me)
       ElseIf otherwise Is Nothing Then

@@ -1,4 +1,5 @@
-﻿Imports Yamo.Expressions.Builders
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
 
 Namespace Expressions
@@ -38,7 +39,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="sql"></param>
     ''' <returns></returns>
-    Public Function Execute(sql As FormattableString) As Int32
+    Public Function Execute(<DisallowNull> sql As FormattableString) As Int32
       Dim query = Me.Builder.CreateQuery(sql)
       Return Me.Executor.Execute(query)
     End Function
@@ -50,7 +51,7 @@ Namespace Expressions
     ''' <param name="sql"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Execute(sql As RawSqlString, ParamArray parameters() As Object) As Int32
+    Public Function Execute(<DisallowNull> sql As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As Int32
       Dim query = Me.Builder.CreateQuery(sql, parameters)
       Return Me.Executor.Execute(query)
     End Function
@@ -62,7 +63,7 @@ Namespace Expressions
     ''' <typeparam name="T"></typeparam>
     ''' <param name="sql"></param>
     ''' <returns></returns>
-    Public Function QueryFirstOrDefault(Of T)(sql As FormattableString) As T
+    Public Function QueryFirstOrDefault(Of T)(<DisallowNull> sql As FormattableString) As T
       Dim query = Me.Builder.CreateQuery(sql)
       Return Me.Executor.QueryFirstOrDefault(Of T)(query)
     End Function
@@ -75,7 +76,7 @@ Namespace Expressions
     ''' <param name="sql"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function QueryFirstOrDefault(Of T)(sql As RawSqlString, ParamArray parameters() As Object) As T
+    Public Function QueryFirstOrDefault(Of T)(<DisallowNull> sql As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As T
       Dim query = Me.Builder.CreateQuery(sql, parameters)
       Return Me.Executor.QueryFirstOrDefault(Of T)(query)
     End Function
@@ -87,7 +88,7 @@ Namespace Expressions
     ''' <typeparam name="T"></typeparam>
     ''' <param name="sql"></param>
     ''' <returns></returns>
-    Public Function Query(Of T)(sql As FormattableString) As List(Of T)
+    Public Function Query(Of T)(<DisallowNull> sql As FormattableString) As List(Of T)
       Dim q = Me.Builder.CreateQuery(sql)
       Return Me.Executor.QueryList(Of T)(q)
     End Function
@@ -100,7 +101,7 @@ Namespace Expressions
     ''' <param name="sql"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Query(Of T)(sql As RawSqlString, ParamArray parameters() As Object) As List(Of T)
+    Public Function Query(Of T)(<DisallowNull> sql As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As List(Of T)
       Dim q = Me.Builder.CreateQuery(sql, parameters)
       Return Me.Executor.QueryList(Of T)(q)
     End Function

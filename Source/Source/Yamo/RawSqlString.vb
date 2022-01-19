@@ -1,4 +1,5 @@
-﻿''' <summary>
+﻿Imports System.Diagnostics.CodeAnalysis
+''' <summary>
 ''' Helper structure that enables to pass raw SQL string to SQL expression builder methods or as a formatting argument.
 ''' </summary>
 Public Structure RawSqlString
@@ -12,7 +13,7 @@ Public Structure RawSqlString
   ''' Creates new instance of <see cref="RawSqlString"/>.
   ''' </summary>
   ''' <param name="value"></param>
-  Public Sub New(value As String)
+  Public Sub New(<DisallowNull> value As String)
     Me.Value = value
   End Sub
 
@@ -21,7 +22,7 @@ Public Structure RawSqlString
   ''' </summary>
   ''' <param name="value"></param>
   ''' <returns></returns>
-  Public Shared Widening Operator CType(value As String) As RawSqlString
+  Public Shared Widening Operator CType(<DisallowNull> value As String) As RawSqlString
     Return New RawSqlString(value)
   End Operator
 
@@ -30,7 +31,7 @@ Public Structure RawSqlString
   ''' </summary>
   ''' <param name="s"></param>
   ''' <returns></returns>
-  Public Shared Widening Operator CType(s As FormattableString) As RawSqlString
+  Public Shared Widening Operator CType(<DisallowNull> s As FormattableString) As RawSqlString
     Return Nothing
   End Operator
 
@@ -39,7 +40,7 @@ Public Structure RawSqlString
   ''' </summary>
   ''' <param name="value"></param>
   ''' <returns></returns>
-  Public Shared Function Create(value As String) As RawSqlString
+  Public Shared Function Create(<DisallowNull> value As String) As RawSqlString
     Return New RawSqlString(value)
   End Function
 

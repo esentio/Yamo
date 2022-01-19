@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 
 Namespace Infrastructure
 
@@ -34,8 +35,8 @@ Namespace Infrastructure
     ''' <summary>
     ''' Gets database transaction.
     ''' </summary>
-    ''' <returns></returns>
-    Public ReadOnly Property Transaction As DbTransaction
+    ''' <returns>Transaction or <see langword="Nothing"/> if transaction is not started.</returns>
+    Public ReadOnly Property Transaction As <MaybeNull> DbTransaction
       Get
         Return m_Transaction
       End Get
@@ -46,7 +47,7 @@ Namespace Infrastructure
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="context"></param>
-    Sub New(context As DbContext)
+    Sub New(<DisallowNull> context As DbContext)
       m_Context = context
       m_Connection = context.Options.Connection
 

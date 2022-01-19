@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Linq.Expressions
 Imports Yamo.Infrastructure
 Imports Yamo.Internal.Query
@@ -53,7 +54,7 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
-    Public Shared Function GetReader(model As Model, sqlResult As SqlResultBase) As Func(Of DbDataReader, ReaderDataBase, Object)
+    Public Shared Function GetReader(<DisallowNull> model As Model, <DisallowNull> sqlResult As SqlResultBase) As Func(Of DbDataReader, ReaderDataBase, Object)
       If sqlResult.ResultType.IsValueType Then
         Return GetInstance(model).GetOrCreateValueTypeToObjectWrappedReader(model, sqlResult)
       Else
@@ -69,7 +70,7 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
-    Public Shared Function GetReader(Of T)(model As Model, sqlResult As SqlResultBase) As Func(Of DbDataReader, ReaderDataBase, T)
+    Public Shared Function GetReader(Of T)(<DisallowNull> model As Model, <DisallowNull> sqlResult As SqlResultBase) As Func(Of DbDataReader, ReaderDataBase, T)
       Return DirectCast(GetInstance(model).GetOrCreateReader(model, sqlResult), Func(Of DbDataReader, ReaderDataBase, T))
     End Function
 

@@ -1,4 +1,6 @@
-﻿Namespace Internal.Query.Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Internal.Query.Metadata
 
   ''' <summary>
   ''' Represents SQL result of a model entity.<br/>
@@ -19,7 +21,7 @@
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="entity"></param>
-    Public Sub New(entity As SqlEntity)
+    Public Sub New(<DisallowNull> entity As SqlEntity)
       MyBase.New(entity.Entity.EntityType)
       Me.Entity = entity
     End Sub

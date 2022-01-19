@@ -1,4 +1,6 @@
-﻿''' <summary>
+﻿Imports System.Diagnostics.CodeAnalysis
+
+''' <summary>
 ''' Metadata defining 25 entities used in JOIN statements.
 ''' </summary>
 ''' <typeparam name="TTable1"></typeparam>
@@ -207,7 +209,7 @@ Public Class Join(Of TTable1, TTable2, TTable3, TTable4, TTable5, TTable6, TTabl
   ''' <param name="table23"></param>
   ''' <param name="table24"></param>
   ''' <param name="table25"></param>
-  Sub New(table1 As TTable1, table2 As TTable2, table3 As TTable3, table4 As TTable4, table5 As TTable5, table6 As TTable6, table7 As TTable7, table8 As TTable8, table9 As TTable9, table10 As TTable10, table11 As TTable11, table12 As TTable12, table13 As TTable13, table14 As TTable14, table15 As TTable15, table16 As TTable16, table17 As TTable17, table18 As TTable18, table19 As TTable19, table20 As TTable20, table21 As TTable21, table22 As TTable22, table23 As TTable23, table24 As TTable24, table25 As TTable25)
+  Sub New(<DisallowNull> table1 As TTable1, <DisallowNull> table2 As TTable2, <DisallowNull> table3 As TTable3, <DisallowNull> table4 As TTable4, <DisallowNull> table5 As TTable5, <DisallowNull> table6 As TTable6, <DisallowNull> table7 As TTable7, <DisallowNull> table8 As TTable8, <DisallowNull> table9 As TTable9, <DisallowNull> table10 As TTable10, <DisallowNull> table11 As TTable11, <DisallowNull> table12 As TTable12, <DisallowNull> table13 As TTable13, <DisallowNull> table14 As TTable14, <DisallowNull> table15 As TTable15, <DisallowNull> table16 As TTable16, <DisallowNull> table17 As TTable17, <DisallowNull> table18 As TTable18, <DisallowNull> table19 As TTable19, <DisallowNull> table20 As TTable20, <DisallowNull> table21 As TTable21, <DisallowNull> table22 As TTable22, <DisallowNull> table23 As TTable23, <DisallowNull> table24 As TTable24, <DisallowNull> table25 As TTable25)
     Me.T1 = table1
     Me.T2 = table2
     Me.T3 = table3

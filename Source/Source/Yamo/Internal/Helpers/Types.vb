@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 
@@ -22,7 +23,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function IsNullable(type As Type) As Boolean
+    Public Shared Function IsNullable(<DisallowNull> type As Type) As Boolean
       ' this might be on hot path; checking IsValueType before calling Nullable.GetUnderlyingType seems to be faster for most use cases
       Return type.IsValueType AndAlso Nullable.GetUnderlyingType(type) IsNot Nothing
     End Function
@@ -33,7 +34,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function IsValueTupleOrNullableValueTuple(type As Type) As Boolean
+    Public Shared Function IsValueTupleOrNullableValueTuple(<DisallowNull> type As Type) As Boolean
       ' via https://www.tabsoverspaces.com/233605-checking-whether-the-type-is-a-tuple-valuetuple
 
       Dim underlyingNullableType = Nullable.GetUnderlyingType(type)
@@ -51,7 +52,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function IsValueTuple(type As Type) As Boolean
+    Public Shared Function IsValueTuple(<DisallowNull> type As Type) As Boolean
       ' via https://www.tabsoverspaces.com/233605-checking-whether-the-type-is-a-tuple-valuetuple
 
       If Not type.IsGenericType Then
@@ -77,7 +78,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function IsAnonymousType(type As Type) As Boolean
+    Public Shared Function IsAnonymousType(<DisallowNull> type As Type) As Boolean
       ' via https://stackoverflow.com/questions/2483023/how-to-test-if-a-type-is-anonymous
       ' and https://elegantcode.com/2011/06/24/detecting-anonymous-types-on-mono/
       Return Attribute.IsDefined(type, GetType(CompilerGeneratedAttribute), False) AndAlso
@@ -94,7 +95,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="member"></param>
     ''' <returns></returns>
-    Public Shared Function IsNullableValueAccess(member As MemberInfo) As Boolean
+    Public Shared Function IsNullableValueAccess(<DisallowNull> member As MemberInfo) As Boolean
       Return member.Name = "Value"
     End Function
 
@@ -105,7 +106,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="member"></param>
     ''' <returns></returns>
-    Public Shared Function IsNullableHasValueAccess(member As MemberInfo) As Boolean
+    Public Shared Function IsNullableHasValueAccess(<DisallowNull> member As MemberInfo) As Boolean
       Return member.Name = "HasValue"
     End Function
 
@@ -115,7 +116,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetFlattenedValueTupleGenericArguments(type As Type) As List(Of Type)
+    Public Shared Function GetFlattenedValueTupleGenericArguments(<DisallowNull> type As Type) As List(Of Type)
       Dim args = New List(Of Type)
       AddValueTupleGenericArguments(type, args)
       Return args
@@ -126,7 +127,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="type"></param>
     ''' <param name="allArgs"></param>
-    Private Shared Sub AddValueTupleGenericArguments(type As Type, allArgs As List(Of Type))
+    Private Shared Sub AddValueTupleGenericArguments(<DisallowNull> type As Type, <DisallowNull> allArgs As List(Of Type))
       Dim args = type.GetGenericArguments()
       Dim count = args.Length
 
@@ -151,7 +152,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetValueTupleTypeInfo(type As Type) As ValueTupleTypeInfo
+    Public Shared Function GetValueTupleTypeInfo(<DisallowNull> type As Type) As ValueTupleTypeInfo
       Dim args = New List(Of Type)
       Dim cis = New List(Of CtorInfo)
 
@@ -193,7 +194,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function IsProbablyModel(type As Type) As Boolean
+    Public Shared Function IsProbablyModel(<DisallowNull> type As Type) As Boolean
       ' TODO: SIP - this won't work if model entity is a structure!
       If type.IsValueType Then Return False
       If type Is GetType(String) Then Return False
@@ -208,7 +209,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetDbTypeForClrType(type As Type) As DbType?
+    Public Shared Function GetDbTypeForClrType(<DisallowNull> type As Type) As DbType?
       ' See also:
       ' https://referencesource.microsoft.com/#System.Data.Entity/System/Data/Metadata/TypeHelpers.cs,6da27ae495b4be68
       ' https://referencesource.microsoft.com/#System.Data/fx/src/data/System/Data/SqlClient/SqlEnums.cs,b80e3c28640e1801

@@ -1,4 +1,6 @@
-﻿Namespace Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Metadata
 
   ''' <summary>
   ''' Represents an entity in database model.
@@ -26,23 +28,39 @@
     ''' <returns></returns>
     Public ReadOnly Property EntityType As Type
 
+    Private m_TableName As String
     ''' <summary>
     ''' Gets or sets table name of the entity.
     ''' </summary>
     ''' <returns></returns>
-    Public Property TableName As String
+    Public Property TableName() As String
+      Get
+        Return m_TableName
+      End Get
+      Set(<DisallowNull> ByVal value As String)
+        m_TableName = value
+      End Set
+    End Property
 
+    Private m_Schema As String
     ''' <summary>
     ''' Gets or sets schema of the entity.
     ''' </summary>
     ''' <returns></returns>
-    Public Property Schema As String
+    Public Property Schema() As String
+      Get
+        Return m_Schema
+      End Get
+      Set(<DisallowNull> ByVal value As String)
+        m_Schema = value
+      End Set
+    End Property
 
     ''' <summary>
     ''' Creates new instance of <see cref="Entity"/>.
     ''' </summary>
     ''' <param name="entityType"></param>
-    Sub New(entityType As Type)
+    Sub New(<DisallowNull> entityType As Type)
       m_PropertiesDictionary = New Dictionary(Of String, [Property])
       m_Properties = New List(Of [Property])
       m_RelationshipNavigations = New Dictionary(Of String, RelationshipNavigation)
@@ -75,7 +93,7 @@
     ''' </summary>
     ''' <param name="name"></param>
     ''' <returns></returns>
-    Public Function GetProperty(name As String) As [Property]
+    Public Function GetProperty(<DisallowNull> name As String) As [Property]
       Return m_PropertiesDictionary(name)
     End Function
 
@@ -199,7 +217,7 @@
     ''' </summary>
     ''' <param name="relatedEntityType"></param>
     ''' <returns></returns>
-    Public Function GetRelationshipNavigations(relatedEntityType As Type) As IReadOnlyList(Of RelationshipNavigation)
+    Public Function GetRelationshipNavigations(<DisallowNull> relatedEntityType As Type) As IReadOnlyList(Of RelationshipNavigation)
       Return m_RelationshipNavigations.Values.Where(Function(r) r.RelatedEntityType = relatedEntityType).ToArray()
     End Function
 
@@ -208,7 +226,7 @@
     ''' </summary>
     ''' <param name="propertyName"></param>
     ''' <returns></returns>
-    Public Function GetRelationshipNavigation(propertyName As String) As RelationshipNavigation
+    Public Function GetRelationshipNavigation(<DisallowNull> propertyName As String) As RelationshipNavigation
       Return m_RelationshipNavigations(propertyName)
     End Function
 

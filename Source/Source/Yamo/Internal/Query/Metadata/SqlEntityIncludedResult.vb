@@ -1,4 +1,6 @@
-﻿Namespace Internal.Query.Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Internal.Query.Metadata
 
   ''' <summary>
   ''' Represents SQL related data of a result included to an entity.<br/>
@@ -36,7 +38,7 @@
     ''' <param name="sql"></param>
     ''' <param name="propertyName"></param>
     ''' <param name="result"></param>
-    Public Sub New(sql As String, propertyName As String, result As SqlResultBase)
+    Public Sub New(<DisallowNull> sql As String, <DisallowNull> propertyName As String, <DisallowNull> result As SqlResultBase)
       Me.Sql = sql
       Me.PropertyName = propertyName
       Me.Result = result

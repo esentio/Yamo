@@ -1,4 +1,6 @@
-﻿Namespace Internal.Helpers
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Internal.Helpers
 
   ''' <summary>
   ''' Value tuple and nullable value tuple type info.<br/>
@@ -34,7 +36,7 @@
     ''' <param name="valueTupleType"></param>
     ''' <param name="flattenedArguments"></param>
     ''' <param name="ctorInfos"></param>
-    Public Sub New(valueTupleType As Type, flattenedArguments As List(Of Type), ctorInfos As List(Of CtorInfo))
+    Public Sub New(<DisallowNull> valueTupleType As Type, <DisallowNull> flattenedArguments As List(Of Type), <DisallowNull> ctorInfos As List(Of CtorInfo))
       Me.ValueTupleType = valueTupleType
       Me.FlattenedArguments = flattenedArguments
       Me.CtorInfos = ctorInfos

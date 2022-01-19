@@ -1,4 +1,6 @@
-﻿Namespace Metadata.Builders
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Metadata.Builders
 
   ''' <summary>
   ''' Provides an API for configuring a collection relationship navigation.
@@ -24,7 +26,7 @@
     ''' <param name="propertyName"></param>
     ''' <param name="relatedEntityType"></param>
     ''' <param name="collectionType"></param>
-    Sub New(declaringEntity As Entity, propertyName As String, relatedEntityType As Type, collectionType As Type)
+    Sub New(<DisallowNull> declaringEntity As Entity, <DisallowNull> propertyName As String, <DisallowNull> relatedEntityType As Type, <DisallowNull> collectionType As Type)
       m_DeclaringEntity = declaringEntity
       m_CollectionNavigation = m_DeclaringEntity.AddCollectionNavigation(propertyName, relatedEntityType, collectionType)
     End Sub

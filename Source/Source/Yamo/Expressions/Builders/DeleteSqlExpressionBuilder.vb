@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports System.Text
 Imports Yamo.Internal
 Imports Yamo.Internal.Query
@@ -61,7 +62,7 @@ Namespace Expressions.Builders
     ''' <param name="mainEntityType"></param>
     ''' <param name="softDelete"></param>
     ''' <param name="tableNameOverride"></param>
-    Public Sub New(context As DbContext, mainEntityType As Type, softDelete As Boolean, tableNameOverride As String)
+    Public Sub New(<DisallowNull> context As DbContext, <DisallowNull> mainEntityType As Type, softDelete As Boolean, tableNameOverride As String)
       MyBase.New(context)
       m_Model = New DeleteSqlModel(Me.DbContext.Model, mainEntityType)
       m_SoftDelete = softDelete
@@ -78,7 +79,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="tableHints"></param>
-    Public Sub SetTableHints(tableHints As String)
+    Public Sub SetTableHints(<DisallowNull> tableHints As String)
       m_TableHints = tableHints
     End Sub
 
@@ -87,7 +88,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="predicate"></param>
-    Public Sub AddWhere(predicate As Expression)
+    Public Sub AddWhere(<DisallowNull> predicate As Expression)
       If Not m_ParameterIndexShift.HasValue Then
         If m_SoftDelete Then
           m_ParameterIndexShift = m_Model.MainEntity.Entity.GetSetOnDeleteProperties().Count
@@ -107,7 +108,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
-    Public Sub AddWhere(predicate As String, ParamArray parameters() As Object)
+    Public Sub AddWhere(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object)
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_WhereExpressions.Add(predicate)
       Else
@@ -206,7 +207,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="obj"></param>
     ''' <returns></returns>
-    Public Function CreateDeleteQuery(obj As Object) As Query
+    Public Function CreateDeleteQuery(<DisallowNull> obj As Object) As Query
       Dim table As String
 
       If m_TableNameOverride Is Nothing Then
@@ -232,7 +233,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="obj"></param>
     ''' <returns></returns>
-    Public Function CreateSoftDeleteQuery(obj As Object) As Query
+    Public Function CreateSoftDeleteQuery(<DisallowNull> obj As Object) As Query
       Dim table As String
 
       If m_TableNameOverride Is Nothing Then

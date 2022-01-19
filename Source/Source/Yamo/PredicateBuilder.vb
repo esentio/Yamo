@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Internal
 
 ''' <summary>
@@ -19,7 +20,7 @@ Public Class PredicateBuilder
   ''' <param name="left"></param>
   ''' <param name="right"></param>
   ''' <returns></returns>
-  Public Shared Function [And](Of T)(left As Expression(Of Func(Of T, Boolean)), right As Expression(Of Func(Of T, Boolean))) As Expression(Of Func(Of T, Boolean))
+  Public Shared Function [And](Of T)(<DisallowNull> left As Expression(Of Func(Of T, Boolean)), <DisallowNull> right As Expression(Of Func(Of T, Boolean))) As Expression(Of Func(Of T, Boolean))
     Dim visitor = New ReplaceParameterVisitor()
 
     Dim newLeft = left.Body
@@ -36,7 +37,7 @@ Public Class PredicateBuilder
   ''' <typeparam name="T"></typeparam>
   ''' <param name="predicates"></param>
   ''' <returns></returns>
-  Public Shared Function [And](Of T)(ParamArray predicates As Expression(Of Func(Of T, Boolean))()) As Expression(Of Func(Of T, Boolean))
+  Public Shared Function [And](Of T)(<DisallowNull> ParamArray predicates As Expression(Of Func(Of T, Boolean))()) As Expression(Of Func(Of T, Boolean))
     If predicates Is Nothing Then
       Throw New ArgumentNullException(NameOf(predicates))
     ElseIf predicates.Length = 0 Then
@@ -66,7 +67,7 @@ Public Class PredicateBuilder
   ''' <typeparam name="T"></typeparam>
   ''' <param name="predicates"></param>
   ''' <returns></returns>
-  Public Shared Function [And](Of T)(predicates As IEnumerable(Of Expression(Of Func(Of T, Boolean)))) As Expression(Of Func(Of T, Boolean))
+  Public Shared Function [And](Of T)(<DisallowNull> predicates As IEnumerable(Of Expression(Of Func(Of T, Boolean)))) As Expression(Of Func(Of T, Boolean))
     If predicates Is Nothing Then
       Throw New ArgumentNullException(NameOf(predicates))
     End If
@@ -105,7 +106,7 @@ Public Class PredicateBuilder
   ''' <param name="left"></param>
   ''' <param name="right"></param>
   ''' <returns></returns>
-  Public Shared Function [Or](Of T)(left As Expression(Of Func(Of T, Boolean)), right As Expression(Of Func(Of T, Boolean))) As Expression(Of Func(Of T, Boolean))
+  Public Shared Function [Or](Of T)(<DisallowNull> left As Expression(Of Func(Of T, Boolean)), <DisallowNull> right As Expression(Of Func(Of T, Boolean))) As Expression(Of Func(Of T, Boolean))
     Dim visitor = New ReplaceParameterVisitor()
 
     Dim newLeft = left.Body
@@ -122,7 +123,7 @@ Public Class PredicateBuilder
   ''' <typeparam name="T"></typeparam>
   ''' <param name="predicates"></param>
   ''' <returns></returns>
-  Public Shared Function [Or](Of T)(ParamArray predicates As Expression(Of Func(Of T, Boolean))()) As Expression(Of Func(Of T, Boolean))
+  Public Shared Function [Or](Of T)(<DisallowNull> ParamArray predicates As Expression(Of Func(Of T, Boolean))()) As Expression(Of Func(Of T, Boolean))
     If predicates Is Nothing Then
       Throw New ArgumentNullException(NameOf(predicates))
     ElseIf predicates.Length = 0 Then
@@ -151,7 +152,7 @@ Public Class PredicateBuilder
   ''' <typeparam name="T"></typeparam>
   ''' <param name="predicates"></param>
   ''' <returns></returns>
-  Public Shared Function [Or](Of T)(predicates As IEnumerable(Of Expression(Of Func(Of T, Boolean)))) As Expression(Of Func(Of T, Boolean))
+  Public Shared Function [Or](Of T)(<DisallowNull> predicates As IEnumerable(Of Expression(Of Func(Of T, Boolean)))) As Expression(Of Func(Of T, Boolean))
     If predicates Is Nothing Then
       Throw New ArgumentNullException(NameOf(predicates))
     End If
@@ -188,7 +189,7 @@ Public Class PredicateBuilder
   ''' <typeparam name="T"></typeparam>
   ''' <param name="predicate"></param>
   ''' <returns></returns>
-  Public Shared Function [Not](Of T)(predicate As Expression(Of Func(Of T, Boolean))) As Expression(Of Func(Of T, Boolean))
+  Public Shared Function [Not](Of T)(<DisallowNull> predicate As Expression(Of Func(Of T, Boolean))) As Expression(Of Func(Of T, Boolean))
     Return Expression.Lambda(Of Func(Of T, Boolean))(Expression.Not(predicate.Body), predicate.Parameters)
   End Function
 

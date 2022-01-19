@@ -1,4 +1,5 @@
-﻿Imports System.Reflection
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Reflection
 Imports Yamo.Infrastructure
 
 Namespace Internal
@@ -74,7 +75,7 @@ Namespace Internal
     ''' <param name="type"></param>
     ''' <param name="fieldInfo"></param>
     ''' <returns></returns>
-    Public Shared Function GetFieldCaller(type As Type, fieldInfo As FieldInfo) As Func(Of Object, Object)
+    Public Shared Function GetFieldCaller(<DisallowNull> type As Type, <DisallowNull> fieldInfo As FieldInfo) As Func(Of Object, Object)
       Return m_Instance.GetOrCreateFieldCaller(type, fieldInfo)
     End Function
 
@@ -85,7 +86,7 @@ Namespace Internal
     ''' <param name="type"></param>
     ''' <param name="fieldInfo"></param>
     ''' <returns></returns>
-    Public Shared Function GetStaticFieldCaller(type As Type, fieldInfo As FieldInfo) As Func(Of Object)
+    Public Shared Function GetStaticFieldCaller(<DisallowNull> type As Type, <DisallowNull> fieldInfo As FieldInfo) As Func(Of Object)
       Return m_Instance.GetOrCreateStaticFieldCaller(type, fieldInfo)
     End Function
 
@@ -96,7 +97,7 @@ Namespace Internal
     ''' <param name="type"></param>
     ''' <param name="propertyInfo"></param>
     ''' <returns></returns>
-    Public Shared Function GetPropertyCaller(type As Type, propertyInfo As PropertyInfo) As Func(Of Object, Object)
+    Public Shared Function GetPropertyCaller(<DisallowNull> type As Type, <DisallowNull> propertyInfo As PropertyInfo) As Func(Of Object, Object)
       Return m_Instance.GetOrCreatePropertyCaller(type, propertyInfo)
     End Function
 
@@ -107,7 +108,7 @@ Namespace Internal
     ''' <param name="type"></param>
     ''' <param name="propertyInfo"></param>
     ''' <returns></returns>
-    Public Shared Function GetStaticPropertyCaller(type As Type, propertyInfo As PropertyInfo) As Func(Of Object)
+    Public Shared Function GetStaticPropertyCaller(<DisallowNull> type As Type, <DisallowNull> propertyInfo As PropertyInfo) As Func(Of Object)
       Return m_Instance.GetOrCreateStaticPropertyCaller(type, propertyInfo)
     End Function
 
@@ -118,7 +119,7 @@ Namespace Internal
     ''' <param name="type"></param>
     ''' <param name="methodInfo"></param>
     ''' <returns></returns>
-    Public Shared Function GetMethodCaller(type As Type, methodInfo As MethodInfo) As Func(Of Object, Object)
+    Public Shared Function GetMethodCaller(<DisallowNull> type As Type, <DisallowNull> methodInfo As MethodInfo) As Func(Of Object, Object)
       Return m_Instance.GetOrCreateMethodCaller(type, methodInfo)
     End Function
 
@@ -129,7 +130,7 @@ Namespace Internal
     ''' <param name="type"></param>
     ''' <param name="methodInfo"></param>
     ''' <returns></returns>
-    Public Shared Function GetStaticMethodCaller(type As Type, methodInfo As MethodInfo) As Func(Of Object)
+    Public Shared Function GetStaticMethodCaller(<DisallowNull> type As Type, <DisallowNull> methodInfo As MethodInfo) As Func(Of Object)
       Return m_Instance.GetOrCreateStaticMethodCaller(type, methodInfo)
     End Function
 

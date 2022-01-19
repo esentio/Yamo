@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Diagnostics.CodeAnalysis
 Imports Yamo.Internal
 
 Namespace Metadata
@@ -20,11 +21,19 @@ Namespace Metadata
     ''' <returns></returns>
     Public ReadOnly Property PropertyType As Type
 
+    Private m_ColumnName As String
     ''' <summary>
     ''' Gets or sets database column name related to this property.
     ''' </summary>
     ''' <returns></returns>
-    Public Property ColumnName As String
+    Public Property ColumnName() As String
+      Get
+        Return m_ColumnName
+      End Get
+      Set(<DisallowNull> ByVal value As String)
+        m_ColumnName = value
+      End Set
+    End Property
 
     ''' <summary>
     ''' Gets or sets whether this property is part of the primary key of an entity.
@@ -122,7 +131,7 @@ Namespace Metadata
     ''' </summary>
     ''' <param name="name"></param>
     ''' <param name="propertyType"></param>
-    Sub New(name As String, propertyType As Type)
+    Sub New(<DisallowNull> name As String, <DisallowNull> propertyType As Type)
       Me.Name = name
       Me.PropertyType = propertyType
       Me.ColumnName = name

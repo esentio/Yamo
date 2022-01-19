@@ -7,6 +7,7 @@ Imports Yamo.Internal.Query
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query.Metadata
 Imports Yamo.Sql
+Imports System.Diagnostics.CodeAnalysis
 
 Namespace Internal
 
@@ -103,7 +104,7 @@ Namespace Internal
     ''' </summary>
     ''' <param name="builder"></param>
     ''' <param name="model"></param>
-    Public Sub New(builder As SqlExpressionBuilderBase, model As SqlModelBase)
+    Public Sub New(<DisallowNull> builder As SqlExpressionBuilderBase, <DisallowNull> model As SqlModelBase)
       m_Builder = builder
       m_Model = model
       m_Stack = New Stack(Of NodeInfo)
@@ -147,7 +148,7 @@ Namespace Internal
     ''' <param name="useAliases"></param>
     ''' <param name="useTableNamesOrAliases"></param>
     ''' <returns></returns>
-    Public Function Translate(expression As Expression, mode As ExpressionTranslateMode, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
+    Public Function Translate(<DisallowNull> expression As Expression, mode As ExpressionTranslateMode, entityIndexHints As Int32(), parameterIndex As Int32, useAliases As Boolean, useTableNamesOrAliases As Boolean) As SqlString
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -171,7 +172,7 @@ Namespace Internal
     ''' <param name="entityIndexHints"><see langword="Nothing"/> for <see cref="ExpressionParametersType.IJoin"/> and not <see langword="Nothing"/> for <see cref="ExpressionParametersType.Entities"/>.</param>
     ''' <param name="parameterIndex"></param>
     ''' <returns></returns>
-    Public Function TranslateCustomSelect(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, SqlResult As SqlResultBase)
+    Public Function TranslateCustomSelect(<DisallowNull> expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, SqlResult As SqlResultBase)
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -196,7 +197,7 @@ Namespace Internal
     ''' <param name="parameterIndex"></param>
     ''' <param name="includeIndex"></param>
     ''' <returns></returns>
-    Public Function TranslateIncludeAction(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, includeIndex As Int32) As (SqlString As SqlString, EntityIndex As Int32, PropertyName As String, Result As SqlResultBase)
+    Public Function TranslateIncludeAction(<DisallowNull> expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, includeIndex As Int32) As (SqlString As SqlString, EntityIndex As Int32, PropertyName As String, Result As SqlResultBase)
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -253,7 +254,7 @@ Namespace Internal
     ''' <param name="parameterIndex"></param>
     ''' <param name="includeIndex"></param>
     ''' <returns></returns>
-    Public Function TranslateIncludeValueSelector(expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, includeIndex As Int32) As (SqlString As SqlString, Result As SqlResultBase)
+    Public Function TranslateIncludeValueSelector(<DisallowNull> expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, includeIndex As Int32) As (SqlString As SqlString, Result As SqlResultBase)
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If

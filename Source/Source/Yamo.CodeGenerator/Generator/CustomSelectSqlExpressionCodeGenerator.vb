@@ -14,6 +14,7 @@
     End Function
 
     Protected Overrides Sub Generate(builder As CodeBuilder, entityCount As Int32)
+      builder.Indent().AppendLine("Imports System.Diagnostics.CodeAnalysis")
       builder.Indent().AppendLine("Imports System.Linq.Expressions")
       builder.Indent().AppendLine("Imports Yamo.Expressions.Builders")
       builder.Indent().AppendLine("Imports Yamo.Internal.Query")

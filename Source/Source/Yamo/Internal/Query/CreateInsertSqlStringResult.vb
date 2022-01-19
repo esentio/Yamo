@@ -1,4 +1,6 @@
-﻿Namespace Internal.Query
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Internal.Query
 
   ''' <summary>
   ''' Create insert SQL string result.<br/>
@@ -26,7 +28,7 @@
     ''' </summary>
     ''' <param name="sqlString"></param>
     ''' <param name="readDbGeneratedValues"></param>
-    Sub New(sqlString As SqlString, readDbGeneratedValues As Boolean)
+    Sub New(<DisallowNull> sqlString As SqlString, readDbGeneratedValues As Boolean)
       Me.SqlString = sqlString
       Me.ReadDbGeneratedValues = readDbGeneratedValues
     End Sub

@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports System.Reflection
 Imports Yamo.Infrastructure
 
@@ -29,7 +30,7 @@ Namespace Sql
     ''' <param name="propertyName"></param>
     ''' <param name="tableAlias"></param>
     ''' <returns></returns>
-    Public Shared Function Column(Of T)(propertyName As String, Optional tableAlias As String = Nothing) As ColumnModelInfo
+    Public Shared Function Column(Of T)(<DisallowNull> propertyName As String, Optional tableAlias As String = Nothing) As ColumnModelInfo
       Return New ColumnModelInfo(GetType(T), propertyName, tableAlias)
     End Function
 
@@ -51,7 +52,7 @@ Namespace Sql
     ''' <param name="method"></param>
     ''' <param name="dialectProvider"></param>
     ''' <returns></returns>
-    Public Overloads Shared Function GetSqlFormat(method As MethodCallExpression, dialectProvider As SqlDialectProvider) As SqlFormat
+    Public Overloads Shared Function GetSqlFormat(<DisallowNull> method As MethodCallExpression, <DisallowNull> dialectProvider As SqlDialectProvider) As SqlFormat
       Throw New InvalidOperationException("This method is not intended to be called in this SQL helper.")
     End Function
 

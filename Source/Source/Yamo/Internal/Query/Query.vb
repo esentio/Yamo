@@ -1,4 +1,6 @@
-﻿Namespace Internal.Query
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Internal.Query
 
   ''' <summary>
   ''' Represents SQL query/statement data.<br/>
@@ -25,7 +27,7 @@
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="sql"></param>
-    Sub New(sql As SqlString)
+    Sub New(<DisallowNull> sql As SqlString)
       Me.Sql = sql.Sql
       Me.Parameters = sql.Parameters
     End Sub
@@ -36,7 +38,7 @@
     ''' </summary>
     ''' <param name="sql"></param>
     ''' <param name="parameters"></param>
-    Sub New(sql As String, parameters As IReadOnlyList(Of SqlParameter))
+    Sub New(<DisallowNull> sql As String, <DisallowNull> parameters As IReadOnlyList(Of SqlParameter))
       Me.Sql = sql
       Me.Parameters = parameters
     End Sub

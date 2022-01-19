@@ -1,4 +1,5 @@
 Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 Imports Yamo.Expressions
 Imports Yamo.Infrastructure
 Imports Yamo.Internal
@@ -101,7 +102,7 @@ Public Class DbContext
   ''' The base implementation does nothing.
   ''' </summary>
   ''' <param name="optionsBuilder"></param>
-  Protected Overridable Sub OnConfiguring(optionsBuilder As DbContextOptionsBuilder)
+  Protected Overridable Sub OnConfiguring(<DisallowNull> optionsBuilder As DbContextOptionsBuilder)
   End Sub
 
   ''' <summary>
@@ -110,7 +111,7 @@ Public Class DbContext
   ''' The base implementation does nothing.
   ''' </summary>
   ''' <param name="modelBuilder"></param>
-  Protected Overridable Sub OnModelCreating(modelBuilder As ModelBuilder)
+  Protected Overridable Sub OnModelCreating(<DisallowNull> modelBuilder As ModelBuilder)
   End Sub
 
   ''' <summary>
@@ -119,7 +120,7 @@ Public Class DbContext
   ''' The base implementation does nothing.
   ''' </summary>
   ''' <param name="command"></param>
-  Protected Overridable Sub OnCommandExecuting(command As DbCommand)
+  Protected Overridable Sub OnCommandExecuting(<DisallowNull> command As DbCommand)
   End Sub
 
   ''' <summary>
@@ -127,7 +128,7 @@ Public Class DbContext
   ''' </summary>
   ''' <param name="sql"></param>
   ''' <returns></returns>
-  Public Function Execute(sql As FormattableString) As Int32
+  Public Function Execute(<DisallowNull> sql As FormattableString) As Int32
     Return (New SqlExpression(Me)).Execute(sql)
   End Function
 
@@ -137,7 +138,7 @@ Public Class DbContext
   ''' <param name="sql"></param>
   ''' <param name="parameters"></param>
   ''' <returns></returns>
-  Public Function Execute(sql As RawSqlString, ParamArray parameters() As Object) As Int32
+  Public Function Execute(<DisallowNull> sql As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As Int32
     Return (New SqlExpression(Me)).Execute(sql, parameters)
   End Function
 
@@ -147,7 +148,7 @@ Public Class DbContext
   ''' <typeparam name="T"></typeparam>
   ''' <param name="sql"></param>
   ''' <returns></returns>
-  Public Function QueryFirstOrDefault(Of T)(sql As FormattableString) As T
+  Public Function QueryFirstOrDefault(Of T)(<DisallowNull> sql As FormattableString) As <MaybeNull> T
     Return (New SqlExpression(Me)).QueryFirstOrDefault(Of T)(sql)
   End Function
 
@@ -158,7 +159,7 @@ Public Class DbContext
   ''' <param name="sql"></param>
   ''' <param name="parameters"></param>
   ''' <returns></returns>
-  Public Function QueryFirstOrDefault(Of T)(sql As RawSqlString, ParamArray parameters() As Object) As T
+  Public Function QueryFirstOrDefault(Of T)(<DisallowNull> sql As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As <MaybeNull> T
     Return (New SqlExpression(Me)).QueryFirstOrDefault(Of T)(sql, parameters)
   End Function
 
@@ -168,7 +169,7 @@ Public Class DbContext
   ''' <typeparam name="T"></typeparam>
   ''' <param name="sql"></param>
   ''' <returns></returns>
-  Public Function Query(Of T)(sql As FormattableString) As List(Of T)
+  Public Function Query(Of T)(<DisallowNull> sql As FormattableString) As List(Of T)
     Return (New SqlExpression(Me)).Query(Of T)(sql)
   End Function
 
@@ -179,7 +180,7 @@ Public Class DbContext
   ''' <param name="sql"></param>
   ''' <param name="parameters"></param>
   ''' <returns></returns>
-  Public Function Query(Of T)(sql As RawSqlString, ParamArray parameters() As Object) As List(Of T)
+  Public Function Query(Of T)(<DisallowNull> sql As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As List(Of T)
     Return (New SqlExpression(Me)).Query(Of T)(sql, parameters)
   End Function
 
@@ -198,7 +199,7 @@ Public Class DbContext
   ''' <typeparam name="T"></typeparam>
   ''' <param name="tableSource"></param>
   ''' <returns></returns>
-  Public Function From(Of T)(tableSource As FormattableString) As SelectSqlExpression(Of T)
+  Public Function From(Of T)(<DisallowNull> tableSource As FormattableString) As SelectSqlExpression(Of T)
     Return New SelectSqlExpression(Of T)(Me, tableSource)
   End Function
 
@@ -209,7 +210,7 @@ Public Class DbContext
   ''' <param name="tableSource"></param>
   ''' <param name="parameters"></param>
   ''' <returns></returns>
-  Public Function From(Of T)(tableSource As RawSqlString, ParamArray parameters() As Object) As SelectSqlExpression(Of T)
+  Public Function From(Of T)(<DisallowNull> tableSource As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As SelectSqlExpression(Of T)
     Return New SelectSqlExpression(Of T)(Me, tableSource, parameters)
   End Function
 
@@ -221,7 +222,7 @@ Public Class DbContext
   ''' <param name="useDbIdentityAndDefaults"></param>
   ''' <param name="setAutoFields"></param>
   ''' <returns></returns>
-  Public Function Insert(Of T)(obj As T, Optional useDbIdentityAndDefaults As Boolean = True, Optional setAutoFields As Boolean = True) As Int32
+  Public Function Insert(Of T)(<DisallowNull> obj As T, Optional useDbIdentityAndDefaults As Boolean = True, Optional setAutoFields As Boolean = True) As Int32
     Return (New InsertSqlExpression(Of T)(Me)).Execute(obj, useDbIdentityAndDefaults, setAutoFields)
   End Function
 
@@ -240,7 +241,7 @@ Public Class DbContext
   ''' <typeparam name="T"></typeparam>
   ''' <param name="table"></param>
   ''' <returns></returns>
-  Public Function Insert(Of T)(table As String) As InsertSqlExpression(Of T)
+  Public Function Insert(Of T)(<DisallowNull> table As String) As InsertSqlExpression(Of T)
     Return New InsertSqlExpression(Of T)(Me, table)
   End Function
 
@@ -252,7 +253,7 @@ Public Class DbContext
   ''' <param name="setAutoFields"></param>
   ''' <param name="forceUpdateAllFields"></param>
   ''' <returns></returns>
-  Public Function Update(Of T)(obj As T, Optional setAutoFields As Boolean = True, Optional forceUpdateAllFields As Boolean = False) As Int32
+  Public Function Update(Of T)(<DisallowNull> obj As T, Optional setAutoFields As Boolean = True, Optional forceUpdateAllFields As Boolean = False) As Int32
     Return (New UpdateSqlExpression(Of T)(Me)).Execute(obj, setAutoFields, forceUpdateAllFields)
   End Function
 
@@ -271,7 +272,7 @@ Public Class DbContext
   ''' <typeparam name="T"></typeparam>
   ''' <param name="table"></param>
   ''' <returns></returns>
-  Public Function Update(Of T)(table As String) As UpdateSqlExpression(Of T)
+  Public Function Update(Of T)(<DisallowNull> table As String) As UpdateSqlExpression(Of T)
     Return New UpdateSqlExpression(Of T)(Me, table)
   End Function
 
@@ -281,7 +282,7 @@ Public Class DbContext
   ''' <typeparam name="T"></typeparam>
   ''' <param name="obj"></param>
   ''' <returns></returns>
-  Public Function Delete(Of T)(obj As T) As Int32
+  Public Function Delete(Of T)(<DisallowNull> obj As T) As Int32
     Return (New DeleteSqlExpression(Of T)(Me, False)).Execute(obj)
   End Function
 
@@ -300,7 +301,7 @@ Public Class DbContext
   ''' <typeparam name="T"></typeparam>
   ''' <param name="table"></param>
   ''' <returns></returns>
-  Public Function Delete(Of T)(table As String) As DeleteSqlExpression(Of T)
+  Public Function Delete(Of T)(<DisallowNull> table As String) As DeleteSqlExpression(Of T)
     Return New DeleteSqlExpression(Of T)(Me, False, table)
   End Function
 
@@ -310,7 +311,7 @@ Public Class DbContext
   ''' <typeparam name="T"></typeparam>
   ''' <param name="obj"></param>
   ''' <returns></returns>
-  Public Function SoftDelete(Of T)(obj As T) As Int32
+  Public Function SoftDelete(Of T)(<DisallowNull> obj As T) As Int32
     Return (New DeleteSqlExpression(Of T)(Me, True)).Execute(obj)
   End Function
 
@@ -329,7 +330,7 @@ Public Class DbContext
   ''' <typeparam name="T"></typeparam>
   ''' <param name="table"></param>
   ''' <returns></returns>
-  Public Function SoftDelete(Of T)(table As String) As DeleteSqlExpression(Of T)
+  Public Function SoftDelete(Of T)(<DisallowNull> table As String) As DeleteSqlExpression(Of T)
     Return New DeleteSqlExpression(Of T)(Me, True, table)
   End Function
 

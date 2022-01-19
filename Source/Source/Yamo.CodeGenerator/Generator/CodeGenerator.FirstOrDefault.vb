@@ -9,7 +9,7 @@
 
       Dim generic = GetGenericName(1, entityCount = 1)
 
-      builder.Indent().AppendLine($"Public Function FirstOrDefault(Optional behavior As CollectionNavigationFillBehavior = CollectionNavigationFillBehavior.ProcessOnlyFirstRow) As {generic}").PushIndent()
+      builder.Indent().AppendLine($"Public Function FirstOrDefault(Optional behavior As CollectionNavigationFillBehavior = CollectionNavigationFillBehavior.ProcessOnlyFirstRow) As <MaybeNull> {generic}").PushIndent()
       builder.Indent().AppendLine("Dim query = Me.Builder.CreateQuery()")
       builder.Indent().AppendLine($"Return Me.Executor.ReadFirstOrDefault(Of {generic})(query, behavior)").PopIndent()
       builder.Indent().AppendLine("End Function")
@@ -21,7 +21,7 @@
 
       Dim generic = GetGenericName(1, entityCount = 1)
 
-      builder.Indent().AppendLine($"Public Function FirstOrDefault() As {generic}").PushIndent()
+      builder.Indent().AppendLine($"Public Function FirstOrDefault() As <MaybeNull> {generic}").PushIndent()
       builder.Indent().AppendLine("Dim query = Me.Builder.CreateQuery()")
       builder.Indent().AppendLine($"Return Me.Executor.ReadCustomFirstOrDefault(Of {generic})(query)").PopIndent()
       builder.Indent().AppendLine("End Function")

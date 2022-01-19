@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Diagnostics.CodeAnalysis
 Imports Yamo.Infrastructure
 Imports Yamo.Metadata
 
@@ -54,7 +55,7 @@ Namespace Internal
     ''' <param name="entityType"></param>
     ''' <param name="relationshipNavigation"></param>
     ''' <returns></returns>
-    Public Shared Function GetSetter(model As Model, entityType As Type, relationshipNavigation As RelationshipNavigation) As Action(Of Object, Object)
+    Public Shared Function GetSetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type, <DisallowNull> relationshipNavigation As RelationshipNavigation) As Action(Of Object, Object)
       If TypeOf relationshipNavigation Is ReferenceNavigation Then
         Return GetInstance(model).GetOrCreateSetter(entityType, relationshipNavigation.PropertyName, relationshipNavigation.RelatedEntityType)
       ElseIf TypeOf relationshipNavigation Is CollectionNavigation Then
@@ -73,7 +74,7 @@ Namespace Internal
     ''' <param name="propertyOrFieldName"></param>
     ''' <param name="valueType"></param>
     ''' <returns></returns>
-    Public Shared Function GetSetter(model As Model, entityType As Type, propertyOrFieldName As String, valueType As Type) As Action(Of Object, Object)
+    Public Shared Function GetSetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type, <DisallowNull> propertyOrFieldName As String, <DisallowNull> valueType As Type) As Action(Of Object, Object)
       Return GetInstance(model).GetOrCreateSetter(entityType, propertyOrFieldName, valueType)
     End Function
 
@@ -85,7 +86,7 @@ Namespace Internal
     ''' <param name="entityType"></param>
     ''' <param name="collectionNavigation"></param>
     ''' <returns></returns>
-    Public Shared Function GetCollectionInitSetter(model As Model, entityType As Type, collectionNavigation As CollectionNavigation) As Action(Of Object)
+    Public Shared Function GetCollectionInitSetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type, <DisallowNull> collectionNavigation As CollectionNavigation) As Action(Of Object)
       Return GetInstance(model).GetOrCreateCollectionInitSetter(entityType, collectionNavigation.PropertyName, collectionNavigation.CollectionType, collectionNavigation.RelatedEntityType)
     End Function
 

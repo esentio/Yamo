@@ -1,4 +1,5 @@
-﻿Imports System.Text
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Text
 
 Namespace Internal.Helpers
 
@@ -21,7 +22,7 @@ Namespace Internal.Helpers
     ''' <param name="sb"></param>
     ''' <param name="separator"></param>
     ''' <param name="values"></param>
-    Public Shared Sub AppendJoin(sb As StringBuilder, separator As String, values As List(Of String))
+    Public Shared Sub AppendJoin(<DisallowNull> sb As StringBuilder, <DisallowNull> separator As String, <DisallowNull> values As List(Of String))
       Dim count = values.Count
 
       For i = 0 To count - 2
@@ -39,7 +40,7 @@ Namespace Internal.Helpers
     ''' <param name="sb"></param>
     ''' <param name="separator"></param>
     ''' <param name="values"></param>
-    Public Shared Sub AppendJoin(sb As StringBuilder, separator As String, values As String())
+    Public Shared Sub AppendJoin(<DisallowNull> sb As StringBuilder, <DisallowNull> separator As String, <DisallowNull> values As String())
       Dim count = values.Length
 
       For i = 0 To count - 2

@@ -1,4 +1,5 @@
-﻿Imports Yamo.Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Metadata
 
 Namespace Internal.Query.Metadata
 
@@ -36,7 +37,7 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property Relationship As SqlEntityRelationship
+    Public ReadOnly Property Relationship As <MaybeNull> SqlEntityRelationship
 
     ''' <summary>
     ''' Gets whether entity is excluded from select clause.
@@ -72,14 +73,14 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns>List of included results or <see langword="Nothing"/> if no additional results are included.</returns>
-    Public ReadOnly Property IncludedSqlResults As List(Of SqlEntityIncludedResult)
+    Public ReadOnly Property IncludedSqlResults As <MaybeNull> List(Of SqlEntityIncludedResult)
 
     ''' <summary>
     ''' Creates new instance of <see cref="SqlEntity"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="entity"></param>
-    Sub New(entity As Entity)
+    Sub New(<DisallowNull> entity As Entity)
       Me.New(entity, "", -1)
     End Sub
 
@@ -90,7 +91,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="entity"></param>
     ''' <param name="tableAlias"></param>
     ''' <param name="index"></param>
-    Sub New(entity As Entity, tableAlias As String, index As Int32)
+    Sub New(<DisallowNull> entity As Entity, <DisallowNull> tableAlias As String, index As Int32)
       Me.Entity = entity
       Me.TableAlias = tableAlias
       Me.Index = index
@@ -118,7 +119,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="index"></param>
     ''' <param name="relationship"></param>
     ''' <param name="isIgnored"></param>
-    Sub New(entity As Entity, tableAlias As String, index As Int32, relationship As SqlEntityRelationship, isIgnored As Boolean)
+    Sub New(<DisallowNull> entity As Entity, <DisallowNull> tableAlias As String, index As Int32, relationship As SqlEntityRelationship, isIgnored As Boolean)
       Me.New(entity, tableAlias, index)
       Me.Relationship = relationship
       Me.IsIgnored = isIgnored
@@ -129,7 +130,7 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="relationship"></param>
-    Public Sub SetRelationship(relationship As SqlEntityRelationship)
+    Public Sub SetRelationship(<DisallowNull> relationship As SqlEntityRelationship)
       Me._Relationship = relationship
     End Sub
 
@@ -169,7 +170,7 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="includedSqlResult"></param>
-    Public Sub AddIncludedSqlResult(includedSqlResult As SqlEntityIncludedResult)
+    Public Sub AddIncludedSqlResult(<DisallowNull> includedSqlResult As SqlEntityIncludedResult)
       If Me.IncludedSqlResults Is Nothing Then
         Me._IncludedSqlResults = New List(Of SqlEntityIncludedResult)
       End If

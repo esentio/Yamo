@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 Imports Yamo.Infrastructure
 Imports Yamo.Metadata
 
@@ -62,7 +63,7 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetReader(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, type As Type) As Func(Of DbDataReader, Int32, Boolean(), Object)
+    Public Shared Function GetReader(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> type As Type) As Func(Of DbDataReader, Int32, Boolean(), Object)
       Return GetInstance(dataReaderType, dialectProvider, model).GetOrCreateReader(dataReaderType, dialectProvider, model, type)
     End Function
 
@@ -75,7 +76,7 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetContainsPKReader(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, type As Type) As Func(Of DbDataReader, Int32, Int32(), Boolean)
+    Public Shared Function GetContainsPKReader(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> type As Type) As Func(Of DbDataReader, Int32, Int32(), Boolean)
       Return GetInstance(dataReaderType, dialectProvider, model).GetOrCreateContainsPKReader(dataReaderType, dialectProvider, model, type)
     End Function
 
@@ -88,7 +89,7 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetPKReader(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, type As Type) As Func(Of DbDataReader, Int32, Int32(), Object)
+    Public Shared Function GetPKReader(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> type As Type) As Func(Of DbDataReader, Int32, Int32(), Object)
       Return GetInstance(dataReaderType, dialectProvider, model).GetOrCreatePKReader(dataReaderType, dialectProvider, model, type)
     End Function
 
@@ -101,7 +102,7 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetDbGeneratedValuesReader(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, type As Type) As Action(Of DbDataReader, Int32, Object)
+    Public Shared Function GetDbGeneratedValuesReader(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> type As Type) As Action(Of DbDataReader, Int32, Object)
       Return GetInstance(dataReaderType, dialectProvider, model).GetOrCreateDbGeneratedValuesReader(dataReaderType, dialectProvider, model, type)
     End Function
 

@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Diagnostics.CodeAnalysis
 
 Namespace Metadata.Builders
 
@@ -23,7 +24,7 @@ Namespace Metadata.Builders
     ''' </summary>
     ''' <param name="entity"></param>
     ''' <param name="name"></param>
-    Sub New(entity As Entity, name As String)
+    Sub New(<DisallowNull> entity As Entity, <DisallowNull> name As String)
       m_Entity = entity
       m_Property = m_Entity.AddProperty(name, GetType(TProperty))
     End Sub
@@ -33,7 +34,7 @@ Namespace Metadata.Builders
     ''' </summary>
     ''' <param name="name"></param>
     ''' <returns></returns>
-    Public Function HasColumnName(name As String) As PropertyBuilder(Of TProperty)
+    Public Function HasColumnName(<DisallowNull> name As String) As PropertyBuilder(Of TProperty)
       m_Property.ColumnName = name
       Return Me
     End Function

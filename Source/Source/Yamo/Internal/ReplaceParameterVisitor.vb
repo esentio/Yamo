@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 
 Namespace Internal
 
@@ -27,7 +28,7 @@ Namespace Internal
     ''' <param name="original"></param>
     ''' <param name="replacement"></param>
     ''' <returns></returns>
-    Public Function Replace(node As Expression, original As ParameterExpression, replacement As ParameterExpression) As Expression
+    Public Function Replace(<DisallowNull> node As Expression, <DisallowNull> original As ParameterExpression, <DisallowNull> replacement As ParameterExpression) As Expression
       m_Original = original
       m_Replacement = replacement
 

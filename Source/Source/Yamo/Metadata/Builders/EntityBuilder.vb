@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Internal.Extensions
 
 Namespace Metadata.Builders
@@ -23,7 +24,7 @@ Namespace Metadata.Builders
     ''' Creates new instance of <see cref="EntityBuilder(Of TEntity)"/>.
     ''' </summary>
     ''' <param name="model"></param>
-    Sub New(model As Model)
+    Sub New(<DisallowNull> model As Model)
       m_Model = model
       m_Entity = m_Model.AddEntity(GetType(TEntity))
     End Sub
@@ -33,7 +34,7 @@ Namespace Metadata.Builders
     ''' </summary>
     ''' <param name="name"></param>
     ''' <returns></returns>
-    Public Function ToTable(name As String) As EntityBuilder(Of TEntity)
+    Public Function ToTable(<DisallowNull> name As String) As EntityBuilder(Of TEntity)
       m_Entity.TableName = name
       Return Me
     End Function
@@ -44,7 +45,7 @@ Namespace Metadata.Builders
     ''' <param name="name"></param>
     ''' <param name="schema"></param>
     ''' <returns></returns>
-    Public Function ToTable(name As String, schema As String) As EntityBuilder(Of TEntity)
+    Public Function ToTable(<DisallowNull> name As String, <DisallowNull> schema As String) As EntityBuilder(Of TEntity)
       m_Entity.TableName = name
       m_Entity.Schema = schema
       Return Me
@@ -57,7 +58,7 @@ Namespace Metadata.Builders
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
-    Public Function [Property](Of TProperty)(propertyExpression As Expression(Of Func(Of TEntity, TProperty))) As PropertyBuilder(Of TProperty)
+    Public Function [Property](Of TProperty)(<DisallowNull> propertyExpression As Expression(Of Func(Of TEntity, TProperty))) As PropertyBuilder(Of TProperty)
       Dim name = propertyExpression.GetPropertyName()
       Return New PropertyBuilder(Of TProperty)(m_Entity, name)
     End Function
@@ -68,7 +69,7 @@ Namespace Metadata.Builders
     ''' <typeparam name="TRelatedEntity"></typeparam>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
-    Public Function HasOne(Of TRelatedEntity)(propertyExpression As Expression(Of Func(Of TEntity, TRelatedEntity))) As ReferenceNavigationBuilder(Of TEntity, TRelatedEntity)
+    Public Function HasOne(Of TRelatedEntity)(<DisallowNull> propertyExpression As Expression(Of Func(Of TEntity, TRelatedEntity))) As ReferenceNavigationBuilder(Of TEntity, TRelatedEntity)
       Dim propertyName = propertyExpression.GetPropertyName()
       Dim relatedEntityType = GetType(TRelatedEntity)
       Return New ReferenceNavigationBuilder(Of TEntity, TRelatedEntity)(m_Entity, propertyName, relatedEntityType)
@@ -80,7 +81,7 @@ Namespace Metadata.Builders
     ''' <typeparam name="TRelatedEntity"></typeparam>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
-    Public Function HasMany(Of TRelatedEntity)(propertyExpression As Expression(Of Func(Of TEntity, IList(Of TRelatedEntity)))) As CollectionNavigationBuilder(Of TEntity, TRelatedEntity)
+    Public Function HasMany(Of TRelatedEntity)(<DisallowNull> propertyExpression As Expression(Of Func(Of TEntity, IList(Of TRelatedEntity)))) As CollectionNavigationBuilder(Of TEntity, TRelatedEntity)
       Dim propertyName = propertyExpression.GetPropertyName()
       Dim relatedEntityType = GetType(TRelatedEntity)
       Dim propertyType = propertyExpression.GetPropertyType()

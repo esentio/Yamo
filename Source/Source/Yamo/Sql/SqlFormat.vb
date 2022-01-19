@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 
 Namespace Sql
 
@@ -24,7 +25,7 @@ Namespace Sql
     ''' Creates new instance of <see cref="SqlFormat"/>.
     ''' </summary>
     ''' <param name="format"></param>
-    Public Sub New(format As String)
+    Public Sub New(<DisallowNull> format As String)
       Me.Format = format
       Me.Arguments = Array.Empty(Of Expression)()
     End Sub
@@ -34,7 +35,7 @@ Namespace Sql
     ''' </summary>
     ''' <param name="format"></param>
     ''' <param name="arguments"></param>
-    Public Sub New(format As String, arguments As IReadOnlyList(Of Expression))
+    Public Sub New(<DisallowNull> format As String, <DisallowNull> arguments As IReadOnlyList(Of Expression))
       Me.Format = format
       Me.Arguments = arguments
     End Sub

@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Diagnostics.CodeAnalysis
 
 Namespace Internal.Query
 
@@ -17,7 +18,7 @@ Namespace Internal.Query
     ''' Gets parameter value.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property Value As Object
+    Public ReadOnly Property Value As <MaybeNull> Object
 
     ''' <summary>
     ''' Gets parameter database type.
@@ -30,7 +31,7 @@ Namespace Internal.Query
     ''' </summary>
     ''' <param name="name"></param>
     ''' <param name="value"></param>
-    Sub New(name As String, value As Object)
+    Sub New(<DisallowNull> name As String, value As Object)
       Me.Name = name
       Me.Value = value
       Me.DbType = Nothing
@@ -42,7 +43,7 @@ Namespace Internal.Query
     ''' <param name="name"></param>
     ''' <param name="value"></param>
     ''' <param name="dbType"></param>
-    Sub New(name As String, value As Object, dbType As DbType)
+    Sub New(<DisallowNull> name As String, value As Object, dbType As DbType)
       Me.Name = name
       Me.Value = value
       Me.DbType = dbType

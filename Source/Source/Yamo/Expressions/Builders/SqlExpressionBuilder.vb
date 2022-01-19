@@ -1,4 +1,5 @@
-﻿Imports Yamo.Internal.Query
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Internal.Query
 
 Namespace Expressions.Builders
 
@@ -14,7 +15,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="context"></param>
-    Public Sub New(context As DbContext)
+    Public Sub New(<DisallowNull> context As DbContext)
       MyBase.New(context)
     End Sub
 
@@ -24,7 +25,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="sql"></param>
     ''' <returns></returns>
-    Public Function CreateQuery(sql As FormattableString) As Query
+    Public Function CreateQuery(<DisallowNull> sql As FormattableString) As Query
       Return New Query(ConvertToSqlString(sql, 0))
     End Function
 
@@ -35,7 +36,7 @@ Namespace Expressions.Builders
     ''' <param name="sql"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function CreateQuery(sql As RawSqlString, ParamArray parameters() As Object) As Query
+    Public Function CreateQuery(<DisallowNull> sql As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As Query
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         Return New Query(New SqlString(sql.Value))
       Else

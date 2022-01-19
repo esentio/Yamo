@@ -1,4 +1,5 @@
-﻿Imports Yamo.Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Metadata
 
 Namespace Internal.Query.Metadata
 
@@ -57,7 +58,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="declaringEntity"></param>
     ''' <param name="relationshipNavigation"></param>
-    Sub New(declaringEntity As SqlEntity, relationshipNavigation As RelationshipNavigation)
+    Sub New(<DisallowNull> declaringEntity As SqlEntity, <DisallowNull> relationshipNavigation As RelationshipNavigation)
       Me.DeclaringEntity = declaringEntity
       Me.RelationshipNavigation = relationshipNavigation
 

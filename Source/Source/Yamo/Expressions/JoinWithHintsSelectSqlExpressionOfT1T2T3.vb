@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
 
@@ -27,7 +28,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function [On](predicate As Expression(Of Func(Of T1, T3, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3)
+    Public Function [On](<DisallowNull> predicate As Expression(Of Func(Of T1, T3, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3)
       Return InternalOn(predicate, {0, 2})
     End Function
 
@@ -36,7 +37,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function [On](predicate As Expression(Of Func(Of T2, T3, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3)
+    Public Function [On](<DisallowNull> predicate As Expression(Of Func(Of T2, T3, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3)
       Return InternalOn(predicate, {1, 2})
     End Function
 
@@ -45,7 +46,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function [On](predicate As Expression(Of Func(Of T1, T2, T3, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3)
+    Public Function [On](<DisallowNull> predicate As Expression(Of Func(Of T1, T2, T3, Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3)
       Return InternalOn(predicate, {0, 1, 2})
     End Function
 
@@ -54,7 +55,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <returns></returns>
-    Public Function [On](predicate As Expression(Of Func(Of Join(Of T1, T2, T3), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3)
+    Public Function [On](<DisallowNull> predicate As Expression(Of Func(Of Join(Of T1, T2, T3), Boolean))) As JoinedSelectSqlExpression(Of T1, T2, T3)
       Return InternalOn(predicate, Nothing)
     End Function
 
@@ -77,7 +78,7 @@ Namespace Expressions
     ''' <param name="[then]"></param>
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
-    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of JoinWithHintsSelectSqlExpression(Of T1, T2, T3), TResult), otherwise As Func(Of JoinWithHintsSelectSqlExpression(Of T1, T2, T3), TResult)) As TResult
+    Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of JoinWithHintsSelectSqlExpression(Of T1, T2, T3), TResult), <DisallowNull> otherwise As Func(Of JoinWithHintsSelectSqlExpression(Of T1, T2, T3), TResult)) As TResult
       If condition Then
         Return [then].Invoke(Me)
       Else

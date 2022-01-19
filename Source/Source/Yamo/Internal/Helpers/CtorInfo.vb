@@ -1,4 +1,5 @@
-﻿Imports System.Reflection
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Reflection
 
 Namespace Internal.Helpers
 
@@ -28,7 +29,7 @@ Namespace Internal.Helpers
     ''' </summary>
     ''' <param name="constructorInfo"></param>
     ''' <param name="parameterCount"></param>
-    Public Sub New(constructorInfo As ConstructorInfo, parameterCount As Int32)
+    Public Sub New(<DisallowNull> constructorInfo As ConstructorInfo, parameterCount As Int32)
       Me.ConstructorInfo = constructorInfo
       Me.ParameterCount = parameterCount
     End Sub

@@ -1,4 +1,6 @@
-﻿Namespace Metadata.Builders
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Metadata.Builders
 
   ''' <summary>
   ''' Provides an API for configuring a reference relationship navigation.
@@ -23,7 +25,7 @@
     ''' <param name="declaringEntity"></param>
     ''' <param name="propertyName"></param>
     ''' <param name="relatedEntityType"></param>
-    Sub New(declaringEntity As Entity, propertyName As String, relatedEntityType As Type)
+    Sub New(<DisallowNull> declaringEntity As Entity, <DisallowNull> propertyName As String, <DisallowNull> relatedEntityType As Type)
       m_DeclaringEntity = declaringEntity
       m_ReferenceNavigation = m_DeclaringEntity.AddReferenceNavigation(propertyName, relatedEntityType)
     End Sub

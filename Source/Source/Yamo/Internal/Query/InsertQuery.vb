@@ -1,4 +1,6 @@
-﻿Namespace Internal.Query
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Internal.Query
 
   ''' <summary>
   ''' Represents insert statement data.<br/>
@@ -28,7 +30,7 @@
     ''' <param name="sql"></param>
     ''' <param name="readDbGeneratedValues"></param>
     ''' <param name="entity"></param>
-    Sub New(sql As SqlString, readDbGeneratedValues As Boolean, entity As Object)
+    Sub New(<DisallowNull> sql As SqlString, readDbGeneratedValues As Boolean, <DisallowNull> entity As Object)
       MyBase.New(sql)
       Me.ReadDbGeneratedValues = readDbGeneratedValues
       Me.Entity = entity
@@ -42,7 +44,7 @@
     ''' <param name="parameters"></param>
     ''' <param name="readDbGeneratedValues"></param>
     ''' <param name="entity"></param>
-    Sub New(sql As String, parameters As IReadOnlyList(Of SqlParameter), readDbGeneratedValues As Boolean, entity As Object)
+    Sub New(<DisallowNull> sql As String, <DisallowNull> parameters As IReadOnlyList(Of SqlParameter), readDbGeneratedValues As Boolean, <DisallowNull> entity As Object)
       MyBase.New(sql, parameters)
       Me.ReadDbGeneratedValues = readDbGeneratedValues
       Me.Entity = entity

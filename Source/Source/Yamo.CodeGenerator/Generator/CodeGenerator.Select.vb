@@ -59,7 +59,7 @@
 
       Dim generic = GetGenericName(index, index = entityCount)
 
-      builder.Indent().AppendLine($"Public Function [Select](Of TResult)(selector As Expression(Of Func(Of {generic}, TResult))) As CustomSelectSqlExpression(Of TResult)").PushIndent()
+      builder.Indent().AppendLine($"Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of {generic}, TResult))) As CustomSelectSqlExpression(Of TResult)").PushIndent()
       builder.Indent().AppendLine($"Return InternalSelect(Of TResult)(selector, {GetEntityIndexHintsForEntity(index - 1)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -72,7 +72,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [Select](Of TResult)(selector As Expression(Of Func(Of {generics}, TResult))) As CustomSelectSqlExpression(Of TResult)").PushIndent()
+      builder.Indent().AppendLine($"Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of {generics}, TResult))) As CustomSelectSqlExpression(Of TResult)").PushIndent()
       builder.Indent().AppendLine($"Return InternalSelect(Of TResult)(selector, {GetEntityIndexHintsForAllEntities(entityCount)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -85,7 +85,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [Select](Of TResult)(selector As Expression(Of Func(Of Join(Of {generics}), TResult))) As CustomSelectSqlExpression(Of TResult)").PushIndent()
+      builder.Indent().AppendLine($"Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of Join(Of {generics}), TResult))) As CustomSelectSqlExpression(Of TResult)").PushIndent()
       builder.Indent().AppendLine("Return InternalSelect(Of TResult)(selector, Nothing)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub

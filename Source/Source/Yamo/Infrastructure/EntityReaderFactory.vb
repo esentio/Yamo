@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Linq.Expressions
 Imports System.Reflection
 Imports Yamo.Metadata
@@ -21,7 +22,7 @@ Namespace Infrastructure
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateReader(dataReaderType As Type, model As Model, entityType As Type) As Func(Of DbDataReader, Int32, Boolean(), Object)
+    Public Overridable Function CreateReader(<DisallowNull> dataReaderType As Type, <DisallowNull> model As Model, <DisallowNull> entityType As Type) As Func(Of DbDataReader, Int32, Boolean(), Object)
       Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
       Dim indexParam = Expression.Parameter(GetType(Int32), "index")
       Dim includedColumnsParam = Expression.Parameter(GetType(Boolean()), "includedColumns")
@@ -106,7 +107,7 @@ Namespace Infrastructure
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateContainsPKReader(dataReaderType As Type, model As Model, entityType As Type) As Func(Of DbDataReader, Int32, Int32(), Boolean)
+    Public Overridable Function CreateContainsPKReader(<DisallowNull> dataReaderType As Type, <DisallowNull> model As Model, <DisallowNull> entityType As Type) As Func(Of DbDataReader, Int32, Int32(), Boolean)
       Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
       Dim indexParam = Expression.Parameter(GetType(Int32), "index")
       Dim pkOffsetsParam = Expression.Parameter(GetType(Int32()), "pkOffsets")
@@ -156,7 +157,7 @@ Namespace Infrastructure
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreatePKReader(dataReaderType As Type, model As Model, entityType As Type) As Func(Of DbDataReader, Int32, Int32(), Object)
+    Public Overridable Function CreatePKReader(<DisallowNull> dataReaderType As Type, <DisallowNull> model As Model, <DisallowNull> entityType As Type) As Func(Of DbDataReader, Int32, Int32(), Object)
       Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
       Dim indexParam = Expression.Parameter(GetType(Int32), "index")
       Dim pkOffsetsParam = Expression.Parameter(GetType(Int32()), "pkOffsets")
@@ -224,7 +225,7 @@ Namespace Infrastructure
     ''' <param name="pkOffsetsParam"></param>
     ''' <param name="variable"></param>
     ''' <param name="expressions"></param>
-    Protected Sub AssignPKToVariable(readerVariable As ParameterExpression, indexParam As ParameterExpression, pkOffsetsParam As ParameterExpression, variable As ParameterExpression, expressions As List(Of Expression))
+    Protected Sub AssignPKToVariable(<DisallowNull> readerVariable As ParameterExpression, <DisallowNull> indexParam As ParameterExpression, <DisallowNull> pkOffsetsParam As ParameterExpression, <DisallowNull> variable As ParameterExpression, <DisallowNull> expressions As List(Of Expression))
       Dim offset = Expression.ArrayIndex(pkOffsetsParam, Expression.Constant(0))
       Dim readIndexArg = Expression.Add(indexParam, offset)
       Dim readValueCall = Expression.Call(readerVariable, "GetValue", Nothing, readIndexArg)
@@ -251,7 +252,7 @@ Namespace Infrastructure
     ''' <param name="pkOffsetsParam"></param>
     ''' <param name="variable"></param>
     ''' <param name="expressions"></param>
-    Protected Sub AssignPKPartToVariable(index As Int32, readerVariable As ParameterExpression, indexParam As ParameterExpression, pkOffsetsParam As ParameterExpression, variable As ParameterExpression, expressions As List(Of Expression))
+    Protected Sub AssignPKPartToVariable(index As Int32, <DisallowNull> readerVariable As ParameterExpression, <DisallowNull> indexParam As ParameterExpression, <DisallowNull> pkOffsetsParam As ParameterExpression, <DisallowNull> variable As ParameterExpression, <DisallowNull> expressions As List(Of Expression))
       Dim offset = Expression.ArrayIndex(pkOffsetsParam, Expression.Constant(index))
       Dim readIndexArg = Expression.Add(indexParam, offset)
       Dim readValueCall = Expression.Call(readerVariable, "GetValue", Nothing, readIndexArg)
@@ -268,7 +269,7 @@ Namespace Infrastructure
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateDbGeneratedValuesReader(dataReaderType As Type, model As Model, entityType As Type) As Action(Of DbDataReader, Int32, Object)
+    Public Overridable Function CreateDbGeneratedValuesReader(<DisallowNull> dataReaderType As Type, <DisallowNull> model As Model, <DisallowNull> entityType As Type) As Action(Of DbDataReader, Int32, Object)
       Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
       Dim indexParam = Expression.Parameter(GetType(Int32), "index")
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
@@ -342,7 +343,7 @@ Namespace Infrastructure
     ''' </summary>
     ''' <param name="prop"></param>
     ''' <returns></returns>
-    Protected Function GetDefaultValue(prop As [Property]) As Expression
+    Protected Function GetDefaultValue(<DisallowNull> prop As [Property]) As Expression
       Dim type = prop.PropertyType
 
       If prop.IsRequired Then
@@ -363,7 +364,7 @@ Namespace Infrastructure
     ''' <param name="dataReaderType"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Protected Overridable Function GetDbDataReaderGetMethodForType(dataReaderType As Type, type As Type) As (Method As String, IsGeneric As Boolean, Convert As Boolean)
+    Protected Overridable Function GetDbDataReaderGetMethodForType(<DisallowNull> dataReaderType As Type, <DisallowNull> type As Type) As (Method As String, IsGeneric As Boolean, Convert As Boolean)
       Select Case type
         Case GetType(String)
           Return ("GetString", False, False)

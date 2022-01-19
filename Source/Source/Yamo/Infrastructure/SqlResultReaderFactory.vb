@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Linq.Expressions
 Imports System.Reflection
 Imports Yamo.Internal
@@ -23,7 +24,7 @@ Namespace Infrastructure
     ''' </summary>
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
-    Public Shared Function CreateResultFactory(sqlResult As SqlResultBase) As Object
+    Public Shared Function CreateResultFactory(<DisallowNull> sqlResult As SqlResultBase) As Object
       If TypeOf sqlResult Is AnonymousTypeSqlResult Then
         Return CreateResultFactory(DirectCast(sqlResult, AnonymousTypeSqlResult))
 
@@ -48,7 +49,7 @@ Namespace Infrastructure
     ''' <param name="resultType"></param>
     ''' <param name="readerFunction"></param>
     ''' <returns></returns>
-    Public Shared Function CreateValueTypeToObjectResultFactoryWrapper(resultType As Type, readerFunction As Object) As Func(Of DbDataReader, ReaderDataBase, Object)
+    Public Shared Function CreateValueTypeToObjectResultFactoryWrapper(<DisallowNull> resultType As Type, <DisallowNull> readerFunction As Object) As Func(Of DbDataReader, ReaderDataBase, Object)
       Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
       Dim readerDataParam = Expression.Parameter(GetType(ReaderDataBase), "readerData")
       Dim parameters = {readerParam, readerDataParam}

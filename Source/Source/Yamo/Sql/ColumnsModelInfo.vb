@@ -1,4 +1,6 @@
-﻿Namespace Sql
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Sql
 
   ''' <summary>
   ''' Stores info about columns of a model.<br/>
@@ -16,14 +18,14 @@
     ''' Table alias used in SQL expression.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property TableAlias As String
+    Public ReadOnly Property TableAlias As <MaybeNull> String
 
     ''' <summary>
     ''' Creates new instance of <see cref="ColumnsModelInfo"/>.
     ''' </summary>
     ''' <param name="model"></param>
     ''' <param name="tableAlias"></param>
-    Public Sub New(model As Type, tableAlias As String)
+    Public Sub New(<DisallowNull> model As Type, tableAlias As String)
       Me.Model = model
       Me.TableAlias = tableAlias
     End Sub

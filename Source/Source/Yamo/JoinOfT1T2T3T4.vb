@@ -1,4 +1,6 @@
-﻿''' <summary>
+﻿Imports System.Diagnostics.CodeAnalysis
+
+''' <summary>
 ''' Metadata defining 4 entities used in JOIN statements.
 ''' </summary>
 ''' <typeparam name="TTable1"></typeparam>
@@ -39,7 +41,7 @@ Public Class Join(Of TTable1, TTable2, TTable3, TTable4)
   ''' <param name="table2"></param>
   ''' <param name="table3"></param>
   ''' <param name="table4"></param>
-  Sub New(table1 As TTable1, table2 As TTable2, table3 As TTable3, table4 As TTable4)
+  Sub New(<DisallowNull> table1 As TTable1, <DisallowNull> table2 As TTable2, <DisallowNull> table3 As TTable3, <DisallowNull> table4 As TTable4)
     Me.T1 = table1
     Me.T2 = table2
     Me.T3 = table3

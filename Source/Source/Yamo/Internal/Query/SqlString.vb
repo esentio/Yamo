@@ -1,4 +1,6 @@
-﻿Namespace Internal.Query
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Internal.Query
 
   ''' <summary>
   ''' Represents SQL string.
@@ -21,7 +23,7 @@
     ''' Creates new instance of <see cref="SqlString"/>.
     ''' </summary>
     ''' <param name="sql"></param>
-    Sub New(sql As String)
+    Sub New(<DisallowNull> sql As String)
       Me.Sql = sql
       Me.Parameters = Array.Empty(Of SqlParameter)()
     End Sub
@@ -31,7 +33,7 @@
     ''' </summary>
     ''' <param name="sql"></param>
     ''' <param name="parameters"></param>
-    Sub New(sql As String, parameters As IReadOnlyList(Of SqlParameter))
+    Sub New(<DisallowNull> sql As String, <DisallowNull> parameters As IReadOnlyList(Of SqlParameter))
       Me.Sql = sql
       Me.Parameters = parameters
     End Sub

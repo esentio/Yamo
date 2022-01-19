@@ -30,7 +30,7 @@
       Dim generic = GetGenericName(index, index = entityCount)
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of {generic}, TKey))) As GroupedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function GroupBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of {generic}, TKey))) As GroupedSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine($"Return InternalGroupBy(Of TKey)(keySelector, {GetEntityIndexHintsForEntity(index - 1)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -43,7 +43,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of {generics}, TKey))) As GroupedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function GroupBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of {generics}, TKey))) As GroupedSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine($"Return InternalGroupBy(Of TKey)(keySelector, {GetEntityIndexHintsForAllEntities(entityCount)})").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
@@ -56,7 +56,7 @@
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function GroupBy(Of TKey)(keySelector As Expression(Of Func(Of Join(Of {generics}), TKey))) As GroupedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"Public Function GroupBy(Of TKey)(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of {generics}), TKey))) As GroupedSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine("Return InternalGroupBy(Of TKey)(keySelector, Nothing)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub

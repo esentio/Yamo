@@ -1,4 +1,5 @@
-﻿Imports Yamo.Expressions.Builders
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Expressions.Builders
 Imports Yamo.Infrastructure
 Imports Yamo.Internal.Query
 Imports Yamo.Metadata
@@ -66,7 +67,7 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetInsertProvider(builder As InsertSqlExpressionBuilder, type As Type) As Func(Of Object, String, Boolean, CreateInsertSqlStringResult)
+    Public Shared Function GetInsertProvider(<DisallowNull> builder As InsertSqlExpressionBuilder, <DisallowNull> type As Type) As Func(Of Object, String, Boolean, CreateInsertSqlStringResult)
       Return GetInstance(builder.DialectProvider, builder.DbContext.Model).GetOrCreateInsertProvider(builder, type)
     End Function
 
@@ -77,7 +78,7 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetUpdateProvider(builder As UpdateSqlExpressionBuilder, type As Type) As Func(Of Object, String, Boolean, SqlString)
+    Public Shared Function GetUpdateProvider(<DisallowNull> builder As UpdateSqlExpressionBuilder, <DisallowNull> type As Type) As Func(Of Object, String, Boolean, SqlString)
       Return GetInstance(builder.DialectProvider, builder.DbContext.Model).GetOrCreateUpdateProvider(builder, type)
     End Function
 
@@ -88,7 +89,7 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetDeleteProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of Object, String, SqlString)
+    Public Shared Function GetDeleteProvider(<DisallowNull> builder As DeleteSqlExpressionBuilder, <DisallowNull> type As Type) As Func(Of Object, String, SqlString)
       Return GetInstance(builder.DialectProvider, builder.DbContext.Model).GetOrCreateDeleteProvider(builder, type)
     End Function
 
@@ -99,7 +100,7 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetSoftDeleteProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of Object, String, SqlString)
+    Public Shared Function GetSoftDeleteProvider(<DisallowNull> builder As DeleteSqlExpressionBuilder, <DisallowNull> type As Type) As Func(Of Object, String, SqlString)
       Return GetInstance(builder.DialectProvider, builder.DbContext.Model).GetOrCreateSoftDeleteProvider(builder, type)
     End Function
 
@@ -110,7 +111,7 @@ Namespace Internal
     ''' <param name="builder"></param>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Public Shared Function GetSoftDeleteWithoutConditionProvider(builder As DeleteSqlExpressionBuilder, type As Type) As Func(Of String, Object(), SqlString)
+    Public Shared Function GetSoftDeleteWithoutConditionProvider(<DisallowNull> builder As DeleteSqlExpressionBuilder, <DisallowNull> type As Type) As Func(Of String, Object(), SqlString)
       Return GetInstance(builder.DialectProvider, builder.DbContext.Model).GetOrCreateSoftDeleteWithoutConditionProvider(builder, type)
     End Function
 

@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.Common
+Imports System.Diagnostics.CodeAnalysis
 Imports Yamo.Infrastructure
 
 ''' <summary>
@@ -17,13 +18,13 @@ Public Class DbContextOptions
   ''' Externally provided database connection.
   ''' </summary>
   ''' <returns></returns>
-  Public Property Connection As DbConnection
+  Public Property Connection As <MaybeNull> DbConnection
 
   ''' <summary>
   ''' Database connection factory (used when no database connection is provided).
   ''' </summary>
   ''' <returns></returns>
-  Public Property ConnectionFactory As Func(Of DbConnection)
+  Public Property ConnectionFactory As <MaybeNull> Func(Of DbConnection)
 
   ''' <summary>
   ''' Database command timeout.

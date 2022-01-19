@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 
 Namespace Internal
 
@@ -55,7 +56,7 @@ Namespace Internal
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="node"></param>
-    Public Sub New(node As Expression)
+    Public Sub New(<DisallowNull> node As Expression)
       Me.Node = node
       Me.IsNegation = False
       Me.IsIgnoredNegation = False

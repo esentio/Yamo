@@ -1,4 +1,5 @@
-﻿Imports Yamo.Internal.Query.Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Internal.Query.Metadata
 
 Namespace Internal.Query
 
@@ -22,7 +23,7 @@ Namespace Internal.Query
     ''' </summary>
     ''' <param name="sql"></param>
     ''' <param name="model"></param>
-    Sub New(sql As SqlString, model As SelectSqlModel)
+    Sub New(<DisallowNull> sql As SqlString, <DisallowNull> model As SelectSqlModel)
       MyBase.New(sql)
       Me.Model = model
     End Sub
@@ -34,7 +35,7 @@ Namespace Internal.Query
     ''' <param name="sql"></param>
     ''' <param name="parameters"></param>
     ''' <param name="model"></param>
-    Sub New(sql As String, parameters As IReadOnlyList(Of SqlParameter), model As SelectSqlModel)
+    Sub New(<DisallowNull> sql As String, <DisallowNull> parameters As IReadOnlyList(Of SqlParameter), <DisallowNull> model As SelectSqlModel)
       MyBase.New(sql, parameters)
       Me.Model = model
     End Sub

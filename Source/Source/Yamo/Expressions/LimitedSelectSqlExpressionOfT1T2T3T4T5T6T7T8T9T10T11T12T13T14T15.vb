@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
 
@@ -59,7 +60,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T1, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T1, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {0})
     End Function
 
@@ -69,7 +70,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T2, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T2, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {1})
     End Function
 
@@ -79,7 +80,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T3, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T3, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {2})
     End Function
 
@@ -89,7 +90,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T4, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T4, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {3})
     End Function
 
@@ -99,7 +100,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T5, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T5, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {4})
     End Function
 
@@ -109,7 +110,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T6, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T6, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {5})
     End Function
 
@@ -119,7 +120,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T7, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T7, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {6})
     End Function
 
@@ -129,7 +130,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T8, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T8, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {7})
     End Function
 
@@ -139,7 +140,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T9, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T9, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {8})
     End Function
 
@@ -149,7 +150,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T10, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T10, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {9})
     End Function
 
@@ -159,7 +160,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T11, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T11, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {10})
     End Function
 
@@ -169,7 +170,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T12, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T12, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {11})
     End Function
 
@@ -179,7 +180,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T13, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T13, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {12})
     End Function
 
@@ -189,7 +190,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T14, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T14, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {13})
     End Function
 
@@ -199,7 +200,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of T15, TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T15, TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, {14})
     End Function
 
@@ -209,7 +210,7 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(selector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15), TResult))) As CustomSelectSqlExpression(Of TResult)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15), TResult))) As CustomSelectSqlExpression(Of TResult)
       Return InternalSelect(Of TResult)(selector, Nothing)
     End Function
 
@@ -233,7 +234,7 @@ Namespace Expressions
     ''' <param name="[then]"></param>
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
-    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of LimitedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15), TResult), otherwise As Func(Of LimitedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15), TResult)) As TResult
+    Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of LimitedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15), TResult), <DisallowNull> otherwise As Func(Of LimitedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15), TResult)) As TResult
       If condition Then
         Return [then].Invoke(Me)
       Else

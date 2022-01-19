@@ -1,4 +1,5 @@
-﻿Imports Yamo.Internal
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Internal
 Imports Yamo.Internal.Query
 
 Namespace Expressions.Builders
@@ -26,7 +27,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="context"></param>
     ''' <param name="tableNameOverride"></param>
-    Public Sub New(context As DbContext, tableNameOverride As String)
+    Public Sub New(<DisallowNull> context As DbContext, tableNameOverride As String)
       MyBase.New(context)
       m_TableNameOverride = tableNameOverride
       m_TableHints = Nothing
@@ -37,7 +38,7 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="tableHints"></param>
-    Public Sub SetTableHints(tableHints As String)
+    Public Sub SetTableHints(<DisallowNull> tableHints As String)
       m_TableHints = tableHints
     End Sub
 
@@ -48,7 +49,7 @@ Namespace Expressions.Builders
     ''' <param name="obj"></param>
     ''' <param name="useDbIdentityAndDefaults"></param>
     ''' <returns></returns>
-    Public Function CreateQuery(obj As Object, useDbIdentityAndDefaults As Boolean) As InsertQuery
+    Public Function CreateQuery(<DisallowNull> obj As Object, useDbIdentityAndDefaults As Boolean) As InsertQuery
       Dim entityType = obj.GetType()
       Dim table As String
 

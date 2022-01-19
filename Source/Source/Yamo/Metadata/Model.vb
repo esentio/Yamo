@@ -1,4 +1,6 @@
-﻿Namespace Metadata
+﻿Imports System.Diagnostics.CodeAnalysis
+
+Namespace Metadata
 
   ''' <summary>
   ''' Metadata about entities, relationships between them and their mapping to the database.
@@ -38,7 +40,7 @@
     ''' </summary>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Function GetEntity(entityType As Type) As Entity
+    Public Function GetEntity(<DisallowNull> entityType As Type) As Entity
       Dim entity As Entity = Nothing
 
       If m_Entities.TryGetValue(entityType, entity) Then
@@ -53,7 +55,7 @@
     ''' </summary>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Function TryGetEntity(entityType As Type) As Entity
+    Public Function TryGetEntity(<DisallowNull> entityType As Type) As Entity
       Dim entity As Entity = Nothing
       m_Entities.TryGetValue(entityType, entity)
       Return entity

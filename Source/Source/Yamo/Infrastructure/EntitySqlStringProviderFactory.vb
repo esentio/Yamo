@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Linq.Expressions
 Imports System.Reflection
 Imports System.Text
@@ -22,7 +23,7 @@ Namespace Infrastructure
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateInsertProvider(builder As InsertSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, Boolean, CreateInsertSqlStringResult)
+    Public Overridable Function CreateInsertProvider(<DisallowNull> builder As InsertSqlExpressionBuilder, <DisallowNull> entityType As Type) As Func(Of Object, String, Boolean, CreateInsertSqlStringResult)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim tableParam = Expression.Parameter(GetType(String), "table")
       Dim useDbIdentityAndDefaultsParam = Expression.Parameter(GetType(Boolean), "useDbIdentityAndDefaults")
@@ -140,7 +141,7 @@ Namespace Infrastructure
     ''' <param name="columnNames"></param>
     ''' <param name="parameterNames"></param>
     ''' <returns></returns>
-    Protected Overridable Function GetInsertWhenUseDbIdentityAndDefaults(tableName As Expression, declareColumns As List(Of String), outputColumnNames As List(Of String), columnNames As List(Of String), parameterNames As List(Of String)) As Expression
+    Protected Overridable Function GetInsertWhenUseDbIdentityAndDefaults(<DisallowNull> tableName As Expression, <DisallowNull> declareColumns As List(Of String), <DisallowNull> outputColumnNames As List(Of String), <DisallowNull> columnNames As List(Of String), <DisallowNull> parameterNames As List(Of String)) As Expression
       Dim part1 = Expression.Constant($"DECLARE @InsertedValues TABLE ({String.Join(", ", declareColumns)})
 INSERT INTO ", GetType(String))
       Dim part3 = Expression.Constant($" ({String.Join(", ", columnNames)}) OUTPUT {String.Join(", ", outputColumnNames)} INTO @InsertedValues VALUES ({String.Join(", ", parameterNames)})
@@ -159,7 +160,7 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' <param name="columnNames"></param>
     ''' <param name="parameterNames"></param>
     ''' <returns></returns>
-    Protected Overridable Function GetInsertWhenNotUseDbIdentityAndDefaults(tableName As Expression, hasIdentityColumn As Boolean, columnNames As List(Of String), parameterNames As List(Of String)) As Expression
+    Protected Overridable Function GetInsertWhenNotUseDbIdentityAndDefaults(<DisallowNull> tableName As Expression, hasIdentityColumn As Boolean, <DisallowNull> columnNames As List(Of String), <DisallowNull> parameterNames As List(Of String)) As Expression
       If hasIdentityColumn Then
         Dim part1 = Expression.Constant("SET IDENTITY_INSERT ", GetType(String))
         Dim part3 = Expression.Constant(" ON
@@ -195,7 +196,7 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateUpdateProvider(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, Boolean, SqlString)
+    Public Overridable Function CreateUpdateProvider(<DisallowNull> builder As UpdateSqlExpressionBuilder, <DisallowNull> entityType As Type) As Func(Of Object, String, Boolean, SqlString)
       If GetType(IHasDbPropertyModifiedTracking).IsAssignableFrom(entityType) Then
         Return CreateUpdateProviderForDbPropertyModifiedTrackingObject(builder, entityType)
       Else
@@ -210,7 +211,7 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Protected Overridable Function CreateUpdateProviderForSimpleObjects(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, Boolean, SqlString)
+    Protected Overridable Function CreateUpdateProviderForSimpleObjects(<DisallowNull> builder As UpdateSqlExpressionBuilder, <DisallowNull> entityType As Type) As Func(Of Object, String, Boolean, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim tableParam = Expression.Parameter(GetType(String), "table")
       Dim forceUpdateAllFieldsParam = Expression.Parameter(GetType(Boolean), "forceUpdateAllFields")
@@ -293,7 +294,7 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Protected Overridable Function CreateUpdateProviderForDbPropertyModifiedTrackingObject(builder As UpdateSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, Boolean, SqlString)
+    Protected Overridable Function CreateUpdateProviderForDbPropertyModifiedTrackingObject(<DisallowNull> builder As UpdateSqlExpressionBuilder, <DisallowNull> entityType As Type) As Func(Of Object, String, Boolean, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim tableParam = Expression.Parameter(GetType(String), "table")
       Dim forceUpdateAllFieldsParam = Expression.Parameter(GetType(Boolean), "forceUpdateAllFields")
@@ -389,7 +390,7 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateDeleteProvider(builder As DeleteSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, SqlString)
+    Public Overridable Function CreateDeleteProvider(<DisallowNull> builder As DeleteSqlExpressionBuilder, <DisallowNull> entityType As Type) As Func(Of Object, String, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim tableParam = Expression.Parameter(GetType(String), "table")
       Dim parameters = {entityParam, tableParam}
@@ -453,7 +454,7 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateSoftDeleteProvider(builder As DeleteSqlExpressionBuilder, entityType As Type) As Func(Of Object, String, SqlString)
+    Public Overridable Function CreateSoftDeleteProvider(<DisallowNull> builder As DeleteSqlExpressionBuilder, <DisallowNull> entityType As Type) As Func(Of Object, String, SqlString)
       Dim entityParam = Expression.Parameter(GetType(Object), "entity")
       Dim tableParam = Expression.Parameter(GetType(String), "table")
       Dim parameters = {entityParam, tableParam}
@@ -535,7 +536,7 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' <param name="builder"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Overridable Function CreateSoftDeleteWithoutConditionProvider(builder As DeleteSqlExpressionBuilder, entityType As Type) As Func(Of String, Object(), SqlString)
+    Public Overridable Function CreateSoftDeleteWithoutConditionProvider(<DisallowNull> builder As DeleteSqlExpressionBuilder, <DisallowNull> entityType As Type) As Func(Of String, Object(), SqlString)
       Dim tableParam = Expression.Parameter(GetType(String), "table")
       Dim valuesParam = Expression.Parameter(GetType(Object()), "values")
       Dim parameters = {tableParam, valuesParam}
@@ -599,7 +600,7 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' <param name="index"></param>
     ''' <param name="builder"></param>
     ''' <returns></returns>
-    Protected Function CreateParameterFromProperty(parametersVariable As Expression, entityVariable As Expression, prop As [Property], index As Int32, builder As SqlExpressionBuilderBase) As (ParameterName As String, ParameterAddCall As Expression)
+    Protected Function CreateParameterFromProperty(<DisallowNull> parametersVariable As Expression, <DisallowNull> entityVariable As Expression, <DisallowNull> prop As [Property], index As Int32, <DisallowNull> builder As SqlExpressionBuilderBase) As (ParameterName As String, ParameterAddCall As Expression)
       Dim parameterValue = Expression.Property(entityVariable, prop.Name)
 
       Return CreateParameter(parametersVariable, parameterValue, prop, index, builder)
@@ -615,7 +616,7 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' <param name="index"></param>
     ''' <param name="builder"></param>
     ''' <returns></returns>
-    Protected Function CreateParameter(parametersVariable As Expression, value As Expression, prop As [Property], index As Int32, builder As SqlExpressionBuilderBase) As (ParameterName As String, ParameterAddCall As Expression)
+    Protected Function CreateParameter(<DisallowNull> parametersVariable As Expression, <DisallowNull> value As Expression, <DisallowNull> prop As [Property], index As Int32, <DisallowNull> builder As SqlExpressionBuilderBase) As (ParameterName As String, ParameterAddCall As Expression)
       Dim parameterNameValue = builder.CreateParameter(index)
       Dim parameterName = Expression.Constant(parameterNameValue, GetType(String))
       Dim parameterValue = Expression.Convert(value, GetType(Object))
@@ -644,7 +645,7 @@ SELECT * FROM @InsertedValues", GetType(String))
     ''' </summary>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Protected Overridable Function GetDbTypeDefinition(type As Type) As String
+    Protected Overridable Function GetDbTypeDefinition(<DisallowNull> type As Type) As String
       Select Case type
         Case GetType(Guid), GetType(Guid?)
           Return "uniqueidentifier"

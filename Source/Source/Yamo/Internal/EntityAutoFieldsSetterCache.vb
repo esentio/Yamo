@@ -1,4 +1,5 @@
-﻿Imports Yamo.Infrastructure
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports Yamo.Infrastructure
 Imports Yamo.Metadata
 
 Namespace Internal
@@ -52,7 +53,7 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Shared Function GetOnInsertSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)
+    Public Shared Function GetOnInsertSetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type) As Action(Of Object, DbContext)
       Return GetInstance(model).GetOrCreateOnInsertSetter(model, entityType)
     End Function
 
@@ -63,7 +64,7 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Shared Function GetOnUpdateSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)
+    Public Shared Function GetOnUpdateSetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type) As Action(Of Object, DbContext)
       Return GetInstance(model).GetOrCreateOnUpdateSetter(model, entityType)
     End Function
 
@@ -74,7 +75,7 @@ Namespace Internal
     ''' <param name="model"></param>
     ''' <param name="entityType"></param>
     ''' <returns></returns>
-    Public Shared Function GetOnDeleteSetter(model As Model, entityType As Type) As Action(Of Object, DbContext)
+    Public Shared Function GetOnDeleteSetter(<DisallowNull> model As Model, <DisallowNull> entityType As Type) As Action(Of Object, DbContext)
       Return GetInstance(model).GetOrCreateOnDeleteSetter(model, entityType)
     End Function
 

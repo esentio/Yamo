@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports Yamo.Expressions.Builders
 Imports Yamo.Internal.Query
 
@@ -29,7 +30,7 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
-    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Exclude(Of TProperty)(<DisallowNull> propertyExpression As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalExclude(propertyExpression)
     End Function
 
@@ -39,7 +40,7 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
-    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Exclude(Of TProperty)(<DisallowNull> propertyExpression As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalExclude(propertyExpression)
     End Function
 
@@ -49,7 +50,7 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
-    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Exclude(Of TProperty)(<DisallowNull> propertyExpression As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalExclude(propertyExpression)
     End Function
 
@@ -59,7 +60,7 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
-    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Exclude(Of TProperty)(<DisallowNull> propertyExpression As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalExclude(propertyExpression)
     End Function
 
@@ -69,7 +70,7 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="propertyExpression"></param>
     ''' <returns></returns>
-    Public Function Exclude(Of TProperty)(propertyExpression As Expression(Of Func(Of Join(Of T1, T2, T3, T4), TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Exclude(Of TProperty)(<DisallowNull> propertyExpression As Expression(Of Func(Of Join(Of T1, T2, T3, T4), TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalExclude(propertyExpression)
     End Function
 
@@ -122,7 +123,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="action"></param>
     ''' <returns></returns>
-    Public Function Include(action As Expression(Of Action(Of T1))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T1))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(action, {0})
     End Function
 
@@ -131,7 +132,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="action"></param>
     ''' <returns></returns>
-    Public Function Include(action As Expression(Of Action(Of T2))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T2))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(action, {1})
     End Function
 
@@ -140,7 +141,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="action"></param>
     ''' <returns></returns>
-    Public Function Include(action As Expression(Of Action(Of T3))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T3))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(action, {2})
     End Function
 
@@ -149,7 +150,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="action"></param>
     ''' <returns></returns>
-    Public Function Include(action As Expression(Of Action(Of T4))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T4))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(action, {3})
     End Function
 
@@ -160,7 +161,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {0}, {0})
     End Function
 
@@ -171,7 +172,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {0}, {1})
     End Function
 
@@ -182,7 +183,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {0}, {2})
     End Function
 
@@ -193,7 +194,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T1, TProperty)), valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {0}, {3})
     End Function
 
@@ -204,7 +205,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {1}, {0})
     End Function
 
@@ -215,7 +216,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {1}, {1})
     End Function
 
@@ -226,7 +227,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {1}, {2})
     End Function
 
@@ -237,7 +238,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T2, TProperty)), valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {1}, {3})
     End Function
 
@@ -248,7 +249,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T3, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {2}, {0})
     End Function
 
@@ -259,7 +260,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T3, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {2}, {1})
     End Function
 
@@ -270,7 +271,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T3, TProperty)), valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {2}, {2})
     End Function
 
@@ -281,7 +282,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T3, TProperty)), valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {2}, {3})
     End Function
 
@@ -292,7 +293,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T4, TProperty)), valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {3}, {0})
     End Function
 
@@ -303,7 +304,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T4, TProperty)), valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {3}, {1})
     End Function
 
@@ -314,7 +315,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T4, TProperty)), valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {3}, {2})
     End Function
 
@@ -325,7 +326,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of T4, TProperty)), valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, {3}, {3})
     End Function
 
@@ -334,7 +335,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="action"></param>
     ''' <returns></returns>
-    Public Function Include(action As Expression(Of Action(Of Join(Of T1, T2, T3, T4)))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of Join(Of T1, T2, T3, T4)))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(action, Nothing)
     End Function
 
@@ -345,7 +346,7 @@ Namespace Expressions
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(keySelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4), TProperty)), valueSelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4), TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4), TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4), TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4)
       Return InternalInclude(keySelector, valueSelector, Nothing, Nothing)
     End Function
 
@@ -390,7 +391,7 @@ Namespace Expressions
     ''' <param name="[then]"></param>
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
-    Public Function [If](Of TResult)(condition As Boolean, [then] As Func(Of SelectedSelectSqlExpression(Of T1, T2, T3, T4), TResult), Optional otherwise As Func(Of SelectedSelectSqlExpression(Of T1, T2, T3, T4), TResult) = Nothing) As TResult
+    Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of SelectedSelectSqlExpression(Of T1, T2, T3, T4), TResult), Optional otherwise As Func(Of SelectedSelectSqlExpression(Of T1, T2, T3, T4), TResult) = Nothing) As TResult
       If condition Then
         Return [then].Invoke(Me)
       ElseIf otherwise Is Nothing Then
@@ -456,7 +457,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="behavior">Defines how collection navigation properties are filled. This setting has no effect if no collection navigation properties are used.</param>
     ''' <returns></returns>
-    Public Function FirstOrDefault(Optional behavior As CollectionNavigationFillBehavior = CollectionNavigationFillBehavior.ProcessOnlyFirstRow) As T1
+    Public Function FirstOrDefault(Optional behavior As CollectionNavigationFillBehavior = CollectionNavigationFillBehavior.ProcessOnlyFirstRow) As <MaybeNull> T1
       Dim query = Me.Builder.CreateQuery()
       Return Me.Executor.ReadFirstOrDefault(Of T1)(query, behavior)
     End Function

@@ -1,4 +1,5 @@
-﻿Imports System.Linq.Expressions
+﻿Imports System.Diagnostics.CodeAnalysis
+Imports System.Linq.Expressions
 Imports System.Reflection
 Imports Yamo.Infrastructure
 
@@ -22,7 +23,7 @@ Namespace Sql
     ''' <param name="method">SQL helper method call expression</param>
     ''' <param name="dialectProvider"></param>
     ''' <returns></returns>
-    Public Shared Function GetSqlFormat(method As MethodCallExpression, dialectProvider As SqlDialectProvider) As SqlFormat
+    Public Shared Function GetSqlFormat(<DisallowNull> method As MethodCallExpression, <DisallowNull> dialectProvider As SqlDialectProvider) As SqlFormat
       Throw New Exception("This method has to be overloaded.")
     End Function
 
@@ -31,7 +32,7 @@ Namespace Sql
     ''' </summary>
     ''' <param name="method"></param>
     ''' <returns></returns>
-    Protected Shared Function FlattenArguments(method As MethodCallExpression) As IReadOnlyList(Of Expression)
+    Protected Shared Function FlattenArguments(<DisallowNull> method As MethodCallExpression) As IReadOnlyList(Of Expression)
       Dim argCount = method.Arguments.Count
 
       If argCount = 0 Then
