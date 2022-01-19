@@ -13,7 +13,7 @@
     <PackageTags>orm;micro-orm;sql;database</PackageTags>
     <AssemblyName>Yamo.Benchmarks</AssemblyName>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
