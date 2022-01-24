@@ -18,7 +18,7 @@ Namespace Internal
     ''' <summary>
     ''' Stores cache instances.
     ''' </summary>
-    Private Shared m_Instances As Dictionary(Of Model, SqlResultReaderCache)
+    Private Shared m_Instances As Dictionary(Of (Type, Model), SqlResultReaderCache)
 
     ''' <summary>
     ''' Stores cached reader instances.<br/>
@@ -36,7 +36,7 @@ Namespace Internal
     ''' Initializes <see cref="SqlResultReaderCache"/> related static data.
     ''' </summary>
     Shared Sub New()
-      m_Instances = New Dictionary(Of Model, SqlResultReaderCache)
+      m_Instances = New Dictionary(Of (Type, Model), SqlResultReaderCache)
     End Sub
 
     ''' <summary>
@@ -51,14 +51,15 @@ Namespace Internal
     ''' Gets reader.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
+    ''' <param name="dataReaderType"></param>
     ''' <param name="model"></param>
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
-    Public Shared Function GetReader(<DisallowNull> model As Model, <DisallowNull> sqlResult As SqlResultBase) As Func(Of DbDataReader, ReaderDataBase, Object)
+    Public Shared Function GetReader(<DisallowNull> dataReaderType As Type, <DisallowNull> model As Model, <DisallowNull> sqlResult As SqlResultBase) As Func(Of DbDataReader, ReaderDataBase, Object)
       If sqlResult.ResultType.IsValueType Then
-        Return GetInstance(model).GetOrCreateValueTypeToObjectWrappedReader(model, sqlResult)
+        Return GetInstance(dataReaderType, model).GetOrCreateValueTypeToObjectWrappedReader(model, sqlResult)
       Else
-        Return DirectCast(GetInstance(model).GetOrCreateReader(model, sqlResult), Func(Of DbDataReader, ReaderDataBase, Object))
+        Return DirectCast(GetInstance(dataReaderType, model).GetOrCreateReader(model, sqlResult), Func(Of DbDataReader, ReaderDataBase, Object))
       End If
     End Function
 
@@ -67,25 +68,29 @@ Namespace Internal
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
+    ''' <param name="dataReaderType"></param>
     ''' <param name="model"></param>
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
-    Public Shared Function GetReader(Of T)(<DisallowNull> model As Model, <DisallowNull> sqlResult As SqlResultBase) As Func(Of DbDataReader, ReaderDataBase, T)
-      Return DirectCast(GetInstance(model).GetOrCreateReader(model, sqlResult), Func(Of DbDataReader, ReaderDataBase, T))
+    Public Shared Function GetReader(Of T)(<DisallowNull> dataReaderType As Type, <DisallowNull> model As Model, <DisallowNull> sqlResult As SqlResultBase) As Func(Of DbDataReader, ReaderDataBase, T)
+      Return DirectCast(GetInstance(dataReaderType, model).GetOrCreateReader(model, sqlResult), Func(Of DbDataReader, ReaderDataBase, T))
     End Function
 
     ''' <summary>
     ''' Gets <see cref="SqlResultReaderCache"/> cache instance. If it doesn't exist, it is created.
     ''' </summary>
+    ''' <param name="dataReaderType"></param>
     ''' <param name="model"></param>
     ''' <returns></returns>
-    Private Shared Function GetInstance(model As Model) As SqlResultReaderCache
+    Private Shared Function GetInstance(dataReaderType As Type, model As Model) As SqlResultReaderCache
       Dim instance As SqlResultReaderCache = Nothing
 
+      Dim key = (dataReaderType, model)
+
       SyncLock m_Instances
-        If Not m_Instances.TryGetValue(model, instance) Then
+        If Not m_Instances.TryGetValue(key, instance) Then
           instance = New SqlResultReaderCache
-          m_Instances.Add(model, instance)
+          m_Instances.Add(key, instance)
         End If
       End SyncLock
 
