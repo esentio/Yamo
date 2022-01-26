@@ -11,12 +11,18 @@ Namespace Internal
   Public Class ModelCache
 
     ''' <summary>
-    ''' Stores cache instances.
+    ''' Stores cache instances.<br/>
+    ''' <br/>
+    ''' Key: <see cref="SqlDialectProvider"/> type.<br/>
+    ''' Value: <see cref="ModelCache"/> instance.
     ''' </summary>
     Private Shared m_Instances As Dictionary(Of Type, ModelCache)
 
     ''' <summary>
-    ''' Stores cached model instances.
+    ''' Stores cached model instances.<br/>
+    ''' <br/>
+    ''' Key: <see cref="DbContext"/> type.<br/>
+    ''' Value: <see cref="Model"/> instance.
     ''' </summary>
     Private m_Models As Dictionary(Of Type, Model)
 

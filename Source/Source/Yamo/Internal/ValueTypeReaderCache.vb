@@ -13,13 +13,18 @@ Namespace Internal
   Public Class ValueTypeReaderCache
 
     ''' <summary>
-    ''' Stores cache instances.
+    ''' Stores cache instances.<br/>
+    ''' <br/>
+    ''' Key: actual <see cref="DbDataReader"/> type, <see cref="SqlDialectProvider"/> instance, <see cref="Model"/> instance.<br/>
+    ''' Value: <see cref="ValueTypeReaderCache"/> instance.
     ''' </summary>
     Private Shared m_Instances As Dictionary(Of (Type, SqlDialectProvider, Model), ValueTypeReaderCache)
 
     ''' <summary>
     ''' Stores cached reader instances.<br/>
-    ''' Instance type is actually Func(Of DbDataReader, Int32, T).
+    ''' <br/>
+    ''' Key: type of scalar result.<br/>
+    ''' Value: <see cref="Func(Of DbDataReader, Int32, T)"/> delegate, where first parameter is <see cref="DbDataReader"/> instance, second parameter is starting reader index and return value is actual result.
     ''' </summary>
     Private m_Readers As Dictionary(Of Type, Object)
 

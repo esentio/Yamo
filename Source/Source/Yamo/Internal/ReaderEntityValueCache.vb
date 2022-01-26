@@ -9,7 +9,10 @@ Namespace Internal
   Public Class ReaderEntityValueCache
 
     ''' <summary>
-    ''' Stores cached instances.
+    ''' Stores cached instances.<br/>
+    ''' <br/>
+    ''' Key: <see cref="ChainKey"/>.<br/>
+    ''' Value: entity instance.
     ''' </summary>
     Private m_Cache As Dictionary(Of ChainKey, Object)()
 

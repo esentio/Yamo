@@ -16,19 +16,26 @@ Namespace Internal
   Public Class SqlResultReaderCache
 
     ''' <summary>
-    ''' Stores cache instances.
+    ''' Stores cache instances.<br/>
+    ''' <br/>
+    ''' Key: actual <see cref="DbDataReader"/> type, <see cref="Model"/> instance.<br/>
+    ''' Value: <see cref="SqlResultReaderCache"/> instance.
     ''' </summary>
     Private Shared m_Instances As Dictionary(Of (Type, Model), SqlResultReaderCache)
 
     ''' <summary>
     ''' Stores cached reader instances.<br/>
-    ''' Instance type is actually Func(Of DbDataReader, ReaderDataBase, T).
+    ''' <br/>
+    ''' Key: type corresponding to <see cref="SqlResultBase.ResultType"/>.<br/>
+    ''' Value: <see cref="Func(Of DbDataReader, ReaderDataBase, T)"/> delegate, where first parameter is <see cref="DbDataReader"/> instance, second parameter is <see cref="ReaderDataBase"/> instance and return value is actual result.
     ''' </summary>
     Private m_Readers As Dictionary(Of Type, Object)
 
     ''' <summary>
     ''' Stores cached reader instances that are wrapped as Func(Of DbDataReader, ReaderDataBase, Object).<br/>
-    ''' Instance type is actually Func(Of DbDataReader, ReaderDataBase, Object).
+    ''' <br/>
+    ''' Key: type corresponding to <see cref="SqlResultBase.ResultType"/>.<br/>
+    ''' Value: <see cref="Func(Of DbDataReader, ReaderDataBase, Object)"/> delegate, where first parameter is <see cref="DbDataReader"/> instance, second parameter is <see cref="ReaderDataBase"/> instance and return value is actual result casted as an <see cref="Object"/>.
     ''' </summary>
     Private m_ValueTypeWrappedReaders As Dictionary(Of Type, Func(Of DbDataReader, ReaderDataBase, Object))
 

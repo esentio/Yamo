@@ -13,27 +13,42 @@ Namespace Internal
   Public Class EntityReaderCache
 
     ''' <summary>
-    ''' Stores cache instances.
+    ''' Stores cache instances.<br/>
+    ''' <br/>
+    ''' Key: actual <see cref="DbDataReader"/> type, <see cref="SqlDialectProvider"/> instance, <see cref="Model"/> instance.<br/>
+    ''' Value: <see cref="EntityReaderCache"/> instance.
     ''' </summary>
     Private Shared m_Instances As Dictionary(Of (Type, SqlDialectProvider, Model), EntityReaderCache)
 
     ''' <summary>
-    ''' Stores cached reader instances.
+    ''' Stores cached reader instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Func(Of DbDataReader, Int32, Boolean(), Object)"/> delegate, where first parameter is <see cref="DbDataReader"/> instance, second parameter is starting reader index, third parameter represents included columns and return value is entity instance.
     ''' </summary>
     Private m_Readers As Dictionary(Of Type, Func(Of DbDataReader, Int32, Boolean(), Object))
 
     ''' <summary>
-    ''' Stores cached contains primary key reader instances.
+    ''' Stores cached contains primary key reader instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Func(Of DbDataReader, Int32, Int32(), Boolean)"/> delegate, where first parameter is <see cref="DbDataReader"/> instance, second parameter is starting reader index, third parameter represents PK offset indexes and return value is entity presence indication.
     ''' </summary>
     Private m_ContainsPKReaders As Dictionary(Of Type, Func(Of DbDataReader, Int32, Int32(), Boolean))
 
     ''' <summary>
-    ''' Stores cached primary key reader instances.
+    ''' Stores cached primary key reader instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Func(Of DbDataReader, Int32, Int32(), Object)"/> delegate, where first parameter is <see cref="DbDataReader"/> instance, second parameter is starting reader index, third parameter represents PK offset indexes and return value is value tuple representation of entity PK.
     ''' </summary>
     Private m_PKReaders As Dictionary(Of Type, Func(Of DbDataReader, Int32, Int32(), Object))
 
     ''' <summary>
-    ''' Stores cached database generated values reader instances.
+    ''' Stores cached database generated values reader instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Action(Of DbDataReader, Int32, Object)"/> delegate, where first parameter is <see cref="DbDataReader"/> instance, second parameter is starting reader index and third parameter is entity instance.
     ''' </summary>
     Private m_DbGeneratedValuesReaders As Dictionary(Of Type, Action(Of DbDataReader, Int32, Object))
 
