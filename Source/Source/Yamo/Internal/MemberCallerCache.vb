@@ -20,32 +20,50 @@ Namespace Internal
     Private Shared m_Instance As MemberCallerCache
 
     ''' <summary>
-    ''' Stores cached field caller instances.
+    ''' Stores cached field caller instances.<br/>
+    ''' <br/>
+    ''' Key: field type, <see cref="FieldInfo"/> instance.<br/>
+    ''' Value: <see cref="Func(Of Object, Object)"/> delegate, where parameter is object and return value is field value of that object.<br/>
     ''' </summary>
     Private m_FieldCallers As Dictionary(Of (Type, FieldInfo), Func(Of Object, Object))
 
     ''' <summary>
-    ''' Stores cached static field caller instances.
+    ''' Stores cached static field caller instances.<br/>
+    ''' <br/>
+    ''' Key: field type, <see cref="FieldInfo"/> instance.<br/>
+    ''' Value: <see cref="Func(Of Object, Object)"/> delegate, where return value is static field value.<br/>
     ''' </summary>
     Private m_StaticFieldCallers As Dictionary(Of (Type, FieldInfo), Func(Of Object))
 
     ''' <summary>
-    ''' Stores cached property caller instances.
+    ''' Stores cached property caller instances.<br/>
+    ''' <br/>
+    ''' Key: field type, <see cref="PropertyInfo"/> instance.<br/>
+    ''' Value: <see cref="Func(Of Object, Object)"/> delegate, where parameter is object and return value is property value of that object.<br/>
     ''' </summary>
     Private m_PropertyCallers As Dictionary(Of (Type, PropertyInfo), Func(Of Object, Object))
 
     ''' <summary>
-    ''' Stores cached static property caller instances.
+    ''' Stores cached static property caller instances.<br/>
+    ''' <br/>
+    ''' Key: field type, <see cref="PropertyInfo"/> instance.<br/>
+    ''' Value: <see cref="Func(Of Object, Object)"/> delegate, where return value is static property value.<br/>
     ''' </summary>
     Private m_StaticPropertyCallers As Dictionary(Of (Type, PropertyInfo), Func(Of Object))
 
     ''' <summary>
-    ''' Stores cached method caller instances.
+    ''' Stores cached method caller instances.<br/>
+    ''' <br/>
+    ''' Key: field type, <see cref="MethodInfo"/> instance.<br/>
+    ''' Value: <see cref="Func(Of Object, Object)"/> delegate, where parameter is object and return value is output from method of that object.<br/>
     ''' </summary>
     Private m_MethodCallers As Dictionary(Of (Type, MethodInfo), Func(Of Object, Object))
 
     ''' <summary>
-    ''' Stores cached static method caller instances.
+    ''' Stores cached static method caller instances.<br/>
+    ''' <br/>
+    ''' Key: field type, <see cref="MethodInfo"/> instance.<br/>
+    ''' Value: <see cref="Func(Of Object, Object)"/> delegate, where return value is output from static method.<br/>
     ''' </summary>
     Private m_StaticMethodCallers As Dictionary(Of (Type, MethodInfo), Func(Of Object))
 

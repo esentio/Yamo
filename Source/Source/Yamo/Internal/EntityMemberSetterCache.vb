@@ -12,22 +12,34 @@ Namespace Internal
   Public Class EntityMemberSetterCache
 
     ''' <summary>
-    ''' Stores cache instances.
+    ''' Stores cache instances.<br/>
+    ''' <br/>
+    ''' Key: <see cref="Model"/> instance.<br/>
+    ''' Value: <see cref="EntityMemberSetterCache"/> instance.
     ''' </summary>
     Private Shared m_Instances As Dictionary(Of Model, EntityMemberSetterCache)
 
     ''' <summary>
-    ''' Stores cached setter instances.
+    ''' Stores cached setter instances.<br/>
+    ''' <br/>
+    ''' Key: entity type, property/field name.<br/>
+    ''' Value: <see cref="Action(Of Object, Object)"/> delegate, where first parameter is entity instance and second parameter is value to be set to a property.
     ''' </summary>
     Private m_Setters As Dictionary(Of (Type, String), Action(Of Object, Object))
 
     ''' <summary>
-    ''' Stores cached collection add setter instances.
+    ''' Stores cached collection add setter instances.<br/>
+    ''' <br/>
+    ''' Key: entity type, property/field name.<br/>
+    ''' Value: <see cref="Action(Of Object, Object)"/> delegate, where first parameter is entity instance and second parameter is value to be added to a property collection.
     ''' </summary>
     Private m_CollectionAddSetters As Dictionary(Of (Type, String), Action(Of Object, Object))
 
     ''' <summary>
-    ''' Stores cached collection init setter instances.
+    ''' Stores cached collection init setter instances.<br/>
+    ''' <br/>
+    ''' Key: entity type, property/field name.<br/>
+    ''' Value: <see cref="Action(Of Object)"/> delegate, where parameter is entity instance with a property that will be set to a new collection.
     ''' </summary>
     Private m_CollectionInitSetters As Dictionary(Of (Type, String), Action(Of Object))
 

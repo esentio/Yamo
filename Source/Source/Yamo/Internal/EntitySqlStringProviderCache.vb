@@ -13,32 +13,49 @@ Namespace Internal
   Public Class EntitySqlStringProviderCache
 
     ''' <summary>
-    ''' Stores cache instances.
+    ''' Stores cache instances.<br/>
+    ''' <br/>
+    ''' Key: <see cref="SqlDialectProvider"/> instance, <see cref="Model"/> instance.<br/>
+    ''' Value: <see cref="EntitySqlStringProviderCache"/> instance.
     ''' </summary>
     Private Shared m_Instances As Dictionary(Of (SqlDialectProvider, Model), EntitySqlStringProviderCache)
 
     ''' <summary>
-    ''' Stores cached insert provider instances.
+    ''' Stores cached insert provider instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Func(Of Object, String, Boolean, CreateInsertSqlStringResult)"/> delegate, where first parameter is entity instance, second parameter is table name, third parameter is indicator of using DB identity and defaults and return value is <see cref="CreateInsertSqlStringResult"/> instance.
     ''' </summary>
     Private m_InsertProviders As Dictionary(Of Type, Func(Of Object, String, Boolean, CreateInsertSqlStringResult))
 
     ''' <summary>
-    ''' Stores cached update provider instances.
+    ''' Stores cached update provider instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Func(Of Object, String, Boolean, SqlString)"/> delegate, where first parameter is entity instance, second parameter is table name, third parameter is indicator of force update of all fields and return value is <see cref="SqlString"/> instance.
     ''' </summary>
     Private m_UpdateProviders As Dictionary(Of Type, Func(Of Object, String, Boolean, SqlString))
 
     ''' <summary>
-    ''' Stores cached delete provider instances.
+    ''' Stores cached delete provider instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Func(Of Object, String, SqlString)"/> delegate, where first parameter is entity instance, second parameter is table name and return value is <see cref="SqlString"/> instance.
     ''' </summary>
     Private m_DeleteProviders As Dictionary(Of Type, Func(Of Object, String, SqlString))
 
     ''' <summary>
-    ''' Stores cached soft delete provider instances.
+    ''' Stores cached soft delete provider instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Func(Of Object, String, SqlString)"/> delegate, where first parameter is entity instance, second parameter is table name and return value is <see cref="SqlString"/> instance.
     ''' </summary>
     Private m_SoftDeleteProviders As Dictionary(Of Type, Func(Of Object, String, SqlString))
 
     ''' <summary>
-    ''' Stores cached soft delete without condition provider instances.
+    ''' Stores cached soft delete without condition provider instances.<br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Func(Of String, Object(), SqlString)"/> delegate, where first parameter is entity instance, second parameter is array of values to be set to auto set on soft delete properties and return value is <see cref="SqlString"/> instance.
     ''' </summary>
     Private m_SoftDeleteWithoutConditionProviders As Dictionary(Of Type, Func(Of String, Object(), SqlString))
 

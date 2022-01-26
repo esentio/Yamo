@@ -11,22 +11,34 @@ Namespace Internal
   Public Class EntityAutoFieldsSetterCache
 
     ''' <summary>
-    ''' Stores cache instances.
+    ''' Stores cache instances.<br/>
+    ''' <br/>
+    ''' Key: <see cref="Model"/> instance.<br/>
+    ''' Value: <see cref="EntityAutoFieldsSetterCache"/> instance.
     ''' </summary>
     Private Shared m_Instances As Dictionary(Of Model, EntityAutoFieldsSetterCache)
 
     ''' <summary>
-    ''' Stores cached oninsert setter instances.
+    ''' Stores cached oninsert setter instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Action(Of Object, DbContext)"/> delegate, where first parameter is entity instance and second parameter is <see cref="DbContext"/> instance.
     ''' </summary>
     Private m_OnInsertSetters As Dictionary(Of Type, Action(Of Object, DbContext))
 
     ''' <summary>
-    ''' Stores cached on update setter instances.
+    ''' Stores cached on update setter instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Action(Of Object, DbContext)"/> delegate, where first parameter is entity instance and second parameter is <see cref="DbContext"/> instance.
     ''' </summary>
     Private m_OnUpdateSetters As Dictionary(Of Type, Action(Of Object, DbContext))
 
     ''' <summary>
-    ''' Stores cached on soft delete setter instances.
+    ''' Stores cached on soft delete setter instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Action(Of Object, DbContext)"/> delegate, where first parameter is entity instance and second parameter is <see cref="DbContext"/> instance.
     ''' </summary>
     Private m_OnDeleteSetters As Dictionary(Of Type, Action(Of Object, DbContext))
 

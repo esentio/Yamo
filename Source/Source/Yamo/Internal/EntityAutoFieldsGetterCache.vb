@@ -11,17 +11,26 @@ Namespace Internal
   Public Class EntityAutoFieldsGetterCache
 
     ''' <summary>
-    ''' Stores cache instances.
+    ''' Stores cache instances.<br/>
+    ''' <br/>
+    ''' Key: <see cref="Model"/> instance.<br/>
+    ''' Value: <see cref="EntityAutoFieldsGetterCache"/> instance.
     ''' </summary>
     Private Shared m_Instances As Dictionary(Of Model, EntityAutoFieldsGetterCache)
 
     ''' <summary>
     ''' Stores cached on update getter instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Func(Of DbContext, Object())"/> delegate, where parameter is <see cref="DbContext"/> instance and return value is array of values for auto set on update properties.
     ''' </summary>
     Private m_OnUpdateGetters As Dictionary(Of Type, Func(Of DbContext, Object()))
 
     ''' <summary>
     ''' Stores cached on soft delete getter instances.<br/>
+    ''' <br/>
+    ''' Key: entity type.<br/>
+    ''' Value: <see cref="Func(Of DbContext, Object())"/> delegate, where parameter is <see cref="DbContext"/> instance and return value is array of values for auto set on soft delete properties.
     ''' </summary>
     Private m_OnDeleteGetters As Dictionary(Of Type, Func(Of DbContext, Object()))
 
