@@ -57,6 +57,11 @@
         actual = FromRawValue(Of TimeOnly)(actual)
       ElseIf TypeOf expected Is TimeOnly? Then
         actual = FromRawValue(Of TimeOnly?)(actual)
+
+      ElseIf TypeOf expected Is Char Then
+        actual = FromRawValue(Of Char)(actual)
+      ElseIf TypeOf expected Is Char? Then
+        actual = FromRawValue(Of Char?)(actual)
       End If
     End If
 
@@ -157,6 +162,15 @@
     ElseIf GetType(T) Is GetType(TimeOnly?) Then
       If TypeOf value Is String Then
         value = New TimeOnly?(TimeOnly.Parse(DirectCast(value, String)))
+      End If
+
+    ElseIf GetType(T) Is GetType(Char) Then
+      If TypeOf value Is String Then
+        Return CType(value, T)
+      End If
+    ElseIf GetType(T) Is GetType(Char?) Then
+      If TypeOf value Is String Then
+        value = New Char?(CType(value, Char))
       End If
     End If
 

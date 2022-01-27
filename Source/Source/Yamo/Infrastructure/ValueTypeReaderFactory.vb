@@ -13,7 +13,9 @@ Namespace Infrastructure
   Public Class ValueTypeReaderFactory
     Inherits ReaderFactoryBase
 
-    ' static methods are used instead of code generation if possible
+    ' NOTE: static methods are used instead of code generation if possible
+
+    ' NOTE: specialized GetX methods are much faster than GetFieldValue(Of T) method
 
     ''' <summary>
     ''' Creates reader.<br/>
@@ -86,8 +88,12 @@ Namespace Infrastructure
           Return DirectCast(AddressOf ReadByte, Func(Of DbDataReader, Int32, Byte))
         Case GetType(Byte?)
           Return DirectCast(AddressOf ReadNullableByte, Func(Of DbDataReader, Int32, Byte?))
+        Case GetType(Char)
+          Return DirectCast(AddressOf ReadChar, Func(Of DbDataReader, Int32, Char))
+        Case GetType(Char?)
+          Return DirectCast(AddressOf ReadNullableChar, Func(Of DbDataReader, Int32, Char?))
         Case Else
-          Throw New NotSupportedException($"Reading value of type '{type}' is not supported.")
+          Return CreateGenericReader(dataReaderType, type)
       End Select
     End Function
 
@@ -489,6 +495,36 @@ Namespace Infrastructure
     End Function
 
     ''' <summary>
+    ''' Reads <see cref="Char"/> value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="reader"></param>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    Protected Shared Function ReadChar(<DisallowNull> reader As DbDataReader, index As Int32) As Char
+      If reader.IsDBNull(index) Then
+        Return Nothing
+      Else
+        Return reader.GetChar(index)
+      End If
+    End Function
+
+    ''' <summary>
+    ''' Reads <see cref="Nullable(Of Char)"/> value.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="reader"></param>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    Protected Shared Function ReadNullableChar(<DisallowNull> reader As DbDataReader, index As Int32) As Char?
+      If reader.IsDBNull(index) Then
+        Return Nothing
+      Else
+        Return reader.GetChar(index)
+      End If
+    End Function
+
+    ''' <summary>
     ''' Creates reader function for <see cref="TimeSpan"/> value.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -529,7 +565,7 @@ Namespace Infrastructure
     End Function
 
     ''' <summary>
-    ''' Creates reader function for generic value.<br/>
+    ''' Creates reader function for value using Get* method.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="T"></typeparam>
@@ -550,10 +586,10 @@ Namespace Infrastructure
 
       Dim valueAssignNull = Expression.Assign(valueVariable, Expression.Default(GetType(T)))
 
+      Dim underlyingNullableType = Nullable.GetUnderlyingType(GetType(T))
+
       Dim isDBNullCall = Expression.Call(readerVariable, "IsDBNull", Nothing, indexParam)
       Dim getValueCall = Expression.Call(readerVariable, getMethod, Nothing, indexParam)
-
-      Dim underlyingNullableType = Nullable.GetUnderlyingType(GetType(T))
 
       If underlyingNullableType Is Nothing Then
         Dim valueAssign = Expression.Assign(valueVariable, getValueCall)
@@ -571,6 +607,53 @@ Namespace Infrastructure
       Dim body = Expression.Block({readerVariable, valueVariable}, expressions)
 
       Dim reader = Expression.Lambda(Of Func(Of DbDataReader, Int32, T))(body, parameters)
+      Return reader.Compile()
+    End Function
+
+    ''' <summary>
+    ''' Creates reader function for value using <see cref="DbDataReader.GetFieldValue(Of T)"/> method.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="dataReaderType"></param>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
+    Protected Overridable Function CreateGenericReader(<DisallowNull> dataReaderType As Type, <DisallowNull> type As Type) As Object
+      Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
+      Dim indexParam = Expression.Parameter(GetType(Int32), "index")
+      Dim parameters = {readerParam, indexParam}
+
+      Dim readerVariable = Expression.Variable(dataReaderType, "r")
+      Dim valueVariable = Expression.Variable(type, "value")
+
+      Dim expressions = New List(Of Expression)(3)
+
+      expressions.Add(Expression.Assign(readerVariable, Expression.Convert(readerParam, dataReaderType)))
+
+      Dim valueAssignNull = Expression.Assign(valueVariable, Expression.Default(type))
+
+      Dim underlyingNullableType = Nullable.GetUnderlyingType(type)
+
+      Dim isDBNullCall = Expression.Call(readerVariable, "IsDBNull", Nothing, indexParam)
+
+      Dim genericType = If(underlyingNullableType Is Nothing, type, underlyingNullableType)
+      Dim getValueCall = Expression.Call(readerVariable, "GetFieldValue", {genericType}, indexParam)
+
+      If underlyingNullableType Is Nothing Then
+        Dim valueAssign = Expression.Assign(valueVariable, getValueCall)
+        Dim isDBNullCond = Expression.IfThenElse(isDBNullCall, valueAssignNull, valueAssign)
+        expressions.Add(isDBNullCond)
+      Else
+        Dim nullableConstructor = type.GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {underlyingNullableType}, Array.Empty(Of ParameterModifier)())
+        Dim valueAssign = Expression.Assign(valueVariable, Expression.[New](nullableConstructor, getValueCall))
+        Dim isDBNullCond = Expression.IfThenElse(isDBNullCall, valueAssignNull, valueAssign)
+        expressions.Add(isDBNullCond)
+      End If
+
+      expressions.Add(valueVariable)
+
+      Dim body = Expression.Block({readerVariable, valueVariable}, expressions)
+
+      Dim reader = Expression.Lambda(body, parameters)
       Return reader.Compile()
     End Function
 

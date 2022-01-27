@@ -365,6 +365,7 @@ Namespace Infrastructure
     ''' <param name="type"></param>
     ''' <returns></returns>
     Protected Overridable Function GetDbDataReaderGetMethodForType(<DisallowNull> dataReaderType As Type, <DisallowNull> type As Type) As (Method As String, IsGeneric As Boolean, Convert As Boolean)
+      ' NOTE: specialized GetX methods are much faster than GetFieldValue(Of T) method
       Select Case type
         Case GetType(String)
           Return ("GetString", False, False)
@@ -384,12 +385,6 @@ Namespace Infrastructure
           Return ("GetTimeSpan", False, False)
         Case GetType(DateTimeOffset), GetType(DateTimeOffset?)
           Return ("GetDateTimeOffset", False, False)
-#If NET6_0_OR_GREATER Then
-        Case GetType(DateOnly), GetType(DateOnly?)
-          Return ("GetFieldValue", True, False)
-        Case GetType(TimeOnly), GetType(TimeOnly?)
-          Return ("GetFieldValue", True, False)
-#End If
         Case GetType(Decimal), GetType(Decimal?)
           Return ("GetDecimal", False, False)
         Case GetType(Double), GetType(Double?)
@@ -400,8 +395,10 @@ Namespace Infrastructure
           Return ("GetValue", False, True)
         Case GetType(Byte), GetType(Byte?)
           Return ("GetByte", False, False)
+        Case GetType(Char), GetType(Char?)
+          Return ("GetChar", False, False)
         Case Else
-          Throw New NotSupportedException($"Reading value of type '{type}' is not supported.")
+          Return ("GetFieldValue", True, False)
       End Select
     End Function
 

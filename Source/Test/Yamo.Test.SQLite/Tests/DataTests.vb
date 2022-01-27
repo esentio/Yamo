@@ -22,43 +22,47 @@ Namespace Tests
 
     <TestMethod()>
     Public Overridable Sub SelectRecordWithDateAndTimeOnlyFields()
-      Dim item1 = Me.ModelFactory.CreateItemWithDateAndTimeOnlyFieldsWithEmptyValues()
+      Dim item1 = Me.ModelFactory.CreateItemWithOnlySQLiteSupportedFieldsWithEmptyValues()
       item1.Id = 1
-      Dim item2 = Me.ModelFactory.CreateItemWithDateAndTimeOnlyFieldsWithMinValues()
+      Dim item2 = Me.ModelFactory.CreateItemWithOnlySQLiteSupportedFieldsWithMinValues()
       item2.Id = 2
-      Dim item3 = Me.ModelFactory.CreateItemWithDateAndTimeOnlyFieldsWithMaxValues()
+      Dim item3 = Me.ModelFactory.CreateItemWithOnlySQLiteSupportedFieldsWithMaxValues()
       item3.Id = 3
 
       Insert(item1)
       Insert(item2)
       Insert(item3)
 
-      Dim expected = New List(Of ItemWithDateAndTimeOnlyFields) From {item1, item2, item3}
-      Dim result As List(Of ItemWithDateAndTimeOnlyFields)
+      Dim expected = New List(Of ItemWithOnlySQLiteSupportedFields) From {item1, item2, item3}
+      Dim result As List(Of ItemWithOnlySQLiteSupportedFields)
 
       Using db = CreateDbContext()
-        result = db.From(Of ItemWithDateAndTimeOnlyFields).SelectAll().ToList()
+        result = db.From(Of ItemWithOnlySQLiteSupportedFields).SelectAll().ToList()
       End Using
 
       CollectionAssert.AreEquivalent(expected, result)
     End Sub
 
-    Protected Overridable Overloads Sub Insert(item As ItemWithDateAndTimeOnlyFields)
+    Protected Overridable Overloads Sub Insert(item As ItemWithOnlySQLiteSupportedFields)
       ' use explicit SQL rather than built-in insert support (that is tested elsewhere)
 
       Dim sql As FormattableString = $"
-      INSERT INTO ItemWithDateAndTimeOnlyFields
+      INSERT INTO ItemWithOnlySQLiteSupportedFields
         (Id
         ,DateOnlyColumn
         ,DateOnlyColumnNull
         ,TimeOnlyColumn
-        ,TimeOnlyColumnNull)
+        ,TimeOnlyColumnNull
+        ,Nchar1Column
+        ,Nchar1ColumnNull)
       VALUES
         ({item.Id}
         ,{item.DateOnlyColumn}
         ,{item.DateOnlyColumnNull}
         ,{item.TimeOnlyColumn}
         ,{item.TimeOnlyColumnNull}
+        ,{item.Nchar1Column}
+        ,{item.Nchar1ColumnNull}
       )"
 
       Using db = CreateDbContext()
