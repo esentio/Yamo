@@ -195,22 +195,26 @@ CREATE TABLE [ItemWithAllSupportedValuesArchive] (
 
 
 
-CREATE TABLE [ItemWithDateAndTimeOnlyFields] (
+CREATE TABLE [ItemWithOnlySQLiteSupportedFields] (
   [Id] INTEGER  NOT NULL
 , [DateOnlyColumn] [date] NOT NULL
 , [DateOnlyColumnNull] [date] NULL
 , [TimeOnlyColumn] [time](7) NOT NULL
 , [TimeOnlyColumnNull] [time](7) NULL
-, CONSTRAINT [PK_ItemWithDateAndTimeOnlyFields] PRIMARY KEY ([Id])
+, [Nchar1Column] [nchar](1) NOT NULL
+, [Nchar1ColumnNull] [nchar](1) NULL
+, CONSTRAINT [PK_ItemWithOnlySQLiteSupportedFields] PRIMARY KEY ([Id])
 );
 
-CREATE TABLE [ItemWithDateAndTimeOnlyFieldsArchive] (
+CREATE TABLE [ItemWithOnlySQLiteSupportedFieldsArchive] (
   [Id] INTEGER  NOT NULL
 , [DateOnlyColumn] [date] NOT NULL
 , [DateOnlyColumnNull] [date] NULL
 , [TimeOnlyColumn] [time](7) NOT NULL
 , [TimeOnlyColumnNull] [time](7) NULL
-, CONSTRAINT [PK_ItemWithDateAndTimeOnlyFieldsArchive] PRIMARY KEY ([Id])
+, [Nchar1Column] [nchar](1) NOT NULL
+, [Nchar1ColumnNull] [nchar](1) NULL
+, CONSTRAINT [PK_ItemWithOnlySQLiteSupportedFieldsArchive] PRIMARY KEY ([Id])
 );
 
 

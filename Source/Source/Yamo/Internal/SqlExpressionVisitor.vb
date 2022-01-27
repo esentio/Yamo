@@ -803,9 +803,6 @@ Namespace Internal
           Case GetType(Boolean)
             m_Sql.Append(m_Builder.DialectProvider.Formatter.GetConstantValue(DirectCast(node.Value, Boolean)))
 
-          Case GetType(System.DateTime)
-            AppendNewParameter(node.Value)
-
           Case GetType(Int16)
             m_Sql.Append(m_Builder.DialectProvider.Formatter.GetConstantValue(DirectCast(node.Value, Int16)))
 
@@ -825,7 +822,7 @@ Namespace Internal
             m_Sql.Append(m_Builder.DialectProvider.Formatter.GetConstantValue(DirectCast(node.Value, Double)))
 
           Case Else
-            Throw New NotSupportedException($"The constant for '{node.Value}' is not supported.")
+            AppendNewParameter(node.Value)
         End Select
       End If
 

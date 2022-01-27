@@ -14,28 +14,32 @@ Public Class SQLiteTestDbContext
 
   Protected Overrides Sub OnModelCreating(modelBuilder As ModelBuilder)
     MyBase.OnModelCreating(modelBuilder)
-    CreateItemWithDateAndTimeOnlyFieldsModel(modelBuilder)
-    CreateItemWithDateAndTimeOnlyFieldsArchiveModel(modelBuilder)
+    CreateItemWithOnlySQLiteSupportedFieldsModel(modelBuilder)
+    CreateItemWithOnlySQLiteSupportedFieldsArchiveModel(modelBuilder)
   End Sub
 
-  Private Sub CreateItemWithDateAndTimeOnlyFieldsModel(modelBuilder As ModelBuilder)
-    modelBuilder.Entity(Of ItemWithDateAndTimeOnlyFields)()
+  Private Sub CreateItemWithOnlySQLiteSupportedFieldsModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFields)()
 
-    modelBuilder.Entity(Of ItemWithDateAndTimeOnlyFields).Property(Function(x) x.Id).IsKey().IsIdentity()
-    modelBuilder.Entity(Of ItemWithDateAndTimeOnlyFields).Property(Function(x) x.DateOnlyColumn)
-    modelBuilder.Entity(Of ItemWithDateAndTimeOnlyFields).Property(Function(x) x.DateOnlyColumnNull)
-    modelBuilder.Entity(Of ItemWithDateAndTimeOnlyFields).Property(Function(x) x.TimeOnlyColumn)
-    modelBuilder.Entity(Of ItemWithDateAndTimeOnlyFields).Property(Function(x) x.TimeOnlyColumnNull)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFields).Property(Function(x) x.Id).IsKey().IsIdentity()
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFields).Property(Function(x) x.DateOnlyColumn)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFields).Property(Function(x) x.DateOnlyColumnNull)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFields).Property(Function(x) x.TimeOnlyColumn)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFields).Property(Function(x) x.TimeOnlyColumnNull)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFields).Property(Function(x) x.Nchar1Column)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFields).Property(Function(x) x.Nchar1ColumnNull)
   End Sub
 
-  Private Sub CreateItemWithDateAndTimeOnlyFieldsArchiveModel(modelBuilder As ModelBuilder)
-    modelBuilder.Entity(Of ItemWithDateAndTimeOnlyFieldsArchive)()
+  Private Sub CreateItemWithOnlySQLiteSupportedFieldsArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFieldsArchive)()
 
-    modelBuilder.Entity(Of ItemWithDateAndTimeOnlyFieldsArchive).Property(Function(x) x.Id).IsKey().IsIdentity()
-    modelBuilder.Entity(Of ItemWithDateAndTimeOnlyFieldsArchive).Property(Function(x) x.DateOnlyColumn)
-    modelBuilder.Entity(Of ItemWithDateAndTimeOnlyFieldsArchive).Property(Function(x) x.DateOnlyColumnNull)
-    modelBuilder.Entity(Of ItemWithDateAndTimeOnlyFieldsArchive).Property(Function(x) x.TimeOnlyColumn)
-    modelBuilder.Entity(Of ItemWithDateAndTimeOnlyFieldsArchive).Property(Function(x) x.TimeOnlyColumnNull)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFieldsArchive).Property(Function(x) x.Id).IsKey().IsIdentity()
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFieldsArchive).Property(Function(x) x.DateOnlyColumn)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFieldsArchive).Property(Function(x) x.DateOnlyColumnNull)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFieldsArchive).Property(Function(x) x.TimeOnlyColumn)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFieldsArchive).Property(Function(x) x.TimeOnlyColumnNull)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFieldsArchive).Property(Function(x) x.Nchar1Column)
+    modelBuilder.Entity(Of ItemWithOnlySQLiteSupportedFieldsArchive).Property(Function(x) x.Nchar1ColumnNull)
   End Sub
 
   Protected Overrides Sub OnConfiguring(optionsBuilder As DbContextOptionsBuilder)
