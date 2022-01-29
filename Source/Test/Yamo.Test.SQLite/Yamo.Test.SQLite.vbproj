@@ -7,7 +7,7 @@
     <IsPackable>false</IsPackable>
 
     <OptionStrict>On</OptionStrict>
-    <Version>0.7.0</Version>
+    <Version>0.8.0</Version>
     <Authors>Peter Šimno</Authors>
     <Company>Peter Šimno</Company>
     <Description>Yamo tests</Description>
