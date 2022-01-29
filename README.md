@@ -180,7 +180,7 @@ using (var db = CreateContext())
 
 It is important to note that Yamo doesn't implicitly open transaction inside the context/when executing the query nor does it commit transaction when disposing the context. If you want to use transactions, you need to call beginn/commit explicitly.
 
-### Creating model
+### Creating a model
 
 Model in Yamo is set of POCO classes - entities - that are mapped to your database tables. Model is built with fluent API, which is very similar to API Entity Framework Core. In contrast to EF Core, this is the only way how to define the model. There is no support for using attributes in your entity classes (at least not at this moment).
 
@@ -234,11 +234,17 @@ Primary key is defined with `IsKey` call. If PK consists of multiple columns, yo
 
 Autoincrement/Indentity column is marked with `IsIdentity` method. Columns with default values are marked with `HasDefaultValue` method. There are some limitations though - please see the chapter describing inserts.
 
-Right now, you can map to properties of following types: `Guid`, `Guid`, `Guid?`, `string`, `bool`, `bool?`, `Int16`, `Int16?`, `Int32`, `Int32?`, `Int64`, `Int64?`, `float`, `float?`, `double`, `double?`, `decimal`, `decimal?`, `decimal`, `decimal?`, `DateTime`, `DateTime?` and `byte[]`.
+Right now, you can map to properties of common types like `Guid`, `string`, `bool`, etc. Some of the types might not be supported in every database. For example `DateOnly` and `TimeOnly` currently only work in SQLite, since SQL Server provider [doesn't support them yet](https://github.com/dotnet/SqlClient/issues/1009) (and they require .NET 6 and above). Converters for storing values in different types are not supported yet.
 
 Database nullability is infered by property type. However, it is not possible to infer nullability for `string` and `byte[]`, since these are reference types and could always be `null`. Therefore, you should call `IsRequired` builder method for string and binary `NOT NULL` columns. Also, make sure such properties don't have `null` values when doing inserts or updates.
 
-It is important to note that you need to explicitly call `Entity` and `Property` builder methods for all your entities and all their mapped properties. Unmapped properties will be ignored by Yamo. An attempt to pass non-defined entity will cause runtime exception.
+You can specify data type used for a property with `UseDbType` method. For example property of type `DateTime` will use `DbType.DateTime` by default , but you can change it, in case your database field only stores the date part:
+
+```c#
+modelBuilder.Entity<Person>().Property(x => x.BirthDate).UseDbType(DbType.Date);
+```
+
+It is important to note that you need to explicitly call `Entity` and `Property` builder methods for all your entities and all their mapped properties. Unmapped properties will be ignored by Yamo. An attempt to pass non-defined entity will cause a runtime exception.
 
 Besides properties that maps directly to database columns, you can also define navigation properties. They define how entities relate to each other. You can have either reference navigation property which holds reference to single related entity (1:1 relationship) or collection navigation property that holds reference to multiple related entities (1:N or M:N relationships).
 
@@ -1432,6 +1438,8 @@ This will translate to appropriate `LIMIT`, `TOP` or `OFFSET FETCH` clauses depe
 
 ### Conditionally built queries
 
+####Fluent API
+
 Often you need to build query dynamically. Add where conditions based on user input. Join a table if certain filter criteria are applied, but avoid joining otherwise for better performance. The list goes on.
 
 Yamo has built-in `If` method, which can be used to conditionally build select queries using fluent style API.
@@ -1507,7 +1515,51 @@ Behavior is following:
 - If there is conditional join and condition is not met, behavior is following:
   - When `SelectAll` method is used, affected reference navigation property will be set to `null` and no record will be added to affected collection navigation property.
   - If property from affected joined entity is used in a clause (`Where`, `OrderBy`, custom `Select`, etc.), `NULL` will be used in an output SQL statement instead of that column.
-  - If whole affected joined entity is used in `GroupBy` or in custom `Select`, all columns normally added to an SQL statement will be replaced with `NULL` value.
+  - If whole affected joined entity is used in `GroupBy` or in custom `Select`, all columns normally added to an SQL statement will be replaced with `NULL` values.
+
+####Predicate builder
+
+Fluent API provides a nice way how to build queries, but doesn't solve every problem. For example chaining multiple `OR` conditions in `WHERE` clause is not possible.
+
+Another approach would be to conditionally build expression tree of the predicates. However, this would often require a lot of boilerplate code.
+
+For this purpose, Yamo provides `PredicateBuilder` helper class that simplifies building predicate expressions. There are following methods available:
+
+- `PredicateBuilder.And<T>(...)` - creates predicate that represents logical `AND` between predicates
+- `PredicateBuilder.Or<T>(...)` - creates predicate that represents logical `OR` between predicates
+- `PredicateBuilder.Not<T>(...)` - creates predicate that represents logical negation of a predicate
+- `PredicateBuilder.True<T>()` - creates predicate that always returns `true`
+- `PredicateBuilder.False<T>()` - creates predicate that always returns `false`
+
+You can use it to build the `Where` condition like this:
+
+```c#
+public static void Test()
+{
+    var bornBefore = DateTime.Now;
+    var names = new string[] { "Leonardo", "Raffaello" };
+
+    using (var db = CreateContext())
+    {
+        var bornBeforeFilter = GetBornBeforeFilter(bornBefore);
+        var nameFilters = names.Select(x => GetNameFilter(x)).ToArray();
+
+        var filter = PredicateBuilder.And(bornBeforeFilter, PredicateBuilder.Or(nameFilters));
+
+        var people = db.From<Person>().Where(filter).SelectAll().ToList();
+    }
+}
+
+private static Expression<Func<Person, bool>> GetNameFilter(string value)
+{
+    return x => x.FirstName == value;
+}
+
+private static Expression<Func<Person, bool>> GetBornBeforeFilter(DateTime value)
+{
+    return x => x.BirthDate < value;
+}
+```
 
 ### Advanced queries
 
@@ -1543,6 +1595,37 @@ using (var db = CreateContext())
 ```
 
 **Important note:** similarly to `Select` method, `Query` and `QueryFirstOrDefault` don't set any relationship properties and you have to do it by yourself in postprocessing (if you need to).
+
+If you ever need just "raw" values of the resultset row(s), simply use `Object[]` as a type parameter of `Query` and `QueryFirstOrDefault` methods. Basically, it just returns values from `DbDataReader.GetValues(Object[])` call. Don't forget that returned array will contain now `DBNull.Value` instead on `null` values. No conversion is made in this case.
+
+```c#
+using (var db = CreateContext())
+{
+    var login = "foo";
+    var data = db.QueryFirstOrDefault<Object[]>($"SELECT Id, Email FROM [User] WHERE Login = {login}");
+    var list = db.Query<Object[]>("SELECT Id, Email FROM [User]");
+}
+```
+
+Besides common types (`String`, `Int32`, ...) also objects of type `DbParameter` can be used as parameters in raw SQL string queries. This is especially handy if you need to specify parameter data type:
+
+```c#
+using (var db = CreateContext())
+{
+    var name = new SqlParameter()
+    {
+        Value = "da Vinci"
+    };
+
+    var birth = new SqlParameter()
+    {
+        Value = new DateTime(1452, 4, 15),
+        DbType = DbType.Date
+    };
+
+    var leonardo = db.QueryFirstOrDefault<Person>($"SELECT {Yamo.Sql.Model.Columns<Person>()} FROM Person WHERE LastName = {name} AND BirthDate = {birth}");
+}
+```
 
 ### Overriding table name
 
