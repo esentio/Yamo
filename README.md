@@ -1438,7 +1438,7 @@ This will translate to appropriate `LIMIT`, `TOP` or `OFFSET FETCH` clauses depe
 
 ### Conditionally built queries
 
-####Fluent API
+#### Fluent API
 
 Often you need to build query dynamically. Add where conditions based on user input. Join a table if certain filter criteria are applied, but avoid joining otherwise for better performance. The list goes on.
 
@@ -1517,7 +1517,7 @@ Behavior is following:
   - If property from affected joined entity is used in a clause (`Where`, `OrderBy`, custom `Select`, etc.), `NULL` will be used in an output SQL statement instead of that column.
   - If whole affected joined entity is used in `GroupBy` or in custom `Select`, all columns normally added to an SQL statement will be replaced with `NULL` values.
 
-####Predicate builder
+#### Predicate builder
 
 Fluent API provides a nice way how to build queries, but doesn't solve every problem. For example chaining multiple `OR` conditions in `WHERE` clause is not possible.
 
