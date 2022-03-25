@@ -173,7 +173,9 @@ Namespace Internal.Query
     ''' <param name="readerIndex"></param>
     ''' <returns></returns>
     Public Shared Function Create(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> sqlResult As SqlResultBase, readerIndex As Int32) As ReaderDataBase
-      If TypeOf sqlResult Is AnonymousTypeSqlResult Then
+      If TypeOf sqlResult Is AdHocTypeSqlResult Then
+        Return Create(dataReaderType, dialectProvider, model, DirectCast(sqlResult, AdHocTypeSqlResult), readerIndex)
+      ElseIf TypeOf sqlResult Is AnonymousTypeSqlResult Then
         Return Create(dataReaderType, dialectProvider, model, DirectCast(sqlResult, AnonymousTypeSqlResult), readerIndex)
       ElseIf TypeOf sqlResult Is ValueTupleSqlResult Then
         Return Create(dataReaderType, dialectProvider, model, DirectCast(sqlResult, ValueTupleSqlResult), readerIndex)
@@ -184,6 +186,20 @@ Namespace Internal.Query
       Else
         Throw New NotSupportedException($"SQL result of type {sqlResult.GetType()} is not supported.")
       End If
+    End Function
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="AdHocTypeSqlResultReaderData"/>.
+    ''' </summary>
+    ''' <param name="dataReaderType"></param>
+    ''' <param name="dialectProvider"></param>
+    ''' <param name="model"></param>
+    ''' <param name="sqlResult"></param>
+    ''' <param name="readerIndex"></param>
+    ''' <returns></returns>
+    Private Shared Function Create(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, sqlResult As AdHocTypeSqlResult, readerIndex As Int32) As AdHocTypeSqlResultReaderData
+      Dim value = Create(dataReaderType, dialectProvider, model, sqlResult.CtorArguments, sqlResult.HasMemberInits, sqlResult.MemberInits, readerIndex)
+      Return New AdHocTypeSqlResultReaderData(sqlResult, readerIndex, value.CtorArguments, value.MemberInits)
     End Function
 
     ''' <summary>
@@ -265,6 +281,43 @@ Namespace Internal.Query
       Next
 
       Return result
+    End Function
+
+    ''' <summary>
+    ''' Creates new instances of <see cref="ReaderDataBase"/>.
+    ''' </summary>
+    ''' <param name="dataReaderType"></param>
+    ''' <param name="dialectProvider"></param>
+    ''' <param name="model"></param>
+    ''' <param name="ctorArgumentsSqlResults"></param>
+    ''' <param name="hasMemberInits"></param>
+    ''' <param name="memberInitsSqlResults"></param>
+    ''' <param name="readerIndex"></param>
+    ''' <returns></returns>
+    Private Shared Function Create(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, ctorArgumentsSqlResults As SqlResultBase(), hasMemberInits As Boolean, memberInitsSqlResults As SqlResultBase(), readerIndex As Int32) As (CtorArguments As ReaderDataBase(), MemberInits As ReaderDataBase())
+      Dim ctorArguments = New ReaderDataBase(ctorArgumentsSqlResults.Length - 1) {}
+
+      For i = 0 To ctorArgumentsSqlResults.Length - 1
+        Dim readerData = Create(dataReaderType, dialectProvider, model, ctorArgumentsSqlResults(i), readerIndex)
+        ctorArguments(i) = readerData
+        readerIndex += readerData.GetColumnCount()
+      Next
+
+      Dim memberInits As ReaderDataBase()
+
+      If hasMemberInits Then
+        memberInits = New ReaderDataBase(memberInitsSqlResults.Length - 1) {}
+
+        For i = 0 To memberInitsSqlResults.Length - 1
+          Dim readerData = Create(dataReaderType, dialectProvider, model, memberInitsSqlResults(i), readerIndex)
+          memberInits(i) = readerData
+          readerIndex += readerData.GetColumnCount()
+        Next
+      Else
+        memberInits = New ReaderDataBase() {}
+      End If
+
+      Return (ctorArguments, memberInits)
     End Function
 
     ''' <summary>

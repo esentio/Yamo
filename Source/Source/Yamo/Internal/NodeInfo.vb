@@ -52,6 +52,27 @@ Namespace Internal
     Public Property IsNullableHasValueAccess As Boolean
 
     ''' <summary>
+    ''' Gets whether node represents cast or conversion operation.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property IsConvert As Boolean
+
+    ''' <summary>
+    ''' Gets whether node represents <see cref="Nullable(Of T)"/> constructor.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property IsNullableConstructor As Boolean
+
+    ''' <summary>
+    ''' Gets whether node represents object initialization.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property IsMemberInit As Boolean
+
+    ''' <summary>
     ''' Creates new instance of <see cref="NodeInfo"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -63,6 +84,9 @@ Namespace Internal
       Me.IsCompare = False
       Me.IsNullableValueAccess = False
       Me.IsNullableHasValueAccess = False
+      Me.IsConvert = False
+      Me.IsNullableConstructor = False
+      Me.IsMemberInit = False
     End Sub
 
   End Class
