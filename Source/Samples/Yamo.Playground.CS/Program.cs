@@ -76,7 +76,8 @@ namespace Yamo.Playground.CS
             //Test51();
             //Test52();
             //Test53();
-            Test54();
+            //Test54();
+            Test55();
         }
 
         public static MyContext CreateContext()
@@ -1022,6 +1023,30 @@ namespace Yamo.Playground.CS
                 var filter = PredicateBuilder.And(bornBeforeFilter, PredicateBuilder.Or(nameFilters));
 
                 var people = db.From<Person>().Where(filter).SelectAll().ToList();
+            }
+        }
+
+        public static void Test55()
+        {
+            using (var db = CreateContext())
+            {
+                var list1 = db.From<Blog>()
+                              .Select(x => new NonModelObject(x.Id) { Description = x.Title, Item = x })
+                              .ToList();
+
+                var list2 = db.From<Blog>()
+                              .Select(x => new NonModelStruct(x.Id) { Description = x.Title, Item = x })
+                              .ToList();
+
+                var value1 = db.From<Blog>()
+                              .Where(x => x.Id == 42)
+                              .Select<NonModelStruct?>(x => new NonModelStruct(x.Id) { Description = x.Title, Item = x })
+                              .FirstOrDefault();
+
+                var value2 = db.From<Blog>()
+                               .Where(x => x.Id == 42)
+                               .Select(x => (NonModelStruct?)new NonModelStruct(x.Id) { Description = x.Title, Item = x })
+                               .FirstOrDefault();
             }
         }
 

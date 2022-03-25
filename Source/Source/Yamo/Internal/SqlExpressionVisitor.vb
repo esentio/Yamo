@@ -19,6 +19,15 @@ Namespace Internal
     Inherits ExpressionVisitor
 
     ''' <summary>
+    ''' New expression type
+    ''' </summary>
+    Private Enum NewExpressionType
+      ValueTuple
+      Anonymous
+      AdHoc
+    End Enum
+
+    ''' <summary>
     ''' Stores SQL expression builder.
     ''' </summary>
     Private m_Builder As SqlExpressionBuilderBase
@@ -659,7 +668,7 @@ Namespace Internal
           End If
 
         Case ExpressionType.Convert, ExpressionType.ConvertChecked
-          ' ignore
+          m_Stack.Peek().IsConvert = True
 
         Case Else
           Throw New NotSupportedException($"The unary operator '{node.NodeType}' is not supported.")
@@ -915,6 +924,53 @@ Namespace Internal
     End Function
 
     ''' <summary>
+    ''' Visit member init.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Protected Overrides Function VisitMemberInit(node As MemberInitExpression) As Expression
+      m_Stack.Peek().IsMemberInit = True
+
+      Visit(node.NewExpression)
+
+      If m_CustomSqlResult Is Nothing OrElse TypeOf m_CustomSqlResult IsNot AdHocTypeSqlResult Then
+        Throw New Exception("Member init is only allowed in custom select or include mode for ad hoc types.")
+      End If
+
+      Dim adHocTypeSqlResult = DirectCast(m_CustomSqlResult, AdHocTypeSqlResult)
+
+      Dim isInCustomSelectMode = m_Mode = ExpressionTranslateMode.CustomSelect
+
+      Dim bindings = node.Bindings
+      Dim count = bindings.Count
+
+      Dim members = New MemberInfo(count - 1) {}
+      Dim items = New Expression(count - 1) {}
+
+      For i = 0 To count - 1
+        Dim binding = bindings(i)
+
+        If Not binding.BindingType = MemberBindingType.Assignment Then
+          Throw New Exception($"Unsupported binding type {binding.BindingType}. Only {MemberBindingType.Assignment} is allowed.")
+        End If
+
+        members(i) = binding.Member
+        items(i) = DirectCast(binding, MemberAssignment).Expression
+      Next
+
+      If Not adHocTypeSqlResult.CtorArguments.Length = 0 Then
+        m_Sql.Append(", ")
+      End If
+
+      Dim resultItems = ProcessItemsInCustomSelectOrIncludeMode(items, isInCustomSelectMode)
+
+      adHocTypeSqlResult.SetMembers(members, resultItems)
+
+      Return node
+    End Function
+
+    ''' <summary>
     ''' Visits new.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -923,17 +979,63 @@ Namespace Internal
     Protected Overrides Function VisitNew(node As NewExpression) As Expression
       Dim type = node.Type
 
-      If Helpers.Types.IsValueTuple(type) Then
-        ' TODO: SIP - does it make sense to support nullable ValueTuples as well?
-        Return VisitValueTupleOrAnonymousType(node, True)
-      ElseIf Helpers.Types.IsAnonymousType(type) Then
-        Return VisitValueTupleOrAnonymousType(node, False)
-      ElseIf type Is GetType(RawSqlString) Then
+      If type Is GetType(RawSqlString) Then
         m_Sql.Append(Evaluate(node.Arguments(0)))
         Return node
+      ElseIf Helpers.Types.IsValueTuple(type) Then
+        Return VisitNewValueTupleOrAnonymousOrAdHocType(node, NewExpressionType.ValueTuple)
+      ElseIf Helpers.Types.IsAnonymousType(type) Then
+        Return VisitNewValueTupleOrAnonymousOrAdHocType(node, NewExpressionType.Anonymous)
       Else
-        Return VisitAndEvaluate(node)
+        Return VisitNewValueTupleOrAnonymousOrAdHocType(node, NewExpressionType.AdHoc)
       End If
+    End Function
+
+    ''' <summary>
+    ''' Visits new expression of ValueTuple or anonymous or ad hoc type.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <param name="newType"></param>
+    ''' <returns></returns>
+    Private Function VisitNewValueTupleOrAnonymousOrAdHocType(node As NewExpression, newType As NewExpressionType) As Expression
+      If Helpers.Types.IsNullable(node.Type) Then
+        m_Stack.Peek().IsNullableConstructor = True
+        Return Visit(node.Arguments(0))
+      End If
+
+      Dim args As IReadOnlyList(Of Expression)
+
+      Dim isValueTuple = newType = NewExpressionType.ValueTuple
+      Dim isAnonymous = newType = NewExpressionType.Anonymous
+
+      If isValueTuple Then
+        args = FlattenValueTupleArguments(node)
+      Else
+        args = node.Arguments
+      End If
+
+      Dim isInCustomSelectMode = m_Mode = ExpressionTranslateMode.CustomSelect
+      Dim isInIncludeMode = m_Mode = ExpressionTranslateMode.Include
+
+      If isInCustomSelectMode OrElse isInIncludeMode Then
+        Dim items = ProcessItemsInCustomSelectOrIncludeMode(args, isInCustomSelectMode)
+
+        If isValueTuple Then
+          Dim isNullable = IsNestedConstructorOfNullableValueTupleTypeSqlResult()
+          Dim type = If(isNullable, GetType(Nullable(Of )).MakeGenericType(node.Type), node.Type)
+          m_CustomSqlResult = New ValueTupleSqlResult(type, items)
+        ElseIf isAnonymous Then
+          m_CustomSqlResult = New AnonymousTypeSqlResult(node.Type, items)
+        Else
+          Dim isNullable = IsNestedConstructorOfNullableAdHocTypeSqlResult()
+          Dim type = If(isNullable, GetType(Nullable(Of )).MakeGenericType(node.Type), node.Type)
+          m_CustomSqlResult = New AdHocTypeSqlResult(type, node.Constructor, items)
+        End If
+      Else
+        ProcessItems(args)
+      End If
+
+      Return node
     End Function
 
     ''' <summary>
@@ -957,51 +1059,36 @@ Namespace Internal
     End Function
 
     ''' <summary>
-    ''' Visits ValueTuple or anonymous type.
+    ''' Process items in custom select or include mode.
     ''' </summary>
-    ''' <param name="node"></param>
-    ''' <param name="isValueTuple"></param>
+    ''' <param name="items"></param>
+    ''' <param name="isInCustomSelectMode"></param>
     ''' <returns></returns>
-    Private Function VisitValueTupleOrAnonymousType(node As NewExpression, isValueTuple As Boolean) As Expression
-      Dim args As IReadOnlyList(Of Expression)
+    Private Function ProcessItemsInCustomSelectOrIncludeMode(items As IReadOnlyList(Of Expression), isInCustomSelectMode As Boolean) As SqlResultBase()
+      Dim count = items.Count
 
-      If isValueTuple Then
-        args = FlattenValueTupleArguments(node)
-      Else
-        args = node.Arguments
-      End If
-
-      Dim count = args.Count
-      Dim items As SqlResultBase() = Nothing
-
-      Dim isInCustomSelectMode = m_Mode = ExpressionTranslateMode.CustomSelect
-      Dim isInIncludeMode = m_Mode = ExpressionTranslateMode.Include
-
-      If isInCustomSelectMode OrElse isInIncludeMode Then
-        items = New SqlResultBase(count - 1) {}
-      End If
+      Dim resultItems = New SqlResultBase(count - 1) {}
 
       Dim entities = m_Model.GetEntities()
 
       For i = 0 To count - 1
-        Dim arg = args(i)
+        Dim arg = items(i)
         Dim type = arg.Type
         Dim entity = entities.FirstOrDefault(Function(x) x.Entity.EntityType = type)
         Dim isEntity = entity IsNot Nothing
+        Dim columnIndex = m_CustomSqlResultItemIndex
 
-        m_CustomSqlResultItemIndex = i
+        m_CustomSqlResultItemIndex += 1
 
         Visit(arg)
 
-        If isInCustomSelectMode OrElse isInIncludeMode Then
-          If isEntity Then
-            items(i) = New EntitySqlResult(entity)
-          Else
-            Dim columnAlias = If(isInCustomSelectMode, CreateColumnAlias(i), CreateIncludeColumnAlias(i))
-            m_Sql.Append(" ")
-            m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
-            items(i) = New ScalarValueSqlResult(type)
-          End If
+        If isEntity Then
+          resultItems(i) = New EntitySqlResult(entity)
+        Else
+          Dim columnAlias = If(isInCustomSelectMode, CreateColumnAlias(columnIndex), CreateIncludeColumnAlias(columnIndex))
+          m_Sql.Append(" ")
+          m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
+          resultItems(i) = New ScalarValueSqlResult(type)
         End If
 
         If Not i = count - 1 Then
@@ -1009,14 +1096,26 @@ Namespace Internal
         End If
       Next
 
-      If isValueTuple Then
-        m_CustomSqlResult = New ValueTupleSqlResult(node.Type, items)
-      Else
-        m_CustomSqlResult = New AnonymousTypeSqlResult(node.Type, items)
-      End If
-
-      Return node
+      Return resultItems
     End Function
+
+    ''' <summary>
+    ''' Process items.
+    ''' </summary>
+    ''' <param name="items"></param>
+    Private Sub ProcessItems(items As IReadOnlyList(Of Expression))
+      Dim count = items.Count
+
+      For i = 0 To count - 1
+        Dim arg = items(i)
+
+        Visit(arg)
+
+        If Not i = count - 1 Then
+          m_Sql.Append(", ")
+        End If
+      Next
+    End Sub
 
     ''' <summary>
     ''' Gets flattened ValueTuple constructor arguments.
@@ -1060,30 +1159,47 @@ Namespace Internal
     ''' <param name="node"></param>
     ''' <returns></returns>
     Private Function VisitInCustomSelectOrIncludeMode(node As Expression) As Expression
-      If node.NodeType = ExpressionType.New Then
-        ' anonymous type, value tuple
+      ' NOTE: the handling of various special cases below (and in other methods) is quite ugly.
+      ' It also offers limited capabilities of nesting. This should be refactored in the future.
+      ' Also, if we support ValueTuples, we should probably support ValueTuple.Create() factory
+      ' methods as well.
+
+      If node.NodeType = ExpressionType.New OrElse node.NodeType = ExpressionType.MemberInit Then
+        ' anonymous type, value tuple, ad hoc type
         Return Visit(node)
-      Else
-        Visit(node)
+      ElseIf node.NodeType = ExpressionType.Convert OrElse node.NodeType = ExpressionType.ConvertChecked Then
+        ' ignore (probably implicit) cast of anonymous type, value tuple, ad hoc type
+        Dim operand = DirectCast(node, UnaryExpression).Operand
 
-        Dim type = node.Type
-        Dim entity = m_Model.GetEntities().FirstOrDefault(Function(x) x.Entity.EntityType = type)
-
-        Dim isInCustomSelectMode = m_Mode = ExpressionTranslateMode.CustomSelect
-
-        If entity Is Nothing Then
-          ' simple scalar value
-          Dim columnAlias = If(isInCustomSelectMode, CreateColumnAlias(0), CreateIncludeColumnAlias(0))
-          m_Sql.Append(" ")
-          m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
-          m_CustomSqlResult = New ScalarValueSqlResult(type)
-        Else
-          ' whole entity
-          m_CustomSqlResult = New EntitySqlResult(entity)
+        If operand.NodeType = ExpressionType.New OrElse operand.NodeType = ExpressionType.MemberInit Then
+          Return Visit(node)
+        ElseIf node.NodeType = ExpressionType.Convert OrElse node.NodeType = ExpressionType.ConvertChecked Then
+          ' check for special case - look at point 3.) mentioned in IsNestedConstructorOfNullableValueTupleTypeSqlResult method
+          If Helpers.Types.IsValueTuple(operand.Type) Then
+            Return Visit(node)
+          End If
         End If
-
-        Return node
       End If
+
+      Visit(node)
+
+      Dim type = node.Type
+      Dim entity = m_Model.GetEntities().FirstOrDefault(Function(x) x.Entity.EntityType = type)
+
+      Dim isInCustomSelectMode = m_Mode = ExpressionTranslateMode.CustomSelect
+
+      If entity Is Nothing Then
+        ' simple scalar value
+        Dim columnAlias = If(isInCustomSelectMode, CreateColumnAlias(0), CreateIncludeColumnAlias(0))
+        m_Sql.Append(" ")
+        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
+        m_CustomSqlResult = New ScalarValueSqlResult(type)
+      Else
+        ' whole entity
+        m_CustomSqlResult = New EntitySqlResult(entity)
+      End If
+
+      Return node
     End Function
 
     ''' <summary>
@@ -1538,6 +1654,104 @@ Namespace Internal
     ''' <returns></returns>
     Private Function IsInNullableValueAccess() As Boolean
       Return 2 <= m_Stack.Count AndAlso m_Stack(1).IsNullableValueAccess
+    End Function
+
+    ''' <summary>
+    ''' Checks whether node represents nested constructor of nullable ValueTuple SQL result.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function IsNestedConstructorOfNullableValueTupleTypeSqlResult() As Boolean
+      ' NOTE: there could be following situations:
+      '
+      ' 1.) nullable constructor -> constructor
+      '     e.g.: Select(Function(x) New(String, String)?((x.Foo, x.Bar))).
+      '
+      ' 2.) convert to nullable -> constructor
+      '     This actually doesn't seems to happen. Instead, it's always 3.) with unnecessary cast. Not sure why.
+      '
+      ' 3.) convert to nullable -> convert to the same value tuple type -> constructor
+      '     e.g.: Select(Function(x) CType((x.Foo, x.Bar), (String, String)?)).
+      '           Select(Of (String, String)?)(Function(x) (x.Foo, x.Bar)).
+
+      Dim count = m_Stack.Count
+
+      If 2 <= count Then
+        Dim currentNode = m_Stack(0).Node
+        Dim parent = m_Stack(1)
+
+        If parent.IsNullableConstructor Then
+          Return True
+        End If
+
+        If parent.IsConvert AndAlso Nullable.GetUnderlyingType(parent.Node.Type) Is currentNode.Type Then
+          Return True
+        End If
+
+        If parent.IsConvert AndAlso parent.Node.Type Is currentNode.Type AndAlso 3 <= count Then
+          Dim parent2 = m_Stack(2)
+
+          If parent2.IsNullableConstructor Then
+            Return True
+          End If
+
+          If parent2.IsConvert AndAlso Nullable.GetUnderlyingType(parent2.Node.Type) Is currentNode.Type Then
+            Return True
+          End If
+        End If
+      End If
+
+      Return False
+    End Function
+
+    ''' <summary>
+    ''' Checks whether node represents nested constructor of nullable ad hoc SQL result.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function IsNestedConstructorOfNullableAdHocTypeSqlResult() As Boolean
+      ' NOTE: there could be following situations:
+      '
+      ' 1.) nullable constructor -> constructor
+      '     e.g.: Select(Function(x) New FooStruct?(New FooStruct(...))).
+      '
+      ' 2.) convert to nullable -> constructor
+      '     e.g.: Select(Function(x) CType(New FooStruct(...), FooStruct?)).
+      '           Select(Of FooStruct?)(Function(x) New FooStruct(...)).
+      '
+      ' 3.) nullable constructor -> member init -> constructor
+      '      e.g.: Select(Function(x) New FooStruct?(New FooStruct With {...}))
+      '
+      ' 4.) convert to nullable -> member init -> constructor
+      '      e.g.: Select(Function(x) CType(New FooStruct With {...}, FooStruct?)).
+      '            Select(Of FooStruct?)(Function(x) New FooStruct With {...}).
+
+      Dim count = m_Stack.Count
+
+      If 2 <= count Then
+        Dim currentNode = m_Stack(0).Node
+        Dim parent = m_Stack(1)
+
+        If parent.IsNullableConstructor Then
+          Return True
+        End If
+
+        If parent.IsConvert AndAlso Nullable.GetUnderlyingType(parent.Node.Type) Is currentNode.Type Then
+          Return True
+        End If
+
+        If parent.IsMemberInit AndAlso 3 <= count Then
+          Dim parent2 = m_Stack(2)
+
+          If parent2.IsNullableConstructor Then
+            Return True
+          End If
+
+          If parent2.IsConvert AndAlso Nullable.GetUnderlyingType(parent2.Node.Type) Is currentNode.Type Then
+            Return True
+          End If
+        End If
+      End If
+
+      Return False
     End Function
 
   End Class

@@ -32,6 +32,14 @@ Namespace Internal
     Private m_Readers As Dictionary(Of Type, Object)
 
     ''' <summary>
+    ''' Stores cached reader instances for ad hoc types.<br/>
+    ''' <br/>
+    ''' Key: <see cref="AdHocTypeSqlResultReaderKey"/> value.<br/>
+    ''' Value: <see cref="Func(Of DbDataReader, ReaderDataBase, T)"/> delegate, where first parameter is <see cref="DbDataReader"/> instance, second parameter is <see cref="ReaderDataBase"/> instance and return value is actual result.
+    ''' </summary>
+    Private m_AdHocTypeReaders As Dictionary(Of AdHocTypeSqlResultReaderKey, Object)
+
+    ''' <summary>
     ''' Stores cached reader instances that are wrapped as Func(Of DbDataReader, ReaderDataBase, Object).<br/>
     ''' <br/>
     ''' Key: type corresponding to <see cref="SqlResultBase.ResultType"/>.<br/>
@@ -51,6 +59,7 @@ Namespace Internal
     ''' </summary>
     Private Sub New()
       m_Readers = New Dictionary(Of Type, Object)
+      m_AdHocTypeReaders = New Dictionary(Of AdHocTypeSqlResultReaderKey, Object)
       m_ValueTypeWrappedReaders = New Dictionary(Of Type, Func(Of DbDataReader, ReaderDataBase, Object))
     End Sub
 
@@ -111,6 +120,51 @@ Namespace Internal
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
     Private Function GetOrCreateReader(model As Model, sqlResult As SqlResultBase) As Object
+      If TypeOf sqlResult Is AdHocTypeSqlResult Then
+        Return GetOrCreateReaderForAdHocTypeSqlResult(model, DirectCast(sqlResult, AdHocTypeSqlResult))
+      Else
+        Return GetOrCreateReaderForSqlResult(model, sqlResult)
+      End If
+    End Function
+
+    ''' <summary>
+    ''' Gets or creates result factory.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="sqlResult"></param>
+    ''' <returns></returns>
+    Private Function GetOrCreateReaderForAdHocTypeSqlResult(model As Model, sqlResult As AdHocTypeSqlResult) As Object
+      Dim reader As Object = Nothing
+      Dim key = sqlResult.GetKey()
+
+      SyncLock m_AdHocTypeReaders
+        Dim value As Object = Nothing
+
+        If m_AdHocTypeReaders.TryGetValue(key, value) Then
+          reader = value
+        End If
+      End SyncLock
+
+      If reader Is Nothing Then
+        reader = SqlResultReaderFactory.CreateResultFactory(sqlResult)
+      Else
+        Return reader
+      End If
+
+      SyncLock m_AdHocTypeReaders
+        m_AdHocTypeReaders(key) = reader
+      End SyncLock
+
+      Return reader
+    End Function
+
+    ''' <summary>
+    ''' Gets or creates result factory.
+    ''' </summary>
+    ''' <param name="model"></param>
+    ''' <param name="sqlResult"></param>
+    ''' <returns></returns>
+    Private Function GetOrCreateReaderForSqlResult(model As Model, sqlResult As SqlResultBase) As Object
       Dim reader As Object = Nothing
       Dim resultType = sqlResult.ResultType
 

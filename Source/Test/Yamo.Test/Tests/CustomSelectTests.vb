@@ -1633,6 +1633,82 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub CustomSelectOfNullableValueTuple()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.UniqueidentifierColumn = Guid.NewGuid
+      item1.BitColumn = False
+      item1.Nvarchar50Column = ""
+      item1.SmallintColumnNull = Nothing
+      item1.IntColumn = 0
+      item1.Numeric10and3Column = 0
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.UniqueidentifierColumn = Guid.NewGuid
+      item2.BitColumn = True
+      item2.Nvarchar50Column = "lorem ipsum"
+      item2.SmallintColumnNull = 6
+      item2.IntColumn = 42
+      item2.Numeric10and3Column = 42.6D
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.UniqueidentifierColumn = Guid.NewGuid
+      item3.BitColumn = True
+      item3.Nvarchar50Column = "dolor sit"
+      item3.SmallintColumnNull = 3
+      item3.IntColumn = 9
+      item3.Numeric10and3Column = 100D
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim expected As (Guid, Boolean, String)? = (item2.UniqueidentifierColumn, item2.BitColumn, item2.Nvarchar50Column)
+        Dim expectedNull As (Guid, Boolean, String)? = Nothing
+
+        ' select ValueTuple with simple values
+        Dim result1a = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = item2.Id).
+                          Select(Function(x) New(Guid, Boolean, String)?((x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column))).
+                          FirstOrDefault()
+        Assert.AreEqual(expected, result1a)
+
+        ' select ValueTuple with simple values - with explicit cast
+        Dim result1b = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = item2.Id).
+                          Select(Function(x) CType((x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column), (Guid, Boolean, String)?)).
+                          FirstOrDefault()
+        Assert.AreEqual(expected, result1b)
+
+        ' select ValueTuple with simple values - with implicit cast
+        Dim result1c = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = item2.Id).
+                          Select(Of (Guid, Boolean, String)?)(Function(x) (x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column)).
+                          FirstOrDefault()
+        Assert.AreEqual(expected, result1c)
+
+        ' select ValueTuple with simple values, but no row is returned
+        Dim result2a = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = Guid.NewGuid).
+                          Select(Function(x) New(Guid, Boolean, String)?((x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column))).
+                          FirstOrDefault()
+        Assert.AreEqual(expectedNull, result2a)
+
+        ' select ValueTuple with simple values, but no row is returned - with explicit cast
+        Dim result2b = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = Guid.NewGuid).
+                          Select(Function(x) CType((x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column), (Guid, Boolean, String)?)).
+                          FirstOrDefault()
+        Assert.AreEqual(expectedNull, result2b)
+
+        ' select ValueTuple with simple values, but no row is returned - with implicit cast
+        Dim result2c = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = Guid.NewGuid).
+                          Select(Of (Guid, Boolean, String)?)(Function(x) (x.UniqueidentifierColumn, x.BitColumn, x.Nvarchar50Column)).
+                          FirstOrDefault()
+        Assert.AreEqual(expectedNull, result2c)
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub CustomSelectOfLargeValueTuple()
       Dim article1 = Me.ModelFactory.CreateArticle(1)
       Dim article2 = Me.ModelFactory.CreateArticle(2)
@@ -1923,21 +1999,392 @@ Namespace Tests
       End Using
     End Sub
 
-    ' TODO: SIP - is it worth to support ValueTuple nesting? (delete this if not)
-    '<TestMethod()>
-    'Public Overridable Sub CustomSelectOfValueTupleWithMoreThan7Fields()
-    '  Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithMaxValues
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfAdHocType()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.UniqueidentifierColumn = Guid.NewGuid
+      item1.BitColumn = False
+      item1.Nvarchar50Column = ""
+      item1.SmallintColumnNull = Nothing
+      item1.IntColumn = 1
+      item1.Numeric10and3ColumnNull = Nothing
 
-    '  InsertItems(item)
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.UniqueidentifierColumn = Guid.NewGuid
+      item2.BitColumn = True
+      item2.Nvarchar50Column = "lorem ipsum"
+      item2.SmallintColumnNull = 6
+      item2.IntColumn = 2
+      item2.Numeric10and3ColumnNull = 42.6D
 
-    '  Using db = CreateDbContext()
-    '    ' test ValueTuple nesting
-    '    Dim result1 = db.From(Of ItemWithAllSupportedValues).
-    '                     Select(Function(x) (x.UniqueidentifierColumn, x.UniqueidentifierColumnNull, x.Nvarchar50Column, x.Nvarchar50ColumnNull, x.BitColumn, x.BitColumnNull, x.SmallintColumn, x.SmallintColumnNull, x.IntColumn, x.IntColumnNull)).
-    '                     FirstOrDefault()
-    '    Assert.AreEqual((item.UniqueidentifierColumn, item.UniqueidentifierColumnNull, item.Nvarchar50Column, item.Nvarchar50ColumnNull, item.BitColumn, item.BitColumnNull, item.SmallintColumn, item.SmallintColumnNull, item.IntColumn, item.IntColumnNull), result1)
-    '  End Using
-    'End Sub
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.UniqueidentifierColumn = Guid.NewGuid
+      item3.BitColumn = True
+      item3.Nvarchar50Column = "dolor sit"
+      item3.SmallintColumnNull = 3
+      item3.IntColumn = 3
+      item3.Numeric10and3ColumnNull = 100D
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select non-model type with simple values using member init
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .StringValue = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelObject(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull), result1)
+
+        ' select non-model type with simple values using different member init
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .BooleanValue = x.BitColumn}).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelObject(item2.UniqueidentifierColumn, item2.BitColumn), result2)
+
+        ' select non-model type with simple and entity values using different member init
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .ItemWithAllSupportedValues = x}).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelObject(item2.UniqueidentifierColumn, item2), result3)
+        Assert.AreEqual(item2, result3.ItemWithAllSupportedValues)
+
+        ' select non-model type with simple values using constructor
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelObject(x.UniqueidentifierColumn, x.Nvarchar50Column, x.Numeric10and3ColumnNull)).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelObject(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull), result4)
+
+        ' select non-model type with simple values using different constructor
+        Dim result5 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelObject(x.UniqueidentifierColumn, x.BitColumn)).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelObject(item2.UniqueidentifierColumn, item2.BitColumn), result5)
+
+        ' select non-model type with simple and entity values using different constructor
+        Dim result6 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelObject(x.UniqueidentifierColumn, x)).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelObject(item2.UniqueidentifierColumn, item2), result6)
+        Assert.AreEqual(item2, result6.ItemWithAllSupportedValues)
+
+        ' select non-model type with simple values using combination of constructor and member init
+        Dim result7 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelObject(x.UniqueidentifierColumn, x.BitColumn) With {.StringValue = x.Nvarchar50Column, .ItemWithAllSupportedValues = x, .NullableDecimalValue = x.Numeric15and0ColumnNull}).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelObject(item2.UniqueidentifierColumn, item2.BitColumn) With {.StringValue = item2.Nvarchar50Column, .ItemWithAllSupportedValues = item2, .NullableDecimalValue = item2.Numeric15and0ColumnNull}, result7)
+        Assert.AreEqual(item2, result7.ItemWithAllSupportedValues)
+
+        ' select non-model type with simple values, but no row is returned
+        Dim result8 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .StringValue = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
+                         FirstOrDefault()
+        Assert.AreEqual(Nothing, result8)
+
+        ' select non-model types
+        Dim result9 = db.From(Of ItemWithAllSupportedValues).
+                         OrderBy(Function(x) x.IntColumn).
+                         Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .StringValue = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
+                         ToList()
+        Assert.AreEqual(3, result9.Count)
+        Assert.AreEqual(New NonModelObject(item1.UniqueidentifierColumn, item1.Nvarchar50Column, item1.Numeric10and3ColumnNull), result9(0))
+        Assert.AreEqual(New NonModelObject(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull), result9(1))
+        Assert.AreEqual(New NonModelObject(item3.UniqueidentifierColumn, item3.Nvarchar50Column, item3.Numeric10and3ColumnNull), result9(2))
+
+        ' select non-model types, but no row is returned
+        Dim result10 = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = Guid.NewGuid).
+                          OrderBy(Function(x) x.IntColumn).
+                          Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .StringValue = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
+                          ToList()
+        Assert.AreEqual(0, result10.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfAdHocTypeThatIsGeneric()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.UniqueidentifierColumn = Guid.NewGuid
+      item1.BitColumn = False
+      item1.Nvarchar50Column = ""
+      item1.SmallintColumnNull = Nothing
+      item1.IntColumn = 1
+      item1.Numeric10and3ColumnNull = Nothing
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.UniqueidentifierColumn = Guid.NewGuid
+      item2.BitColumn = True
+      item2.Nvarchar50Column = "lorem ipsum"
+      item2.SmallintColumnNull = 6
+      item2.IntColumn = 2
+      item2.Numeric10and3ColumnNull = 42.6D
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.UniqueidentifierColumn = Guid.NewGuid
+      item3.BitColumn = True
+      item3.Nvarchar50Column = "dolor sit"
+      item3.SmallintColumnNull = 3
+      item3.IntColumn = 3
+      item3.Numeric10and3ColumnNull = 100D
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select non-model generic type with simple values
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelGenericObject(Of Guid, String)(x.UniqueidentifierColumn, x.Nvarchar50Column)).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelGenericObject(Of Guid, String)(item2.UniqueidentifierColumn, item2.Nvarchar50Column), result1)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfAdHocTypeWithMultipleEntities()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
+      Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
+
+      InsertItems(article1, article2, article3, label1En, label3En, label3De)
+
+      Using db = CreateDbContext()
+        ' select non-model type with 2 entities
+        Dim result1 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article1.Id).
+                         Select(Function(a, l) New NonModelObject(a, l)).
+                         FirstOrDefault()
+        Assert.AreEqual(article1, result1.Article)
+        Assert.AreEqual(label1En, result1.Label)
+
+        ' select non-model type with 2 entities, but one is missing
+        Dim result2 = db.From(Of Article).
+                         LeftJoin(Of Label)(Function(a, l) a.Id = l.Id).
+                         Where(Function(a, l) a.Id = article2.Id).
+                         Select(Function(a, l) New NonModelObject(a, l)).
+                         FirstOrDefault()
+        Assert.AreEqual(article2, result2.Article)
+        Assert.AreEqual(Nothing, result2.Label)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfAdHocTypeThatIsModelEntity()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      InsertItems(article1, article2, article3)
+
+      Using db = CreateDbContext()
+        ' select model type
+        Dim result1 = db.From(Of Article).
+                         Where(Function(x) x.Id = article2.Id).
+                         Select(Function(x) New Article With {.Id = x.Id, .Price = x.Price}).
+                         FirstOrDefault()
+        Assert.AreEqual(article2, result1)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfAdHocTypeThatIsStruct()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.UniqueidentifierColumn = Guid.NewGuid
+      item1.BitColumn = False
+      item1.Nvarchar50Column = ""
+      item1.SmallintColumnNull = Nothing
+      item1.IntColumn = 1
+      item1.Numeric10and3ColumnNull = Nothing
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.UniqueidentifierColumn = Guid.NewGuid
+      item2.BitColumn = True
+      item2.Nvarchar50Column = "lorem ipsum"
+      item2.SmallintColumnNull = 6
+      item2.IntColumn = 2
+      item2.Numeric10and3ColumnNull = 42.6D
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.UniqueidentifierColumn = Guid.NewGuid
+      item3.BitColumn = True
+      item3.Nvarchar50Column = "dolor sit"
+      item3.SmallintColumnNull = 3
+      item3.IntColumn = 3
+      item3.Numeric10and3ColumnNull = 100D
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select non-model struct type with simple values using member init
+        Dim result1 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelStruct With {.GuidValue = x.UniqueidentifierColumn, .StringValue = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull), result1)
+
+        ' select non-model struct type with simple and entity values using different member init
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelStruct With {.GuidValue = x.UniqueidentifierColumn, .ItemWithAllSupportedValues = x}).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct(item2.UniqueidentifierColumn, item2), result2)
+
+        ' select non-model struct type with simple values using constructor
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelStruct(x.UniqueidentifierColumn, x.Nvarchar50Column, x.Numeric10and3ColumnNull)).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull), result3)
+
+        ' select non-model struct type with simple and entity values using different constructor
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelStruct(x.UniqueidentifierColumn, x)).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct(item2.UniqueidentifierColumn, item2), result4)
+
+        ' NOTE: this doesn't compile and there is following error: "Expression cannot be converted into an expression tree."
+        '' select non-model struct type with simple values using combination of constructor and member init
+        'Dim result5 = db.From(Of ItemWithAllSupportedValues).
+        '                 Where(Function(x) x.Id = item2.Id).
+        '                 Select(Function(x) New NonModelStruct(x.UniqueidentifierColumn, x.Nvarchar50Column, x.Numeric10and3ColumnNull) With {.IntValue = x.IntColumn}).
+        '                 FirstOrDefault()
+        'Assert.AreEqual(New NonModelStruct(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull) With {.IntValue = item2.IntColumn}, result5)
+
+        ' select non-model struct type with simple values, but no row is returned
+        Dim result6 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = Guid.NewGuid).
+                         Select(Function(x) New NonModelStruct(x.UniqueidentifierColumn, x.Nvarchar50Column, x.Numeric10and3ColumnNull)).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct, result6)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfAdHocTypeThatIsNullableStruct()
+      Dim item1 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item1.UniqueidentifierColumn = Guid.NewGuid
+      item1.BitColumn = False
+      item1.Nvarchar50Column = ""
+      item1.SmallintColumnNull = Nothing
+      item1.IntColumn = 1
+      item1.Numeric10and3ColumnNull = Nothing
+
+      Dim item2 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item2.UniqueidentifierColumn = Guid.NewGuid
+      item2.BitColumn = True
+      item2.Nvarchar50Column = "lorem ipsum"
+      item2.SmallintColumnNull = 6
+      item2.IntColumn = 2
+      item2.Numeric10and3ColumnNull = 42.6D
+
+      Dim item3 = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues
+      item3.UniqueidentifierColumn = Guid.NewGuid
+      item3.BitColumn = True
+      item3.Nvarchar50Column = "dolor sit"
+      item3.SmallintColumnNull = 3
+      item3.IntColumn = 3
+      item3.Numeric10and3ColumnNull = 100D
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        ' select non-model nullable struct type with simple values using member init
+        Dim result1a = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = item2.Id).
+                          Select(Function(x) New NonModelStruct?(New NonModelStruct With {.GuidValue = x.UniqueidentifierColumn, .StringValue = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull})).
+                          FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct?(New NonModelStruct(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull)), result1a)
+
+        ' select non-model nullable struct type with simple values using member init - with explicit cast
+        Dim result1b = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = item2.Id).
+                          Select(Function(x) CType(New NonModelStruct With {.GuidValue = x.UniqueidentifierColumn, .StringValue = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}, NonModelStruct?)).
+                          FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct?(New NonModelStruct(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull)), result1b)
+
+        ' select non-model nullable struct type with simple values using member init - with implicit cast
+        Dim result1c = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = item2.Id).
+                          Select(Of NonModelStruct?)(Function(x) New NonModelStruct With {.GuidValue = x.UniqueidentifierColumn, .StringValue = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
+                          FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct?(New NonModelStruct(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull)), result1c)
+
+        ' select non-model nullable struct type with simple and entity values using different member init
+        Dim result2 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelStruct?(New NonModelStruct With {.GuidValue = x.UniqueidentifierColumn, .ItemWithAllSupportedValues = x})).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct?(New NonModelStruct(item2.UniqueidentifierColumn, item2)), result2)
+
+        ' select non-model nullable struct type with simple values using constructor
+        Dim result3a = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = item2.Id).
+                          Select(Function(x) New NonModelStruct?(New NonModelStruct(x.UniqueidentifierColumn, x.Nvarchar50Column, x.Numeric10and3ColumnNull))).
+                          FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct?(New NonModelStruct(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull)), result3a)
+
+        ' select non-model nullable struct type with simple values using constructor - with explicit cast
+        Dim result3b = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = item2.Id).
+                          Select(Function(x) CType(New NonModelStruct(x.UniqueidentifierColumn, x.Nvarchar50Column, x.Numeric10and3ColumnNull), NonModelStruct?)).
+                          FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct?(New NonModelStruct(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull)), result3b)
+
+        ' select non-model nullable struct type with simple values using constructor - with implicit cast
+        Dim result3c = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = item2.Id).
+                          Select(Of NonModelStruct?)(Function(x) New NonModelStruct(x.UniqueidentifierColumn, x.Nvarchar50Column, x.Numeric10and3ColumnNull)).
+                          FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct?(New NonModelStruct(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull)), result3c)
+
+        ' select non-model nullable struct type with simple and entity values using different constructor
+        Dim result4 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) x.Id = item2.Id).
+                         Select(Function(x) New NonModelStruct?(New NonModelStruct(x.UniqueidentifierColumn, x))).
+                         FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct?(New NonModelStruct(item2.UniqueidentifierColumn, item2)), result4)
+
+        ' NOTE: this doesn't compile and there is following error: "Expression cannot be converted into an expression tree."
+        '' select non-model struct type with simple values using combination of constructor and member init
+        'Dim result5 = db.From(Of ItemWithAllSupportedValues).
+        '                 Where(Function(x) x.Id = item2.Id).
+        '                 Select(Function(x) New NonModelStruct?(New NonModelStruct(x.UniqueidentifierColumn, x.Nvarchar50Column, x.Numeric10and3ColumnNull) With {.IntValue = x.IntColumn})).
+        '                 FirstOrDefault()
+        'Assert.AreEqual(New NonModelStruct?(New NonModelStruct(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull) With {.IntValue = item2.IntColumn}), result5)
+
+        ' select non-model nullable struct type with simple values, but no row is returned
+        Dim result6a = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = Guid.NewGuid).
+                          Select(Function(x) New NonModelStruct?(New NonModelStruct(x.UniqueidentifierColumn, x.Nvarchar50Column, x.Numeric10and3ColumnNull))).
+                          FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct?, result6a)
+
+        ' select non-model nullable struct type with simple values, but no row is returned - with explicit cast
+        Dim result6b = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = Guid.NewGuid).
+                          Select(Function(x) CType(New NonModelStruct(x.UniqueidentifierColumn, x.Nvarchar50Column, x.Numeric10and3ColumnNull), NonModelStruct?)).
+                          FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct?, result6b)
+
+        ' select non-model nullable struct type with simple values, but no row is returned - with implicit cast
+        Dim result6c = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) x.Id = Guid.NewGuid).
+                          Select(Of NonModelStruct?)(Function(x) New NonModelStruct(x.UniqueidentifierColumn, x.Nvarchar50Column, x.Numeric10and3ColumnNull)).
+                          FirstOrDefault()
+        Assert.AreEqual(New NonModelStruct?, result6c)
+      End Using
+    End Sub
 
   End Class
 End Namespace

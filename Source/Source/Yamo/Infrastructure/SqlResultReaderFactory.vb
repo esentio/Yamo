@@ -25,7 +25,10 @@ Namespace Infrastructure
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
     Public Shared Function CreateResultFactory(<DisallowNull> sqlResult As SqlResultBase) As Object
-      If TypeOf sqlResult Is AnonymousTypeSqlResult Then
+      If TypeOf sqlResult Is AdHocTypeSqlResult Then
+        Return CreateResultFactory(DirectCast(sqlResult, AdHocTypeSqlResult))
+
+      ElseIf TypeOf sqlResult Is AnonymousTypeSqlResult Then
         Return CreateResultFactory(DirectCast(sqlResult, AnonymousTypeSqlResult))
 
       ElseIf TypeOf sqlResult Is ValueTupleSqlResult Then
@@ -71,6 +74,90 @@ Namespace Infrastructure
 
       Dim wrapper = Expression.Lambda(body, parameters)
       Return DirectCast(wrapper.Compile(), Func(Of DbDataReader, ReaderDataBase, Object))
+    End Function
+
+    ''' <summary>
+    ''' Creates result factory.
+    ''' </summary>
+    ''' <param name="sqlResult"></param>
+    ''' <returns></returns>
+    Private Shared Function CreateResultFactory(sqlResult As AdHocTypeSqlResult) As Object
+      Dim readerParam = Expression.Parameter(GetType(DbDataReader), "reader")
+      Dim readerDataParam = Expression.Parameter(GetType(ReaderDataBase), "readerData")
+      Dim parameters = {readerParam, readerDataParam}
+
+      Dim variables = New List(Of ParameterExpression)
+      Dim expressions = New List(Of Expression)
+      Dim ctorArguments = New List(Of Expression)
+      Dim memberBinds As List(Of MemberBinding) = Nothing
+
+      Dim readerDataVar = AddReaderDataVar(GetType(AdHocTypeSqlResultReaderData), "readerDataVar", readerDataParam, variables, expressions)
+
+      For i = 0 To sqlResult.CtorArguments.Length - 1
+        Dim sqlResultItem = sqlResult.CtorArguments(i)
+
+        Dim readerDataItemVarType = GetReaderDataType(sqlResultItem)
+        Dim readerDataItemVarName = $"readerDataCtorVar{i.ToString(Globalization.CultureInfo.InvariantCulture)}"
+        Dim readerDataItemSource = Expression.Convert(Expression.ArrayIndex(Expression.Property(readerDataVar, NameOf(AdHocTypeSqlResultReaderData.CtorArguments)), Expression.Constant(i)), readerDataItemVarType)
+        Dim readerDataItemVar = AddReaderDataVar(readerDataItemVarType, readerDataItemVarName, readerDataItemSource, variables, expressions)
+
+        Dim valueVar = Expression.Variable(sqlResultItem.ResultType, $"ctorValue{i.ToString(Globalization.CultureInfo.InvariantCulture)}")
+        variables.Add(valueVar)
+
+        AddSqlResultReads(readerParam, readerDataItemVar, valueVar, sqlResultItem, expressions, ctorArguments)
+      Next
+
+      If sqlResult.HasMemberInits Then
+        Dim memberInits = New List(Of Expression)
+        memberBinds = New List(Of MemberBinding)
+
+        For i = 0 To sqlResult.MemberInits.Length - 1
+          Dim sqlResultItem = sqlResult.MemberInits(i)
+
+          Dim readerDataItemVarType = GetReaderDataType(sqlResultItem)
+          Dim readerDataItemVarName = $"readerDataMemberInitVar{i.ToString(Globalization.CultureInfo.InvariantCulture)}"
+          Dim readerDataItemSource = Expression.Convert(Expression.ArrayIndex(Expression.Property(readerDataVar, NameOf(AdHocTypeSqlResultReaderData.MemberInits)), Expression.Constant(i)), readerDataItemVarType)
+          Dim readerDataItemVar = AddReaderDataVar(readerDataItemVarType, readerDataItemVarName, readerDataItemSource, variables, expressions)
+
+          Dim valueVar = Expression.Variable(sqlResultItem.ResultType, $"memberInitValue{i.ToString(Globalization.CultureInfo.InvariantCulture)}")
+          variables.Add(valueVar)
+
+          AddSqlResultReads(readerParam, readerDataItemVar, valueVar, sqlResultItem, expressions, memberInits)
+
+          memberBinds.Add(Expression.Bind(sqlResult.Members(i), memberInits(i)))
+        Next
+      End If
+
+      Dim resultType = sqlResult.ResultType
+      Dim constructorType = resultType
+      Dim isNullable = False
+      Dim underlyingNullableType = Nullable.GetUnderlyingType(sqlResult.ResultType)
+
+      If underlyingNullableType IsNot Nothing Then
+        isNullable = True
+        constructorType = underlyingNullableType
+      End If
+
+      Dim resultConstructorInfo = sqlResult.Constructor
+      Dim constructor = If(resultConstructorInfo Is Nothing, Expression.[New](constructorType), Expression.[New](resultConstructorInfo, ctorArguments))
+
+      Dim result As Expression = constructor
+
+      If sqlResult.HasMemberInits Then
+        result = Expression.MemberInit(constructor, memberBinds)
+      End If
+
+      If isNullable Then
+        Dim nullableConstructorInfo = resultType.GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {underlyingNullableType}, Array.Empty(Of ParameterModifier)())
+        result = Expression.[New](nullableConstructorInfo, result)
+      End If
+
+      expressions.Add(result)
+
+      Dim body = Expression.Block(variables, expressions)
+
+      Dim reader = Expression.Lambda(body, parameters)
+      Return reader.Compile()
     End Function
 
     ''' <summary>
@@ -216,7 +303,10 @@ Namespace Infrastructure
     ''' <param name="sqlResult"></param>
     ''' <returns></returns>
     Private Shared Function GetReaderDataType(sqlResult As SqlResultBase) As Type
-      If TypeOf sqlResult Is AnonymousTypeSqlResult Then
+      If TypeOf sqlResult Is AdHocTypeSqlResult Then
+        Return GetType(AdHocTypeSqlResultReaderData)
+
+      ElseIf TypeOf sqlResult Is AnonymousTypeSqlResult Then
         Return GetType(AnonymousTypeSqlResultReaderData)
 
       ElseIf TypeOf sqlResult Is ValueTupleSqlResult Then
@@ -257,8 +347,8 @@ Namespace Infrastructure
     ''' <param name="valueVar"></param>
     ''' <param name="sqlResult"></param>
     ''' <param name="expressions"></param>
-    ''' <param name="ctorArguments"></param>
-    Private Shared Sub AddSqlResultReads(readerParam As ParameterExpression, readerDataVar As ParameterExpression, valueVar As ParameterExpression, sqlResult As SqlResultBase, expressions As List(Of Expression), ctorArguments As List(Of Expression))
+    ''' <param name="items"></param>
+    Private Shared Sub AddSqlResultReads(readerParam As ParameterExpression, readerDataVar As ParameterExpression, valueVar As ParameterExpression, sqlResult As SqlResultBase, expressions As List(Of Expression), items As List(Of Expression))
       Dim type = sqlResult.ResultType
 
       Dim readerIndexProp = Expression.Property(readerDataVar, NameOf(ReaderDataBase.ReaderIndex))
@@ -309,7 +399,7 @@ Namespace Infrastructure
         Throw New NotSupportedException($"SQL result of type {sqlResult.GetType()} is not supported.")
       End If
 
-      ctorArguments.Add(valueVar)
+      items.Add(valueVar)
     End Sub
 
     ''' <summary>
