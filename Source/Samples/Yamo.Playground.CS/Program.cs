@@ -1038,15 +1038,23 @@ namespace Yamo.Playground.CS
                               .Select(x => new NonModelStruct(x.Id) { Description = x.Title, Item = x })
                               .ToList();
 
+                // only case where nested constructors are allowed - to get nullable value types like structs and value tuples
                 var value1 = db.From<Blog>()
-                              .Where(x => x.Id == 42)
-                              .Select<NonModelStruct?>(x => new NonModelStruct(x.Id) { Description = x.Title, Item = x })
-                              .FirstOrDefault();
+                               .Where(x => x.Id == 42)
+                               .Select(x => new NonModelStruct?(new NonModelStruct(x.Id) { Description = x.Title, Item = x }))
+                               .FirstOrDefault();
 
+                // same as above, but different approach to get nullable struct
                 var value2 = db.From<Blog>()
                                .Where(x => x.Id == 42)
                                .Select(x => (NonModelStruct?)new NonModelStruct(x.Id) { Description = x.Title, Item = x })
                                .FirstOrDefault();
+
+                // same as above, but different approach to get nullable struct
+                var value3 = db.From<Blog>()
+                              .Where(x => x.Id == 42)
+                              .Select<NonModelStruct?>(x => new NonModelStruct(x.Id) { Description = x.Title, Item = x })
+                              .FirstOrDefault();
             }
         }
 
