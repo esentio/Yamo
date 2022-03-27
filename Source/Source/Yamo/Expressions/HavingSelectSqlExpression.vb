@@ -168,7 +168,7 @@ Namespace Expressions
     ''' </summary>
     ''' <returns></returns>
     Public Function SelectAll() As SelectedSelectSqlExpression(Of T)
-      Me.Builder.AddSelectAll(GetType(T))
+      Me.Builder.AddSelectAll(SelectColumnsBehavior.ExcludeNonRequiredColumns)
       Return New SelectedSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
     End Function
 

@@ -77,7 +77,8 @@ namespace Yamo.Playground.CS
             //Test52();
             //Test53();
             //Test54();
-            Test55();
+            //Test55();
+            Test56();
         }
 
         public static MyContext CreateContext()
@@ -1055,6 +1056,35 @@ namespace Yamo.Playground.CS
                               .Where(x => x.Id == 42)
                               .Select<NonModelStruct?>(x => new NonModelStruct(x.Id) { Description = x.Title, Item = x })
                               .FirstOrDefault();
+            }
+        }
+
+        public static void Test56()
+        {
+            using (var db = CreateContext())
+            {
+                // there is no relationship between Blog and Person defined in the DbContext and no As() method is used either
+
+                // by default, SelectColumnsBehavior.ExcludeNonRequiredColumns is used
+                // only columns of blog table are selected
+                var list1 = db.From<Blog>()
+                              .Join<Person>((b, p) => b.CreatedUserId == p.Id)
+                              .Where(p => p.FirstName == "Joe")
+                              .SelectAll()
+                              .ToList();
+
+                // Generated SQL:
+                // SELECT [T0].[Id], [T0].[Title], [T0].[Content], [T0].[Created], [T0].[CreatedUserId], [T0].[Modified], [T0].[ModifiedUserId], [T0].[Deleted], [T0].[DeletedUserId] FROM [Blog] [T0] INNER JOIN [Person] [T1] ON [T0].[CreatedUserId] = [T1].[Id] WHERE [T1].[FirstName] = @p0
+
+                // columns of all tables in the query are selected
+                var list2 = db.From<Blog>()
+                              .Join<Person>((b, p) => b.CreatedUserId == p.Id)
+                              .Where(p => p.FirstName == "Joe")
+                              .SelectAll(SelectColumnsBehavior.SelectAllColumns)
+                              .ToList();
+
+                // Generated SQL:
+                // SELECT [T0].[Id], [T0].[Title], [T0].[Content], [T0].[Created], [T0].[CreatedUserId], [T0].[Modified], [T0].[ModifiedUserId], [T0].[Deleted], [T0].[DeletedUserId], [T1].[Id], [T1].[FirstName], [T1].[LastName], [T1].[BirthDate] FROM [Blog] [T0] INNER JOIN [Person] [T1] ON [T0].[CreatedUserId] = [T1].[Id] WHERE [T1].[FirstName] = @p0
             }
         }
 

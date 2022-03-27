@@ -600,12 +600,21 @@ Namespace Expressions.Builders
     End Sub
 
     ''' <summary>
-    ''' Adds select all columns.<br/>
+    ''' Adds automatic select of (all) columns.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="entityTypes"></param>
-    Public Sub AddSelectAll(<DisallowNull> ParamArray entityTypes As Type())
-      ' right now this does nothing; refactor?
+    ''' <param name="behavior"></param>
+    Public Sub AddSelectAll(behavior As SelectColumnsBehavior)
+      If behavior = SelectColumnsBehavior.ExcludeNonRequiredColumns Then
+        ' main entity is always included
+        For i = 1 To m_Model.GetEntityCount() - 1
+          Dim sqlEntity = m_Model.GetEntity(i)
+
+          If sqlEntity.Relationship Is Nothing Then
+            sqlEntity.Exclude()
+          End If
+        Next
+      End If
     End Sub
 
     ''' <summary>
@@ -702,7 +711,7 @@ Namespace Expressions.Builders
     End Sub
 
     ''' <summary>
-    ''' Adds select.<br/>
+    ''' Adds custom select.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="selector"></param>

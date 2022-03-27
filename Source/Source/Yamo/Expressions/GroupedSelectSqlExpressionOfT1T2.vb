@@ -303,11 +303,12 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds SELECT clause with all columns of all tables (entities).
+    ''' Adds SELECT clause with all columns of the tables (entities) used in the query. Behavior parameter controls whether columns of all or only required tables are included.
     ''' </summary>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function SelectAll() As SelectedSelectSqlExpression(Of T1, T2)
-      Me.Builder.AddSelectAll(GetType(T1), GetType(T2))
+    Public Function SelectAll(Optional behavior As SelectColumnsBehavior = SelectColumnsBehavior.ExcludeNonRequiredColumns) As SelectedSelectSqlExpression(Of T1, T2)
+      Me.Builder.AddSelectAll(behavior)
       Return New SelectedSelectSqlExpression(Of T1, T2)(Me.Builder, Me.Executor)
     End Function
 

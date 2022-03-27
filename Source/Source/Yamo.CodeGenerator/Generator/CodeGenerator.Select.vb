@@ -28,16 +28,28 @@
     End Sub
 
     Protected Sub GenerateSelectAll(builder As CodeBuilder, entityCount As Int32)
-      Dim comment = If(entityCount = 1, "Adds SELECT clause with all columns of the table (entity).", "Adds SELECT clause with all columns of all tables (entities).")
-      AddComment(builder, comment, returns:="")
+      If entityCount = 1 Then
+        Dim comment = "Adds SELECT clause with all columns of the table (entity)."
+        AddComment(builder, comment, returns:="")
 
-      Dim generics = String.Join(", ", GetGenericNames(entityCount))
-      Dim genericTypes = String.Join(", ", GetGenericNames(entityCount).Select(Function(x) $"GetType({x})"))
+        Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function SelectAll() As SelectedSelectSqlExpression(Of {generics})").PushIndent()
-      builder.Indent().AppendLine($"Me.Builder.AddSelectAll({genericTypes})")
-      builder.Indent().AppendLine($"Return New SelectedSelectSqlExpression(Of {generics})(Me.Builder, Me.Executor)").PopIndent()
-      builder.Indent().AppendLine("End Function")
+        builder.Indent().AppendLine($"Public Function SelectAll() As SelectedSelectSqlExpression(Of {generics})").PushIndent()
+        builder.Indent().AppendLine("Me.Builder.AddSelectAll(SelectColumnsBehavior.ExcludeNonRequiredColumns)")
+        builder.Indent().AppendLine($"Return New SelectedSelectSqlExpression(Of {generics})(Me.Builder, Me.Executor)").PopIndent()
+        builder.Indent().AppendLine("End Function")
+      Else
+        Dim comment = "Adds SELECT clause with all columns of the tables (entities) used in the query. Behavior parameter controls whether columns of all or only required tables are included."
+        Dim params = {"behavior"}
+        AddComment(builder, comment, params:=params, returns:="")
+
+        Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+        builder.Indent().AppendLine($"Public Function SelectAll(Optional behavior As SelectColumnsBehavior = SelectColumnsBehavior.ExcludeNonRequiredColumns) As SelectedSelectSqlExpression(Of {generics})").PushIndent()
+        builder.Indent().AppendLine("Me.Builder.AddSelectAll(behavior)")
+        builder.Indent().AppendLine($"Return New SelectedSelectSqlExpression(Of {generics})(Me.Builder, Me.Executor)").PopIndent()
+        builder.Indent().AppendLine("End Function")
+      End If
     End Sub
 
     Protected Sub GenerateSelectCount(builder As CodeBuilder, entityCount As Int32)
