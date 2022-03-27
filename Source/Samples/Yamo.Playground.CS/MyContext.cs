@@ -9,6 +9,7 @@ using Yamo.Metadata.Builders;
 using Yamo.Playground.CS.Model;
 using Yamo.SqlServer;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Yamo.Playground.CS
 {
