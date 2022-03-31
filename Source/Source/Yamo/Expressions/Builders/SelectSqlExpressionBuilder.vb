@@ -17,6 +17,13 @@ Namespace Expressions.Builders
     Inherits SqlExpressionBuilderBase
 
     ''' <summary>
+    ''' Gets subquery context.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property SubqueryContext As <MaybeNull> SubqueryContext
+
+    ''' <summary>
     ''' Stores SQL model.
     ''' </summary>
     Private m_Model As SelectSqlModel
@@ -77,7 +84,7 @@ Namespace Expressions.Builders
     Private m_LimitExpression As String
 
     ''' <summary>
-    ''' Stores whether top should be used for limit
+    ''' Stores whether top should be used for limit.
     ''' </summary>
     Private m_UseTopForLimit As Boolean
 
@@ -102,6 +109,11 @@ Namespace Expressions.Builders
     Private m_Parameters As List(Of SqlParameter)
 
     ''' <summary>
+    ''' Stores parameter index offset.
+    ''' </summary>
+    Private m_ParameterIndexOffset As Int32
+
+    ''' <summary>
     ''' Creates new instance of <see cref="SelectSqlExpressionBuilder"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -109,6 +121,23 @@ Namespace Expressions.Builders
     ''' <param name="mainEntityType"></param>
     Public Sub New(<DisallowNull> context As DbContext, <DisallowNull> mainEntityType As Type)
       MyBase.New(context)
+      Me.SubqueryContext = Nothing
+      Initialize(mainEntityType)
+    End Sub
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="SelectSqlExpressionBuilder"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="context"></param>
+    ''' <param name="mainEntityType"></param>
+    Public Sub New(<DisallowNull> context As SubqueryContext, <DisallowNull> mainEntityType As Type)
+      MyBase.New(context.DbContext)
+      Me.SubqueryContext = context
+      Initialize(mainEntityType)
+    End Sub
+
+    Private Sub Initialize(<DisallowNull> mainEntityType As Type)
       m_Model = New SelectSqlModel(Me.DbContext.Model, mainEntityType)
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       ' lists are created only when necessary
@@ -135,7 +164,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="tableSource"></param>
     Public Sub SetMainTableSource(<DisallowNull> tableSource As FormattableString)
-      Dim sql = ConvertToSqlString(tableSource, m_Parameters.Count)
+      Dim sql = ConvertToSqlString(tableSource, GetParameterIndex())
       m_MainTableSourceExpression = sql.Sql
       m_Parameters.AddRange(sql.Parameters)
     End Sub
@@ -150,7 +179,7 @@ Namespace Expressions.Builders
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_MainTableSourceExpression = tableSource.Value
       Else
-        Dim sql = ConvertToSqlString(tableSource.Value, parameters, m_Parameters.Count)
+        Dim sql = ConvertToSqlString(tableSource.Value, parameters, GetParameterIndex())
         m_MainTableSourceExpression = sql.Sql
         m_Parameters.AddRange(sql.Parameters)
       End If
@@ -195,9 +224,30 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="joinType"></param>
+    ''' <param name="tableSourceFactory"></param>
+    Public Sub AddJoin(Of TJoined)(joinType As JoinType, <DisallowNull> tableSourceFactory As Func(Of SubqueryContext, Subquery(Of TJoined)))
+      ' TODO: SIP - implement subquery
+
+      ' TODO: SIP - implement subquery - pass executor? change API?
+      Dim context = New SubqueryContext(Me.DbContext, Nothing, GetParameterIndex())
+      Dim subquery = tableSourceFactory.Invoke(context)
+      Dim sql = subquery.Query
+
+      m_CurrentJoinInfo = New JoinInfo(joinType, "(" & sql.Sql & ")")
+      m_Parameters.AddRange(sql.Parameters)
+
+
+    End Sub
+
+    ''' <summary>
+    ''' Adds join.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="joinType"></param>
     ''' <param name="tableSource"></param>
     Public Sub AddJoin(Of TJoined)(joinType As JoinType, <DisallowNull> tableSource As FormattableString)
-      Dim sql = ConvertToSqlString(tableSource, m_Parameters.Count)
+      Dim sql = ConvertToSqlString(tableSource, GetParameterIndex())
       m_CurrentJoinInfo = New JoinInfo(joinType, sql.Sql)
       m_Parameters.AddRange(sql.Parameters)
     End Sub
@@ -214,7 +264,7 @@ Namespace Expressions.Builders
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_CurrentJoinInfo = New JoinInfo(joinType, tableSource.Value)
       Else
-        Dim sql = ConvertToSqlString(tableSource.Value, parameters, m_Parameters.Count)
+        Dim sql = ConvertToSqlString(tableSource.Value, parameters, GetParameterIndex())
         m_CurrentJoinInfo = New JoinInfo(joinType, sql.Sql)
         m_Parameters.AddRange(sql.Parameters)
       End If
@@ -284,7 +334,7 @@ Namespace Expressions.Builders
 
         m_JoinExpressions.Add(sql)
       Else
-        Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, m_Parameters.Count, True, True)
+        Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, GetParameterIndex(), True, True)
 
         If joinInfo.TableSource Is Nothing Then
           sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints) & " ON " & result.Sql
@@ -434,7 +484,7 @@ Namespace Expressions.Builders
         m_WhereExpressions = New List(Of String)
       End If
 
-      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, GetParameterIndex(), True, True)
       m_WhereExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -453,7 +503,7 @@ Namespace Expressions.Builders
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_WhereExpressions.Add(predicate)
       Else
-        Dim sql = ConvertToSqlString(predicate, parameters, m_Parameters.Count)
+        Dim sql = ConvertToSqlString(predicate, parameters, GetParameterIndex())
         m_WhereExpressions.Add(sql.Sql)
         m_Parameters.AddRange(sql.Parameters)
       End If
@@ -470,7 +520,7 @@ Namespace Expressions.Builders
         m_GroupByExpressions = New List(Of String)
       End If
 
-      Dim result = m_Visitor.Translate(keySelector, ExpressionTranslateMode.GroupBy, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(keySelector, ExpressionTranslateMode.GroupBy, entityIndexHints, GetParameterIndex(), True, True)
       m_GroupByExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -486,7 +536,7 @@ Namespace Expressions.Builders
         m_HavingExpressions = New List(Of String)
       End If
 
-      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, GetParameterIndex(), True, True)
       m_HavingExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -505,7 +555,7 @@ Namespace Expressions.Builders
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_HavingExpressions.Add(predicate)
       Else
-        Dim sql = ConvertToSqlString(predicate, parameters, m_Parameters.Count)
+        Dim sql = ConvertToSqlString(predicate, parameters, GetParameterIndex())
         m_HavingExpressions.Add(sql.Sql)
         m_Parameters.AddRange(sql.Parameters)
       End If
@@ -523,7 +573,7 @@ Namespace Expressions.Builders
         m_OrderByExpressions = New List(Of String)
       End If
 
-      Dim result = m_Visitor.Translate(keySelector, ExpressionTranslateMode.OrderBy, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(keySelector, ExpressionTranslateMode.OrderBy, entityIndexHints, GetParameterIndex(), True, True)
 
       If ascending Then
         m_OrderByExpressions.Add(result.Sql)
@@ -553,7 +603,7 @@ Namespace Expressions.Builders
           m_OrderByExpressions.Add(predicate & " DESC")
         End If
       Else
-        Dim sql = ConvertToSqlString(predicate, parameters, m_Parameters.Count)
+        Dim sql = ConvertToSqlString(predicate, parameters, GetParameterIndex())
 
         If ascending Then
           m_OrderByExpressions.Add(sql.Sql)
@@ -663,7 +713,7 @@ Namespace Expressions.Builders
     ''' <param name="action"></param>
     ''' <param name="entityIndexHints"></param>
     Public Sub IncludeToSelected(<DisallowNull> action As Expression, entityIndexHints As Int32())
-      Dim result = m_Visitor.TranslateIncludeAction(action, entityIndexHints, m_Parameters.Count, m_IncludedExpressionsCount)
+      Dim result = m_Visitor.TranslateIncludeAction(action, entityIndexHints, GetParameterIndex(), m_IncludedExpressionsCount)
       m_Parameters.AddRange(result.SqlString.Parameters)
       m_IncludedExpressionsCount += 1
 
@@ -694,7 +744,7 @@ Namespace Expressions.Builders
         Throw New Exception("Cannot infer included column. Use expression that contains entity property only.")
       End If
 
-      Dim valueResult = m_Visitor.TranslateIncludeValueSelector(valueSelector, valueSelectorEntityIndexHints, m_Parameters.Count, m_IncludedExpressionsCount)
+      Dim valueResult = m_Visitor.TranslateIncludeValueSelector(valueSelector, valueSelectorEntityIndexHints, GetParameterIndex(), m_IncludedExpressionsCount)
       m_Parameters.AddRange(valueResult.SqlString.Parameters)
       m_IncludedExpressionsCount += 1
 
@@ -717,7 +767,7 @@ Namespace Expressions.Builders
     ''' <param name="selector"></param>
     ''' <param name="entityIndexHints"></param>
     Public Sub AddSelect(<DisallowNull> selector As Expression, entityIndexHints As Int32())
-      Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, m_Parameters.Count)
+      Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, GetParameterIndex())
       m_SelectExpression = result.SqlString.Sql
       m_Parameters.AddRange(result.SqlString.Parameters)
       m_Model.CustomSqlResult = result.SqlResult
@@ -844,6 +894,24 @@ Namespace Expressions.Builders
       End If
 
       Return New SelectQuery(sql.ToString(), m_Parameters, m_Model)
+    End Function
+
+    ''' <summary>
+    ''' Creates SQL subquery.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <returns></returns>
+    Public Function CreateSubquery(Of T)() As Subquery(Of T)
+      Return New Subquery(Of T)(CreateQuery())
+    End Function
+
+    ''' <summary>
+    ''' Gets parameter index.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function GetParameterIndex() As Int32
+      Return m_ParameterIndexOffset + m_Parameters.Count
     End Function
 
     ''' <summary>

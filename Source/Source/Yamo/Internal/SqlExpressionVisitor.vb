@@ -1390,6 +1390,7 @@ Namespace Internal
       ElseIf Not m_UseTableNamesOrAliases Then
         m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, prop.ColumnName)
       ElseIf m_UseAliases Then
+        ' TODO: SIP - implement subquery - simply just use entity?
         Dim tableAlias = m_Model.GetEntity(entity.Index).TableAlias
         m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, tableAlias)
         m_Sql.Append(".")

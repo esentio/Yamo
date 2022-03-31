@@ -42,6 +42,11 @@
       Me.Label = label
     End Sub
 
+    Public Sub New(intValue As Int32, stringValue As String)
+      Me.IntValue = intValue
+      Me.StringValue = stringValue
+    End Sub
+
     Public Overrides Function Equals(obj As Object) As Boolean
       If obj Is Nothing OrElse TypeOf obj IsNot NonModelObject Then
         Return False

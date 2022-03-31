@@ -1084,6 +1084,14 @@ Namespace Expressions
     End Function
 
     ''' <summary>
+    ''' Creates SQL subquery.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function ToSubquery() As Subquery(Of T1)
+      Return Me.Builder.CreateSubquery(Of T1)()
+    End Function
+
+    ''' <summary>
     ''' Executes SQL query and returns list of records.
     ''' </summary>
     ''' <returns></returns>

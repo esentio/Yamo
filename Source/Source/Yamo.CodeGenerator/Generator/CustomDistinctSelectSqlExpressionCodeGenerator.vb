@@ -30,6 +30,9 @@
       GenerateConstructor(builder, entityCount)
       builder.AppendLine()
 
+      GenerateToSubquery(builder, entityCount)
+      builder.AppendLine()
+
       GenerateCustomToList(builder, entityCount)
       builder.AppendLine()
 

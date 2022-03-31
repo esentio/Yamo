@@ -17,13 +17,15 @@ Namespace Expressions.Builders
     ''' Gets dialect provider.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    Public ReadOnly DialectProvider As SqlDialectProvider
+    ''' <returns></returns>
+    Public ReadOnly Property DialectProvider As SqlDialectProvider
 
     ''' <summary>
     ''' Gets context.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    Public ReadOnly DbContext As DbContext
+    ''' <returns></returns>
+    Public ReadOnly Property DbContext As DbContext
 
     ''' <summary>
     ''' Creates new instance of <see cref="SqlExpressionBuilderBase"/>.<br/>
