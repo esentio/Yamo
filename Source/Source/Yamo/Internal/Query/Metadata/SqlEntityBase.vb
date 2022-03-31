@@ -4,19 +4,16 @@ Imports Yamo.Metadata
 Namespace Internal.Query.Metadata
 
   ''' <summary>
-  ''' Represents SQL related entity data.<br/>
+  ''' Base class for SQL related entity data.<br/>
   ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
   ''' </summary>
-  Public Class SqlEntity
-
-    ' TODO: SIP - structure instead?
+  Public MustInherit Class SqlEntityBase
 
     ''' <summary>
-    ''' Gets entity.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' Gets type of model representing this SQL entity.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property Entity As Entity
+    Public ReadOnly Property EntityType As Type
 
     ''' <summary>
     ''' Gets table alias.<br/>
@@ -76,30 +73,22 @@ Namespace Internal.Query.Metadata
     Public ReadOnly Property IncludedSqlResults As <MaybeNull> List(Of SqlEntityIncludedResult)
 
     ''' <summary>
-    ''' Creates new instance of <see cref="SqlEntity"/>.<br/>
+    ''' Creates new instance of <see cref="SqlEntityBase"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="entity"></param>
-    Sub New(<DisallowNull> entity As Entity)
-      Me.New(entity, "", -1)
-    End Sub
-
-    ''' <summary>
-    ''' Creates new instance of <see cref="SqlEntity"/>.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <param name="entity"></param>
+    ''' <param name="entityType"></param>
     ''' <param name="tableAlias"></param>
     ''' <param name="index"></param>
-    Sub New(<DisallowNull> entity As Entity, <DisallowNull> tableAlias As String, index As Int32)
-      Me.Entity = entity
+    ''' <param name="columnsCount"></param>
+    Sub New(<DisallowNull> entityType As Type, <DisallowNull> tableAlias As String, index As Int32, columnsCount As Int32)
+      Me.EntityType = entityType
       Me.TableAlias = tableAlias
       Me.Index = index
       Me.Relationship = Nothing
       Me.IsExcluded = False
       Me.IsIgnored = False
 
-      Dim lastIndex = Me.Entity.GetPropertiesCount() - 1
+      Dim lastIndex = columnsCount - 1
       Dim includedColumns = New Boolean(lastIndex) {}
 
       For i = 0 To lastIndex
@@ -111,16 +100,17 @@ Namespace Internal.Query.Metadata
     End Sub
 
     ''' <summary>
-    ''' Creates new instance of <see cref="SqlEntity"/>.<br/>
+    ''' Creates new instance of <see cref="SqlEntityBase"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="entity"></param>
+    ''' <param name="entityType"></param>
     ''' <param name="tableAlias"></param>
     ''' <param name="index"></param>
+    ''' <param name="columnsCount"></param>
     ''' <param name="relationship"></param>
     ''' <param name="isIgnored"></param>
-    Sub New(<DisallowNull> entity As Entity, <DisallowNull> tableAlias As String, index As Int32, relationship As SqlEntityRelationship, isIgnored As Boolean)
-      Me.New(entity, tableAlias, index)
+    Sub New(<DisallowNull> entityType As Type, <DisallowNull> tableAlias As String, index As Int32, columnsCount As Int32, relationship As SqlEntityRelationship, isIgnored As Boolean)
+      Me.New(entityType, tableAlias, index, columnsCount)
       Me.Relationship = relationship
       Me.IsIgnored = isIgnored
     End Sub
@@ -141,6 +131,22 @@ Namespace Internal.Query.Metadata
     Public Sub Exclude()
       Me._IsExcluded = True
     End Sub
+
+    ''' <summary>
+    ''' Gets column name.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="propertyName"></param>
+    ''' <returns></returns>
+    Public MustOverride Function GetColumnName(<DisallowNull> propertyName As String) As String
+
+    ''' <summary>
+    ''' Gets column name.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    Public MustOverride Function GetColumnName(index As Int32) As String
 
     ''' <summary>
     ''' Gets count of included columns. Only columns representing entity properties are counted, not columns representing included result(s).<br/>

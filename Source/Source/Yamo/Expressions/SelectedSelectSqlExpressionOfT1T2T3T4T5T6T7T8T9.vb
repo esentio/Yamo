@@ -19,6 +19,7 @@ Namespace Expressions
   ''' <typeparam name="T9"></typeparam>
   Public Class SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)
     Inherits SelectSqlExpressionBase
+    Implements ISubqueryableSelectSqlExpression(Of T1)
 
     ''' <summary>
     ''' Creates new instance of <see cref="SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9)"/>.
@@ -1296,6 +1297,14 @@ Namespace Expressions
       If genericType Is GetType(DistinctSelectSqlExpression(Of )) Then Return True
 
       Return False
+    End Function
+
+    ''' <summary>
+    ''' Creates SQL subquery.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function ToSubquery() As Subquery(Of T1) Implements ISubqueryableSelectSqlExpression(Of T1).ToSubquery
+      Return Me.Builder.CreateSubquery(Of T1)()
     End Function
 
     ''' <summary>

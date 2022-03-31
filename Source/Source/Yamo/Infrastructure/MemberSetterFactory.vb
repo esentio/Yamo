@@ -6,26 +6,26 @@ Imports Yamo.Metadata
 Namespace Infrastructure
 
   ''' <summary>
-  ''' Entity member setter factory.<br/>
+  ''' Member setter factory.<br/>
   ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
   ''' </summary>
-  Public Class EntityMemberSetterFactory
+  Public Class MemberSetterFactory
 
     ''' <summary>
     ''' Creates property or field setter.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="entityType"></param>
+    ''' <param name="objectType"></param>
     ''' <param name="propertyOrFieldName"></param>
     ''' <param name="valueType"></param>
     ''' <returns></returns>
-    Public Shared Function CreateSetter(<DisallowNull> entityType As Type, <DisallowNull> propertyOrFieldName As String, <DisallowNull> valueType As Type) As Action(Of Object, Object)
-      Dim entityParam = Expression.Parameter(GetType(Object), "entity")
+    Public Shared Function CreateSetter(<DisallowNull> objectType As Type, <DisallowNull> propertyOrFieldName As String, <DisallowNull> valueType As Type) As Action(Of Object, Object)
+      Dim objParam = Expression.Parameter(GetType(Object), "obj")
       Dim valueParam = Expression.Parameter(GetType(Object), "value")
-      Dim parameters = {entityParam, valueParam}
+      Dim parameters = {objParam, valueParam}
 
-      Dim entityCasted = Expression.Convert(entityParam, entityType)
-      Dim prop = Expression.PropertyOrField(entityCasted, propertyOrFieldName)
+      Dim objCasted = Expression.Convert(objParam, objectType)
+      Dim prop = Expression.PropertyOrField(objCasted, propertyOrFieldName)
       Dim valueCasted = Expression.Convert(valueParam, prop.Type)
       Dim propAssign = Expression.Assign(prop, valueCasted)
 
@@ -39,19 +39,19 @@ Namespace Infrastructure
     ''' Creates setter that adds an item to the collection of a property or a field.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="entityType"></param>
+    ''' <param name="objectType"></param>
     ''' <param name="propertyOrFieldName"></param>
     ''' <param name="itemType"></param>
     ''' <returns></returns>
-    Public Shared Function CreateCollectionAddSetter(<DisallowNull> entityType As Type, <DisallowNull> propertyOrFieldName As String, <DisallowNull> itemType As Type) As Action(Of Object, Object)
-      Dim entityParam = Expression.Parameter(GetType(Object), "entity")
+    Public Shared Function CreateCollectionAddSetter(<DisallowNull> objectType As Type, <DisallowNull> propertyOrFieldName As String, <DisallowNull> itemType As Type) As Action(Of Object, Object)
+      Dim objParam = Expression.Parameter(GetType(Object), "obj")
       Dim valueParam = Expression.Parameter(GetType(Object), "value")
-      Dim parameters = {entityParam, valueParam}
+      Dim parameters = {objParam, valueParam}
 
-      Dim entityCasted = Expression.Convert(entityParam, entityType)
+      Dim objCasted = Expression.Convert(objParam, objectType)
       Dim valueCasted = Expression.Convert(valueParam, itemType)
 
-      Dim prop = Expression.PropertyOrField(entityCasted, propertyOrFieldName)
+      Dim prop = Expression.PropertyOrField(objCasted, propertyOrFieldName)
       Dim propAdd = Expression.Call(prop, "Add", Nothing, valueCasted)
 
       Dim body = Expression.Block(propAdd)
@@ -64,23 +64,23 @@ Namespace Infrastructure
     ''' Creates property or field setter that initializes a collection.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="entityType"></param>
+    ''' <param name="objectType"></param>
     ''' <param name="propertyOrFieldName"></param>
     ''' <param name="collectionType"></param>
     ''' <param name="itemType"></param>
     ''' <returns></returns>
-    Public Shared Function CreateCollectionInitSetter(<DisallowNull> entityType As Type, <DisallowNull> propertyOrFieldName As String, <DisallowNull> collectionType As Type, <DisallowNull> itemType As Type) As Action(Of Object)
-      Dim entityParam = Expression.Parameter(GetType(Object), "entity")
-      Dim parameters = {entityParam}
+    Public Shared Function CreateCollectionInitSetter(<DisallowNull> objectType As Type, <DisallowNull> propertyOrFieldName As String, <DisallowNull> collectionType As Type, <DisallowNull> itemType As Type) As Action(Of Object)
+      Dim objParam = Expression.Parameter(GetType(Object), "obj")
+      Dim parameters = {objParam}
 
-      Dim entityCasted = Expression.Convert(entityParam, entityType)
+      Dim objCasted = Expression.Convert(objParam, objectType)
 
       If collectionType.IsInterface Then
         collectionType = GetType(List(Of )).MakeGenericType(itemType)
       End If
 
       Dim value = Expression.[New](collectionType)
-      Dim prop = Expression.PropertyOrField(entityCasted, propertyOrFieldName)
+      Dim prop = Expression.PropertyOrField(objCasted, propertyOrFieldName)
       Dim propAssign = Expression.Assign(prop, value)
       Dim isNull = Expression.Equal(prop, Expression.Constant(Nothing))
       Dim cond = Expression.IfThen(isNull, propAssign)

@@ -96,6 +96,16 @@
         builder.AppendLine()
 
         comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
+        params = {"context"}
+        AddComment(builder, comment, params:=params)
+
+        builder.Indent().AppendLine("Friend Sub New(context As SubqueryContext)").PushIndent()
+        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), context.Executor)").PopIndent()
+        builder.Indent().AppendLine("End Sub")
+
+        builder.AppendLine()
+
+        comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
         params = {"context", "tableSource"}
         AddComment(builder, comment, params:=params)
 
@@ -107,11 +117,33 @@
         builder.AppendLine()
 
         comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
+        params = {"context", "tableSource"}
+        AddComment(builder, comment, params:=params)
+
+        builder.Indent().AppendLine("Friend Sub New(context As SubqueryContext, tableSource As FormattableString)").PushIndent()
+        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), context.Executor)")
+        builder.Indent().AppendLine("Me.Builder.SetMainTableSource(tableSource)").PopIndent()
+        builder.Indent().AppendLine("End Sub")
+
+        builder.AppendLine()
+
+        comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
         params = {"context", "tableSource", "parameters"}
         AddComment(builder, comment, params:=params)
 
         builder.Indent().AppendLine("Friend Sub New(context As DbContext, tableSource As RawSqlString, ParamArray parameters() As Object)").PushIndent()
         builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), New QueryExecutor(context))")
+        builder.Indent().AppendLine("Me.Builder.SetMainTableSource(tableSource, parameters)").PopIndent()
+        builder.Indent().AppendLine("End Sub")
+
+        builder.AppendLine()
+
+        comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
+        params = {"context", "tableSource", "parameters"}
+        AddComment(builder, comment, params:=params)
+
+        builder.Indent().AppendLine("Friend Sub New(context As SubqueryContext, tableSource As RawSqlString, ParamArray parameters() As Object)").PushIndent()
+        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), context.Executor)")
         builder.Indent().AppendLine("Me.Builder.SetMainTableSource(tableSource, parameters)").PopIndent()
         builder.Indent().AppendLine("End Sub")
       Else

@@ -78,7 +78,11 @@ namespace Yamo.Playground.CS
             //Test53();
             //Test54();
             //Test55();
-            Test56();
+            //Test56();
+            //Test57();
+            //Test58();
+            //Test59();
+            Test60();
         }
 
         public static MyContext CreateContext()
@@ -1085,6 +1089,136 @@ namespace Yamo.Playground.CS
 
                 // Generated SQL:
                 // SELECT [T0].[Id], [T0].[Title], [T0].[Content], [T0].[Created], [T0].[CreatedUserId], [T0].[Modified], [T0].[ModifiedUserId], [T0].[Deleted], [T0].[DeletedUserId], [T1].[Id], [T1].[FirstName], [T1].[LastName], [T1].[BirthDate] FROM [Blog] [T0] INNER JOIN [Person] [T1] ON [T0].[CreatedUserId] = [T1].[Id] WHERE [T1].[FirstName] = @p0
+            }
+        }
+
+        public static void Test57()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From<Article>()
+                             .Join(c =>
+                             {
+                                 return c.From<Label>()
+                                         .Where(x => x.Language == "en")
+                                         .SelectAll();
+                             })
+                             .On(j => j.T1.Id == j.T2.Id)
+                             .SelectAll().ToList();
+
+                foreach (var article in list)
+                {
+                    Console.WriteLine($"{article.Id}: {article.Label.Description}");
+                }
+            }
+        }
+
+        public static void Test58()
+        {
+            using (var db = CreateContext())
+            {
+                // get all articles which have at least 2 categories
+
+                // using anonymous type
+                var list1 = db.From<Article>()
+                              .Join(c =>
+                              {
+                                  return c.From<ArticleCategory>()
+                                          .GroupBy(x => x.ArticleId)
+                                          .Select(x => new { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() });
+                              })
+                              .On(j => j.T1.Id == j.T2.ArticleId)
+                              .Where(j => 2 < j.T2.CategoriesCount)
+                              .SelectAll()
+                              .ToList();
+
+                // using non model entity (same result as above)
+                var list2 = db.From<Article>()
+                              .Join(c =>
+                              {
+                                  return c.From<ArticleCategory>()
+                                          .GroupBy(x => x.ArticleId)
+                                          .Select(x => new Stats { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() });
+                              })
+                              .On(j => j.T1.Id == j.T2.ArticleId)
+                              .Where(j => 2 < j.T2.CategoriesCount)
+                              .SelectAll()
+                              .ToList();
+            }
+        }
+
+        public static void Test59()
+        {
+            using (var db = CreateContext())
+            {
+                // get all articles with Stats property filled
+                var list1 = db.From<Article>()
+                              .LeftJoin(c =>
+                              {
+                                  return c.From<ArticleCategory>()
+                                          .GroupBy(x => x.ArticleId)
+                                          .Select(x => new Stats { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() });
+                              })
+                              .On(j => j.T1.Id == j.T2.ArticleId)
+                              .As(x => x.Stats)
+                              .SelectAll()
+                              .ToList();
+
+                // get all articles with CategoriesCount property filled
+                var list2 = db.From<Article>()
+                              .LeftJoin(c =>
+                              {
+                                  return c.From<ArticleCategory>()
+                                          .GroupBy(x => x.ArticleId)
+                                          .Select(x => new Stats { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() });
+                              })
+                              .On(j => j.T1.Id == j.T2.ArticleId)
+                              .SelectAll()
+                              .Include(j => j.T1.CategoriesCount, j => j.T2.CategoriesCount)
+                              .ToList();
+            }
+        }
+
+        public static void Test60()
+        {
+            using (var db = CreateContext())
+            {
+                // get all articles with Stats property filled
+
+                // Using NonModelEntityCreationBehavior.NullIfAllColumnsAreNull, which is the default.
+                // If article has no category, joined subquery won't have matching records present and both
+                // columns will contain null values. Stats object won't be created and Stats property will be
+                // set to null in this case.
+                var list1 = db.From<Article>()
+                              .LeftJoin(c =>
+                              {
+                                  return c.From<ArticleCategory>()
+                                          .GroupBy(x => x.ArticleId)
+                                          .Select(x => new Stats { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() });
+                              })
+                              .On(j => j.T1.Id == j.T2.ArticleId)
+                              .As(x => x.Stats)
+                              .SelectAll()
+                              .ToList();
+
+                // Using NonModelEntityCreationBehavior.AlwaysCreateInstance.
+                // If article has no category, joined subquery won't have matching records present and both
+                // columns will contain null values. However, Stats object will still be created and therefore Stats
+                // property will always contain Stats object instance. To fill Stats object properties, default value
+                // will be used in case of null.
+                // So in this case it will be:
+                //    new Stats { ArticleId = 0, CategoriesCount = 0 }
+                var list2 = db.From<Article>()
+                              .LeftJoin(c =>
+                              {
+                                  return c.From<ArticleCategory>()
+                                          .GroupBy(x => x.ArticleId)
+                                          .Select(x => new Stats { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() });
+                              }, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                              .On(j => j.T1.Id == j.T2.ArticleId)
+                              .As(x => x.Stats)
+                              .SelectAll()
+                              .ToList();
             }
         }
 

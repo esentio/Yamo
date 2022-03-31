@@ -11,6 +11,7 @@ Namespace Expressions
   ''' <typeparam name="T"></typeparam>
   Public Class CustomSelectSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
+    Implements ISubqueryableSelectSqlExpression(Of T)
 
     ''' <summary>
     ''' Creates new instance of <see cref="CustomSelectSqlExpression(Of T)"/>.
@@ -28,6 +29,14 @@ Namespace Expressions
     Public Function Distinct() As CustomDistinctSelectSqlExpression(Of T)
       Me.Builder.AddDistinct()
       Return New CustomDistinctSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
+    End Function
+
+    ''' <summary>
+    ''' Creates SQL subquery.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function ToSubquery() As Subquery(Of T) Implements ISubqueryableSelectSqlExpression(Of T).ToSubquery
+      Return Me.Builder.CreateSubquery(Of T)()
     End Function
 
     ''' <summary>

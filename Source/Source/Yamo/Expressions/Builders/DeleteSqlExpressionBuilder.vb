@@ -64,7 +64,7 @@ Namespace Expressions.Builders
     ''' <param name="tableNameOverride"></param>
     Public Sub New(<DisallowNull> context As DbContext, <DisallowNull> mainEntityType As Type, softDelete As Boolean, tableNameOverride As String)
       MyBase.New(context)
-      m_Model = New DeleteSqlModel(Me.DbContext.Model, mainEntityType)
+      m_Model = New DeleteSqlModel(GetMainEntity(mainEntityType))
       m_SoftDelete = softDelete
       m_TableNameOverride = tableNameOverride
       m_TableHints = Nothing
@@ -175,7 +175,7 @@ Namespace Expressions.Builders
         table = table & " " & m_TableHints
       End If
 
-      Dim getter = EntityAutoFieldsGetterCache.GetOnDeleteGetter(m_Model.Model, entity.EntityType)
+      Dim getter = EntityAutoFieldsGetterCache.GetOnDeleteGetter(Me.DbContext.Model, entity.EntityType)
       Dim values = getter(Me.DbContext)
 
       Dim provider = EntitySqlStringProviderCache.GetSoftDeleteWithoutConditionProvider(Me, entity.EntityType)

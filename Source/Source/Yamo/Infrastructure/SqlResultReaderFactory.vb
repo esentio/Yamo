@@ -355,7 +355,7 @@ Namespace Infrastructure
 
       If TypeOf sqlResult Is EntitySqlResult Then
         Dim entityProp = Expression.Property(readerDataVar, NameOf(EntitySqlResultReaderData.Entity))
-        Dim includedColumnsProp = Expression.Property(entityProp, NameOf(SqlEntity.IncludedColumns))
+        Dim includedColumnsProp = Expression.Property(entityProp, NameOf(SqlEntityBase.IncludedColumns))
         Dim pkOffsetsProp = Expression.Property(readerDataVar, NameOf(EntitySqlResultReaderData.PKOffsets))
 
         Dim containsPKReaderProp = Expression.Property(readerDataVar, NameOf(EntitySqlResultReaderData.ContainsPKReader))
