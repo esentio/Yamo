@@ -15,9 +15,9 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="model"></param>
-    ''' <param name="mainEntityType"></param>
-    Public Sub New(<DisallowNull> model As Model, <DisallowNull> mainEntityType As Type)
-      MyBase.New(model, mainEntityType)
+    ''' <param name="mainEntity"></param>
+    Public Sub New(<DisallowNull> model As Model, <DisallowNull> mainEntity As Entity)
+      MyBase.New(model, mainEntity)
     End Sub
 
   End Class

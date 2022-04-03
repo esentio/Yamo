@@ -177,16 +177,17 @@ Namespace Tests
 
       InsertItems(article1, article2, article3, label1En, label2De, label3En, label3De)
 
+      ' TODO: SIP - implement subquery - use also constructor arguments
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).
                         Join(Function(c)
                                Return c.From(Of Label).
                                         Where(Function(x) x.Language = English).
-                                        Select(Function(x) New NonModelObject With {.IntValue = x.Id, .StringValue = x.Description}).
+                                        Select(Function(x) New NonModelObject(x.Language) With {.IntValue = x.Id, .StringValue1 = x.Description}).
                                         ToSubquery()
                              End Function).
                         On(Function(a, l) a.Id = l.IntValue).
-                        OrderBy(Function(l) l.StringValue).
+                        OrderBy(Function(l) l.StringValue1).
                         SelectAll().ToList()
 
         Assert.AreEqual(2, result.Count)
@@ -200,11 +201,11 @@ Namespace Tests
                         Join(Function(c)
                                Return c.From(Of Label).
                                         Where(Function(x) x.Language = English).
-                                        Select(Function(x) New NonModelObject With {.IntValue = x.Id, .StringValue = x.Description}).
+                                        Select(Function(x) New NonModelObject(x.Language) With {.IntValue = x.Id, .StringValue1 = x.Description}).
                                         ToSubquery()
                              End Function).
                         On(Function(j) j.T1.Id = j.T2.IntValue).
-                        OrderBy(Function(j) j.T2.StringValue).
+                        OrderBy(Function(j) j.T2.StringValue1).
                         SelectAll().ToList()
 
         Assert.AreEqual(2, result.Count)
@@ -221,11 +222,11 @@ Namespace Tests
                           Join(Function(c)
                                  Return c.From(Of Label).
                                           Where(Function(x) x.Language = English).
-                                          Select(Function(x) New NonModelObject(x.Id, x.Description)).
+                                          Select(Function(x) New NonModelObject(x.Id, x.Description, x.Language)).
                                           ToSubquery()
                                End Function).
                           On(Function(a, l) a.Id = l.IntValue).
-                          OrderBy(Function(l) l.StringValue).
+                          OrderBy(Function(l) l.StringValue1).
                           SelectAll().ToList()
         End Using
         Assert.Fail()
@@ -239,11 +240,11 @@ Namespace Tests
                           Join(Function(c)
                                  Return c.From(Of Label).
                                           Where(Function(x) x.Language = English).
-                                          Select(Function(x) New NonModelObject(x.Id, x.Description)).
+                                          Select(Function(x) New NonModelObject(x.Id, x.Description, x.Language)).
                                           ToSubquery()
                                End Function).
                           On(Function(j) j.T1.Id = j.T2.IntValue).
-                          OrderBy(Function(j) j.T2.StringValue).
+                          OrderBy(Function(j) j.T2.StringValue1).
                           SelectAll().ToList()
         End Using
         Assert.Fail()
@@ -258,6 +259,7 @@ Namespace Tests
     ' As()
     ' include
     ' ci query obsahuje stlpce
+    ' conditional
 
   End Class
 End Namespace

@@ -26,7 +26,7 @@ Namespace Internal.Query
     ''' <param name="model"></param>
     ''' <param name="entities"></param>
     ''' <returns></returns>
-    Public Shared Function Create(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> entities As SqlEntity()) As EntitySqlResultReaderDataCollection
+    Public Shared Function Create(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> entities As SqlEntityBase()) As EntitySqlResultReaderDataCollection
       Dim relationships = New(RelatedEntities As List(Of Int32), CollectionNavigations As List(Of CollectionNavigation))(entities.Length - 1) {}
 
       For index = 0 To entities.Length - 1
@@ -60,7 +60,8 @@ Namespace Internal.Query
 
       For index = 0 To entities.Length - 1
         Dim entityReaderIndex = readerIndex
-        Dim entity = entities(index)
+        ' TODO: SIP - implement subquery - cast can be wrong
+        Dim entity = DirectCast(entities(index), EntityBasedSqlEntity)
         Dim entityType = entity.Entity.EntityType
 
         Dim entityReader = EntityReaderCache.GetReader(dataReaderType, dialectProvider, model, entityType)
@@ -121,7 +122,7 @@ Namespace Internal.Query
     ''' <param name="model"></param>
     ''' <param name="entity"></param>
     ''' <returns></returns>
-    Public Shared Function Create(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> entity As SqlEntity) As EntitySqlResultReaderData
+    Public Shared Function Create(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> entity As EntityBasedSqlEntity) As EntitySqlResultReaderData
       Dim readerIndex = 0
       Dim entityReaderIndex = 0
       Dim entityType = entity.Entity.EntityType
@@ -325,7 +326,7 @@ Namespace Internal.Query
     ''' </summary>
     ''' <param name="entity"></param>
     ''' <returns></returns>
-    Private Shared Function GetPKOffsets(entity As SqlEntity) As Int32()
+    Private Shared Function GetPKOffsets(entity As EntityBasedSqlEntity) As Int32()
       Dim includedColumns = entity.IncludedColumns
       Dim pks = entity.Entity.GetKeyProperties()
       Dim pkOffsets = New Int32(pks.Count - 1) {}

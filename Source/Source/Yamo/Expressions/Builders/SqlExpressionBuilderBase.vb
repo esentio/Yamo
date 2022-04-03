@@ -3,6 +3,7 @@ Imports System.Diagnostics.CodeAnalysis
 Imports System.Text
 Imports Yamo.Infrastructure
 Imports Yamo.Internal.Query
+Imports Yamo.Metadata
 Imports Yamo.Sql
 
 Namespace Expressions.Builders
@@ -36,6 +37,21 @@ Namespace Expressions.Builders
       Me.DialectProvider = context.Options.DialectProvider
       Me.DbContext = context
     End Sub
+
+    ''' <summary>
+    ''' Gets main entity.
+    ''' </summary>
+    ''' <param name="mainEntityType"></param>
+    ''' <returns></returns>
+    Protected Function GetMainEntity(mainEntityType As Type) As Entity
+      Dim entity = Me.DbContext.Model.TryGetEntity(mainEntityType)
+
+      If entity Is Nothing Then
+        Throw New Exception($"Entity '{mainEntityType}' is not defined in the model. Only model entities are supported as a main entity.")
+      End If
+
+      Return entity
+    End Function
 
     ''' <summary>
     ''' Creates SQL parameter.<br/>

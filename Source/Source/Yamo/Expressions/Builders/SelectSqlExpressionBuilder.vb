@@ -137,8 +137,12 @@ Namespace Expressions.Builders
       Initialize(mainEntityType)
     End Sub
 
+    ''' <summary>
+    ''' Initializes values.
+    ''' </summary>
+    ''' <param name="mainEntityType"></param>
     Private Sub Initialize(<DisallowNull> mainEntityType As Type)
-      m_Model = New SelectSqlModel(Me.DbContext.Model, mainEntityType)
+      m_Model = New SelectSqlModel(Me.DbContext.Model, GetMainEntity(mainEntityType))
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       ' lists are created only when necessary
       m_MainTableSourceExpression = Nothing
@@ -233,10 +237,8 @@ Namespace Expressions.Builders
       Dim subquery = tableSourceFactory.Invoke(context)
       Dim sql = subquery.Query
 
-      m_CurrentJoinInfo = New JoinInfo(joinType, "(" & sql.Sql & ")")
+      m_CurrentJoinInfo = New JoinInfo(joinType, "(" & sql.Sql & ")", sql.Model.NonModelEntity)
       m_Parameters.AddRange(sql.Parameters)
-
-
     End Sub
 
     ''' <summary>
@@ -303,49 +305,79 @@ Namespace Expressions.Builders
         relationship = TryGetRelationship(Of TJoined)(entityIndexHints)
       End If
 
-      Dim sqlEntity = m_Model.AddJoin(Of TJoined)(relationship)
-      Dim entity = sqlEntity.Entity
-      Dim tableAlias = sqlEntity.TableAlias
+      Dim nonModelEntity = joinInfo.NonModelEntity
 
       Dim sql As String
-      Dim joinTypeString As String
+      Dim joinTypeString = GetJoinTypeString(joinInfo.JoinType)
 
-      Select Case joinInfo.JoinType
-        Case JoinType.Inner
-          joinTypeString = "INNER JOIN"
-        Case JoinType.LeftOuter
-          joinTypeString = "LEFT OUTER JOIN"
-        Case JoinType.RightOuter
-          joinTypeString = "RIGHT OUTER JOIN"
-        Case JoinType.FullOuter
-          joinTypeString = "FULL OUTER JOIN"
-        Case JoinType.CrossJoin
-          joinTypeString = "CROSS JOIN"
-        Case Else
-          Throw New NotSupportedException($"Unsupported join type '{joinInfo.JoinType}'.")
-      End Select
+      If nonModelEntity Is Nothing Then
+        Dim entity = Me.DbContext.Model.GetEntity(GetType(TJoined))
+        Dim sqlEntity = m_Model.AddJoin(entity, relationship)
+        Dim tableAlias = sqlEntity.TableAlias
 
-      If predicate Is Nothing Then
-        If joinInfo.TableSource Is Nothing Then
-          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints)
+        If predicate Is Nothing Then
+          If joinInfo.TableSource Is Nothing Then
+            sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints)
+          Else
+            sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints)
+          End If
+
+          m_JoinExpressions.Add(sql)
+
         Else
-          sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints)
+          Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, GetParameterIndex(), True, True)
+
+          If joinInfo.TableSource Is Nothing Then
+            sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints) & " ON " & result.Sql
+          Else
+            sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints) & " ON " & result.Sql
+          End If
+
+          m_JoinExpressions.Add(sql)
+          m_Parameters.AddRange(result.Parameters)
         End If
 
-        m_JoinExpressions.Add(sql)
       Else
-        Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, GetParameterIndex(), True, True)
+        Dim sqlEntity = m_Model.AddJoin(nonModelEntity, relationship)
+        Dim tableAlias = sqlEntity.TableAlias
 
-        If joinInfo.TableSource Is Nothing Then
-          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints) & " ON " & result.Sql
+        If predicate Is Nothing Then
+          sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints)
+
+          m_JoinExpressions.Add(sql)
+
         Else
-          sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints) & " ON " & result.Sql
-        End If
+          Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, GetParameterIndex(), True, True)
 
-        m_JoinExpressions.Add(sql)
-        m_Parameters.AddRange(result.Parameters)
+          sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints) & " ON " & result.Sql
+
+          m_JoinExpressions.Add(sql)
+          m_Parameters.AddRange(result.Parameters)
+        End If
       End If
     End Sub
+
+    ''' <summary>
+    ''' Gets SQL join type string.
+    ''' </summary>
+    ''' <param name="joinType"></param>
+    ''' <returns></returns>
+    Private Shared Function GetJoinTypeString(joinType As JoinType) As String
+      Select Case joinType
+        Case JoinType.Inner
+          Return "INNER JOIN"
+        Case JoinType.LeftOuter
+          Return "LEFT OUTER JOIN"
+        Case JoinType.RightOuter
+          Return "RIGHT OUTER JOIN"
+        Case JoinType.FullOuter
+          Return "FULL OUTER JOIN"
+        Case JoinType.CrossJoin
+          Return "CROSS JOIN"
+        Case Else
+          Throw New NotSupportedException($"Unsupported join type '{joinType}'.")
+      End Select
+    End Function
 
     ''' <summary>
     ''' Adds ignored join.<br/>
@@ -353,7 +385,9 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="entityType"></param>
     Public Sub AddIgnoredJoin(entityType As Type)
-      m_Model.AddIgnoredJoin(entityType)
+      ' TODO: SIP - implement subquery
+      Dim entity = Me.DbContext.Model.GetEntity(entityType)
+      m_Model.AddIgnoredJoin(entity)
     End Sub
 
     ''' <summary>
@@ -414,7 +448,14 @@ Namespace Expressions.Builders
       End If
 
       ' try to infer relationship from model
-      Dim declaringSqlEntity = m_Model.GetEntity(entityIndexHints(0))
+      Dim sqlEntity = m_Model.GetEntity(entityIndexHints(0))
+
+      If TypeOf sqlEntity IsNot EntityBasedSqlEntity Then
+        ' relationships are supported only for model entities
+        Return Nothing
+      End If
+
+      Dim declaringSqlEntity = DirectCast(sqlEntity, EntityBasedSqlEntity)
       Dim relationshipNavigations = declaringSqlEntity.Entity.GetRelationshipNavigations(GetType(TJoined))
 
       If relationshipNavigations.Count = 1 Then
@@ -454,6 +495,16 @@ Namespace Expressions.Builders
         Throw New Exception("Cannot infer relationship. Use expression that contains relationship property only.")
       End If
 
+      If result.EntityNotEntityBased Then
+        Throw New Exception($"Cannot set relationship. Relationship is supported only for model entities. Type '{result.EntityType}' is not defined in the model.")
+      End If
+
+      Dim lastEntity = m_Model.GetLastEntity()
+
+      If TypeOf lastEntity IsNot EntityBasedSqlEntity Then
+        Throw New Exception($"Cannot set relationship. Relationship is supported only for model entities. Type '{lastEntity.EntityType}' is not defined in the model.")
+      End If
+
       Dim declaringSqlEntity = result.Entity
       Dim propertyType = result.PropertyType
       Dim propertyName = result.PropertyName
@@ -467,9 +518,9 @@ Namespace Expressions.Builders
 
         ' there is still small possibility that item type is not genericTypes(0) type, but in most cases like List(Of) we should be ok
 
-        m_Model.GetLastEntity().SetRelationship(New SqlEntityRelationship(declaringSqlEntity, New CollectionNavigation(propertyName, genericTypes(0), propertyType)))
+        lastEntity.SetRelationship(New SqlEntityRelationship(declaringSqlEntity, New CollectionNavigation(propertyName, genericTypes(0), propertyType)))
       Else
-        m_Model.GetLastEntity().SetRelationship(New SqlEntityRelationship(declaringSqlEntity, New ReferenceNavigation(propertyName, propertyType)))
+        lastEntity.SetRelationship(New SqlEntityRelationship(declaringSqlEntity, New ReferenceNavigation(propertyName, propertyType)))
       End If
     End Sub
 
@@ -687,6 +738,10 @@ Namespace Expressions.Builders
         Throw New Exception("Cannot infer excluded column. Use expression that contains entity property only.")
       End If
 
+      If result.EntityNotEntityBased Then
+        Throw New Exception($"Cannot exclude column. Exclusion is supported only for model entities. Type '{result.EntityType}' is not defined in the model.")
+      End If
+
       Dim entity = result.Entity
       Dim prop = entity.Entity.GetProperty(result.PropertyName)
 
@@ -744,6 +799,10 @@ Namespace Expressions.Builders
         Throw New Exception("Cannot infer included column. Use expression that contains entity property only.")
       End If
 
+      If keyResult.EntityNotEntityBased Then
+        Throw New Exception($"Cannot include column. Inclusion is supported only for model entities. Type '{keyResult.EntityType}' is not defined in the model.")
+      End If
+
       Dim valueResult = m_Visitor.TranslateIncludeValueSelector(valueSelector, valueSelectorEntityIndexHints, GetParameterIndex(), m_IncludedExpressionsCount)
       m_Parameters.AddRange(valueResult.SqlString.Parameters)
       m_IncludedExpressionsCount += 1
@@ -767,10 +826,12 @@ Namespace Expressions.Builders
     ''' <param name="selector"></param>
     ''' <param name="entityIndexHints"></param>
     Public Sub AddSelect(<DisallowNull> selector As Expression, entityIndexHints As Int32())
-      Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, GetParameterIndex())
+      Dim isSubquery = Me.SubqueryContext IsNot Nothing
+      Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, GetParameterIndex(), isSubquery)
       m_SelectExpression = result.SqlString.Sql
       m_Parameters.AddRange(result.SqlString.Parameters)
       m_Model.CustomSqlResult = result.SqlResult
+      m_Model.NonModelEntity = result.NonModelEntity
     End Sub
 
     ''' <summary>
@@ -789,9 +850,16 @@ Namespace Expressions.Builders
       Dim first = True
 
       For i = 0 To m_Model.GetEntityCount() - 1
-        Dim entity = m_Model.GetEntity(i)
+        Dim entityBase = m_Model.GetEntity(i)
 
-        If Not entity.IsExcludedOrIgnored Then
+        If Not entityBase.IsExcludedOrIgnored Then
+          ' NOTE: all non model based entities should be excluded
+          If TypeOf entityBase IsNot EntityBasedSqlEntity Then
+            Throw New Exception("Model based entity is expected.")
+          End If
+
+          Dim entity = DirectCast(entityBase, EntityBasedSqlEntity)
+
           Dim formattedTableAlias = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)
           Dim properties = entity.Entity.GetProperties()
 
@@ -920,7 +988,7 @@ Namespace Expressions.Builders
     ''' <param name="propertyExpression"></param>
     ''' <param name="excludeLastModelEntity"></param>
     ''' <returns></returns>
-    Private Function GetEntityAndProperty(propertyExpression As Expression, Optional excludeLastModelEntity As Boolean = False) As (EntityType As Type, Entity As SqlEntity, PropertyType As Type, PropertyName As String, NotFound As Boolean, MultipleResults As Boolean)
+    Private Function GetEntityAndProperty(propertyExpression As Expression, Optional excludeLastModelEntity As Boolean = False) As (EntityType As Type, Entity As EntityBasedSqlEntity, PropertyType As Type, PropertyName As String, NotFound As Boolean, MultipleResults As Boolean, EntityNotEntityBased As Boolean)
       If TypeOf propertyExpression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -929,10 +997,11 @@ Namespace Expressions.Builders
 
       Dim parameterType = lambda.Parameters(0).Type
       Dim returnType = lambda.ReturnType
-      Dim entity As SqlEntity = Nothing
+      Dim entity As EntityBasedSqlEntity = Nothing
       Dim propertyName As String = Nothing
       Dim notFound = False
       Dim multipleResults = False
+      Dim entityNotEntityBased = False
 
       If GetType(IJoin).IsAssignableFrom(parameterType) Then
         If lambda.Body.NodeType = ExpressionType.MemberAccess Then
@@ -944,8 +1013,14 @@ Namespace Expressions.Builders
             If excludeLastModelEntity AndAlso index = m_Model.GetEntityCount() - 1 Then
               ' this should never happen, because we only use excludeLastModelEntity in SetLastJoinRelationship and there the IJoin doesn't contain the last entity
             Else
-              entity = m_Model.GetEntity(index)
-              propertyName = node.Member.Name
+              Dim entityItem = m_Model.GetEntity(index)
+
+              If TypeOf entityItem Is EntityBasedSqlEntity Then
+                entity = DirectCast(m_Model.GetEntity(index), EntityBasedSqlEntity)
+                propertyName = node.Member.Name
+              Else
+                entityNotEntityBased = True
+              End If
             End If
           End If
         End If
@@ -959,12 +1034,16 @@ Namespace Expressions.Builders
         For i = 0 To count - 1
           Dim item = entities(i)
 
-          If item.Entity.EntityType Is parameterType Then
+          If item.EntityType Is parameterType Then
             If entity Is Nothing Then
-              entity = item
+              If TypeOf item Is EntityBasedSqlEntity Then
+                entity = DirectCast(item, EntityBasedSqlEntity)
 
-              If lambda.Body.NodeType = ExpressionType.MemberAccess Then
-                propertyName = DirectCast(lambda.Body, MemberExpression).Member.Name
+                If lambda.Body.NodeType = ExpressionType.MemberAccess Then
+                  propertyName = DirectCast(lambda.Body, MemberExpression).Member.Name
+                End If
+              Else
+                entityNotEntityBased = True
               End If
             Else
               entity = Nothing
@@ -979,7 +1058,7 @@ Namespace Expressions.Builders
         End If
       End If
 
-      Return (parameterType, entity, returnType, propertyName, notFound, multipleResults)
+      Return (parameterType, entity, returnType, propertyName, notFound, multipleResults, entityNotEntityBased)
     End Function
 
   End Class

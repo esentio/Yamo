@@ -25,35 +25,61 @@ Namespace Internal.Query.Metadata
       End Set
     End Property
 
+    Private m_NonModelEntity As NonModelEntity
+    ''' <summary>
+    ''' Gets or sets ad hoc non model entity.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns>Non model entity or <see langword="Nothing"/> if the select is not custom or this is not a subquery.</returns>
+    Public Property NonModelEntity() As NonModelEntity
+      Get
+        Return m_NonModelEntity
+      End Get
+      Set(ByVal value As NonModelEntity)
+        m_NonModelEntity = value
+      End Set
+    End Property
+
     ''' <summary>
     ''' Creates new instance of <see cref="SelectSqlModel"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="model"></param>
-    ''' <param name="mainEntityType"></param>
-    Public Sub New(<DisallowNull> model As Model, <DisallowNull> mainEntityType As Type)
-      MyBase.New(model, mainEntityType)
+    ''' <param name="mainEntity"></param>
+    Public Sub New(<DisallowNull> model As Model, <DisallowNull> mainEntity As Entity)
+      MyBase.New(model, mainEntity)
     End Sub
 
     ''' <summary>
     ''' Adds joined table.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <typeparam name="T"></typeparam>
+    ''' <param name="entity"></param>
     ''' <param name="relationship"></param>
     ''' <returns></returns>
-    Public Function AddJoin(Of T)(Optional relationship As SqlEntityRelationship = Nothing) As SqlEntity
-      Return AddEntity(GetType(T), relationship, False)
+    Public Function AddJoin(entity As Entity, Optional relationship As SqlEntityRelationship = Nothing) As SqlEntityBase
+      Return AddEntity(entity, relationship, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds joined table.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="entity"></param>
+    ''' <param name="relationship"></param>
+    ''' <returns></returns>
+    Public Function AddJoin(entity As NonModelEntity, Optional relationship As SqlEntityRelationship = Nothing) As SqlEntityBase
+      Return AddEntity(entity, relationship, False)
     End Function
 
     ''' <summary>
     ''' Adds ignored joined table.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="entityType"></param>
+    ''' <param name="entity"></param>
     ''' <returns></returns>
-    Public Function AddIgnoredJoin(<DisallowNull> entityType As Type) As SqlEntity
-      Return AddEntity(entityType, Nothing, True)
+    Public Function AddIgnoredJoin(<DisallowNull> entity As Entity) As SqlEntityBase
+      Return AddEntity(entity, Nothing, True)
     End Function
 
     ''' <summary>

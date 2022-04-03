@@ -58,7 +58,7 @@ Namespace Expressions.Builders
     ''' <param name="tableNameOverride"></param>
     Public Sub New(<DisallowNull> context As DbContext, <DisallowNull> mainEntityType As Type, tableNameOverride As String)
       MyBase.New(context)
-      m_Model = New UpdateSqlModel(Me.DbContext.Model, mainEntityType)
+      m_Model = New UpdateSqlModel(Me.DbContext.Model, GetMainEntity(mainEntityType))
       m_TableNameOverride = tableNameOverride
       m_TableHints = Nothing
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)

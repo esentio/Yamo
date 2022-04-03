@@ -16,7 +16,7 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property DeclaringEntity As SqlEntity
+    Public ReadOnly Property DeclaringEntity As EntityBasedSqlEntity
 
     ''' <summary>
     ''' Gets relationship navigation.<br/>
@@ -58,7 +58,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="declaringEntity"></param>
     ''' <param name="relationshipNavigation"></param>
-    Sub New(<DisallowNull> declaringEntity As SqlEntity, <DisallowNull> relationshipNavigation As RelationshipNavigation)
+    Sub New(<DisallowNull> declaringEntity As EntityBasedSqlEntity, <DisallowNull> relationshipNavigation As RelationshipNavigation)
       Me.DeclaringEntity = declaringEntity
       Me.RelationshipNavigation = relationshipNavigation
 

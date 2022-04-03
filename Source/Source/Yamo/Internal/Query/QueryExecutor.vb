@@ -679,7 +679,7 @@ Namespace Internal.Query
           Throw New Exception($"Unable to create result factory for type '{resultType}'. Only value tuples and model entities are supported.")
         End If
 
-        Return New EntitySqlResult(New SqlEntity(entity))
+        Return New EntitySqlResult(New EntityBasedSqlEntity(entity))
       Else
         Return Nothing
       End If
@@ -697,7 +697,7 @@ Namespace Internal.Query
         Dim entity = model.TryGetEntity(type)
 
         If entity IsNot Nothing Then
-          Return New EntitySqlResult(New SqlEntity(entity))
+          Return New EntitySqlResult(New EntityBasedSqlEntity(entity))
         End If
       End If
 

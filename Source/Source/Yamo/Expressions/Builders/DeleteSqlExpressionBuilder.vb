@@ -64,7 +64,7 @@ Namespace Expressions.Builders
     ''' <param name="tableNameOverride"></param>
     Public Sub New(<DisallowNull> context As DbContext, <DisallowNull> mainEntityType As Type, softDelete As Boolean, tableNameOverride As String)
       MyBase.New(context)
-      m_Model = New DeleteSqlModel(Me.DbContext.Model, mainEntityType)
+      m_Model = New DeleteSqlModel(Me.DbContext.Model, GetMainEntity(mainEntityType))
       m_SoftDelete = softDelete
       m_TableNameOverride = tableNameOverride
       m_TableHints = Nothing

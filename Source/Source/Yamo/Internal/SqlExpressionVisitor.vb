@@ -103,6 +103,11 @@ Namespace Internal
     Private m_CustomSqlResultItemIndex As Int32
 
     ''' <summary>
+    ''' Stores non model entity.
+    ''' </summary>
+    Private m_NonModelEntity As NonModelEntity
+
+    ''' <summary>
     ''' Stores stack of nodes.
     ''' </summary>
     Private m_Stack As Stack(Of NodeInfo)
@@ -143,6 +148,7 @@ Namespace Internal
       m_CurrentLikeParameterFormat = Nothing
       m_CustomSqlResult = Nothing
       m_CustomSqlResultItemIndex = 0
+      m_NonModelEntity = Nothing
       m_Stack.Clear()
     End Sub
 
@@ -180,8 +186,9 @@ Namespace Internal
     ''' <param name="expression"></param>
     ''' <param name="entityIndexHints"><see langword="Nothing"/> for <see cref="ExpressionParametersType.IJoin"/> and not <see langword="Nothing"/> for <see cref="ExpressionParametersType.Entities"/>.</param>
     ''' <param name="parameterIndex"></param>
+    ''' <param name="createNonModelEntity"></param>
     ''' <returns></returns>
-    Public Function TranslateCustomSelect(<DisallowNull> expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32) As (SqlString As SqlString, SqlResult As SqlResultBase)
+    Public Function TranslateCustomSelect(<DisallowNull> expression As Expression, entityIndexHints As Int32(), parameterIndex As Int32, createNonModelEntity As Boolean) As (SqlString As SqlString, SqlResult As SqlResultBase, NonModelEntity As NonModelEntity)
       If TypeOf expression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -190,11 +197,15 @@ Namespace Internal
 
       Initialize(lambda, ExpressionTranslateMode.CustomSelect, entityIndexHints, parameterIndex, -1, True, True)
 
+      If createNonModelEntity Then
+        m_NonModelEntity = New NonModelEntity(lambda.ReturnType)
+      End If
+
       VisitInCustomSelectOrIncludeMode(lambda.Body)
 
       m_ExpressionParameters = Nothing
 
-      Return (New SqlString(m_Sql.ToString(), m_Parameters), m_CustomSqlResult)
+      Return (New SqlString(m_Sql.ToString(), m_Parameters), m_CustomSqlResult, m_NonModelEntity)
     End Function
 
     ''' <summary>
@@ -963,7 +974,7 @@ Namespace Internal
         m_Sql.Append(", ")
       End If
 
-      Dim resultItems = ProcessItemsInCustomSelectOrIncludeMode(items, isInCustomSelectMode)
+      Dim resultItems = ProcessItemsInCustomSelectOrIncludeMode(items, isInCustomSelectMode, NewExpressionType.AdHoc, True, members)
 
       adHocTypeSqlResult.SetMembers(members, resultItems)
 
@@ -983,11 +994,11 @@ Namespace Internal
         m_Sql.Append(Evaluate(node.Arguments(0)))
         Return node
       ElseIf Helpers.Types.IsValueTuple(type) Then
-        Return VisitNewValueTupleOrAnonymousOrAdHocType(node, NewExpressionType.ValueTuple)
+        Return VisitNewValueTupleOrAnonymousOrAdHocType(node, NewExpressionType.ValueTuple, True)
       ElseIf Helpers.Types.IsAnonymousType(type) Then
-        Return VisitNewValueTupleOrAnonymousOrAdHocType(node, NewExpressionType.Anonymous)
+        Return VisitNewValueTupleOrAnonymousOrAdHocType(node, NewExpressionType.Anonymous, True)
       Else
-        Return VisitNewValueTupleOrAnonymousOrAdHocType(node, NewExpressionType.AdHoc)
+        Return VisitNewValueTupleOrAnonymousOrAdHocType(node, NewExpressionType.AdHoc, False)
       End If
     End Function
 
@@ -996,8 +1007,9 @@ Namespace Internal
     ''' </summary>
     ''' <param name="node"></param>
     ''' <param name="newType"></param>
+    ''' <param name="canUseMembersForNonModelEntity"></param>
     ''' <returns></returns>
-    Private Function VisitNewValueTupleOrAnonymousOrAdHocType(node As NewExpression, newType As NewExpressionType) As Expression
+    Private Function VisitNewValueTupleOrAnonymousOrAdHocType(node As NewExpression, newType As NewExpressionType, canUseMembersForNonModelEntity As Boolean) As Expression
       If Helpers.Types.IsNullable(node.Type) Then
         m_Stack.Peek().IsNullableConstructor = True
         Return Visit(node.Arguments(0))
@@ -1018,7 +1030,7 @@ Namespace Internal
       Dim isInIncludeMode = m_Mode = ExpressionTranslateMode.Include
 
       If isInCustomSelectMode OrElse isInIncludeMode Then
-        Dim items = ProcessItemsInCustomSelectOrIncludeMode(args, isInCustomSelectMode)
+        Dim items = ProcessItemsInCustomSelectOrIncludeMode(args, isInCustomSelectMode, newType, canUseMembersForNonModelEntity, node.Members)
 
         If isValueTuple Then
           Dim isNullable = IsNestedConstructorOfNullableValueTupleTypeSqlResult()
@@ -1063,8 +1075,11 @@ Namespace Internal
     ''' </summary>
     ''' <param name="items"></param>
     ''' <param name="isInCustomSelectMode"></param>
+    ''' <param name="newType"></param>
+    ''' <param name="canUseMembersForNonModelEntity"></param>
+    ''' <param name="members"></param>
     ''' <returns></returns>
-    Private Function ProcessItemsInCustomSelectOrIncludeMode(items As IReadOnlyList(Of Expression), isInCustomSelectMode As Boolean) As SqlResultBase()
+    Private Function ProcessItemsInCustomSelectOrIncludeMode(items As IReadOnlyList(Of Expression), isInCustomSelectMode As Boolean, newType As NewExpressionType, canUseMembersForNonModelEntity As Boolean, members As IReadOnlyList(Of MemberInfo)) As SqlResultBase()
       Dim count = items.Count
 
       Dim resultItems = New SqlResultBase(count - 1) {}
@@ -1074,7 +1089,7 @@ Namespace Internal
       For i = 0 To count - 1
         Dim arg = items(i)
         Dim type = arg.Type
-        Dim entity = entities.FirstOrDefault(Function(x) x.Entity.EntityType = type)
+        Dim entity = entities.OfType(Of EntityBasedSqlEntity).FirstOrDefault(Function(x) x.EntityType = type)
         Dim isEntity = entity IsNot Nothing
         Dim columnIndex = m_CustomSqlResultItemIndex
 
@@ -1086,8 +1101,13 @@ Namespace Internal
           resultItems(i) = New EntitySqlResult(entity)
         Else
           Dim columnAlias = If(isInCustomSelectMode, CreateColumnAlias(columnIndex), CreateIncludeColumnAlias(columnIndex))
-          m_Sql.Append(" ")
-          m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
+
+          If m_NonModelEntity Is Nothing OrElse Not canUseMembersForNonModelEntity Then
+            AppendColumnAliasWithSpace(columnAlias)
+          Else
+            AppendColumnAliasWithSpace(columnAlias, newType, members, i)
+          End If
+
           resultItems(i) = New ScalarValueSqlResult(type)
         End If
 
@@ -1184,19 +1204,22 @@ Namespace Internal
       Visit(node)
 
       Dim type = node.Type
-      Dim entity = m_Model.GetEntities().FirstOrDefault(Function(x) x.Entity.EntityType = type)
+      Dim entity = m_Model.GetEntities().FirstOrDefault(Function(x) x.EntityType = type)
 
       Dim isInCustomSelectMode = m_Mode = ExpressionTranslateMode.CustomSelect
 
       If entity Is Nothing Then
         ' simple scalar value
         Dim columnAlias = If(isInCustomSelectMode, CreateColumnAlias(0), CreateIncludeColumnAlias(0))
-        m_Sql.Append(" ")
-        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
+        AppendColumnAliasWithSpace(columnAlias)
         m_CustomSqlResult = New ScalarValueSqlResult(type)
       Else
         ' whole entity
-        m_CustomSqlResult = New EntitySqlResult(entity)
+        If TypeOf entity IsNot EntityBasedSqlEntity Then
+          Throw New NotSupportedException($"Unsupported type '{type}' in custom select.")
+        End If
+
+        m_CustomSqlResult = New EntitySqlResult(DirectCast(entity, EntityBasedSqlEntity))
       End If
 
       Return node
@@ -1374,32 +1397,72 @@ Namespace Internal
     End Sub
 
     ''' <summary>
+    ''' Appends column alias.
+    ''' </summary>
+    ''' <param name="columnAlias"></param>
+    Private Sub AppendColumnAliasWithSpace(columnAlias As String)
+      m_Sql.Append(" ")
+      m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
+
+      If m_NonModelEntity IsNot Nothing Then
+        m_NonModelEntity.AddColumn(columnAlias)
+      End If
+    End Sub
+
+    ''' <summary>
+    ''' Appends column alias.
+    ''' </summary>
+    ''' <param name="columnAlias"></param>
+    ''' <param name="newType"></param>
+    ''' <param name="members"></param>
+    ''' <param name="memberIndex"></param>
+    Private Sub AppendColumnAliasWithSpace(columnAlias As String, newType As NewExpressionType, members As IReadOnlyList(Of MemberInfo), memberIndex As Int32)
+      m_Sql.Append(" ")
+      m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
+
+      If m_NonModelEntity IsNot Nothing Then
+        Dim propertyName As String
+
+        If newType = NewExpressionType.ValueTuple Then
+          ' NOTE: for large value tuples, this won't work properly, because of nesting.
+          ' We could throw an exception here. But that would be limiting. Returning such large value tuple
+          ' will work and so will accessing Item1 - Item7 members later in the query. Problem only occurs
+          ' when nested member (wrongly translated to Item8+) will be accessed in the expression later.
+          ' Then, there will be an exception.
+          propertyName = "Item" & (memberIndex + 1).ToString(Globalization.CultureInfo.InvariantCulture)
+        Else
+          propertyName = members(memberIndex).Name
+        End If
+
+        m_NonModelEntity.AddColumn(propertyName, columnAlias)
+      End If
+    End Sub
+
+    ''' <summary>
     ''' Appends entity member access.
     ''' </summary>
     ''' <param name="entityIndex"></param>
     ''' <param name="propertyName"></param>
     Private Sub AppendEntityMemberAccess(entityIndex As Int32, propertyName As String)
       Dim entity = m_Model.GetEntity(entityIndex)
-      Dim isIgnored = entity.IsIgnored
-      Dim prop = entity.Entity.GetProperty(propertyName)
 
-      If isIgnored Then
+      If entity.IsIgnored Then
         ' NOTE: currently, we append NULL if table is ignored. This could be solved better for SELECT clauses.
         ' We could omit column in SQL and instead of using reader, set value directly to Nothing (default).
         m_Sql.Append("NULL")
       ElseIf Not m_UseTableNamesOrAliases Then
-        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, prop.ColumnName)
+        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.GetColumnName(propertyName))
       ElseIf m_UseAliases Then
-        ' TODO: SIP - implement subquery - simply just use entity?
-        Dim tableAlias = m_Model.GetEntity(entity.Index).TableAlias
-        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, tableAlias)
+        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.TableAlias)
         m_Sql.Append(".")
-        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, prop.ColumnName)
+        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.GetColumnName(propertyName))
       Else
+        ' TODO: SIP - implement subquery
+        Throw New NotSupportedException()
         ' NOTE: this is not used right now
-        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.Entity.TableName, entity.Entity.Schema)
-        m_Sql.Append(".")
-        m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, prop.ColumnName)
+        'm_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.Entity.TableName, entity.Entity.Schema)
+        'm_Sql.Append(".")
+        'm_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.GetColumnName(propertyName))
       End If
     End Sub
 
@@ -1421,12 +1484,12 @@ Namespace Internal
       Dim isInIncludeMode = m_Mode = ExpressionTranslateMode.Include
 
       Dim isIgnored = entity.IsIgnored
-      Dim properties = entity.Entity.GetProperties()
+      Dim columnNames = entity.GetColumnNames()
       Dim columnCount = entity.GetColumnCount(isInIncludeMode)
       Dim columnIndex = 0
 
-      For propertyIndex = 0 To properties.Count - 1
-        If entity.IncludedColumns(propertyIndex) Then
+      For i = 0 To columnNames.Count - 1
+        If entity.IncludedColumns(i) Then
           If isIgnored Then
             ' NOTE: currently, we append NULL if table is ignored. This could be solved better for SELECT clauses.
             ' We could omit columns in SQL and instead of using entity reader, set value directly to Nothing (default).
@@ -1434,17 +1497,15 @@ Namespace Internal
           Else
             m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.TableAlias)
             m_Sql.Append(".")
-            m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, properties(propertyIndex).ColumnName)
+            m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnNames(i))
           End If
 
           If isInCustomSelectMode Then
             Dim columnAlias = CreateColumnAlias(m_CustomSqlResultItemIndex, columnIndex)
-            m_Sql.Append(" ")
-            m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
+            AppendColumnAliasWithSpace(columnAlias)
           ElseIf isInIncludeMode Then
             Dim columnAlias = CreateIncludeColumnAlias(m_CustomSqlResultItemIndex, columnIndex)
-            m_Sql.Append(" ")
-            m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnAlias)
+            AppendColumnAliasWithSpace(columnAlias)
           End If
 
           columnIndex += 1

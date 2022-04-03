@@ -110,7 +110,7 @@ Namespace Metadata
     ''' </summary>
     ''' <returns></returns>
     Public Function GetKeyProperties() As IReadOnlyList(Of [Property])
-      Return m_Properties.Where(Function(t) t.IsKey).ToArray()
+      Return m_Properties.Where(Function(x) x.IsKey).ToArray()
     End Function
 
     ''' <summary>
@@ -118,7 +118,7 @@ Namespace Metadata
     ''' </summary>
     ''' <returns></returns>
     Public Function GetNonKeyProperties() As IReadOnlyList(Of [Property])
-      Return m_Properties.Where(Function(t) Not t.IsKey).ToArray()
+      Return m_Properties.Where(Function(x) Not x.IsKey).ToArray()
     End Function
 
     ''' <summary>
@@ -126,7 +126,7 @@ Namespace Metadata
     ''' </summary>
     ''' <returns></returns>
     Public Function GetSetOnInsertProperties() As IReadOnlyList(Of [Property])
-      Return m_Properties.Where(Function(t) t.SetOnInsert).ToArray()
+      Return m_Properties.Where(Function(x) x.SetOnInsert).ToArray()
     End Function
 
     ''' <summary>
@@ -134,7 +134,7 @@ Namespace Metadata
     ''' </summary>
     ''' <returns></returns>
     Public Function GetSetOnUpdateProperties() As IReadOnlyList(Of [Property])
-      Return m_Properties.Where(Function(t) t.SetOnUpdate).ToArray()
+      Return m_Properties.Where(Function(x) x.SetOnUpdate).ToArray()
     End Function
 
     ''' <summary>
@@ -142,7 +142,7 @@ Namespace Metadata
     ''' </summary>
     ''' <returns></returns>
     Public Function GetSetOnDeleteProperties() As IReadOnlyList(Of [Property])
-      Return m_Properties.Where(Function(t) t.SetOnDelete).ToArray()
+      Return m_Properties.Where(Function(x) x.SetOnDelete).ToArray()
     End Function
 
     ''' <summary>
@@ -150,7 +150,7 @@ Namespace Metadata
     ''' </summary>
     ''' <returns></returns>
     Public Function GetIdentityOrDefaultValueProperties() As IReadOnlyList(Of [Property])
-      Return m_Properties.Where(Function(t) t.IsIdentity OrElse t.HasDefaultValue).ToArray()
+      Return m_Properties.Where(Function(x) x.IsIdentity OrElse x.HasDefaultValue).ToArray()
     End Function
 
     ''' <summary>
@@ -166,7 +166,7 @@ Namespace Metadata
     ''' </summary>
     ''' <returns></returns>
     Public Function GetKeyPropertiesCount() As Int32
-      Return m_Properties.Where(Function(p) p.IsKey).Count()
+      Return m_Properties.Where(Function(x) x.IsKey).Count()
     End Function
 
     ''' <summary>
@@ -218,7 +218,7 @@ Namespace Metadata
     ''' <param name="relatedEntityType"></param>
     ''' <returns></returns>
     Public Function GetRelationshipNavigations(<DisallowNull> relatedEntityType As Type) As IReadOnlyList(Of RelationshipNavigation)
-      Return m_RelationshipNavigations.Values.Where(Function(r) r.RelatedEntityType = relatedEntityType).ToArray()
+      Return m_RelationshipNavigations.Values.Where(Function(x) x.RelatedEntityType = relatedEntityType).ToArray()
     End Function
 
     ''' <summary>

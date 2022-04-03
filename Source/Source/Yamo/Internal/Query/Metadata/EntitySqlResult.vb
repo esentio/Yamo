@@ -14,14 +14,14 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property Entity As SqlEntity
+    Public ReadOnly Property Entity As EntityBasedSqlEntity
 
     ''' <summary>
     ''' Creates new instance of <see cref="EntitySqlResult"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="entity"></param>
-    Public Sub New(<DisallowNull> entity As SqlEntity)
+    Public Sub New(<DisallowNull> entity As EntityBasedSqlEntity)
       MyBase.New(entity.Entity.EntityType)
       Me.Entity = entity
     End Sub

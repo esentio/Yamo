@@ -17,7 +17,7 @@ Namespace Internal.Query
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property Entity As SqlEntity
+    Public ReadOnly Property Entity As EntityBasedSqlEntity
 
     ''' <summary>
     ''' Gets entity reader.<br/>
