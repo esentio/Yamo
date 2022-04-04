@@ -4,17 +4,17 @@ Imports System.Diagnostics.CodeAnalysis
 Namespace Internal.Query
 
   ''' <summary>
-  ''' Represents reader data for multiple entity values.<br/>
+  ''' Represents reader data for multiple SQL entity values.<br/>
   ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
   ''' </summary>
-  Public Class EntitySqlResultReaderDataCollection
+  Public Class AutoModeSqlResultReaderDataCollection
 
     ''' <summary>
     ''' Gets reader data of entities.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property Items As EntitySqlResultReaderData()
+    Public ReadOnly Property Items As AutoModeSqlResultReaderData()
 
     ''' <summary>
     ''' Gets count of entities.<br/>
@@ -36,11 +36,11 @@ Namespace Internal.Query
     Private m_ChainIndexes As List(Of Int32)() ' probably change to something like Boolean() in the future (list is used just for convenience in GetChainKey method - once better hashing API is avaliable, refactor this!)
 
     ''' <summary>
-    ''' Creates new instance of <see cref="EntitySqlResultReaderDataCollection"/>.<br/>
+    ''' Creates new instance of <see cref="AutoModeSqlResultReaderDataCollection"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="items"></param>
-    Public Sub New(<DisallowNull> items As EntitySqlResultReaderData())
+    Public Sub New(<DisallowNull> items As AutoModeSqlResultReaderData())
       Me.Items = items
       Me.Count = items.Length
       Me.HasCollectionNavigation = items.Any(Function(o) o.HasCollectionNavigation)
@@ -160,12 +160,16 @@ Namespace Internal.Query
       For i = 0 To Me.Count - 1
         Dim readerData = Me.Items(i)
 
-        If readerData.Entity.IsExcludedOrIgnored Then
-          pks(i) = Nothing
-        ElseIf readerData.ContainsPKReader(dataReader, readerData.ReaderIndex, readerData.PKOffsets) Then
-          pks(i) = readerData.PKReader(dataReader, readerData.ReaderIndex, readerData.PKOffsets)
-        Else
-          pks(i) = Nothing
+        pks(i) = Nothing
+
+        If Not readerData.Entity.IsExcludedOrIgnored Then
+          If TypeOf readerData.ReaderData Is EntitySqlResultReaderData Then
+            Dim entityReaderData = DirectCast(readerData.ReaderData, EntitySqlResultReaderData)
+
+            If entityReaderData.ContainsPKReader(dataReader, entityReaderData.ReaderIndex, entityReaderData.PKOffsets) Then
+              pks(i) = entityReaderData.PKReader(dataReader, entityReaderData.ReaderIndex, entityReaderData.PKOffsets)
+            End If
+          End If
         End If
       Next
     End Sub

@@ -17,6 +17,13 @@ Namespace Internal.Query.Metadata
     Public ReadOnly Property EntityType As Type
 
     ''' <summary>
+    ''' Gets SQL result.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns><see langword="Nothing"/> may be returned if object is not fully initialized yet.</returns>
+    Public ReadOnly Property SqlResult As <MaybeNull> SqlResultBase
+
+    ''' <summary>
     ''' Stores column names by their corresponding property names.
     ''' </summary>
     Private m_ColumnsDictionary As Dictionary(Of String, String)
@@ -71,7 +78,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="propertyName"></param>
     ''' <param name="columnName"></param>
-    Public Sub AddColumn(propertyName As String, columnName As String)
+    Public Sub AddColumn(<DisallowNull> propertyName As String, <DisallowNull> columnName As String)
       m_ColumnsDictionary(propertyName) = columnName
       m_Columns.Add(columnName)
     End Sub
@@ -81,8 +88,17 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="columnName"></param>
-    Public Sub AddColumn(columnName As String)
+    Public Sub AddColumn(<DisallowNull> columnName As String)
       m_Columns.Add(columnName)
+    End Sub
+
+    ''' <summary>
+    ''' Sets SQL result.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="sqlResult"></param>
+    Public Sub SetSqlResult(<DisallowNull> sqlResult As SqlResultBase)
+      Me._SqlResult = sqlResult
     End Sub
 
   End Class

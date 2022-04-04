@@ -107,9 +107,7 @@ Namespace Tests
 
         Assert.AreEqual(2, result.Count)
         Assert.AreEqual(article3, result(0))
-        Assert.AreEqual(label3En, result(0).Label)
         Assert.AreEqual(article1, result(1))
-        Assert.AreEqual(label1En, result(1).Label)
       End Using
     End Sub
 
@@ -158,9 +156,7 @@ Namespace Tests
 
         Assert.AreEqual(2, result.Count)
         Assert.AreEqual(article3, result(0))
-        Assert.AreEqual(label3En, result(0).Label)
         Assert.AreEqual(article1, result(1))
-        Assert.AreEqual(label1En, result(1).Label)
       End Using
     End Sub
 
@@ -177,7 +173,6 @@ Namespace Tests
 
       InsertItems(article1, article2, article3, label1En, label2De, label3En, label3De)
 
-      ' TODO: SIP - implement subquery - use also constructor arguments
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).
                         Join(Function(c)
@@ -210,9 +205,7 @@ Namespace Tests
 
         Assert.AreEqual(2, result.Count)
         Assert.AreEqual(article3, result(0))
-        Assert.AreEqual(label3En, result(0).Label)
         Assert.AreEqual(article1, result(1))
-        Assert.AreEqual(label1En, result(1).Label)
       End Using
 
       ' use property with unknown column mapping

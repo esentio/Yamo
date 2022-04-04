@@ -10,18 +10,18 @@ Namespace Internal.Query.Metadata
   Public Class SelectSqlModel
     Inherits SqlModelBase
 
-    Private m_CustomSqlResult As SqlResultBase
+    Private m_SqlResult As SqlResultBase
     ''' <summary>
-    ''' Gets or sets custom SQL result.<br/>
+    ''' Gets or sets SQL result.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <returns>Custom SQL result or <see langword="Nothing"/> if the select is not custom.</returns>
-    Public Property CustomSqlResult() As <MaybeNull> SqlResultBase
+    ''' <returns></returns>
+    Public Property SqlResult() As <MaybeNull> SqlResultBase
       Get
-        Return m_CustomSqlResult
+        Return m_SqlResult
       End Get
       Set(<DisallowNull> ByVal value As SqlResultBase)
-        m_CustomSqlResult = value
+        m_SqlResult = value
       End Set
     End Property
 

@@ -205,6 +205,10 @@ Namespace Internal
 
       m_ExpressionParameters = Nothing
 
+      If createNonModelEntity Then
+        m_NonModelEntity.SetSqlResult(m_CustomSqlResult)
+      End If
+
       Return (New SqlString(m_Sql.ToString(), m_Parameters), m_CustomSqlResult, m_NonModelEntity)
     End Function
 

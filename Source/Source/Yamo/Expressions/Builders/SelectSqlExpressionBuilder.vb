@@ -716,6 +716,8 @@ Namespace Expressions.Builders
           End If
         Next
       End If
+
+      m_Model.SqlResult = New EntitySqlResult(m_Model.MainEntity)
     End Sub
 
     ''' <summary>
@@ -830,7 +832,7 @@ Namespace Expressions.Builders
       Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, GetParameterIndex(), isSubquery)
       m_SelectExpression = result.SqlString.Sql
       m_Parameters.AddRange(result.SqlString.Parameters)
-      m_Model.CustomSqlResult = result.SqlResult
+      m_Model.SqlResult = result.SqlResult
       m_Model.NonModelEntity = result.NonModelEntity
     End Sub
 

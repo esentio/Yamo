@@ -18,7 +18,7 @@ Namespace Internal.Query
     End Sub
 
     ''' <summary>
-    ''' Creates new instance of <see cref="EntitySqlResultReaderDataCollection"/>.<br/>
+    ''' Creates new instance of <see cref="AutoModeSqlResultReaderDataCollection"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="dataReaderType"></param>
@@ -26,7 +26,7 @@ Namespace Internal.Query
     ''' <param name="model"></param>
     ''' <param name="entities"></param>
     ''' <returns></returns>
-    Public Shared Function Create(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> entities As SqlEntityBase()) As EntitySqlResultReaderDataCollection
+    Public Shared Function CreateAuto(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> entities As SqlEntityBase()) As AutoModeSqlResultReaderDataCollection
       Dim relationships = New(RelatedEntities As List(Of Int32), CollectionNavigations As List(Of CollectionNavigation))(entities.Length - 1) {}
 
       For index = 0 To entities.Length - 1
@@ -55,19 +55,31 @@ Namespace Internal.Query
         End If
       Next
 
-      Dim readerDataItems = New EntitySqlResultReaderData(entities.Length - 1) {}
+      Dim readerDataItems = New AutoModeSqlResultReaderData(entities.Length - 1) {}
       Dim readerIndex = 0
 
       For index = 0 To entities.Length - 1
         Dim entityReaderIndex = readerIndex
-        ' TODO: SIP - implement subquery - cast can be wrong
-        Dim entity = DirectCast(entities(index), EntityBasedSqlEntity)
-        Dim entityType = entity.Entity.EntityType
+        Dim entity = entities(index)
+        Dim entityType = entity.EntityType
 
-        Dim entityReader = EntityReaderCache.GetReader(dataReaderType, dialectProvider, model, entityType)
-        Dim containsPKReader = EntityReaderCache.GetContainsPKReader(dataReaderType, dialectProvider, model, entityType)
-        Dim pkOffsets = GetPKOffsets(entity)
-        Dim pkReader = EntityReaderCache.GetPKReader(dataReaderType, dialectProvider, model, entityType)
+        Dim readerData As ReaderDataBase
+
+        If TypeOf entity Is EntityBasedSqlEntity Then
+          Dim ebEntity = DirectCast(entity, EntityBasedSqlEntity)
+
+          Dim entityReader = EntityReaderCache.GetReader(dataReaderType, dialectProvider, model, entityType)
+          Dim containsPKReader = EntityReaderCache.GetContainsPKReader(dataReaderType, dialectProvider, model, entityType)
+          Dim pkOffsets = GetPKOffsets(ebEntity)
+          Dim pkReader = EntityReaderCache.GetPKReader(dataReaderType, dialectProvider, model, entityType)
+
+          readerData = New EntitySqlResultReaderData(New EntitySqlResult(ebEntity), entityReaderIndex, entityReader, containsPKReader, pkOffsets, pkReader)
+        Else
+          Dim nmEntity = DirectCast(entity, NonModelEntityBasedSqlEntity)
+
+          readerData = Create(dataReaderType, dialectProvider, model, nmEntity.Entity.SqlResult, entityReaderIndex)
+        End If
+
         Dim relatedEntities = relationships(index).RelatedEntities
 
         Dim collectionNavigations = relationships(index).CollectionNavigations
@@ -106,28 +118,37 @@ Namespace Internal.Query
           Next
         End If
 
-        Dim readerData = New EntitySqlResultReaderData(New EntitySqlResult(entity), entityReaderIndex, entityReader, containsPKReader, pkOffsets, pkReader, relatedEntities, collectionInitializers, relationshipSetter, includedSqlResultsReaderData)
-        readerDataItems(index) = readerData
+        Dim autoReaderData = New AutoModeSqlResultReaderData(entity, readerData, relatedEntities, collectionInitializers, relationshipSetter, includedSqlResultsReaderData)
+        readerDataItems(index) = autoReaderData
       Next
 
-      Return New EntitySqlResultReaderDataCollection(readerDataItems)
+      Return New AutoModeSqlResultReaderDataCollection(readerDataItems)
     End Function
 
     ''' <summary>
-    ''' Creates new instance of <see cref="EntitySqlResultReaderData"/>.<br/>
+    ''' Creates new instance of <see cref="AutoModeSqlResultReaderData"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="dataReaderType"></param>
     ''' <param name="dialectProvider"></param>
     ''' <param name="model"></param>
     ''' <param name="entity"></param>
+    ''' <param name="sqlResult"></param>
     ''' <returns></returns>
-    Public Shared Function Create(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> entity As EntityBasedSqlEntity) As EntitySqlResultReaderData
+    Public Shared Function CreateAuto(<DisallowNull> dataReaderType As Type, <DisallowNull> dialectProvider As SqlDialectProvider, <DisallowNull> model As Model, <DisallowNull> entity As SqlEntityBase, <DisallowNull> sqlResult As SqlResultBase) As AutoModeSqlResultReaderData
       Dim readerIndex = 0
       Dim entityReaderIndex = 0
-      Dim entityType = entity.Entity.EntityType
+      Dim entityType = entity.EntityType
 
-      Dim entityReader = EntityReaderCache.GetReader(dataReaderType, dialectProvider, model, entityType)
+      Dim readerData As ReaderDataBase
+
+      If TypeOf entity Is EntityBasedSqlEntity Then
+        Dim entityReader = EntityReaderCache.GetReader(dataReaderType, dialectProvider, model, entityType)
+        readerData = New EntitySqlResultReaderData(DirectCast(sqlResult, EntitySqlResult), entityReaderIndex, entityReader)
+      Else
+        Dim nmEntity = DirectCast(entity, NonModelEntityBasedSqlEntity)
+        readerData = Create(dataReaderType, dialectProvider, model, nmEntity.Entity.SqlResult, entityReaderIndex)
+      End If
 
       readerIndex += entity.GetColumnCount()
 
@@ -147,7 +168,7 @@ Namespace Internal.Query
         Next
       End If
 
-      Return New EntitySqlResultReaderData(New EntitySqlResult(entity), entityReaderIndex, entityReader, includedSqlResultsReaderData)
+      Return New AutoModeSqlResultReaderData(entity, readerData, includedSqlResultsReaderData)
     End Function
 
     ''' <summary>
