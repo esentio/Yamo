@@ -495,16 +495,7 @@ Namespace Expressions.Builders
         Throw New Exception("Cannot infer relationship. Use expression that contains relationship property only.")
       End If
 
-      If result.EntityNotEntityBased Then
-        Throw New Exception($"Cannot set relationship. Relationship is supported only for model entities. Type '{result.EntityType}' is not defined in the model.")
-      End If
-
       Dim lastEntity = m_Model.GetLastEntity()
-
-      If TypeOf lastEntity IsNot EntityBasedSqlEntity Then
-        Throw New Exception($"Cannot set relationship. Relationship is supported only for model entities. Type '{lastEntity.EntityType}' is not defined in the model.")
-      End If
-
       Dim declaringSqlEntity = result.Entity
       Dim propertyType = result.PropertyType
       Dim propertyName = result.PropertyName
@@ -740,11 +731,11 @@ Namespace Expressions.Builders
         Throw New Exception("Cannot infer excluded column. Use expression that contains entity property only.")
       End If
 
-      If result.EntityNotEntityBased Then
+      If TypeOf result.Entity IsNot EntityBasedSqlEntity Then
         Throw New Exception($"Cannot exclude column. Exclusion is supported only for model entities. Type '{result.EntityType}' is not defined in the model.")
       End If
 
-      Dim entity = result.Entity
+      Dim entity = DirectCast(result.Entity, EntityBasedSqlEntity)
       Dim prop = entity.Entity.GetProperty(result.PropertyName)
 
       If prop.IsKey Then
@@ -801,10 +792,6 @@ Namespace Expressions.Builders
         Throw New Exception("Cannot infer included column. Use expression that contains entity property only.")
       End If
 
-      If keyResult.EntityNotEntityBased Then
-        Throw New Exception($"Cannot include column. Inclusion is supported only for model entities. Type '{keyResult.EntityType}' is not defined in the model.")
-      End If
-
       Dim valueResult = m_Visitor.TranslateIncludeValueSelector(valueSelector, valueSelectorEntityIndexHints, GetParameterIndex(), m_IncludedExpressionsCount)
       m_Parameters.AddRange(valueResult.SqlString.Parameters)
       m_IncludedExpressionsCount += 1
@@ -852,20 +839,13 @@ Namespace Expressions.Builders
       Dim first = True
 
       For i = 0 To m_Model.GetEntityCount() - 1
-        Dim entityBase = m_Model.GetEntity(i)
+        Dim entity = m_Model.GetEntity(i)
 
-        If Not entityBase.IsExcludedOrIgnored Then
-          ' NOTE: all non model based entities should be excluded
-          If TypeOf entityBase IsNot EntityBasedSqlEntity Then
-            Throw New Exception("Model based entity is expected.")
-          End If
-
-          Dim entity = DirectCast(entityBase, EntityBasedSqlEntity)
-
+        If Not entity.IsExcludedOrIgnored Then
           Dim formattedTableAlias = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)
-          Dim properties = entity.Entity.GetProperties()
+          Dim columns = entity.GetColumnNames()
 
-          For j = 0 To properties.Count - 1
+          For j = 0 To columns.Count - 1
             If entity.IncludedColumns(j) Then
               If first Then
                 first = False
@@ -875,7 +855,7 @@ Namespace Expressions.Builders
 
               sql.Append(formattedTableAlias)
               sql.Append(".")
-              Me.DialectProvider.Formatter.AppendIdentifier(sql, properties(j).ColumnName)
+              Me.DialectProvider.Formatter.AppendIdentifier(sql, columns(j))
             End If
           Next
 
@@ -990,7 +970,7 @@ Namespace Expressions.Builders
     ''' <param name="propertyExpression"></param>
     ''' <param name="excludeLastModelEntity"></param>
     ''' <returns></returns>
-    Private Function GetEntityAndProperty(propertyExpression As Expression, Optional excludeLastModelEntity As Boolean = False) As (EntityType As Type, Entity As EntityBasedSqlEntity, PropertyType As Type, PropertyName As String, NotFound As Boolean, MultipleResults As Boolean, EntityNotEntityBased As Boolean)
+    Private Function GetEntityAndProperty(propertyExpression As Expression, Optional excludeLastModelEntity As Boolean = False) As (EntityType As Type, Entity As SqlEntityBase, PropertyType As Type, PropertyName As String, NotFound As Boolean, MultipleResults As Boolean)
       If TypeOf propertyExpression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -999,11 +979,10 @@ Namespace Expressions.Builders
 
       Dim parameterType = lambda.Parameters(0).Type
       Dim returnType = lambda.ReturnType
-      Dim entity As EntityBasedSqlEntity = Nothing
+      Dim entity As SqlEntityBase = Nothing
       Dim propertyName As String = Nothing
       Dim notFound = False
       Dim multipleResults = False
-      Dim entityNotEntityBased = False
 
       If GetType(IJoin).IsAssignableFrom(parameterType) Then
         If lambda.Body.NodeType = ExpressionType.MemberAccess Then
@@ -1015,14 +994,8 @@ Namespace Expressions.Builders
             If excludeLastModelEntity AndAlso index = m_Model.GetEntityCount() - 1 Then
               ' this should never happen, because we only use excludeLastModelEntity in SetLastJoinRelationship and there the IJoin doesn't contain the last entity
             Else
-              Dim entityItem = m_Model.GetEntity(index)
-
-              If TypeOf entityItem Is EntityBasedSqlEntity Then
-                entity = DirectCast(m_Model.GetEntity(index), EntityBasedSqlEntity)
-                propertyName = node.Member.Name
-              Else
-                entityNotEntityBased = True
-              End If
+              entity = m_Model.GetEntity(index)
+              propertyName = node.Member.Name
             End If
           End If
         End If
@@ -1038,14 +1011,10 @@ Namespace Expressions.Builders
 
           If item.EntityType Is parameterType Then
             If entity Is Nothing Then
-              If TypeOf item Is EntityBasedSqlEntity Then
-                entity = DirectCast(item, EntityBasedSqlEntity)
+              entity = item
 
-                If lambda.Body.NodeType = ExpressionType.MemberAccess Then
-                  propertyName = DirectCast(lambda.Body, MemberExpression).Member.Name
-                End If
-              Else
-                entityNotEntityBased = True
+              If lambda.Body.NodeType = ExpressionType.MemberAccess Then
+                propertyName = DirectCast(lambda.Body, MemberExpression).Member.Name
               End If
             Else
               entity = Nothing
@@ -1060,7 +1029,7 @@ Namespace Expressions.Builders
         End If
       End If
 
-      Return (parameterType, entity, returnType, propertyName, notFound, multipleResults, entityNotEntityBased)
+      Return (parameterType, entity, returnType, propertyName, notFound, multipleResults)
     End Function
 
   End Class

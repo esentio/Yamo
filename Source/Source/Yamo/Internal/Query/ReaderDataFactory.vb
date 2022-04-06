@@ -90,14 +90,14 @@ Namespace Internal.Query
           collectionInitializers = New Action(Of Object)(collectionNavigations.Count - 1) {}
 
           For i = 0 To collectionNavigations.Count - 1
-            collectionInitializers(i) = EntityMemberSetterCache.GetCollectionInitSetter(model, entityType, collectionNavigations(i))
+            collectionInitializers(i) = MemberSetterCache.GetCollectionInitSetter(model, entityType, collectionNavigations(i))
           Next
         End If
 
         Dim relationshipSetter As Action(Of Object, Object) = Nothing
 
         If entity.Relationship IsNot Nothing Then
-          relationshipSetter = EntityMemberSetterCache.GetSetter(model, entity.Relationship.DeclaringEntity.Entity.EntityType, entity.Relationship.RelationshipNavigation)
+          relationshipSetter = MemberSetterCache.GetSetter(model, entity.Relationship.DeclaringEntity.EntityType, entity.Relationship.RelationshipNavigation)
         End If
 
         readerIndex += entity.GetColumnCount()
@@ -111,7 +111,7 @@ Namespace Internal.Query
           ' LINQ not used for performance and allocation reasons
           For j = 0 To entityIncludedSqlResults.Count - 1
             Dim entityIncludedSqlResult = entityIncludedSqlResults(j)
-            Dim setter = EntityMemberSetterCache.GetSetter(model, entityType, entityIncludedSqlResult.PropertyName, entityIncludedSqlResult.Result.ResultType)
+            Dim setter = MemberSetterCache.GetSetter(model, entityType, entityIncludedSqlResult.PropertyName, entityIncludedSqlResult.Result.ResultType)
             Dim readData = Create(dataReaderType, dialectProvider, model, entityIncludedSqlResult.Result, readerIndex)
             includedSqlResultsReaderData(j) = New IncludedSqlResultReaderData(setter, readData)
             readerIndex += readData.GetColumnCount()
@@ -161,7 +161,7 @@ Namespace Internal.Query
         ' LINQ not used for performance and allocation reasons
         For j = 0 To entityIncludedSqlResults.Count - 1
           Dim entityIncludedSqlResult = entityIncludedSqlResults(j)
-          Dim setter = EntityMemberSetterCache.GetSetter(model, entityType, entityIncludedSqlResult.PropertyName, entityIncludedSqlResult.Result.ResultType)
+          Dim setter = MemberSetterCache.GetSetter(model, entityType, entityIncludedSqlResult.PropertyName, entityIncludedSqlResult.Result.ResultType)
           Dim readData = Create(dataReaderType, dialectProvider, model, entityIncludedSqlResult.Result, readerIndex)
           includedSqlResultsReaderData(j) = New IncludedSqlResultReaderData(setter, readData)
           readerIndex += readData.GetColumnCount()

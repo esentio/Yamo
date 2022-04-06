@@ -68,7 +68,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <returns></returns>
     Public Overrides Function GetColumnNames() As List(Of String)
-      ' TODO: SIP - implement subquery - use list?
+      ' TODO: SIP - implement subquery - use list? yield?
       Return Me.Entity.GetProperties().Select(Function(x) x.ColumnName).ToList()
     End Function
 
