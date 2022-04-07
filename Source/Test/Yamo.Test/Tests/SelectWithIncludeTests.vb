@@ -570,5 +570,231 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeValueFromSubqueryOfTypeEntity()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            SelectAll().
+                                            ToSubquery()
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.Description).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.IsNull(result(0).Label)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).LabelDescription)
+        Assert.IsNull(result(1).Label)
+      End Using
+
+      ' same as above, but include whole subquery result
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            SelectAll().
+                                            ToSubquery()
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.Description).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).LabelDescription)
+        Assert.IsNull(result(1).Label)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeValueFromSubqueryOfTypeAnonymousType()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}).
+                                            ToSubquery()
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.Description).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).LabelDescription)
+      End Using
+
+      ' same as above, but include whole subquery result
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}).
+                                            ToSubquery()
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        As(Function(x) x.Tag).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.Description).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Description = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).LabelDescription)
+        Assert.AreEqual(New With {Key .Id = 0, Key .Description = CType(Nothing, String)}, result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeValueFromSubqueryOfTypeValueTuple()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) (Id:=x.Id, Description:=x.Description)).
+                                            ToSubquery()
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.Description).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).LabelDescription)
+      End Using
+
+      ' same as above, but include whole subquery result
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) (Id:=x.Id, Description:=x.Description)).
+                                            ToSubquery()
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        As(Function(x) x.Tag).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.Description).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.AreEqual((label1En.Id, label1En.Description), result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).LabelDescription)
+        Assert.AreEqual(ValueTuple.Create(Of Int32, String)(0, Nothing), result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeValueFromSubqueryOfTypeAdHocType()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description}).
+                                            ToSubquery()
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.IntValue).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.StringValue1).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).LabelDescription)
+      End Using
+
+      ' same as above, but include whole subquery result
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description}).
+                                            ToSubquery()
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.IntValue).
+                        As(Function(x) x.Tag).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.StringValue1).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.AreEqual(New NonModelObject() With {.IntValue = label1En.Id, .StringValue1 = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).LabelDescription)
+        Assert.AreEqual(New NonModelObject() With {.IntValue = 0, .StringValue1 = Nothing}, result(1).Tag)
+      End Using
+    End Sub
+
   End Class
 End Namespace

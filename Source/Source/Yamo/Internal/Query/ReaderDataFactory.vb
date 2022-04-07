@@ -78,6 +78,8 @@ Namespace Internal.Query
           Dim nmEntity = DirectCast(entity, NonModelEntityBasedSqlEntity)
 
           readerData = Create(dataReaderType, dialectProvider, model, nmEntity.Entity.SqlResult, entityReaderIndex)
+
+          ' TODO: SIP - implement subquery - conditionally excluded unknown sql result
         End If
 
         Dim relatedEntities = relationships(index).RelatedEntities

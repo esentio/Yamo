@@ -385,9 +385,13 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="entityType"></param>
     Public Sub AddIgnoredJoin(entityType As Type)
-      ' TODO: SIP - implement subquery
-      Dim entity = Me.DbContext.Model.GetEntity(entityType)
-      m_Model.AddIgnoredJoin(entity)
+      Dim entity = Me.DbContext.Model.TryGetEntity(entityType)
+
+      If entity Is Nothing Then
+        m_Model.AddIgnoredJoin(New NonModelEntity(entityType))
+      Else
+        m_Model.AddIgnoredJoin(entity)
+      End If
     End Sub
 
     ''' <summary>

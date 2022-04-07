@@ -31,7 +31,7 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns>Non model entity or <see langword="Nothing"/> if the select is not custom or this is not a subquery.</returns>
-    Public Property NonModelEntity() As NonModelEntity
+    Public Property NonModelEntity() As <MaybeNull> NonModelEntity
       Get
         Return m_NonModelEntity
       End Get
@@ -57,7 +57,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="entity"></param>
     ''' <param name="relationship"></param>
     ''' <returns></returns>
-    Public Function AddJoin(entity As Entity, Optional relationship As SqlEntityRelationship = Nothing) As SqlEntityBase
+    Public Function AddJoin(<DisallowNull> entity As Entity, Optional relationship As SqlEntityRelationship = Nothing) As SqlEntityBase
       Return AddEntity(entity, relationship, False)
     End Function
 
@@ -68,7 +68,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="entity"></param>
     ''' <param name="relationship"></param>
     ''' <returns></returns>
-    Public Function AddJoin(entity As NonModelEntity, Optional relationship As SqlEntityRelationship = Nothing) As SqlEntityBase
+    Public Function AddJoin(<DisallowNull> entity As NonModelEntity, Optional relationship As SqlEntityRelationship = Nothing) As SqlEntityBase
       Return AddEntity(entity, relationship, False)
     End Function
 
@@ -79,6 +79,16 @@ Namespace Internal.Query.Metadata
     ''' <param name="entity"></param>
     ''' <returns></returns>
     Public Function AddIgnoredJoin(<DisallowNull> entity As Entity) As SqlEntityBase
+      Return AddEntity(entity, Nothing, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds ignored joined table.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="entity"></param>
+    ''' <returns></returns>
+    Public Function AddIgnoredJoin(<DisallowNull> entity As NonModelEntity) As SqlEntityBase
       Return AddEntity(entity, Nothing, True)
     End Function
 

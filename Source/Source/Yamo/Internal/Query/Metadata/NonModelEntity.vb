@@ -20,7 +20,7 @@ Namespace Internal.Query.Metadata
     ''' Gets SQL result.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <returns><see langword="Nothing"/> may be returned if object is not fully initialized yet.</returns>
+    ''' <returns><see langword="Nothing"/> may be returned if object is not fully initialized yet or it is unknown, because it has been conditionally excluded.</returns>
     Public ReadOnly Property SqlResult As <MaybeNull> SqlResultBase
 
     ''' <summary>
