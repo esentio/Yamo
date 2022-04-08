@@ -20,7 +20,7 @@ Namespace Internal.Query.Metadata
     ''' Gets SQL result.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <returns><see langword="Nothing"/> may be returned if object is not fully initialized yet or it is unknown, because it has been conditionally excluded.</returns>
+    ''' <returns><see langword="Nothing"/> may be returned if object is not fully initialized yet.</returns>
     Public ReadOnly Property SqlResult As <MaybeNull> SqlResultBase
 
     ''' <summary>
@@ -58,9 +58,10 @@ Namespace Internal.Query.Metadata
     ''' Gets column names.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
+    ''' <param name="index"></param>
     ''' <returns></returns>
-    Public Function GetColumnNames() As List(Of String)
-      Return m_Columns
+    Public Function GetColumnName(index As Int32) As String
+      Return m_Columns(index)
     End Function
 
     ''' <summary>

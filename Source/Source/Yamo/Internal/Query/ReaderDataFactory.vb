@@ -78,8 +78,6 @@ Namespace Internal.Query
           Dim nmEntity = DirectCast(entity, NonModelEntityBasedSqlEntity)
 
           readerData = Create(dataReaderType, dialectProvider, model, nmEntity.Entity.SqlResult, entityReaderIndex)
-
-          ' TODO: SIP - implement subquery - conditionally excluded unknown sql result
         End If
 
         Dim relatedEntities = relationships(index).RelatedEntities
@@ -207,6 +205,8 @@ Namespace Internal.Query
         Return Create(dataReaderType, dialectProvider, model, DirectCast(sqlResult, EntitySqlResult), readerIndex)
       ElseIf TypeOf sqlResult Is ScalarValueSqlResult Then
         Return Create(dataReaderType, dialectProvider, model, DirectCast(sqlResult, ScalarValueSqlResult), readerIndex)
+      ElseIf TypeOf sqlResult Is ExcludedUnknownSqlResult Then
+        Return Create(dataReaderType, dialectProvider, model, DirectCast(sqlResult, ExcludedUnknownSqlResult), readerIndex)
       Else
         Throw New NotSupportedException($"SQL result of type {sqlResult.GetType()} is not supported.")
       End If
@@ -284,6 +284,19 @@ Namespace Internal.Query
     Private Shared Function Create(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, sqlResult As ScalarValueSqlResult, readerIndex As Int32) As ScalarValueSqlResultReaderData
       Dim reader = ValueTypeReaderCache.GetReader(dataReaderType, dialectProvider, model, sqlResult.ResultType)
       Return New ScalarValueSqlResultReaderData(sqlResult, readerIndex, reader)
+    End Function
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="ExcludedUnknownSqlResultReaderData"/>.
+    ''' </summary>
+    ''' <param name="dataReaderType"></param>
+    ''' <param name="dialectProvider"></param>
+    ''' <param name="model"></param>
+    ''' <param name="sqlResult"></param>
+    ''' <param name="readerIndex"></param>
+    ''' <returns></returns>
+    Private Shared Function Create(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, sqlResult As ExcludedUnknownSqlResult, readerIndex As Int32) As ExcludedUnknownSqlResultReaderData
+      Return New ExcludedUnknownSqlResultReaderData(sqlResult, readerIndex)
     End Function
 
     ''' <summary>

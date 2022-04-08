@@ -58,7 +58,7 @@ Namespace Expressions.Builders
     ''' <param name="tableNameOverride"></param>
     Public Sub New(<DisallowNull> context As DbContext, <DisallowNull> mainEntityType As Type, tableNameOverride As String)
       MyBase.New(context)
-      m_Model = New UpdateSqlModel(Me.DbContext.Model, GetMainEntity(mainEntityType))
+      m_Model = New UpdateSqlModel(GetMainEntity(mainEntityType))
       m_TableNameOverride = tableNameOverride
       m_TableHints = Nothing
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
@@ -189,7 +189,7 @@ Namespace Expressions.Builders
         Dim properties = entity.GetSetOnUpdateProperties()
 
         If 0 < properties.Count Then
-          Dim getter = EntityAutoFieldsGetterCache.GetOnUpdateGetter(m_Model.Model, entity.EntityType)
+          Dim getter = EntityAutoFieldsGetterCache.GetOnUpdateGetter(Me.DbContext.Model, entity.EntityType)
           Dim values = getter(Me.DbContext)
 
           For i = 0 To properties.Count - 1

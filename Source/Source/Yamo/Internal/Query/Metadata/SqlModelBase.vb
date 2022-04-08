@@ -10,14 +10,6 @@ Namespace Internal.Query.Metadata
   Public MustInherit Class SqlModelBase
 
     ''' <summary>
-    ''' Gets model.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <returns></returns>
-    Public ReadOnly Property Model As Model
-    ' TODO: SIP - implement subquery - remove?
-
-    ''' <summary>
     ''' Gets main SQL entity.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -34,11 +26,8 @@ Namespace Internal.Query.Metadata
     ''' Creates new instance of <see cref="SqlModelBase"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="model"></param>
     ''' <param name="mainEntity"></param>
-    Public Sub New(<DisallowNull> model As Model, <DisallowNull> mainEntity As Entity)
-      ' TODO: SIP - implement subquery - remove model?
-      Me.Model = model
+    Public Sub New(<DisallowNull> mainEntity As Entity)
       Me.Entities = New List(Of SqlEntityBase)
 
       Dim tableAlias = "T0"

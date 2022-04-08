@@ -1461,8 +1461,7 @@ Namespace Internal
         m_Sql.Append(".")
         m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.GetColumnName(propertyName))
       Else
-        ' TODO: SIP - implement subquery
-        Throw New NotSupportedException()
+        Throw New InvalidOperationException("Calling AppendEntityMemberAccess is not supported in this context.")
         ' NOTE: this is not used right now
         'm_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.Entity.TableName, entity.Entity.Schema)
         'm_Sql.Append(".")
@@ -1488,11 +1487,10 @@ Namespace Internal
       Dim isInIncludeMode = m_Mode = ExpressionTranslateMode.Include
 
       Dim isIgnored = entity.IsIgnored
-      Dim columnNames = entity.GetColumnNames()
       Dim columnCount = entity.GetColumnCount(isInIncludeMode)
       Dim columnIndex = 0
 
-      For i = 0 To columnNames.Count - 1
+      For i = 0 To entity.IncludedColumns.Length - 1
         If entity.IncludedColumns(i) Then
           If isIgnored Then
             ' NOTE: currently, we append NULL if table is ignored. This could be solved better for SELECT clauses.
@@ -1501,7 +1499,7 @@ Namespace Internal
           Else
             m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.TableAlias)
             m_Sql.Append(".")
-            m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, columnNames(i))
+            m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.GetColumnName(i))
           End If
 
           If isInCustomSelectMode Then

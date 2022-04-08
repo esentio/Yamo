@@ -98,6 +98,15 @@ Namespace Metadata
     End Function
 
     ''' <summary>
+    ''' Gets property of this entity.
+    ''' </summary>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    Public Function GetProperty(index As Int32) As [Property]
+      Return m_Properties(index)
+    End Function
+
+    ''' <summary>
     ''' Gets all properties defined on this entity.
     ''' </summary>
     ''' <returns></returns>

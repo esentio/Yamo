@@ -54,12 +54,13 @@ Namespace Internal.Query.Metadata
     End Function
 
     ''' <summary>
-    ''' Gets column names.<br/>
+    ''' Gets column name.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
+    ''' <param name="index"></param>
     ''' <returns></returns>
-    Public Overrides Function GetColumnNames() As List(Of String)
-      Return Me.Entity.GetColumnNames()
+    Public Overrides Function GetColumnName(index As Int32) As String
+      Return Me.Entity.GetColumnName(index)
     End Function
 
   End Class

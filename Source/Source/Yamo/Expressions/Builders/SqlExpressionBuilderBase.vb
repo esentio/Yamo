@@ -43,7 +43,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="mainEntityType"></param>
     ''' <returns></returns>
-    Protected Function GetMainEntity(mainEntityType As Type) As Entity
+    Protected Function GetMainEntity(<DisallowNull> mainEntityType As Type) As Entity
       Dim entity = Me.DbContext.Model.TryGetEntity(mainEntityType)
 
       If entity Is Nothing Then

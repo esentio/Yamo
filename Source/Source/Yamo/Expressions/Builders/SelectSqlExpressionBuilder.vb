@@ -142,7 +142,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="mainEntityType"></param>
     Private Sub Initialize(<DisallowNull> mainEntityType As Type)
-      m_Model = New SelectSqlModel(Me.DbContext.Model, GetMainEntity(mainEntityType))
+      m_Model = New SelectSqlModel(GetMainEntity(mainEntityType))
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       ' lists are created only when necessary
       m_MainTableSourceExpression = Nothing
@@ -388,7 +388,9 @@ Namespace Expressions.Builders
       Dim entity = Me.DbContext.Model.TryGetEntity(entityType)
 
       If entity Is Nothing Then
-        m_Model.AddIgnoredJoin(New NonModelEntity(entityType))
+        Dim sqlEntity = New NonModelEntity(entityType)
+        sqlEntity.SetSqlResult(New ExcludedUnknownSqlResult(entityType))
+        m_Model.AddIgnoredJoin(sqlEntity)
       Else
         m_Model.AddIgnoredJoin(entity)
       End If
@@ -847,9 +849,8 @@ Namespace Expressions.Builders
 
         If Not entity.IsExcludedOrIgnored Then
           Dim formattedTableAlias = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)
-          Dim columns = entity.GetColumnNames()
 
-          For j = 0 To columns.Count - 1
+          For j = 0 To entity.IncludedColumns.Length - 1
             If entity.IncludedColumns(j) Then
               If first Then
                 first = False
@@ -859,7 +860,7 @@ Namespace Expressions.Builders
 
               sql.Append(formattedTableAlias)
               sql.Append(".")
-              Me.DialectProvider.Formatter.AppendIdentifier(sql, columns(j))
+              Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.GetColumnName(j))
             End If
           Next
 

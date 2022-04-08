@@ -141,11 +141,12 @@ Namespace Internal.Query.Metadata
     Public MustOverride Function GetColumnName(<DisallowNull> propertyName As String) As String
 
     ''' <summary>
-    ''' Gets column names.<br/>
+    ''' Gets column name.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
+    ''' <param name="index"></param>
     ''' <returns></returns>
-    Public MustOverride Function GetColumnNames() As List(Of String)
+    Public MustOverride Function GetColumnName(index As Int32) As String
 
     ''' <summary>
     ''' Gets count of included columns. Only columns representing entity properties are counted, not columns representing included result(s).<br/>
@@ -176,7 +177,6 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="includedSqlResult"></param>
     Public Sub AddIncludedSqlResult(<DisallowNull> includedSqlResult As SqlEntityIncludedResult)
-      ' TODO: SIP - implement subquery - only for entitybased?
       If Me.IncludedSqlResults Is Nothing Then
         Me._IncludedSqlResults = New List(Of SqlEntityIncludedResult)
       End If
