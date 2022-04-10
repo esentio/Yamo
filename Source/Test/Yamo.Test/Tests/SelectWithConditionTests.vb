@@ -1487,8 +1487,7 @@ Namespace Tests
                                   Return exp.Join(Function(c)
                                                     Return c.From(Of Label).
                                                              Where(Function(x) x.Language = English).
-                                                             Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}).
-                                                             ToSubquery()
+                                                             Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description})
                                                   End Function).
                                              On(Function(j) j.T1.Id = j.T2.Id)
                                 End Function
@@ -1516,8 +1515,7 @@ Namespace Tests
                                   Return exp.Join(Function(c)
                                                     Return c.From(Of Label).
                                                              Where(Function(x) x.Language = English).
-                                                             Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}).
-                                                             ToSubquery()
+                                                             Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description})
                                                   End Function).
                                              On(Function(j) j.T1.Id = j.T2.Id)
                                 End Function
@@ -1545,8 +1543,7 @@ Namespace Tests
                                   Return exp.Join(Function(c)
                                                     Return c.From(Of Label).
                                                              Where(Function(x) x.Language = English).
-                                                             Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}).
-                                                             ToSubquery()
+                                                             Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description})
                                                   End Function).
                                              On(Function(j) j.T1.Id = j.T2.Id)
                                 End Function,
@@ -1554,8 +1551,7 @@ Namespace Tests
                                      Return exp.Join(Function(c)
                                                        Return c.From(Of Label).
                                                                 Where(Function(x) x.Language = German).
-                                                                Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}).
-                                                                ToSubquery()
+                                                                Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description})
                                                      End Function).
                                              On(Function(j) j.T1.Id = j.T2.Id)
                                    End Function
@@ -1583,8 +1579,7 @@ Namespace Tests
                                   Return exp.Join(Function(c)
                                                     Return c.From(Of Label).
                                                              Where(Function(x) x.Language = English).
-                                                             Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}).
-                                                             ToSubquery()
+                                                             Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description})
                                                   End Function).
                                              On(Function(j) j.T1.Id = j.T2.Id)
                                 End Function,
@@ -1592,8 +1587,7 @@ Namespace Tests
                                      Return exp.Join(Function(c)
                                                        Return c.From(Of Label).
                                                                 Where(Function(x) x.Language = German).
-                                                                Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}).
-                                                                ToSubquery()
+                                                                Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description})
                                                      End Function).
                                              On(Function(j) j.T1.Id = j.T2.Id)
                                    End Function

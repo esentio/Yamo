@@ -8,7 +8,7 @@
 
       Dim generic = GetGenericName(1, entityCount = 1)
 
-      builder.Indent().AppendLine($"Public Function ToSubquery() As Subquery(Of {generic})").PushIndent()
+      builder.Indent().AppendLine($"Public Function ToSubquery() As Subquery(Of {generic}) Implements ISubqueryableSelectSqlExpression(Of {generic}).ToSubquery").PushIndent()
       builder.Indent().AppendLine($"Return Me.Builder.CreateSubquery(Of {generic})()").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub

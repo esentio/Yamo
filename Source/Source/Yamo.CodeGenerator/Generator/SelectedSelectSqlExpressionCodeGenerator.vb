@@ -27,8 +27,11 @@
       Dim typeParams = GetGenericNames(entityCount)
       AddComment(builder, comment, typeParams:=typeParams)
 
+      Dim generic = GetGenericName(1, entityCount = 1)
+
       builder.Indent().AppendLine($"Public Class {GetFullClassName(entityCount)}").PushIndent()
       builder.Indent().AppendLine("Inherits SelectSqlExpressionBase")
+      builder.Indent().AppendLine($"Implements ISubqueryableSelectSqlExpression(Of {generic})")
       builder.AppendLine()
       GenerateConstructor(builder, entityCount)
       builder.AppendLine()

@@ -227,14 +227,12 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="executor"></param>
     ''' <param name="joinType"></param>
     ''' <param name="tableSourceFactory"></param>
-    Public Sub AddJoin(Of TJoined)(joinType As JoinType, <DisallowNull> tableSourceFactory As Func(Of SubqueryContext, Subquery(Of TJoined)))
-      ' TODO: SIP - implement subquery
-
-      ' TODO: SIP - implement subquery - pass executor? change API?
-      Dim context = New SubqueryContext(Me.DbContext, Nothing, GetParameterIndex())
-      Dim subquery = tableSourceFactory.Invoke(context)
+    Public Sub AddJoin(Of TJoined)(<DisallowNull> executor As QueryExecutor, joinType As JoinType, <DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)))
+      Dim context = New SubqueryContext(Me.DbContext, executor, GetParameterIndex())
+      Dim subquery = tableSourceFactory.Invoke(context).ToSubquery()
       Dim sql = subquery.Query
 
       m_CurrentJoinInfo = New JoinInfo(joinType, "(" & sql.Sql & ")", sql.Model.NonModelEntity)

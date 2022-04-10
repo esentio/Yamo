@@ -27,8 +27,7 @@ Namespace Tests
                         Join(Of Label)(Function(c)
                                          Return c.From(Of Label).
                                                   Where(Function(x) x.Language = English).
-                                                  SelectAll().
-                                                  ToSubquery()
+                                                  SelectAll()
                                        End Function).
                         On(Function(a, l) a.Id = l.Id).
                         OrderBy(Function(l) l.Description).
@@ -47,8 +46,7 @@ Namespace Tests
                         Join(Of Label)(Function(c)
                                          Return c.From(Of Label).
                                                   Where(Function(x) x.Language = English).
-                                                  SelectAll().
-                                                  ToSubquery()
+                                                  SelectAll()
                                        End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T2.Description).
@@ -80,8 +78,7 @@ Namespace Tests
                         Join(Function(c)
                                Return c.From(Of Label).
                                         Where(Function(x) x.Language = English).
-                                        Select(Function(x) New With {.Id = x.Id, .Description = x.Description}).
-                                        ToSubquery()
+                                        Select(Function(x) New With {.Id = x.Id, .Description = x.Description})
                              End Function).
                         On(Function(a, l) a.Id = l.Id).
                         OrderBy(Function(l) l.Description).
@@ -98,8 +95,7 @@ Namespace Tests
                         Join(Function(c)
                                Return c.From(Of Label).
                                         Where(Function(x) x.Language = English).
-                                        Select(Function(x) New With {.Id = x.Id, .Description = x.Description}).
-                                        ToSubquery()
+                                        Select(Function(x) New With {.Id = x.Id, .Description = x.Description})
                              End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T2.Description).
@@ -129,8 +125,7 @@ Namespace Tests
                         Join(Function(c)
                                Return c.From(Of Label).
                                         Where(Function(x) x.Language = English).
-                                        Select(Function(x) (Id:=x.Id, Description:=x.Description)).
-                                        ToSubquery()
+                                        Select(Function(x) (Id:=x.Id, Description:=x.Description))
                              End Function).
                         On(Function(a, l) a.Id = l.Id).
                         OrderBy(Function(l) l.Description).
@@ -147,8 +142,7 @@ Namespace Tests
                         Join(Function(c)
                                Return c.From(Of Label).
                                         Where(Function(x) x.Language = English).
-                                        Select(Function(x) (Id:=x.Id, Description:=x.Description)).
-                                        ToSubquery()
+                                        Select(Function(x) (Id:=x.Id, Description:=x.Description))
                              End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T2.Description).
@@ -178,8 +172,7 @@ Namespace Tests
                         Join(Function(c)
                                Return c.From(Of Label).
                                         Where(Function(x) x.Language = English).
-                                        Select(Function(x) New NonModelObject(x.Language) With {.IntValue = x.Id, .StringValue1 = x.Description}).
-                                        ToSubquery()
+                                        Select(Function(x) New NonModelObject(x.Language) With {.IntValue = x.Id, .StringValue1 = x.Description})
                              End Function).
                         On(Function(a, l) a.Id = l.IntValue).
                         OrderBy(Function(l) l.StringValue1).
@@ -196,8 +189,7 @@ Namespace Tests
                         Join(Function(c)
                                Return c.From(Of Label).
                                         Where(Function(x) x.Language = English).
-                                        Select(Function(x) New NonModelObject(x.Language) With {.IntValue = x.Id, .StringValue1 = x.Description}).
-                                        ToSubquery()
+                                        Select(Function(x) New NonModelObject(x.Language) With {.IntValue = x.Id, .StringValue1 = x.Description})
                              End Function).
                         On(Function(j) j.T1.Id = j.T2.IntValue).
                         OrderBy(Function(j) j.T2.StringValue1).
@@ -215,8 +207,7 @@ Namespace Tests
                           Join(Function(c)
                                  Return c.From(Of Label).
                                           Where(Function(x) x.Language = English).
-                                          Select(Function(x) New NonModelObject(x.Id, x.Description, x.Language)).
-                                          ToSubquery()
+                                          Select(Function(x) New NonModelObject(x.Id, x.Description, x.Language))
                                End Function).
                           On(Function(a, l) a.Id = l.IntValue).
                           OrderBy(Function(l) l.StringValue1).
@@ -233,8 +224,7 @@ Namespace Tests
                           Join(Function(c)
                                  Return c.From(Of Label).
                                           Where(Function(x) x.Language = English).
-                                          Select(Function(x) New NonModelObject(x.Id, x.Description, x.Language)).
-                                          ToSubquery()
+                                          Select(Function(x) New NonModelObject(x.Id, x.Description, x.Language))
                                End Function).
                           On(Function(j) j.T1.Id = j.T2.IntValue).
                           OrderBy(Function(j) j.T2.StringValue1).
@@ -254,7 +244,7 @@ Namespace Tests
     ' × include
     ' include pre non model entitu
     ' ci query obsahuje stlpce
-    ' conditional
+    ' × conditional
 
   End Class
 End Namespace

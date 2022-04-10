@@ -59,8 +59,7 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            SelectAll().
-                                            ToSubquery()
+                                            SelectAll()
                                  End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         As(Function(x) x.Tag).
@@ -98,8 +97,7 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}).
-                                            ToSubquery()
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description})
                                  End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         As(Function(x) x.Tag).
@@ -134,8 +132,7 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            Select(Function(x) (Id:=x.Id, Description:=x.Description)).
-                                            ToSubquery()
+                                            Select(Function(x) (Id:=x.Id, Description:=x.Description))
                                  End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         As(Function(x) x.Tag).
@@ -170,8 +167,7 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description}).
-                                            ToSubquery()
+                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description})
                                  End Function).
                         On(Function(j) j.T1.Id = j.T2.IntValue).
                         As(Function(x) x.Tag).

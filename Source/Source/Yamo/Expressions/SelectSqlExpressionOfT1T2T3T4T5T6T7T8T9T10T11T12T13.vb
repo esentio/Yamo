@@ -59,7 +59,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="tableSourceFactory"></param>
     ''' <returns></returns>
-    Public Function Join(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, Subquery(Of TJoined))) As JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)
+    Public Function Join(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined))) As JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.Inner, tableSourceFactory)
     End Function
 
@@ -109,7 +109,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="tableSourceFactory"></param>
     ''' <returns></returns>
-    Public Function LeftJoin(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, Subquery(Of TJoined))) As JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)
+    Public Function LeftJoin(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined))) As JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.LeftOuter, tableSourceFactory)
     End Function
 
@@ -159,7 +159,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="tableSourceFactory"></param>
     ''' <returns></returns>
-    Public Function RightJoin(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, Subquery(Of TJoined))) As JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)
+    Public Function RightJoin(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined))) As JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.RightOuter, tableSourceFactory)
     End Function
 
@@ -209,7 +209,7 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="tableSourceFactory"></param>
     ''' <returns></returns>
-    Public Function FullJoin(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, Subquery(Of TJoined))) As JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)
+    Public Function FullJoin(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined))) As JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.FullOuter, tableSourceFactory)
     End Function
 
@@ -249,8 +249,8 @@ Namespace Expressions
     ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="tableSourceFactory"></param>
     ''' <returns></returns>
-    Public Function CrossJoin(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, Subquery(Of TJoined))) As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)
-      Me.Builder.AddJoin(Of TJoined)(JoinType.CrossJoin, tableSourceFactory)
+    Public Function CrossJoin(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined))) As JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)
+      Me.Builder.AddJoin(Of TJoined)(Me.Executor, JoinType.CrossJoin, tableSourceFactory)
       Me.Builder.AddOn(Of TJoined)(Nothing, {0, 1})
       Return New JoinedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)(Me.Builder, Me.Executor)
     End Function
@@ -311,8 +311,8 @@ Namespace Expressions
     ''' <param name="joinType"></param>
     ''' <param name="tableSourceFactory"></param>
     ''' <returns></returns>
-    Private Function InternalJoin(Of TJoined)(joinType As JoinType, tableSourceFactory As Func(Of SubqueryContext, Subquery(Of TJoined))) As JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)
-      Me.Builder.AddJoin(Of TJoined)(joinType, tableSourceFactory)
+    Private Function InternalJoin(Of TJoined)(joinType As JoinType, tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined))) As JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)
+      Me.Builder.AddJoin(Of TJoined)(Me.Executor, joinType, tableSourceFactory)
       Return New JoinSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TJoined)(Me.Builder, Me.Executor)
     End Function
 
