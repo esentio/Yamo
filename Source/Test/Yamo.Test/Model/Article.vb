@@ -24,6 +24,8 @@
 
     Public Property Tag As Object
 
+    Public Property Tags As List(Of Object)
+
     Public Overrides Function Equals(obj As Object) As Boolean
       If obj Is Nothing OrElse TypeOf obj IsNot Article Then
         Return False

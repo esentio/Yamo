@@ -676,7 +676,7 @@ Namespace Tests
         Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Description = label1En.Description}, result(0).Tag)
         Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
         Assert.IsNull(result(1).LabelDescription)
-        Assert.AreEqual(New With {Key .Id = 0, Key .Description = CType(Nothing, String)}, result(1).Tag)
+        Assert.IsNull(result(1).Tag)
       End Using
     End Sub
 
@@ -730,7 +730,7 @@ Namespace Tests
         Assert.AreEqual((label1En.Id, label1En.Description), result(0).Tag)
         Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
         Assert.IsNull(result(1).LabelDescription)
-        Assert.AreEqual(ValueTuple.Create(Of Int32, String)(0, Nothing), result(1).Tag)
+        Assert.IsNull(result(1).Tag)
       End Using
     End Sub
 
@@ -784,7 +784,7 @@ Namespace Tests
         Assert.AreEqual(New NonModelObject() With {.IntValue = label1En.Id, .StringValue1 = label1En.Description}, result(0).Tag)
         Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
         Assert.IsNull(result(1).LabelDescription)
-        Assert.AreEqual(New NonModelObject() With {.IntValue = 0, .StringValue1 = Nothing}, result(1).Tag)
+        Assert.IsNull(result(1).Tag)
       End Using
     End Sub
 

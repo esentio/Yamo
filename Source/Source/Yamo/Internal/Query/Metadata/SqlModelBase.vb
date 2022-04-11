@@ -59,11 +59,12 @@ Namespace Internal.Query.Metadata
     ''' <param name="entity"></param>
     ''' <param name="relationship"></param>
     ''' <param name="isIgnored"></param>
+    ''' <param name="creationBehavior"></param>
     ''' <returns></returns>
-    Protected Function AddEntity(<DisallowNull> entity As NonModelEntity, relationship As SqlEntityRelationship, isIgnored As Boolean) As NonModelEntityBasedSqlEntity
+    Protected Function AddEntity(<DisallowNull> entity As NonModelEntity, relationship As SqlEntityRelationship, isIgnored As Boolean, creationBehavior As NonModelEntityCreationBehavior) As NonModelEntityBasedSqlEntity
       Dim index = Me.Entities.Count
       Dim tableAlias = "T" & index.ToString(Globalization.CultureInfo.InvariantCulture)
-      Dim sqlEntity = New NonModelEntityBasedSqlEntity(entity, tableAlias, index, relationship, isIgnored)
+      Dim sqlEntity = New NonModelEntityBasedSqlEntity(entity, tableAlias, index, relationship, isIgnored, creationBehavior)
 
       Me.Entities.Add(sqlEntity)
 

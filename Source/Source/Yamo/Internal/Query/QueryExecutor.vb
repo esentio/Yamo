@@ -523,7 +523,15 @@ Namespace Internal.Query
 
       Else
         ' custom SQL result
-        Dim sqlResult = DirectCast(readerData.Entity, NonModelEntityBasedSqlEntity).Entity.SqlResult
+        Dim sqlEntity = DirectCast(readerData.Entity, NonModelEntityBasedSqlEntity)
+        Dim sqlResult = sqlEntity.Entity.SqlResult
+
+        If sqlEntity.CreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull Then
+          If Not SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderData.ReaderIndex, sqlResult.GetColumnCount()) Then
+            Return Nothing
+          End If
+        End If
+
         Dim reader = SqlResultReaderCache.GetReader(dataReaderType, m_DbContext.Model, sqlResult)
         value = reader(dataReader, readerData.ReaderData)
 
@@ -593,13 +601,24 @@ Namespace Internal.Query
 
       Else
         ' custom SQL result
-        Dim sqlResult = DirectCast(readerData.Entity, NonModelEntityBasedSqlEntity).Entity.SqlResult
+        Dim sqlEntity = DirectCast(readerData.Entity, NonModelEntityBasedSqlEntity)
+        Dim sqlResult = sqlEntity.Entity.SqlResult
+
+        If sqlEntity.CreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull Then
+          If Not SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderData.ReaderIndex, sqlResult.GetColumnCount()) Then
+            Return Nothing
+          End If
+        End If
+
         Dim reader = SqlResultReaderCache.GetReader(dataReaderType, m_DbContext.Model, sqlResult)
         value = reader(dataReader, readerData.ReaderData)
 
         If value Is Nothing Then
           Return Nothing
         End If
+
+        FillRelationships(readerData, declaringEntity, value)
+        FillIncluded(readerData, dataReaderType, dataReader, value)
       End If
 
       If readerData.HasRelatedEntities Then

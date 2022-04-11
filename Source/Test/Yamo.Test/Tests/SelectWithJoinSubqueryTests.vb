@@ -245,6 +245,7 @@ Namespace Tests
     ' include pre non model entitu
     ' ci query obsahuje stlpce
     ' × conditional
+    ' ResetDbPropertyModifiedTracking
 
   End Class
 End Namespace

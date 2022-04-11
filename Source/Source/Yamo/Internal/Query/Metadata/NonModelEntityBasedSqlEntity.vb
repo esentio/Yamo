@@ -18,16 +18,11 @@ Namespace Internal.Query.Metadata
     Public ReadOnly Property Entity As NonModelEntity
 
     ''' <summary>
-    ''' Creates new instance of <see cref="EntityBasedSqlEntity"/>.<br/>
+    ''' Gets entity creation behavior.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="entity"></param>
-    ''' <param name="tableAlias"></param>
-    ''' <param name="index"></param>
-    Sub New(<DisallowNull> entity As NonModelEntity, <DisallowNull> tableAlias As String, index As Int32)
-      MyBase.New(entity.EntityType, tableAlias, index, entity.GetColumnsCount())
-      Me.Entity = entity
-    End Sub
+    ''' <returns></returns>
+    Public ReadOnly Property CreationBehavior As NonModelEntityCreationBehavior
 
     ''' <summary>
     ''' Creates new instance of <see cref="EntityBasedSqlEntity"/>.<br/>
@@ -38,9 +33,11 @@ Namespace Internal.Query.Metadata
     ''' <param name="index"></param>
     ''' <param name="relationship"></param>
     ''' <param name="isIgnored"></param>
-    Sub New(<DisallowNull> entity As NonModelEntity, <DisallowNull> tableAlias As String, index As Int32, relationship As SqlEntityRelationship, isIgnored As Boolean)
+    ''' <param name="creationBehavior"></param>
+    Sub New(<DisallowNull> entity As NonModelEntity, <DisallowNull> tableAlias As String, index As Int32, relationship As SqlEntityRelationship, isIgnored As Boolean, creationBehavior As NonModelEntityCreationBehavior)
       MyBase.New(entity.EntityType, tableAlias, index, entity.GetColumnsCount(), relationship, isIgnored)
       Me.Entity = entity
+      Me.CreationBehavior = creationBehavior
     End Sub
 
     ''' <summary>

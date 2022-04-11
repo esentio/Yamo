@@ -230,12 +230,13 @@ Namespace Expressions.Builders
     ''' <param name="executor"></param>
     ''' <param name="joinType"></param>
     ''' <param name="tableSourceFactory"></param>
-    Public Sub AddJoin(Of TJoined)(<DisallowNull> executor As QueryExecutor, joinType As JoinType, <DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)))
+    ''' <param name="behavior"></param>
+    Public Sub AddJoin(Of TJoined)(<DisallowNull> executor As QueryExecutor, joinType As JoinType, <DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)), behavior As NonModelEntityCreationBehavior)
       Dim context = New SubqueryContext(Me.DbContext, executor, GetParameterIndex())
       Dim subquery = tableSourceFactory.Invoke(context).ToSubquery()
       Dim sql = subquery.Query
 
-      m_CurrentJoinInfo = New JoinInfo(joinType, "(" & sql.Sql & ")", sql.Model.NonModelEntity)
+      m_CurrentJoinInfo = New JoinInfo(joinType, "(" & sql.Sql & ")", sql.Model.NonModelEntity, behavior)
       m_Parameters.AddRange(sql.Parameters)
     End Sub
 
@@ -336,7 +337,7 @@ Namespace Expressions.Builders
         End If
 
       Else
-        Dim sqlEntity = m_Model.AddJoin(nonModelEntity, relationship)
+        Dim sqlEntity = m_Model.AddJoin(nonModelEntity, relationship, joinInfo.NonModelEntityCreationBehavior)
         Dim tableAlias = sqlEntity.TableAlias
 
         If predicate Is Nothing Then

@@ -147,6 +147,27 @@ Namespace Tests
         EnsureColumnsArePresent(sql, articleEntity)
         EnsureColumnsArePresent(sql, labelEntity)
       End Using
+
+      ' same as above, but assume behavior is not explicitly set
+      Using db = CreateDbContext()
+        Dim articleEntity = db.Model.GetEntity(article.GetType())
+        Dim labelEntity = db.Model.GetEntity(labelEn.GetType())
+
+        ' ensure relationship is defined
+        Assert.IsNotNull(articleEntity.GetRelationshipNavigation(NameOf(article.Label)))
+
+        Dim result = db.From(Of Article).
+                        Join(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        SelectAll().FirstOrDefault()
+
+        Assert.AreEqual(article, result)
+        Assert.AreEqual(labelEn, result.Label)
+
+        Dim sql = db.GetLastCommandText()
+
+        EnsureColumnsArePresent(sql, articleEntity)
+        EnsureColumnsArePresent(sql, labelEntity)
+      End Using
     End Sub
 
     <TestMethod()>
@@ -167,6 +188,27 @@ Namespace Tests
         Dim result = db.From(Of Article).
                         Join(Of ItemWithAllSupportedValues)(Function(j) j.T1.Id = j.T2.IntColumn).As(Function(x) x.Tag).
                         SelectAll(SelectColumnsBehavior.ExcludeNonRequiredColumns).FirstOrDefault()
+
+        Assert.AreEqual(article, result)
+        Assert.AreEqual(item, result.Tag)
+
+        Dim sql = db.GetLastCommandText()
+
+        EnsureColumnsArePresent(sql, articleEntity)
+        EnsureColumnsArePresent(sql, itemEntity)
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
+      Using db = CreateDbContext()
+        Dim articleEntity = db.Model.GetEntity(article.GetType())
+        Dim itemEntity = db.Model.GetEntity(item.GetType())
+
+        ' ensure relationship is not defined
+        Assert.IsFalse(db.Model.GetEntity(article.GetType()).GetRelationshipNavigations(item.GetType()).Any())
+
+        Dim result = db.From(Of Article).
+                        Join(Of ItemWithAllSupportedValues)(Function(j) j.T1.Id = j.T2.IntColumn).As(Function(x) x.Tag).
+                        SelectAll().FirstOrDefault()
 
         Assert.AreEqual(article, result)
         Assert.AreEqual(item, result.Tag)
@@ -204,6 +246,26 @@ Namespace Tests
         EnsureColumnsArePresent(sql, articleEntity)
         EnsureColumnsAreNotPresent(sql, itemEntity)
       End Using
+
+      ' same as above, but assume behavior is not explicitly set
+      Using db = CreateDbContext()
+        Dim articleEntity = db.Model.GetEntity(article.GetType())
+        Dim itemEntity = db.Model.GetEntity(item.GetType())
+
+        ' ensure relationship is not defined
+        Assert.IsFalse(db.Model.GetEntity(article.GetType()).GetRelationshipNavigations(item.GetType()).Any())
+
+        Dim result = db.From(Of Article).
+                        Join(Of ItemWithAllSupportedValues)(Function(j) j.T1.Id = j.T2.IntColumn).
+                        SelectAll().FirstOrDefault()
+
+        Assert.AreEqual(article, result)
+
+        Dim sql = db.GetLastCommandText()
+
+        EnsureColumnsArePresent(sql, articleEntity)
+        EnsureColumnsAreNotPresent(sql, itemEntity)
+      End Using
     End Sub
 
     <TestMethod()>
@@ -223,6 +285,27 @@ Namespace Tests
         Dim result = db.From(Of Article).
                         Join(Of Label)(Function(j) j.T1.Id = j.T2.Id).
                         SelectAll(SelectColumnsBehavior.ExcludeNonRequiredColumns).ExcludeT2().FirstOrDefault()
+
+        Assert.AreEqual(article, result)
+        Assert.IsNull(result.Label)
+
+        Dim sql = db.GetLastCommandText()
+
+        EnsureColumnsArePresent(sql, articleEntity)
+        EnsureColumnsAreNotPresent(sql, labelEntity)
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
+      Using db = CreateDbContext()
+        Dim articleEntity = db.Model.GetEntity(article.GetType())
+        Dim labelEntity = db.Model.GetEntity(labelEn.GetType())
+
+        ' ensure relationship is defined
+        Assert.IsNotNull(articleEntity.GetRelationshipNavigation(NameOf(article.Label)))
+
+        Dim result = db.From(Of Article).
+                        Join(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        SelectAll().ExcludeT2().FirstOrDefault()
 
         Assert.AreEqual(article, result)
         Assert.IsNull(result.Label)

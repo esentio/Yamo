@@ -56,7 +56,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="entity"></param>
     ''' <param name="relationship"></param>
     ''' <returns></returns>
-    Public Function AddJoin(<DisallowNull> entity As Entity, Optional relationship As SqlEntityRelationship = Nothing) As SqlEntityBase
+    Public Function AddJoin(<DisallowNull> entity As Entity, relationship As SqlEntityRelationship) As SqlEntityBase
       Return AddEntity(entity, relationship, False)
     End Function
 
@@ -66,9 +66,10 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="entity"></param>
     ''' <param name="relationship"></param>
+    ''' <param name="creationBehavior"></param>
     ''' <returns></returns>
-    Public Function AddJoin(<DisallowNull> entity As NonModelEntity, Optional relationship As SqlEntityRelationship = Nothing) As SqlEntityBase
-      Return AddEntity(entity, relationship, False)
+    Public Function AddJoin(<DisallowNull> entity As NonModelEntity, relationship As SqlEntityRelationship, creationBehavior As NonModelEntityCreationBehavior) As SqlEntityBase
+      Return AddEntity(entity, relationship, False, creationBehavior)
     End Function
 
     ''' <summary>
@@ -88,7 +89,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="entity"></param>
     ''' <returns></returns>
     Public Function AddIgnoredJoin(<DisallowNull> entity As NonModelEntity) As SqlEntityBase
-      Return AddEntity(entity, Nothing, True)
+      Return AddEntity(entity, Nothing, True, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
     End Function
 
     ''' <summary>
