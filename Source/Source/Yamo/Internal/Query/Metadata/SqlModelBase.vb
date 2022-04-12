@@ -17,7 +17,8 @@ Namespace Internal.Query.Metadata
     Public ReadOnly Property MainEntity As EntityBasedSqlEntity
 
     ''' <summary>
-    ''' Gets SQL entities.
+    ''' Gets SQL entities.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
     Protected ReadOnly Property Entities As List(Of SqlEntityBase)

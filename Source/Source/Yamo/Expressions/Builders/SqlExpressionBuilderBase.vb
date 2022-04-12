@@ -39,7 +39,8 @@ Namespace Expressions.Builders
     End Sub
 
     ''' <summary>
-    ''' Gets main entity.
+    ''' Gets main entity.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="mainEntityType"></param>
     ''' <returns></returns>
