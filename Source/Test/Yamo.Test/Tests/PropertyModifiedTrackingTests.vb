@@ -215,7 +215,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectRecordWithPropertyModifiedTrackingAsJoinedTable()
+    Public Overridable Sub SelectRecordWithPropertyModifiedTrackingFromJoinedTable()
       Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
       Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, Nothing)
       Dim linkedItem3 = Me.ModelFactory.CreateLinkedItem(3, Nothing)
@@ -241,6 +241,74 @@ Namespace Tests
                         SelectAll().ToList()
         Assert.AreEqual(3, result.Count)
         Assert.IsTrue(result.All(Function(x) Not DirectCast(x.RelatedItem, ItemWithPropertyModifiedTracking).IsAnyDbPropertyModified()))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectModelEntityRecordWithPropertyModifiedTrackingFromJoinedSubquery()
+      Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
+      Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, Nothing)
+      Dim linkedItem3 = Me.ModelFactory.CreateLinkedItem(3, Nothing)
+
+      InsertItems(linkedItem1, linkedItem2, linkedItem3)
+
+      Dim item1 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      item1.Id = 1
+      Dim item2 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      item2.Id = 2
+      Dim item3 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      item3.Id = 3
+
+      Using db = CreateDbContext()
+        db.Insert(item1, useDbIdentityAndDefaults:=False)
+        db.Insert(item2, useDbIdentityAndDefaults:=False)
+        db.Insert(item3, useDbIdentityAndDefaults:=False)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of LinkedItem).
+                        Join(Function(c)
+                               Return c.From(Of ItemWithPropertyModifiedTracking).
+                                        SelectAll()
+                             End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).As(Function(x) x.RelatedItem).
+                        SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        Assert.IsTrue(result.All(Function(x) Not DirectCast(x.RelatedItem, ItemWithPropertyModifiedTracking).IsAnyDbPropertyModified()))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectNonModelAdHocTypeRecordWithPropertyModifiedTrackingFromJoinedSubquery()
+      Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
+      Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, Nothing)
+      Dim linkedItem3 = Me.ModelFactory.CreateLinkedItem(3, Nothing)
+
+      InsertItems(linkedItem1, linkedItem2, linkedItem3)
+
+      Dim item1 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      item1.Id = 1
+      Dim item2 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      item2.Id = 2
+      Dim item3 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      item3.Id = 3
+
+      Using db = CreateDbContext()
+        db.Insert(item1, useDbIdentityAndDefaults:=False)
+        db.Insert(item2, useDbIdentityAndDefaults:=False)
+        db.Insert(item3, useDbIdentityAndDefaults:=False)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of LinkedItem).
+                        Join(Function(c)
+                               Return c.From(Of ItemWithPropertyModifiedTracking).
+                                        Select(Function(x) New NonModelObjectWithPropertyModifiedTracking With {.IntValue = x.Id, .StringValue = x.Description})
+                             End Function).
+                        On(Function(j) j.T1.Id = j.T2.IntValue).As(Function(x) x.RelatedItem).
+                        SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        Assert.IsTrue(result.All(Function(x) Not DirectCast(x.RelatedItem, NonModelObjectWithPropertyModifiedTracking).IsAnyDbPropertyModified()))
       End Using
     End Sub
 

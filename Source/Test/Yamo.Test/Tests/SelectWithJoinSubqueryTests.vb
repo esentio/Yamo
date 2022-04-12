@@ -235,17 +235,5 @@ Namespace Tests
       End Try
     End Sub
 
-    ' TODO: SIP - implement subquery
-    ' × ad hoc
-    ' × anonymous
-    ' × value tuple
-    ' × As()
-    ' As() pre non model entitu
-    ' × include
-    ' include pre non model entitu
-    ' ci query obsahuje stlpce
-    ' × conditional
-    ' ResetDbPropertyModifiedTracking
-
   End Class
 End Namespace
