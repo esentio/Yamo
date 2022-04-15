@@ -169,6 +169,67 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub SelectWithExcludeColumnInJoinedSubquery()
+      Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
+      Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, 1)
+      linkedItem2.Description = "item 2"
+
+      InsertItems(linkedItem1, linkedItem2)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of LinkedItem).
+                        Join(Function(c)
+                               Return c.From(Of LinkedItem).
+                                        SelectAll()
+                             End Function).
+                        On(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(x) x.NextItem).
+                        SelectAll().
+                        Exclude(Function(j) j.T2.Description).
+                        ToList()
+
+        Assert.AreEqual(1, result.Count)
+
+        Dim linkedItem1Result = result.First()
+
+        Assert.AreEqual("", linkedItem1Result.NextItem.Description)
+
+        ' check if remaining fields are loaded
+        linkedItem2.Description = ""
+
+        Assert.AreEqual(linkedItem2, linkedItem1Result.NextItem)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithExcludeColumnDirectlyInJoinedSubquery()
+      Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
+      Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, 1)
+      linkedItem2.Description = "item 2"
+
+      InsertItems(linkedItem1, linkedItem2)
+
+      Try
+        Using db = CreateDbContext()
+          Dim result = db.From(Of LinkedItem).
+                        Join(Function(c)
+                               Return c.From(Of LinkedItem).
+                                        SelectAll().
+                                        Exclude(Function(x) x.Description)
+                             End Function).
+                        On(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(x) x.NextItem).
+                        SelectAll().
+                        ToList()
+
+          Assert.Fail()
+        End Using
+      Catch ex As NotSupportedException
+        ' expected
+      Catch ex As Exception
+        Assert.Fail()
+      End Try
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub SelectWithExcludeColumnsWithShuffledProperties()
       Dim linkedItem1 = Me.ModelFactory.CreateLinkedItemWithShuffledProperties(1, Nothing)
       linkedItem1.Description = "item 1"

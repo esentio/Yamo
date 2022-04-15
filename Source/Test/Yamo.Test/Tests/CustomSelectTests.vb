@@ -2031,7 +2031,7 @@ Namespace Tests
         ' select non-model type with simple values using member init
         Dim result1 = db.From(Of ItemWithAllSupportedValues).
                          Where(Function(x) x.Id = item2.Id).
-                         Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .StringValue = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
+                         Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .StringValue1 = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
                          FirstOrDefault()
         Assert.AreEqual(New NonModelObject(item2.UniqueidentifierColumn, item2.Nvarchar50Column, item2.Numeric10and3ColumnNull), result1)
 
@@ -2075,22 +2075,22 @@ Namespace Tests
         ' select non-model type with simple values using combination of constructor and member init
         Dim result7 = db.From(Of ItemWithAllSupportedValues).
                          Where(Function(x) x.Id = item2.Id).
-                         Select(Function(x) New NonModelObject(x.UniqueidentifierColumn, x.BitColumn) With {.StringValue = x.Nvarchar50Column, .ItemWithAllSupportedValues = x, .NullableDecimalValue = x.Numeric15and0ColumnNull}).
+                         Select(Function(x) New NonModelObject(x.UniqueidentifierColumn, x.BitColumn) With {.StringValue1 = x.Nvarchar50Column, .ItemWithAllSupportedValues = x, .NullableDecimalValue = x.Numeric15and0ColumnNull}).
                          FirstOrDefault()
-        Assert.AreEqual(New NonModelObject(item2.UniqueidentifierColumn, item2.BitColumn) With {.StringValue = item2.Nvarchar50Column, .ItemWithAllSupportedValues = item2, .NullableDecimalValue = item2.Numeric15and0ColumnNull}, result7)
+        Assert.AreEqual(New NonModelObject(item2.UniqueidentifierColumn, item2.BitColumn) With {.StringValue1 = item2.Nvarchar50Column, .ItemWithAllSupportedValues = item2, .NullableDecimalValue = item2.Numeric15and0ColumnNull}, result7)
         Assert.AreEqual(item2, result7.ItemWithAllSupportedValues)
 
         ' select non-model type with simple values, but no row is returned
         Dim result8 = db.From(Of ItemWithAllSupportedValues).
                          Where(Function(x) x.Id = Guid.NewGuid).
-                         Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .StringValue = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
+                         Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .StringValue1 = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
                          FirstOrDefault()
         Assert.AreEqual(Nothing, result8)
 
         ' select non-model types
         Dim result9 = db.From(Of ItemWithAllSupportedValues).
                          OrderBy(Function(x) x.IntColumn).
-                         Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .StringValue = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
+                         Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .StringValue1 = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
                          ToList()
         Assert.AreEqual(3, result9.Count)
         Assert.AreEqual(New NonModelObject(item1.UniqueidentifierColumn, item1.Nvarchar50Column, item1.Numeric10and3ColumnNull), result9(0))
@@ -2101,7 +2101,7 @@ Namespace Tests
         Dim result10 = db.From(Of ItemWithAllSupportedValues).
                           Where(Function(x) x.Id = Guid.NewGuid).
                           OrderBy(Function(x) x.IntColumn).
-                          Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .StringValue = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
+                          Select(Function(x) New NonModelObject With {.GuidValue = x.UniqueidentifierColumn, .StringValue1 = x.Nvarchar50Column, .NullableDecimalValue = x.Numeric10and3ColumnNull}).
                           ToList()
         Assert.AreEqual(0, result10.Count)
       End Using

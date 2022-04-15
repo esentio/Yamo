@@ -983,37 +983,6 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectWithRelationshipNotDefinedInModel()
-      Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
-      Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, 1)
-
-      Dim linkedItem1Child1 = Me.ModelFactory.CreateLinkedItemChild(1, 1)
-      Dim linkedItem1Child2 = Me.ModelFactory.CreateLinkedItemChild(2, 1)
-      Dim linkedItem1Child3 = Me.ModelFactory.CreateLinkedItemChild(3, 1)
-
-      InsertItems(linkedItem1, linkedItem2)
-      InsertItems(linkedItem1Child1, linkedItem1Child2, linkedItem1Child3)
-
-      Using db = CreateDbContext()
-        Dim result = db.From(Of LinkedItem).
-                        Join(Of LinkedItem)(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(x) x.NextItem).
-                        Join(Of LinkedItemChild)(Function(j) j.T1.Id = j.T3.LinkedItemId).As(Function(j) j.T1.Children).
-                        SelectAll().ToList()
-
-        Assert.AreEqual(1, result.Count)
-
-        Dim linkedItem1Result = result.First()
-        Assert.AreEqual(linkedItem1, linkedItem1Result)
-        Assert.IsNotNull(linkedItem1Result.NextItem)
-        Assert.AreEqual(linkedItem2, linkedItem1Result.NextItem)
-        Assert.AreEqual(3, linkedItem1Result.Children.Count)
-        Assert.IsNotNull(linkedItem1Result.Children.SingleOrDefault(Function(x) x.Id = 1))
-        Assert.IsNotNull(linkedItem1Result.Children.SingleOrDefault(Function(x) x.Id = 2))
-        Assert.IsNotNull(linkedItem1Result.Children.SingleOrDefault(Function(x) x.Id = 3))
-      End Using
-    End Sub
-
-    <TestMethod()>
     Public Overridable Sub SelectWithMaximumAllowedRelationships()
       Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
       Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, 1)

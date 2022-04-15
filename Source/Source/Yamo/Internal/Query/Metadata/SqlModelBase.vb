@@ -10,57 +10,62 @@ Namespace Internal.Query.Metadata
   Public MustInherit Class SqlModelBase
 
     ''' <summary>
-    ''' Gets model.<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <returns></returns>
-    Public ReadOnly Property Model As Model
-
-    ''' <summary>
     ''' Gets main SQL entity.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property MainEntity As SqlEntity
-      Get
-        Return Me.Entities(0)
-      End Get
-    End Property
+    Public ReadOnly Property MainEntity As EntityBasedSqlEntity
 
     ''' <summary>
-    ''' Gets SQL entities.
+    ''' Gets SQL entities.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Protected ReadOnly Property Entities As List(Of SqlEntity)
+    Protected ReadOnly Property Entities As List(Of SqlEntityBase)
 
     ''' <summary>
     ''' Creates new instance of <see cref="SqlModelBase"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="model"></param>
-    ''' <param name="mainEntityType"></param>
-    Public Sub New(<DisallowNull> model As Model, <DisallowNull> mainEntityType As Type)
-      Me.Model = model
-      Me.Entities = New List(Of SqlEntity)
+    ''' <param name="mainEntity"></param>
+    Public Sub New(<DisallowNull> mainEntity As Entity)
+      Me.Entities = New List(Of SqlEntityBase)
 
-      Dim entity = Me.Model.GetEntity(mainEntityType)
       Dim tableAlias = "T0"
 
-      Me.Entities.Add(New SqlEntity(entity, tableAlias, 0))
+      Me.MainEntity = New EntityBasedSqlEntity(mainEntity, tableAlias, 0)
+      Me.Entities.Add(Me.MainEntity)
     End Sub
 
     ''' <summary>
     ''' Adds SQL entity used in the query.
     ''' </summary>
-    ''' <param name="entityType"></param>
+    ''' <param name="entity"></param>
     ''' <param name="relationship"></param>
     ''' <param name="isIgnored"></param>
     ''' <returns></returns>
-    Protected Function AddEntity(<DisallowNull> entityType As Type, relationship As SqlEntityRelationship, isIgnored As Boolean) As SqlEntity
-      Dim entity = Me.Model.GetEntity(entityType)
+    Protected Function AddEntity(<DisallowNull> entity As Entity, relationship As SqlEntityRelationship, isIgnored As Boolean) As EntityBasedSqlEntity
       Dim index = Me.Entities.Count
       Dim tableAlias = "T" & index.ToString(Globalization.CultureInfo.InvariantCulture)
-      Dim sqlEntity = New SqlEntity(entity, tableAlias, index, relationship, isIgnored)
+      Dim sqlEntity = New EntityBasedSqlEntity(entity, tableAlias, index, relationship, isIgnored)
+
+      Me.Entities.Add(sqlEntity)
+
+      Return sqlEntity
+    End Function
+
+    ''' <summary>
+    ''' Adds SQL entity used in the query.
+    ''' </summary>
+    ''' <param name="entity"></param>
+    ''' <param name="relationship"></param>
+    ''' <param name="isIgnored"></param>
+    ''' <param name="creationBehavior"></param>
+    ''' <returns></returns>
+    Protected Function AddEntity(<DisallowNull> entity As NonModelEntity, relationship As SqlEntityRelationship, isIgnored As Boolean, creationBehavior As NonModelEntityCreationBehavior) As NonModelEntityBasedSqlEntity
+      Dim index = Me.Entities.Count
+      Dim tableAlias = "T" & index.ToString(Globalization.CultureInfo.InvariantCulture)
+      Dim sqlEntity = New NonModelEntityBasedSqlEntity(entity, tableAlias, index, relationship, isIgnored, creationBehavior)
 
       Me.Entities.Add(sqlEntity)
 
@@ -73,7 +78,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="index"></param>
     ''' <returns></returns>
-    Public Function GetEntity(index As Int32) As SqlEntity
+    Public Function GetEntity(index As Int32) As SqlEntityBase
       Return Me.Entities(index)
     End Function
 
@@ -82,7 +87,7 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public Function GetLastEntity() As SqlEntity
+    Public Function GetLastEntity() As SqlEntityBase
       Return Me.Entities.Last()
     End Function
 
@@ -91,12 +96,12 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public Function GetEntities() As SqlEntity()
+    Public Function GetEntities() As SqlEntityBase()
       Return Me.Entities.ToArray()
     End Function
 
     ''' <summary>
-    ''' Get entities count.<br/>
+    ''' Gets entities count.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>

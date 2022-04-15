@@ -17,6 +17,13 @@ Namespace Expressions.Builders
     Inherits SqlExpressionBuilderBase
 
     ''' <summary>
+    ''' Gets subquery context.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property SubqueryContext As <MaybeNull> SubqueryContext
+
+    ''' <summary>
     ''' Stores SQL model.
     ''' </summary>
     Private m_Model As SelectSqlModel
@@ -77,7 +84,7 @@ Namespace Expressions.Builders
     Private m_LimitExpression As String
 
     ''' <summary>
-    ''' Stores whether top should be used for limit
+    ''' Stores whether top should be used for limit.
     ''' </summary>
     Private m_UseTopForLimit As Boolean
 
@@ -102,6 +109,11 @@ Namespace Expressions.Builders
     Private m_Parameters As List(Of SqlParameter)
 
     ''' <summary>
+    ''' Stores parameter index offset.
+    ''' </summary>
+    Private m_ParameterIndexOffset As Int32
+
+    ''' <summary>
     ''' Creates new instance of <see cref="SelectSqlExpressionBuilder"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -109,7 +121,28 @@ Namespace Expressions.Builders
     ''' <param name="mainEntityType"></param>
     Public Sub New(<DisallowNull> context As DbContext, <DisallowNull> mainEntityType As Type)
       MyBase.New(context)
-      m_Model = New SelectSqlModel(Me.DbContext.Model, mainEntityType)
+      Me.SubqueryContext = Nothing
+      Initialize(mainEntityType)
+    End Sub
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="SelectSqlExpressionBuilder"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="context"></param>
+    ''' <param name="mainEntityType"></param>
+    Public Sub New(<DisallowNull> context As SubqueryContext, <DisallowNull> mainEntityType As Type)
+      MyBase.New(context.DbContext)
+      Me.SubqueryContext = context
+      Initialize(mainEntityType)
+    End Sub
+
+    ''' <summary>
+    ''' Initializes values.
+    ''' </summary>
+    ''' <param name="mainEntityType"></param>
+    Private Sub Initialize(<DisallowNull> mainEntityType As Type)
+      m_Model = New SelectSqlModel(GetMainEntity(mainEntityType))
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       ' lists are created only when necessary
       m_MainTableSourceExpression = Nothing
@@ -135,7 +168,7 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="tableSource"></param>
     Public Sub SetMainTableSource(<DisallowNull> tableSource As FormattableString)
-      Dim sql = ConvertToSqlString(tableSource, m_Parameters.Count)
+      Dim sql = ConvertToSqlString(tableSource, GetParameterIndex())
       m_MainTableSourceExpression = sql.Sql
       m_Parameters.AddRange(sql.Parameters)
     End Sub
@@ -150,7 +183,7 @@ Namespace Expressions.Builders
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_MainTableSourceExpression = tableSource.Value
       Else
-        Dim sql = ConvertToSqlString(tableSource.Value, parameters, m_Parameters.Count)
+        Dim sql = ConvertToSqlString(tableSource.Value, parameters, GetParameterIndex())
         m_MainTableSourceExpression = sql.Sql
         m_Parameters.AddRange(sql.Parameters)
       End If
@@ -194,10 +227,28 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="executor"></param>
+    ''' <param name="joinType"></param>
+    ''' <param name="tableSourceFactory"></param>
+    ''' <param name="behavior"></param>
+    Public Sub AddJoin(Of TJoined)(<DisallowNull> executor As QueryExecutor, joinType As JoinType, <DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)), behavior As NonModelEntityCreationBehavior)
+      Dim context = New SubqueryContext(Me.DbContext, executor, GetParameterIndex())
+      Dim subquery = tableSourceFactory.Invoke(context).ToSubquery()
+      Dim sql = subquery.Query
+
+      m_CurrentJoinInfo = New JoinInfo(joinType, "(" & sql.Sql & ")", sql, behavior)
+      m_Parameters.AddRange(sql.Parameters)
+    End Sub
+
+    ''' <summary>
+    ''' Adds join.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="joinType"></param>
     ''' <param name="tableSource"></param>
     Public Sub AddJoin(Of TJoined)(joinType As JoinType, <DisallowNull> tableSource As FormattableString)
-      Dim sql = ConvertToSqlString(tableSource, m_Parameters.Count)
+      Dim sql = ConvertToSqlString(tableSource, GetParameterIndex())
       m_CurrentJoinInfo = New JoinInfo(joinType, sql.Sql)
       m_Parameters.AddRange(sql.Parameters)
     End Sub
@@ -214,7 +265,7 @@ Namespace Expressions.Builders
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_CurrentJoinInfo = New JoinInfo(joinType, tableSource.Value)
       Else
-        Dim sql = ConvertToSqlString(tableSource.Value, parameters, m_Parameters.Count)
+        Dim sql = ConvertToSqlString(tableSource.Value, parameters, GetParameterIndex())
         m_CurrentJoinInfo = New JoinInfo(joinType, sql.Sql)
         m_Parameters.AddRange(sql.Parameters)
       End If
@@ -253,49 +304,84 @@ Namespace Expressions.Builders
         relationship = TryGetRelationship(Of TJoined)(entityIndexHints)
       End If
 
-      Dim sqlEntity = m_Model.AddJoin(Of TJoined)(relationship)
-      Dim entity = sqlEntity.Entity
-      Dim tableAlias = sqlEntity.TableAlias
+      Dim subquery = joinInfo.Subquery
+      Dim subQueryWithNonModelEntityResult = subquery?.Model.NonModelEntity IsNot Nothing
 
       Dim sql As String
-      Dim joinTypeString As String
+      Dim joinTypeString = GetJoinTypeString(joinInfo.JoinType)
 
-      Select Case joinInfo.JoinType
-        Case JoinType.Inner
-          joinTypeString = "INNER JOIN"
-        Case JoinType.LeftOuter
-          joinTypeString = "LEFT OUTER JOIN"
-        Case JoinType.RightOuter
-          joinTypeString = "RIGHT OUTER JOIN"
-        Case JoinType.FullOuter
-          joinTypeString = "FULL OUTER JOIN"
-        Case JoinType.CrossJoin
-          joinTypeString = "CROSS JOIN"
-        Case Else
-          Throw New NotSupportedException($"Unsupported join type '{joinInfo.JoinType}'.")
-      End Select
+      If subQueryWithNonModelEntityResult Then
+        Dim sqlEntity = m_Model.AddJoin(subquery.Model.NonModelEntity, relationship, joinInfo.NonModelEntityCreationBehavior)
+        Dim tableAlias = sqlEntity.TableAlias
 
-      If predicate Is Nothing Then
-        If joinInfo.TableSource Is Nothing Then
-          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints)
-        Else
+        If predicate Is Nothing Then
           sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints)
-        End If
 
-        m_JoinExpressions.Add(sql)
-      Else
-        Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, m_Parameters.Count, True, True)
+          m_JoinExpressions.Add(sql)
 
-        If joinInfo.TableSource Is Nothing Then
-          sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints) & " ON " & result.Sql
         Else
+          Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, GetParameterIndex(), True, True)
+
           sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints) & " ON " & result.Sql
+
+          m_JoinExpressions.Add(sql)
+          m_Parameters.AddRange(result.Parameters)
         End If
 
-        m_JoinExpressions.Add(sql)
-        m_Parameters.AddRange(result.Parameters)
+      Else
+        Dim entity = Me.DbContext.Model.GetEntity(GetType(TJoined))
+        Dim sqlEntity = m_Model.AddJoin(entity, relationship)
+        Dim tableAlias = sqlEntity.TableAlias
+
+        If subquery IsNot Nothing AndAlso subquery.Model.MainEntity.ColumnAliases IsNot Nothing Then
+          sqlEntity.SetColumnAliases(subquery.Model.MainEntity.ColumnAliases)
+        End If
+
+        If predicate Is Nothing Then
+          If joinInfo.TableSource Is Nothing Then
+            sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints)
+          Else
+            sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints)
+          End If
+
+          m_JoinExpressions.Add(sql)
+
+        Else
+          Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, GetParameterIndex(), True, True)
+
+          If joinInfo.TableSource Is Nothing Then
+            sql = joinTypeString & " " & Me.DialectProvider.Formatter.CreateIdentifier(entity.TableName, entity.Schema) & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints) & " ON " & result.Sql
+          Else
+            sql = joinTypeString & " " & joinInfo.TableSource & " " & Me.DialectProvider.Formatter.CreateIdentifier(tableAlias) & If(tableHints Is Nothing, "", " " & tableHints) & " ON " & result.Sql
+          End If
+
+          m_JoinExpressions.Add(sql)
+          m_Parameters.AddRange(result.Parameters)
+        End If
       End If
     End Sub
+
+    ''' <summary>
+    ''' Gets SQL join type string.
+    ''' </summary>
+    ''' <param name="joinType"></param>
+    ''' <returns></returns>
+    Private Shared Function GetJoinTypeString(joinType As JoinType) As String
+      Select Case joinType
+        Case JoinType.Inner
+          Return "INNER JOIN"
+        Case JoinType.LeftOuter
+          Return "LEFT OUTER JOIN"
+        Case JoinType.RightOuter
+          Return "RIGHT OUTER JOIN"
+        Case JoinType.FullOuter
+          Return "FULL OUTER JOIN"
+        Case JoinType.CrossJoin
+          Return "CROSS JOIN"
+        Case Else
+          Throw New NotSupportedException($"Unsupported join type '{joinType}'.")
+      End Select
+    End Function
 
     ''' <summary>
     ''' Adds ignored join.<br/>
@@ -303,7 +389,15 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="entityType"></param>
     Public Sub AddIgnoredJoin(entityType As Type)
-      m_Model.AddIgnoredJoin(entityType)
+      Dim entity = Me.DbContext.Model.TryGetEntity(entityType)
+
+      If entity Is Nothing Then
+        Dim sqlEntity = New NonModelEntity(entityType)
+        sqlEntity.SetSqlResult(New ExcludedUnknownSqlResult(entityType))
+        m_Model.AddIgnoredJoin(sqlEntity)
+      Else
+        m_Model.AddIgnoredJoin(entity)
+      End If
     End Sub
 
     ''' <summary>
@@ -364,7 +458,14 @@ Namespace Expressions.Builders
       End If
 
       ' try to infer relationship from model
-      Dim declaringSqlEntity = m_Model.GetEntity(entityIndexHints(0))
+      Dim sqlEntity = m_Model.GetEntity(entityIndexHints(0))
+
+      If TypeOf sqlEntity IsNot EntityBasedSqlEntity Then
+        ' relationships are supported only for model entities
+        Return Nothing
+      End If
+
+      Dim declaringSqlEntity = DirectCast(sqlEntity, EntityBasedSqlEntity)
       Dim relationshipNavigations = declaringSqlEntity.Entity.GetRelationshipNavigations(GetType(TJoined))
 
       If relationshipNavigations.Count = 1 Then
@@ -404,6 +505,7 @@ Namespace Expressions.Builders
         Throw New Exception("Cannot infer relationship. Use expression that contains relationship property only.")
       End If
 
+      Dim lastEntity = m_Model.GetLastEntity()
       Dim declaringSqlEntity = result.Entity
       Dim propertyType = result.PropertyType
       Dim propertyName = result.PropertyName
@@ -417,9 +519,9 @@ Namespace Expressions.Builders
 
         ' there is still small possibility that item type is not genericTypes(0) type, but in most cases like List(Of) we should be ok
 
-        m_Model.GetLastEntity().SetRelationship(New SqlEntityRelationship(declaringSqlEntity, New CollectionNavigation(propertyName, genericTypes(0), propertyType)))
+        lastEntity.SetRelationship(New SqlEntityRelationship(declaringSqlEntity, New CollectionNavigation(propertyName, genericTypes(0), propertyType)))
       Else
-        m_Model.GetLastEntity().SetRelationship(New SqlEntityRelationship(declaringSqlEntity, New ReferenceNavigation(propertyName, propertyType)))
+        lastEntity.SetRelationship(New SqlEntityRelationship(declaringSqlEntity, New ReferenceNavigation(propertyName, propertyType)))
       End If
     End Sub
 
@@ -434,7 +536,7 @@ Namespace Expressions.Builders
         m_WhereExpressions = New List(Of String)
       End If
 
-      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, GetParameterIndex(), True, True)
       m_WhereExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -453,7 +555,7 @@ Namespace Expressions.Builders
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_WhereExpressions.Add(predicate)
       Else
-        Dim sql = ConvertToSqlString(predicate, parameters, m_Parameters.Count)
+        Dim sql = ConvertToSqlString(predicate, parameters, GetParameterIndex())
         m_WhereExpressions.Add(sql.Sql)
         m_Parameters.AddRange(sql.Parameters)
       End If
@@ -470,7 +572,7 @@ Namespace Expressions.Builders
         m_GroupByExpressions = New List(Of String)
       End If
 
-      Dim result = m_Visitor.Translate(keySelector, ExpressionTranslateMode.GroupBy, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(keySelector, ExpressionTranslateMode.GroupBy, entityIndexHints, GetParameterIndex(), True, True)
       m_GroupByExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -486,7 +588,7 @@ Namespace Expressions.Builders
         m_HavingExpressions = New List(Of String)
       End If
 
-      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(predicate, ExpressionTranslateMode.Condition, entityIndexHints, GetParameterIndex(), True, True)
       m_HavingExpressions.Add(result.Sql)
       m_Parameters.AddRange(result.Parameters)
     End Sub
@@ -505,7 +607,7 @@ Namespace Expressions.Builders
       If parameters Is Nothing OrElse parameters.Length = 0 Then
         m_HavingExpressions.Add(predicate)
       Else
-        Dim sql = ConvertToSqlString(predicate, parameters, m_Parameters.Count)
+        Dim sql = ConvertToSqlString(predicate, parameters, GetParameterIndex())
         m_HavingExpressions.Add(sql.Sql)
         m_Parameters.AddRange(sql.Parameters)
       End If
@@ -523,7 +625,7 @@ Namespace Expressions.Builders
         m_OrderByExpressions = New List(Of String)
       End If
 
-      Dim result = m_Visitor.Translate(keySelector, ExpressionTranslateMode.OrderBy, entityIndexHints, m_Parameters.Count, True, True)
+      Dim result = m_Visitor.Translate(keySelector, ExpressionTranslateMode.OrderBy, entityIndexHints, GetParameterIndex(), True, True)
 
       If ascending Then
         m_OrderByExpressions.Add(result.Sql)
@@ -553,7 +655,7 @@ Namespace Expressions.Builders
           m_OrderByExpressions.Add(predicate & " DESC")
         End If
       Else
-        Dim sql = ConvertToSqlString(predicate, parameters, m_Parameters.Count)
+        Dim sql = ConvertToSqlString(predicate, parameters, GetParameterIndex())
 
         If ascending Then
           m_OrderByExpressions.Add(sql.Sql)
@@ -607,14 +709,20 @@ Namespace Expressions.Builders
     Public Sub AddSelectAll(behavior As SelectColumnsBehavior)
       If behavior = SelectColumnsBehavior.ExcludeNonRequiredColumns Then
         ' main entity is always included
+        ' in case of subquery, ignore all relationships
+
+        Dim isSubquery = Me.IsSubquery()
+
         For i = 1 To m_Model.GetEntityCount() - 1
           Dim sqlEntity = m_Model.GetEntity(i)
 
-          If sqlEntity.Relationship Is Nothing Then
+          If sqlEntity.Relationship Is Nothing OrElse isSubquery Then
             sqlEntity.Exclude()
           End If
         Next
       End If
+
+      m_Model.SqlResult = New EntitySqlResult(m_Model.MainEntity)
     End Sub
 
     ''' <summary>
@@ -623,6 +731,10 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="propertyExpression">Lambda expression with one parameter is expected.</param>
     Public Sub ExcludeSelected(<DisallowNull> propertyExpression As Expression)
+      If IsSubquery() Then
+        Throw New NotSupportedException("Exclude is not supported in subqueries.")
+      End If
+
       Dim result = GetEntityAndProperty(propertyExpression)
 
       If result.NotFound Then
@@ -637,7 +749,11 @@ Namespace Expressions.Builders
         Throw New Exception("Cannot infer excluded column. Use expression that contains entity property only.")
       End If
 
-      Dim entity = result.Entity
+      If TypeOf result.Entity IsNot EntityBasedSqlEntity Then
+        Throw New Exception($"Cannot exclude column. Exclusion is supported only for model entities. Type '{result.EntityType}' is not defined in the model.")
+      End If
+
+      Dim entity = DirectCast(result.Entity, EntityBasedSqlEntity)
       Dim prop = entity.Entity.GetProperty(result.PropertyName)
 
       If prop.IsKey Then
@@ -663,7 +779,11 @@ Namespace Expressions.Builders
     ''' <param name="action"></param>
     ''' <param name="entityIndexHints"></param>
     Public Sub IncludeToSelected(<DisallowNull> action As Expression, entityIndexHints As Int32())
-      Dim result = m_Visitor.TranslateIncludeAction(action, entityIndexHints, m_Parameters.Count, m_IncludedExpressionsCount)
+      If IsSubquery() Then
+        Throw New NotSupportedException("Include is not supported in subqueries.")
+      End If
+
+      Dim result = m_Visitor.TranslateIncludeAction(action, entityIndexHints, GetParameterIndex(), m_IncludedExpressionsCount)
       m_Parameters.AddRange(result.SqlString.Parameters)
       m_IncludedExpressionsCount += 1
 
@@ -680,6 +800,10 @@ Namespace Expressions.Builders
     ''' <param name="keySelectorEntityIndexHints"></param>
     ''' <param name="valueSelectorEntityIndexHints"></param>
     Public Sub IncludeToSelected(<DisallowNull> keySelector As Expression, <DisallowNull> valueSelector As Expression, keySelectorEntityIndexHints As Int32(), valueSelectorEntityIndexHints As Int32())
+      If IsSubquery() Then
+        Throw New NotSupportedException("Include is not supported in subqueries.")
+      End If
+
       Dim keyResult = GetEntityAndProperty(keySelector)
 
       If keyResult.NotFound Then
@@ -694,7 +818,7 @@ Namespace Expressions.Builders
         Throw New Exception("Cannot infer included column. Use expression that contains entity property only.")
       End If
 
-      Dim valueResult = m_Visitor.TranslateIncludeValueSelector(valueSelector, valueSelectorEntityIndexHints, m_Parameters.Count, m_IncludedExpressionsCount)
+      Dim valueResult = m_Visitor.TranslateIncludeValueSelector(valueSelector, valueSelectorEntityIndexHints, GetParameterIndex(), m_IncludedExpressionsCount)
       m_Parameters.AddRange(valueResult.SqlString.Parameters)
       m_IncludedExpressionsCount += 1
 
@@ -717,10 +841,12 @@ Namespace Expressions.Builders
     ''' <param name="selector"></param>
     ''' <param name="entityIndexHints"></param>
     Public Sub AddSelect(<DisallowNull> selector As Expression, entityIndexHints As Int32())
-      Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, m_Parameters.Count)
+      Dim isSubquery = Me.IsSubquery()
+      Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, GetParameterIndex(), isSubquery)
       m_SelectExpression = result.SqlString.Sql
       m_Parameters.AddRange(result.SqlString.Parameters)
-      m_Model.CustomSqlResult = result.SqlResult
+      m_Model.SqlResult = result.SqlResult
+      m_Model.NonModelEntity = result.NonModelEntity
     End Sub
 
     ''' <summary>
@@ -736,16 +862,26 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="sql"></param>
     Private Sub BuildAndAppendSelectExpression(sql As StringBuilder)
+      ' aliases are necessary only for subqueries and if SELECT clause contains columns from more that one entity (aliases prevent column name conflicts)
+      Dim useColumnAliasesForModelEntities = Me.IsSubquery() AndAlso 1 < m_Model.GetNotExcludedOrIgnoredEntityCount()
+      Dim columnAliases As String() = Nothing
+
       Dim first = True
+      Dim index = 0
 
       For i = 0 To m_Model.GetEntityCount() - 1
         Dim entity = m_Model.GetEntity(i)
 
         If Not entity.IsExcludedOrIgnored Then
           Dim formattedTableAlias = Me.DialectProvider.Formatter.CreateIdentifier(entity.TableAlias)
-          Dim properties = entity.Entity.GetProperties()
+          Dim columnsCount = entity.IncludedColumns.Length
+          Dim useColumnAliasesForModelEntity = useColumnAliasesForModelEntities AndAlso TypeOf entity Is EntityBasedSqlEntity
 
-          For j = 0 To properties.Count - 1
+          If useColumnAliasesForModelEntity Then
+            columnAliases = New String(columnsCount - 1) {}
+          End If
+
+          For j = 0 To columnsCount - 1
             If entity.IncludedColumns(j) Then
               If first Then
                 first = False
@@ -755,9 +891,22 @@ Namespace Expressions.Builders
 
               sql.Append(formattedTableAlias)
               sql.Append(".")
-              Me.DialectProvider.Formatter.AppendIdentifier(sql, properties(j).ColumnName)
+              Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.GetColumnName(j))
+
+              If useColumnAliasesForModelEntity Then
+                Dim columnAlias = CreateColumnAlias(index)
+                sql.Append(" ")
+                Me.DialectProvider.Formatter.AppendIdentifier(sql, columnAlias)
+                columnAliases(j) = columnAlias
+              End If
+
+              index += 1
             End If
           Next
+
+          If useColumnAliasesForModelEntity Then
+            DirectCast(entity, EntityBasedSqlEntity).SetColumnAliases(columnAliases)
+          End If
 
           Dim includedSqlResults = entity.IncludedSqlResults
 
@@ -847,12 +996,30 @@ Namespace Expressions.Builders
     End Function
 
     ''' <summary>
+    ''' Creates SQL subquery.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <returns></returns>
+    Public Function CreateSubquery(Of T)() As Subquery(Of T)
+      Return New Subquery(Of T)(CreateQuery())
+    End Function
+
+    ''' <summary>
+    ''' Gets parameter index.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function GetParameterIndex() As Int32
+      Return m_ParameterIndexOffset + m_Parameters.Count
+    End Function
+
+    ''' <summary>
     ''' Gets entity and property name from an expression.
     ''' </summary>
     ''' <param name="propertyExpression"></param>
     ''' <param name="excludeLastModelEntity"></param>
     ''' <returns></returns>
-    Private Function GetEntityAndProperty(propertyExpression As Expression, Optional excludeLastModelEntity As Boolean = False) As (EntityType As Type, Entity As SqlEntity, PropertyType As Type, PropertyName As String, NotFound As Boolean, MultipleResults As Boolean)
+    Private Function GetEntityAndProperty(propertyExpression As Expression, Optional excludeLastModelEntity As Boolean = False) As (EntityType As Type, Entity As SqlEntityBase, PropertyType As Type, PropertyName As String, NotFound As Boolean, MultipleResults As Boolean)
       If TypeOf propertyExpression IsNot LambdaExpression Then
         Throw New ArgumentException("Expression must be of type LambdaExpression.")
       End If
@@ -861,7 +1028,7 @@ Namespace Expressions.Builders
 
       Dim parameterType = lambda.Parameters(0).Type
       Dim returnType = lambda.ReturnType
-      Dim entity As SqlEntity = Nothing
+      Dim entity As SqlEntityBase = Nothing
       Dim propertyName As String = Nothing
       Dim notFound = False
       Dim multipleResults = False
@@ -891,7 +1058,7 @@ Namespace Expressions.Builders
         For i = 0 To count - 1
           Dim item = entities(i)
 
-          If item.Entity.EntityType Is parameterType Then
+          If item.EntityType Is parameterType Then
             If entity Is Nothing Then
               entity = item
 
@@ -912,6 +1079,23 @@ Namespace Expressions.Builders
       End If
 
       Return (parameterType, entity, returnType, propertyName, notFound, multipleResults)
+    End Function
+
+    ''' <summary>
+    ''' Gets whether this is a subquery.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function IsSubquery() As Boolean
+      Return Me.SubqueryContext IsNot Nothing
+    End Function
+
+    ''' <summary>
+    ''' Creates column alias.
+    ''' </summary>
+    ''' <param name="index"></param>
+    ''' <returns></returns>
+    Private Function CreateColumnAlias(index As Int32) As String
+      Return "C" & index.ToString(Globalization.CultureInfo.InvariantCulture)
     End Function
 
   End Class

@@ -25,6 +25,14 @@ Namespace Expressions
     ''' Creates new instance of <see cref="SelectSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="context"></param>
+    Friend Sub New(context As SubqueryContext)
+      MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), context.Executor)
+    End Sub
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="SelectSqlExpression(Of T)"/>.
+    ''' </summary>
+    ''' <param name="context"></param>
     ''' <param name="tableSource"></param>
     Friend Sub New(context As DbContext, tableSource As FormattableString)
       MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), New QueryExecutor(context))
@@ -36,9 +44,30 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="context"></param>
     ''' <param name="tableSource"></param>
+    Friend Sub New(context As SubqueryContext, tableSource As FormattableString)
+      MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), context.Executor)
+      Me.Builder.SetMainTableSource(tableSource)
+    End Sub
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="SelectSqlExpression(Of T)"/>.
+    ''' </summary>
+    ''' <param name="context"></param>
+    ''' <param name="tableSource"></param>
     ''' <param name="parameters"></param>
     Friend Sub New(context As DbContext, tableSource As RawSqlString, ParamArray parameters() As Object)
       MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), New QueryExecutor(context))
+      Me.Builder.SetMainTableSource(tableSource, parameters)
+    End Sub
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="SelectSqlExpression(Of T)"/>.
+    ''' </summary>
+    ''' <param name="context"></param>
+    ''' <param name="tableSource"></param>
+    ''' <param name="parameters"></param>
+    Friend Sub New(context As SubqueryContext, tableSource As RawSqlString, ParamArray parameters() As Object)
+      MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), context.Executor)
       Me.Builder.SetMainTableSource(tableSource, parameters)
     End Sub
 
@@ -79,6 +108,17 @@ Namespace Expressions
     ''' <returns></returns>
     Public Function Join(Of TJoined)() As JoinSelectSqlExpression(Of T, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.Inner)
+    End Function
+
+    ''' <summary>
+    ''' Adds INNER JOIN clause.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="tableSourceFactory"></param>
+    ''' <param name="behavior"></param>
+    ''' <returns></returns>
+    Public Function Join(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull) As JoinSelectSqlExpression(Of T, TJoined)
+      Return InternalJoin(Of TJoined)(JoinType.Inner, tableSourceFactory, behavior)
     End Function
 
     ''' <summary>
@@ -135,6 +175,17 @@ Namespace Expressions
     ''' Adds LEFT OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="tableSourceFactory"></param>
+    ''' <param name="behavior"></param>
+    ''' <returns></returns>
+    Public Function LeftJoin(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull) As JoinSelectSqlExpression(Of T, TJoined)
+      Return InternalJoin(Of TJoined)(JoinType.LeftOuter, tableSourceFactory, behavior)
+    End Function
+
+    ''' <summary>
+    ''' Adds LEFT OUTER JOIN clause.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="tableSource"></param>
     ''' <returns></returns>
     Public Function LeftJoin(Of TJoined)(<DisallowNull> tableSource As FormattableString) As JoinSelectSqlExpression(Of T, TJoined)
@@ -179,6 +230,17 @@ Namespace Expressions
     ''' <returns></returns>
     Public Function RightJoin(Of TJoined)() As JoinSelectSqlExpression(Of T, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.RightOuter)
+    End Function
+
+    ''' <summary>
+    ''' Adds RIGHT OUTER JOIN clause.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="tableSourceFactory"></param>
+    ''' <param name="behavior"></param>
+    ''' <returns></returns>
+    Public Function RightJoin(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull) As JoinSelectSqlExpression(Of T, TJoined)
+      Return InternalJoin(Of TJoined)(JoinType.RightOuter, tableSourceFactory, behavior)
     End Function
 
     ''' <summary>
@@ -235,6 +297,17 @@ Namespace Expressions
     ''' Adds FULL OUTER JOIN clause.
     ''' </summary>
     ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="tableSourceFactory"></param>
+    ''' <param name="behavior"></param>
+    ''' <returns></returns>
+    Public Function FullJoin(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull) As JoinSelectSqlExpression(Of T, TJoined)
+      Return InternalJoin(Of TJoined)(JoinType.FullOuter, tableSourceFactory, behavior)
+    End Function
+
+    ''' <summary>
+    ''' Adds FULL OUTER JOIN clause.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
     ''' <param name="tableSource"></param>
     ''' <returns></returns>
     Public Function FullJoin(Of TJoined)(<DisallowNull> tableSource As FormattableString) As JoinSelectSqlExpression(Of T, TJoined)
@@ -259,6 +332,19 @@ Namespace Expressions
     ''' <returns></returns>
     Public Function CrossJoin(Of TJoined)() As JoinedSelectSqlExpression(Of T, TJoined)
       Return InternalJoin(Of TJoined)(JoinType.CrossJoin, Nothing, {0, 1})
+    End Function
+
+    ''' <summary>
+    ''' Adds CROSS JOIN clause.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="tableSourceFactory"></param>
+    ''' <param name="behavior"></param>
+    ''' <returns></returns>
+    Public Function CrossJoin(Of TJoined)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull) As JoinedSelectSqlExpression(Of T, TJoined)
+      Me.Builder.AddJoin(Of TJoined)(Me.Executor, JoinType.CrossJoin, tableSourceFactory, behavior)
+      Me.Builder.AddOn(Of TJoined)(Nothing, {0, 1})
+      Return New JoinedSelectSqlExpression(Of T, TJoined)(Me.Builder, Me.Executor)
     End Function
 
     ''' <summary>
@@ -307,6 +393,19 @@ Namespace Expressions
     ''' <returns></returns>
     Private Function InternalJoin(Of TJoined)(joinType As JoinType) As JoinSelectSqlExpression(Of T, TJoined)
       Me.Builder.AddJoin(Of TJoined)(joinType)
+      Return New JoinSelectSqlExpression(Of T, TJoined)(Me.Builder, Me.Executor)
+    End Function
+
+    ''' <summary>
+    ''' Adds JOIN clause.
+    ''' </summary>
+    ''' <typeparam name="TJoined"></typeparam>
+    ''' <param name="joinType"></param>
+    ''' <param name="tableSourceFactory"></param>
+    ''' <param name="behavior"></param>
+    ''' <returns></returns>
+    Private Function InternalJoin(Of TJoined)(joinType As JoinType, tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)), behavior As NonModelEntityCreationBehavior) As JoinSelectSqlExpression(Of T, TJoined)
+      Me.Builder.AddJoin(Of TJoined)(Me.Executor, joinType, tableSourceFactory, behavior)
       Return New JoinSelectSqlExpression(Of T, TJoined)(Me.Builder, Me.Executor)
     End Function
 

@@ -10,18 +10,33 @@ Namespace Internal.Query.Metadata
   Public Class SelectSqlModel
     Inherits SqlModelBase
 
-    Private m_CustomSqlResult As SqlResultBase
+    Private m_SqlResult As SqlResultBase
     ''' <summary>
-    ''' Gets or sets custom SQL result.<br/>
+    ''' Gets or sets SQL result.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <returns>Custom SQL result or <see langword="Nothing"/> if the select is not custom.</returns>
-    Public Property CustomSqlResult() As <MaybeNull> SqlResultBase
+    ''' <returns></returns>
+    Public Property SqlResult() As <MaybeNull> SqlResultBase
       Get
-        Return m_CustomSqlResult
+        Return m_SqlResult
       End Get
       Set(<DisallowNull> ByVal value As SqlResultBase)
-        m_CustomSqlResult = value
+        m_SqlResult = value
+      End Set
+    End Property
+
+    Private m_NonModelEntity As NonModelEntity
+    ''' <summary>
+    ''' Gets or sets ad hoc non model entity.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns>Non model entity or <see langword="Nothing"/> if the select is not custom or this is not a subquery.</returns>
+    Public Property NonModelEntity() As <MaybeNull> NonModelEntity
+      Get
+        Return m_NonModelEntity
+      End Get
+      Set(ByVal value As NonModelEntity)
+        m_NonModelEntity = value
       End Set
     End Property
 
@@ -29,31 +44,52 @@ Namespace Internal.Query.Metadata
     ''' Creates new instance of <see cref="SelectSqlModel"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="model"></param>
-    ''' <param name="mainEntityType"></param>
-    Public Sub New(<DisallowNull> model As Model, <DisallowNull> mainEntityType As Type)
-      MyBase.New(model, mainEntityType)
+    ''' <param name="mainEntity"></param>
+    Public Sub New(<DisallowNull> mainEntity As Entity)
+      MyBase.New(mainEntity)
     End Sub
 
     ''' <summary>
     ''' Adds joined table.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <typeparam name="T"></typeparam>
+    ''' <param name="entity"></param>
     ''' <param name="relationship"></param>
     ''' <returns></returns>
-    Public Function AddJoin(Of T)(Optional relationship As SqlEntityRelationship = Nothing) As SqlEntity
-      Return AddEntity(GetType(T), relationship, False)
+    Public Function AddJoin(<DisallowNull> entity As Entity, relationship As SqlEntityRelationship) As EntityBasedSqlEntity
+      Return AddEntity(entity, relationship, False)
+    End Function
+
+    ''' <summary>
+    ''' Adds joined table.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="entity"></param>
+    ''' <param name="relationship"></param>
+    ''' <param name="creationBehavior"></param>
+    ''' <returns></returns>
+    Public Function AddJoin(<DisallowNull> entity As NonModelEntity, relationship As SqlEntityRelationship, creationBehavior As NonModelEntityCreationBehavior) As NonModelEntityBasedSqlEntity
+      Return AddEntity(entity, relationship, False, creationBehavior)
     End Function
 
     ''' <summary>
     ''' Adds ignored joined table.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="entityType"></param>
+    ''' <param name="entity"></param>
     ''' <returns></returns>
-    Public Function AddIgnoredJoin(<DisallowNull> entityType As Type) As SqlEntity
-      Return AddEntity(entityType, Nothing, True)
+    Public Function AddIgnoredJoin(<DisallowNull> entity As Entity) As EntityBasedSqlEntity
+      Return AddEntity(entity, Nothing, True)
+    End Function
+
+    ''' <summary>
+    ''' Adds ignored joined table.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="entity"></param>
+    ''' <returns></returns>
+    Public Function AddIgnoredJoin(<DisallowNull> entity As NonModelEntity) As NonModelEntityBasedSqlEntity
+      Return AddEntity(entity, Nothing, True, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
     End Function
 
     ''' <summary>
@@ -63,6 +99,25 @@ Namespace Internal.Query.Metadata
     ''' <returns></returns>
     Public Function ContainsJoins() As Boolean
       Return 1 < Me.Entities.Count
+    End Function
+
+    ''' <summary>
+    ''' Gets count of entities that are not excluded or ignored.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetNotExcludedOrIgnoredEntityCount() As Int32
+      ' LINQ not used for performance and allocation reasons
+
+      Dim count = 0
+
+      For i = 0 To Me.Entities.Count - 1
+        If Not Me.Entities(i).IsExcludedOrIgnored Then
+          count += 1
+        End If
+      Next
+
+      Return count
     End Function
 
   End Class
