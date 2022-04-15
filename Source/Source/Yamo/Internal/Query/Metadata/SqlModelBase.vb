@@ -101,7 +101,7 @@ Namespace Internal.Query.Metadata
     End Function
 
     ''' <summary>
-    ''' Get entities count.<br/>
+    ''' Gets entities count.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>

@@ -56,7 +56,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="entity"></param>
     ''' <param name="relationship"></param>
     ''' <returns></returns>
-    Public Function AddJoin(<DisallowNull> entity As Entity, relationship As SqlEntityRelationship) As SqlEntityBase
+    Public Function AddJoin(<DisallowNull> entity As Entity, relationship As SqlEntityRelationship) As EntityBasedSqlEntity
       Return AddEntity(entity, relationship, False)
     End Function
 
@@ -68,7 +68,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="relationship"></param>
     ''' <param name="creationBehavior"></param>
     ''' <returns></returns>
-    Public Function AddJoin(<DisallowNull> entity As NonModelEntity, relationship As SqlEntityRelationship, creationBehavior As NonModelEntityCreationBehavior) As SqlEntityBase
+    Public Function AddJoin(<DisallowNull> entity As NonModelEntity, relationship As SqlEntityRelationship, creationBehavior As NonModelEntityCreationBehavior) As NonModelEntityBasedSqlEntity
       Return AddEntity(entity, relationship, False, creationBehavior)
     End Function
 
@@ -78,7 +78,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="entity"></param>
     ''' <returns></returns>
-    Public Function AddIgnoredJoin(<DisallowNull> entity As Entity) As SqlEntityBase
+    Public Function AddIgnoredJoin(<DisallowNull> entity As Entity) As EntityBasedSqlEntity
       Return AddEntity(entity, Nothing, True)
     End Function
 
@@ -88,7 +88,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="entity"></param>
     ''' <returns></returns>
-    Public Function AddIgnoredJoin(<DisallowNull> entity As NonModelEntity) As SqlEntityBase
+    Public Function AddIgnoredJoin(<DisallowNull> entity As NonModelEntity) As NonModelEntityBasedSqlEntity
       Return AddEntity(entity, Nothing, True, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
     End Function
 
@@ -99,6 +99,25 @@ Namespace Internal.Query.Metadata
     ''' <returns></returns>
     Public Function ContainsJoins() As Boolean
       Return 1 < Me.Entities.Count
+    End Function
+
+    ''' <summary>
+    ''' Gets count of entities that are not excluded or ignored.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetNotExcludedOrIgnoredEntityCount() As Int32
+      ' LINQ not used for performance and allocation reasons
+
+      Dim count = 0
+
+      For i = 0 To Me.Entities.Count - 1
+        If Not Me.Entities(i).IsExcludedOrIgnored Then
+          count += 1
+        End If
+      Next
+
+      Return count
     End Function
 
   End Class

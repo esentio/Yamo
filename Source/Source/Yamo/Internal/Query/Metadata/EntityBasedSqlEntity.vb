@@ -18,6 +18,13 @@ Namespace Internal.Query.Metadata
     Public ReadOnly Property Entity As Entity
 
     ''' <summary>
+    ''' Gets column aliases.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns>Returns <see langword="Nothing"/> if aliases are not used.</returns>
+    Public ReadOnly Property ColumnAliases As <MaybeNull> String()
+
+    ''' <summary>
     ''' Creates new instance of <see cref="EntityBasedSqlEntity"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -53,13 +60,26 @@ Namespace Internal.Query.Metadata
     End Sub
 
     ''' <summary>
+    ''' Sets column aliases if they are used.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="aliases"></param>
+    Public Sub SetColumnAliases(<DisallowNull> aliases As String())
+      _ColumnAliases = aliases
+    End Sub
+
+    ''' <summary>
     ''' Gets column name.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="propertyName"></param>
     ''' <returns></returns>
     Public Overrides Function GetColumnName(<DisallowNull> propertyName As String) As String
-      Return Me.Entity.GetProperty(propertyName).ColumnName
+      If Me.ColumnAliases Is Nothing Then
+        Return Me.Entity.GetProperty(propertyName).ColumnName
+      Else
+        Return Me.ColumnAliases(Me.Entity.GetProperty(propertyName).Index)
+      End If
     End Function
 
     ''' <summary>
@@ -69,7 +89,11 @@ Namespace Internal.Query.Metadata
     ''' <param name="index"></param>
     ''' <returns></returns>
     Public Overrides Function GetColumnName(index As Int32) As String
-      Return Me.Entity.GetProperty(index).ColumnName
+      If Me.ColumnAliases Is Nothing Then
+        Return Me.Entity.GetProperty(index).ColumnName
+      Else
+        Return Me.ColumnAliases(index)
+      End If
     End Function
 
   End Class

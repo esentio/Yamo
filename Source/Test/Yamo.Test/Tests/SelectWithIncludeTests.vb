@@ -788,5 +788,37 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeValueDirectlyInSubquery()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Try
+        Using db = CreateDbContext()
+          Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            SelectAll().
+                                            Include(Sub(x) x.Tag = x.Description)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ToList()
+
+          Assert.Fail()
+        End Using
+      Catch ex As NotSupportedException
+        ' expected
+      Catch ex As Exception
+        Assert.Fail()
+      End Try
+    End Sub
+
   End Class
 End Namespace

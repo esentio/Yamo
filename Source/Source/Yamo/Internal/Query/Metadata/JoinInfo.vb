@@ -23,11 +23,11 @@ Namespace Internal.Query.Metadata
     Public ReadOnly Property TableSource As <MaybeNull> String
 
     ''' <summary>
-    ''' Gets ad hoc non model entity (if used).<br/>
+    ''' Gets subquery (if used).<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property NonModelEntity As <MaybeNull> NonModelEntity
+    Public ReadOnly Property Subquery As <MaybeNull> SelectQuery
 
     ''' <summary>
     ''' Gets non model entity creation behavior (if used).<br/>
@@ -61,12 +61,12 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="joinType"></param>
     ''' <param name="tableSource"></param>
-    ''' <param name="nonModelEntity"></param>
+    ''' <param name="subquery"></param>
     ''' <param name="creationBehavior"></param>
-    Sub New(<DisallowNull> joinType As JoinType, tableSource As String, nonModelEntity As NonModelEntity, creationBehavior As NonModelEntityCreationBehavior)
+    Sub New(<DisallowNull> joinType As JoinType, tableSource As String, subquery As SelectQuery, creationBehavior As NonModelEntityCreationBehavior)
       Me.JoinType = joinType
       Me.TableSource = tableSource
-      Me.NonModelEntity = nonModelEntity
+      Me.Subquery = subquery
       Me.NonModelEntityCreationBehavior = creationBehavior
     End Sub
 
