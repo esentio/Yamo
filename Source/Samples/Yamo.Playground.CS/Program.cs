@@ -82,7 +82,8 @@ namespace Yamo.Playground.CS
             //Test57();
             //Test58();
             //Test59();
-            Test60();
+            //Test60();
+            Test61();
         }
 
         public static MyContext CreateContext()
@@ -1219,6 +1220,22 @@ namespace Yamo.Playground.CS
                               .As(x => x.Stats)
                               .SelectAll()
                               .ToList();
+            }
+        }
+
+        public static void Test61()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From(c =>
+                             {
+                                 return c.From<Article>()
+                                         .Where(x => x.InStock)
+                                         .SelectAll();
+                             })
+                             .Where(x => 42 < x.Price)
+                             .SelectAll()
+                             .ToList();
             }
         }
 

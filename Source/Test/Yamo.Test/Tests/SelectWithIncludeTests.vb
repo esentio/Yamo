@@ -602,7 +602,7 @@ Namespace Tests
         Assert.IsNull(result(1).Label)
       End Using
 
-      ' same as above, but include whole subquery result
+      ' same as above, but don't exclude label
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).
                         LeftJoin(Function(c)
@@ -785,6 +785,543 @@ Namespace Tests
         Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
         Assert.IsNull(result(1).LabelDescription)
         Assert.IsNull(result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeValuesFromSubqueryOfComplexType()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description})
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.Description).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0))
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.AreEqual(article2, result(1))
+        Assert.IsNull(result(1).LabelDescription)
+      End Using
+
+      Try
+        Using db = CreateDbContext()
+          Dim result = db.From(Of Article).
+                          LeftJoin(Function(c)
+                                     Return c.From(Of Label).
+                                              Where(Function(x) x.Language = English).
+                                              Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description})
+                                   End Function).
+                          On(Function(j) j.T1.Id = j.T2.Id).
+                          OrderBy(Function(j) j.T1.Id).
+                          SelectAll().
+                          Include(Sub(j) j.T1.Tag = j.T2.Label).
+                          ToList()
+        End Using
+
+        Assert.Fail()
+      Catch ex As AssertFailedException
+        Assert.Fail()
+      Catch ex As Exception
+        ' expected
+      End Try
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeWholeResultFromSubqueryOfTypeEntity()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            SelectAll()
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0))
+        Assert.AreEqual(label1En, result(0).Tag)
+        Assert.IsNull(result(0).Label)
+        Assert.AreEqual(article2, result(1))
+        Assert.IsNull(result(1).Tag)
+        Assert.IsNull(result(1).Label)
+      End Using
+
+      ' same as above, but don't exclude label
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            SelectAll()
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0))
+        Assert.AreEqual(label1En, result(0).Tag)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(article2, result(1))
+        Assert.IsNull(result(1).Tag)
+        Assert.IsNull(result(1).Label)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeWholeResultFromSubqueryOfComplexType()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description})
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0))
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Label = label1En, Key .Description = label1En.Description}, result(0).Tag)
+        Assert.IsNull(result(0).Label)
+        Assert.AreEqual(article2, result(1))
+        Assert.IsNull(result(1).Tag)
+        Assert.IsNull(result(1).Label)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeWholeResultFromSubqueryOfTypeEntityUsingNullIfAllColumnsAreNullBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      ' NonModelEntityCreationBehavior should not have any effect here
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            SelectAll()
+                                 End Function, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0))
+        Assert.AreEqual(label1En, result(0).Tag)
+        Assert.IsNull(result(0).Label)
+        Assert.AreEqual(article2, result(1))
+        Assert.IsNull(result(1).Tag)
+        Assert.IsNull(result(1).Label)
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            SelectAll()
+                                 End Function, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0))
+        Assert.AreEqual(label1En, result(0).Tag)
+        Assert.IsNull(result(0).Label)
+        Assert.AreEqual(article2, result(1))
+        Assert.IsNull(result(1).Tag)
+        Assert.IsNull(result(1).Label)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeWholeResultFromSubqueryOfTypeEntityUsingAlwaysCreateInstanceBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      ' NonModelEntityCreationBehavior should not have any effect here
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            SelectAll()
+                                 End Function, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0))
+        Assert.AreEqual(label1En, result(0).Tag)
+        Assert.IsNull(result(0).Label)
+        Assert.AreEqual(article2, result(1))
+        Assert.IsNull(result(1).Tag)
+        Assert.IsNull(result(1).Label)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeWholeResultFromSubqueryOfTypeAnonymousTypeUsingNullIfAllColumnsAreNullBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description})
+                                 End Function, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Description = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description})
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Description = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeWholeResultFromSubqueryOfTypeAnonymousTypeUsingAlwaysCreateInstanceBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description})
+                                 End Function, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Description = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .Id = 0, Key .Description = CType(Nothing, String)}, result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeWholeResultFromSubqueryOfTypeValueTupleUsingNullIfAllColumnsAreNullBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) (Id:=x.Id, Description:=x.Description))
+                                 End Function, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual((label1En.Id, label1En.Description), result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) (Id:=x.Id, Description:=x.Description))
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual((label1En.Id, label1En.Description), result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeWholeResultFromSubqueryOfTypeValueTupleUsingAlwaysCreateInstanceBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      ' same as above, but include whole subquery result
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) (Id:=x.Id, Description:=x.Description))
+                                 End Function, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual((label1En.Id, label1En.Description), result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual((0, CType(Nothing, String)), result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeWholeResultFromSubqueryOfTypeAdHocTypeUsingNullIfAllColumnsAreNullBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description})
+                                 End Function, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        On(Function(j) j.T1.Id = j.T2.IntValue).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject() With {.IntValue = label1En.Id, .StringValue1 = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description})
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.IntValue).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject() With {.IntValue = label1En.Id, .StringValue1 = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeWholeResultFromSubqueryOfTypeAdHocTypeUsingAlwaysCreateInstanceBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description})
+                                 End Function, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                        On(Function(j) j.T1.Id = j.T2.IntValue).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject() With {.IntValue = label1En.Id, .StringValue1 = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject() With {.IntValue = 0, .StringValue1 = CType(Nothing, String)}, result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeValueToResultOfSubqueryOfTypeEntity()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Function(c)
+                               Return c.From(Of Article).
+                                        SelectAll()
+                             End Function).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.Description).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).LabelDescription)
+        Assert.IsNull(result(1).Label)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeValueToResultOfSubqueryOfTypeAdHocType()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Dim item1 = New NonModelObject(article1.Id, article1.Price) With {.StringValue1 = label1En.Description}
+      Dim item2 = New NonModelObject(article2.Id, article2.Price) With {.StringValue1 = Nothing}
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Function(c)
+                               Return c.From(Of Article).
+                                        Select(Function(x) New NonModelObject With {.IntValue = x.Id, .DecimalValue = x.Price})
+                             End Function).
+                        LeftJoin(Of Label)(Function(j) j.T1.IntValue = j.T2.Id AndAlso j.T2.Language = English).
+                        OrderBy(Function(j) j.T1.IntValue).
+                        SelectAll().
+                        Include(Sub(j) j.T1.StringValue1 = j.T2.Description).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(item1, result(0))
+        Assert.AreEqual(item2, result(1))
       End Using
     End Sub
 

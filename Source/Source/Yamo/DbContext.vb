@@ -197,6 +197,17 @@ Public Class DbContext
   ''' Starts building SQL SELECT statement.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
+  ''' <param name="tableSourceFactory"></param>
+  ''' <param name="behavior"></param>
+  ''' <returns></returns>
+  Public Function From(Of T)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull) As SelectSqlExpression(Of T)
+    Return New SelectSqlExpression(Of T)(Me, tableSourceFactory, behavior)
+  End Function
+
+  ''' <summary>
+  ''' Starts building SQL SELECT statement.
+  ''' </summary>
+  ''' <typeparam name="T"></typeparam>
   ''' <param name="tableSource"></param>
   ''' <returns></returns>
   Public Function From(Of T)(<DisallowNull> tableSource As FormattableString) As SelectSqlExpression(Of T)

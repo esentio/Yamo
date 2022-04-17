@@ -108,6 +108,11 @@ Namespace Internal
     Private m_NonModelEntity As NonModelEntity
 
     ''' <summary>
+    ''' Stores whether current expression is custom select of a single entity.
+    ''' </summary>
+    Private m_IsCustomSelectOfSingleEntity As Boolean
+
+    ''' <summary>
     ''' Stores stack of nodes.
     ''' </summary>
     Private m_Stack As Stack(Of NodeInfo)
@@ -149,6 +154,7 @@ Namespace Internal
       m_CustomSqlResult = Nothing
       m_CustomSqlResultItemIndex = 0
       m_NonModelEntity = Nothing
+      m_IsCustomSelectOfSingleEntity = False
       m_Stack.Clear()
     End Sub
 
@@ -205,7 +211,10 @@ Namespace Internal
 
       m_ExpressionParameters = Nothing
 
-      If createNonModelEntity Then
+      If m_IsCustomSelectOfSingleEntity Then
+        ' better would be not to not create an instance in this case
+        m_NonModelEntity = Nothing
+      ElseIf createNonModelEntity Then
         m_NonModelEntity.SetSqlResult(m_CustomSqlResult)
       End If
 
@@ -1205,25 +1214,29 @@ Namespace Internal
         End If
       End If
 
-      Visit(node)
-
       Dim type = node.Type
       Dim entity = m_Model.GetEntities().FirstOrDefault(Function(x) x.EntityType = type)
 
-      Dim isInCustomSelectMode = m_Mode = ExpressionTranslateMode.CustomSelect
-
       If entity Is Nothing Then
         ' simple scalar value
+        Visit(node)
+
+        Dim isInCustomSelectMode = m_Mode = ExpressionTranslateMode.CustomSelect
         Dim columnAlias = If(isInCustomSelectMode, CreateColumnAlias(0), CreateIncludeColumnAlias(0))
         AppendColumnAliasWithSpace(columnAlias)
         m_CustomSqlResult = New ScalarValueSqlResult(type)
       Else
         ' whole entity
-        If TypeOf entity IsNot EntityBasedSqlEntity Then
+        If TypeOf entity Is EntityBasedSqlEntity Then
+          m_IsCustomSelectOfSingleEntity = True
+          Visit(node)
+          m_CustomSqlResult = New EntitySqlResult(DirectCast(entity, EntityBasedSqlEntity))
+        ElseIf TypeOf entity Is NonModelEntityBasedSqlEntity Then
+          Visit(node)
+          m_CustomSqlResult = DirectCast(entity, NonModelEntityBasedSqlEntity).Entity.SqlResult
+        Else
           Throw New NotSupportedException($"Unsupported type '{type}' in custom select.")
         End If
-
-        m_CustomSqlResult = New EntitySqlResult(DirectCast(entity, EntityBasedSqlEntity))
       End If
 
       Return node
@@ -1502,7 +1515,9 @@ Namespace Internal
             m_Builder.DialectProvider.Formatter.AppendIdentifier(m_Sql, entity.GetColumnName(i))
           End If
 
-          If isInCustomSelectMode Then
+          ' NOTE: do not use aliases for custom selects of a single entity. For normal queries, they are not necessary.
+          ' For subqueries, we don't use them either (it's easier this way).
+          If isInCustomSelectMode AndAlso Not m_IsCustomSelectOfSingleEntity Then
             Dim columnAlias = CreateColumnAlias(m_CustomSqlResultItemIndex, columnIndex)
             AppendColumnAliasWithSpace(columnAlias)
           ElseIf isInIncludeMode Then

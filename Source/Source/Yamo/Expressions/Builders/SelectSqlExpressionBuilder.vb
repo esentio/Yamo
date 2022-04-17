@@ -118,11 +118,34 @@ Namespace Expressions.Builders
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="context"></param>
+    Public Sub New(<DisallowNull> context As DbContext)
+      MyBase.New(context)
+      Me.SubqueryContext = Nothing
+      Initialize()
+    End Sub
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="SelectSqlExpressionBuilder"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="context"></param>
     ''' <param name="mainEntityType"></param>
     Public Sub New(<DisallowNull> context As DbContext, <DisallowNull> mainEntityType As Type)
       MyBase.New(context)
       Me.SubqueryContext = Nothing
-      Initialize(mainEntityType)
+      Initialize()
+      m_Model.SetMainEntity(GetMainEntity(mainEntityType), False)
+    End Sub
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="SelectSqlExpressionBuilder"/>.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="context"></param>
+    Public Sub New(<DisallowNull> context As SubqueryContext)
+      MyBase.New(context.DbContext)
+      Me.SubqueryContext = context
+      Initialize()
     End Sub
 
     ''' <summary>
@@ -134,15 +157,16 @@ Namespace Expressions.Builders
     Public Sub New(<DisallowNull> context As SubqueryContext, <DisallowNull> mainEntityType As Type)
       MyBase.New(context.DbContext)
       Me.SubqueryContext = context
-      Initialize(mainEntityType)
+      Initialize()
+      m_Model.SetMainEntity(GetMainEntity(mainEntityType), False)
+      m_ParameterIndexOffset = context.ParameterIndexOffset
     End Sub
 
     ''' <summary>
     ''' Initializes values.
     ''' </summary>
-    ''' <param name="mainEntityType"></param>
-    Private Sub Initialize(<DisallowNull> mainEntityType As Type)
-      m_Model = New SelectSqlModel(GetMainEntity(mainEntityType))
+    Private Sub Initialize()
+      m_Model = New SelectSqlModel()
       m_Visitor = New SqlExpressionVisitor(Me, m_Model)
       ' lists are created only when necessary
       m_MainTableSourceExpression = Nothing
@@ -160,6 +184,43 @@ Namespace Expressions.Builders
       m_IncludedExpressionsCount = 0
       m_UseDistinct = False
       m_Parameters = New List(Of SqlParameter)
+      m_ParameterIndexOffset = 0
+    End Sub
+
+    ''' <summary>
+    ''' Sets main table source.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="executor"></param>
+    ''' <param name="tableSourceFactory"></param>
+    ''' <param name="behavior"></param>
+    Public Sub SetMainTableSource(Of T)(<DisallowNull> executor As QueryExecutor, <DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T)), behavior As NonModelEntityCreationBehavior)
+      Dim context = New SubqueryContext(Me.DbContext, executor, GetParameterIndex())
+      Dim subquery = tableSourceFactory.Invoke(context).ToSubquery()
+      Dim query = subquery.Query
+
+      Dim subqueryWithNonModelEntityResult = query.Model.NonModelEntity IsNot Nothing
+
+      If subqueryWithNonModelEntityResult Then
+        Dim sqlEntity = m_Model.SetMainEntity(query.Model.NonModelEntity)
+        sqlEntity.Entity.SqlResult.CreationBehavior = behavior
+      Else
+        Dim entity = Me.DbContext.Model.GetEntity(GetType(T))
+        Dim sqlEntity = m_Model.SetMainEntity(entity, True)
+
+        ' type should always be EntityBasedSqlEntity in this case
+        If TypeOf query.Model.MainEntity Is EntityBasedSqlEntity Then
+          Dim subqueryEntity = DirectCast(query.Model.MainEntity, EntityBasedSqlEntity)
+
+          If subqueryEntity.ColumnAliases IsNot Nothing Then
+            sqlEntity.SetColumnAliases(subqueryEntity.ColumnAliases)
+          End If
+        End If
+      End If
+
+      m_MainTableSourceExpression = "(" & query.Sql & ")"
+      m_Parameters.AddRange(query.Parameters)
     End Sub
 
     ''' <summary>
@@ -234,10 +295,10 @@ Namespace Expressions.Builders
     Public Sub AddJoin(Of TJoined)(<DisallowNull> executor As QueryExecutor, joinType As JoinType, <DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)), behavior As NonModelEntityCreationBehavior)
       Dim context = New SubqueryContext(Me.DbContext, executor, GetParameterIndex())
       Dim subquery = tableSourceFactory.Invoke(context).ToSubquery()
-      Dim sql = subquery.Query
+      Dim query = subquery.Query
 
-      m_CurrentJoinInfo = New JoinInfo(joinType, "(" & sql.Sql & ")", sql, behavior)
-      m_Parameters.AddRange(sql.Parameters)
+      m_CurrentJoinInfo = New JoinInfo(joinType, "(" & query.Sql & ")", query, behavior)
+      m_Parameters.AddRange(query.Parameters)
     End Sub
 
     ''' <summary>
@@ -305,13 +366,15 @@ Namespace Expressions.Builders
       End If
 
       Dim subquery = joinInfo.Subquery
-      Dim subQueryWithNonModelEntityResult = subquery?.Model.NonModelEntity IsNot Nothing
+      Dim subqueryWithNonModelEntityResult = subquery?.Model.NonModelEntity IsNot Nothing
 
       Dim sql As String
       Dim joinTypeString = GetJoinTypeString(joinInfo.JoinType)
 
-      If subQueryWithNonModelEntityResult Then
-        Dim sqlEntity = m_Model.AddJoin(subquery.Model.NonModelEntity, relationship, joinInfo.NonModelEntityCreationBehavior)
+      If subqueryWithNonModelEntityResult Then
+        Dim sqlEntity = m_Model.AddJoin(subquery.Model.NonModelEntity, relationship)
+        sqlEntity.Entity.SqlResult.CreationBehavior = joinInfo.NonModelEntityCreationBehavior
+
         Dim tableAlias = sqlEntity.TableAlias
 
         If predicate Is Nothing Then
@@ -329,12 +392,19 @@ Namespace Expressions.Builders
         End If
 
       Else
+        Dim isSubquery = subquery IsNot Nothing
+
         Dim entity = Me.DbContext.Model.GetEntity(GetType(TJoined))
-        Dim sqlEntity = m_Model.AddJoin(entity, relationship)
+        Dim sqlEntity = m_Model.AddJoin(entity, isSubquery, relationship)
         Dim tableAlias = sqlEntity.TableAlias
 
-        If subquery IsNot Nothing AndAlso subquery.Model.MainEntity.ColumnAliases IsNot Nothing Then
-          sqlEntity.SetColumnAliases(subquery.Model.MainEntity.ColumnAliases)
+        ' type should always be EntityBasedSqlEntity in this case
+        If isSubquery AndAlso TypeOf subquery.Model.MainEntity Is EntityBasedSqlEntity Then
+          Dim subqueryEntity = DirectCast(subquery.Model.MainEntity, EntityBasedSqlEntity)
+
+          If subqueryEntity.ColumnAliases IsNot Nothing Then
+            sqlEntity.SetColumnAliases(subqueryEntity.ColumnAliases)
+          End If
         End If
 
         If predicate Is Nothing Then
@@ -722,7 +792,11 @@ Namespace Expressions.Builders
         Next
       End If
 
-      m_Model.SqlResult = New EntitySqlResult(m_Model.MainEntity)
+      If TypeOf m_Model.MainEntity Is EntityBasedSqlEntity Then
+        m_Model.SqlResult = New EntitySqlResult(DirectCast(m_Model.MainEntity, EntityBasedSqlEntity))
+      Else
+        m_Model.SqlResult = DirectCast(m_Model.MainEntity, NonModelEntityBasedSqlEntity).Entity.SqlResult
+      End If
     End Sub
 
     ''' <summary>
@@ -750,7 +824,7 @@ Namespace Expressions.Builders
       End If
 
       If TypeOf result.Entity IsNot EntityBasedSqlEntity Then
-        Throw New Exception($"Cannot exclude column. Exclusion is supported only for model entities. Type '{result.EntityType}' is not defined in the model.")
+        Throw New NotSupportedException($"Cannot exclude column. Exclusion is supported only for model entities. Type '{result.EntityType}' is not defined in the model.")
       End If
 
       Dim entity = DirectCast(result.Entity, EntityBasedSqlEntity)
@@ -947,7 +1021,7 @@ Namespace Expressions.Builders
       sql.Append(" FROM ")
 
       If m_MainTableSourceExpression Is Nothing Then
-        Dim entity = m_Model.MainEntity.Entity
+        Dim entity = DirectCast(m_Model.MainEntity, EntityBasedSqlEntity).Entity
         Me.DialectProvider.Formatter.AppendIdentifier(sql, entity.TableName, entity.Schema)
       Else
         sql.Append(m_MainTableSourceExpression)

@@ -144,6 +144,7 @@ Namespace Tests
     Public Overridable Sub SelectWithExcludeColumnInJoinedTable()
       Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
       Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, 1)
+      linkedItem1.Description = "item 1"
       linkedItem2.Description = "item 2"
 
       InsertItems(linkedItem1, linkedItem2)
@@ -155,23 +156,46 @@ Namespace Tests
                         Exclude(Function(j) j.T2.Description).
                         ToList()
 
-        Assert.AreEqual(1, result.Count)
-
-        Dim linkedItem1Result = result.First()
-
-        Assert.AreEqual("", linkedItem1Result.NextItem.Description)
-
-        ' check if remaining fields are loaded
         linkedItem2.Description = ""
 
-        Assert.AreEqual(linkedItem2, linkedItem1Result.NextItem)
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(linkedItem1, result(0))
+        Assert.AreEqual(linkedItem2, result(0).NextItem)
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectWithExcludeColumnInJoinedSubquery()
+    Public Overridable Sub SelectWithExcludeColumnInFromSubquery()
       Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
       Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, 1)
+      linkedItem1.Description = "item 1"
+      linkedItem2.Description = "item 2"
+
+      InsertItems(linkedItem1, linkedItem2)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Function(c)
+                               Return c.From(Of LinkedItem).
+                                        SelectAll()
+                             End Function).
+                        Join(Of LinkedItem)(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(x) x.NextItem).
+                        SelectAll().
+                        Exclude(Function(j) j.T1.Description).
+                        ToList()
+
+        linkedItem1.Description = ""
+
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(linkedItem1, result(0))
+        Assert.AreEqual(linkedItem2, result(0).NextItem)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithExcludeColumnInJoinSubquery()
+      Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
+      Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, 1)
+      linkedItem1.Description = "item 1"
       linkedItem2.Description = "item 2"
 
       InsertItems(linkedItem1, linkedItem2)
@@ -187,16 +211,11 @@ Namespace Tests
                         Exclude(Function(j) j.T2.Description).
                         ToList()
 
-        Assert.AreEqual(1, result.Count)
-
-        Dim linkedItem1Result = result.First()
-
-        Assert.AreEqual("", linkedItem1Result.NextItem.Description)
-
-        ' check if remaining fields are loaded
         linkedItem2.Description = ""
 
-        Assert.AreEqual(linkedItem2, linkedItem1Result.NextItem)
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(linkedItem1, result(0))
+        Assert.AreEqual(linkedItem2, result(0).NextItem)
       End Using
     End Sub
 
@@ -211,14 +230,60 @@ Namespace Tests
       Try
         Using db = CreateDbContext()
           Dim result = db.From(Of LinkedItem).
-                        Join(Function(c)
-                               Return c.From(Of LinkedItem).
-                                        SelectAll().
-                                        Exclude(Function(x) x.Description)
-                             End Function).
-                        On(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(x) x.NextItem).
-                        SelectAll().
-                        ToList()
+                          Join(Function(c)
+                                 Return c.From(Of LinkedItem).
+                                          SelectAll().
+                                          Exclude(Function(x) x.Description)
+                               End Function).
+                          On(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(x) x.NextItem).
+                          SelectAll().
+                          ToList()
+
+          Assert.Fail()
+        End Using
+      Catch ex As NotSupportedException
+        ' expected
+      Catch ex As Exception
+        Assert.Fail()
+      End Try
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithExcludeColumnInNonModelEntity()
+      Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
+      Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, 1)
+
+      InsertItems(linkedItem1, linkedItem2)
+
+      Try
+        Using db = CreateDbContext()
+          Dim result = db.From(Function(c)
+                                 Return c.From(Of LinkedItem).
+                                          Select(Function(x) New With {.Id = x.Id, .PreviousId = x.PreviousId})
+                               End Function).
+                          SelectAll().
+                          Exclude(Function(x) x.PreviousId).
+                          ToList()
+
+          Assert.Fail()
+        End Using
+      Catch ex As NotSupportedException
+        ' expected
+      Catch ex As Exception
+        Assert.Fail()
+      End Try
+
+      Try
+        Using db = CreateDbContext()
+          Dim result = db.From(Of LinkedItem).
+                          Join(Function(c)
+                                 Return c.From(Of LinkedItem).
+                                          Select(Function(x) New With {.Id = x.Id, .PreviousId = x.PreviousId})
+                               End Function).
+                          On(Function(j) j.T1.Id = j.T2.PreviousId.Value).As(Function(x) x.NextItem).
+                          SelectAll().
+                          Exclude(Function(j) j.T2.PreviousId).
+                          ToList()
 
           Assert.Fail()
         End Using

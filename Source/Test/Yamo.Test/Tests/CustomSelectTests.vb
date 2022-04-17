@@ -2386,5 +2386,104 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfComplexAnonymousTypeFromSubqueryUsingNullIfAllColumnsAreNullBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description})
+                                 End Function, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        Select(Function(j) j.T2).
+                        ToList()
+
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Label = label1En, Key .Description = label1En.Description}, result(0))
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description})
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        Select(Function(j) j.T2).
+                        ToList()
+
+        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Label = label1En, Key .Description = label1En.Description}, result(0))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfComplexAnonymousTypeFromSubqueryUsingAlwaysCreateInstanceBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description})
+                                 End Function, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        Select(Function(j) j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Label = label1En, Key .Description = label1En.Description}, result(0))
+        Assert.AreEqual(New With {Key .Id = 0, Key .Label = CType(Nothing, Label), Key .Description = CType(Nothing, String)}, result(1))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub CustomSelectOfComplexAnonymousTypeWithValuesFromSubquery()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description})
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        Select(Function(j) New With {Key .ArticleId = j.T1.Id, Key .Description = j.T2.Description}).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(New With {Key .ArticleId = article1.Id, Key .Description = label1En.Description}, result(0))
+        Assert.AreEqual(New With {Key .ArticleId = article2.Id, Key .Description = CType(Nothing, String)}, result(1))
+      End Using
+
+      ' NOTE: selecting complex types from subquery is not supported at the moment
+    End Sub
+
   End Class
 End Namespace

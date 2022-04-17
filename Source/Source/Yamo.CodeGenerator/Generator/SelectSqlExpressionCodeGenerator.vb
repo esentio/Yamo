@@ -106,12 +106,34 @@
         builder.AppendLine()
 
         comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
+        params = {"context", "tableSourceFactory", "behavior"}
+        AddComment(builder, comment, params:=params)
+
+        builder.Indent().AppendLine("Friend Sub New(context As DbContext, tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T)), behavior As NonModelEntityCreationBehavior)").PushIndent()
+        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context), New QueryExecutor(context))")
+        builder.Indent().AppendLine("Me.Builder.SetMainTableSource(Me.Executor, tableSourceFactory, behavior)").PopIndent()
+        builder.Indent().AppendLine("End Sub")
+
+        builder.AppendLine()
+
+        comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
         params = {"context", "tableSource"}
         AddComment(builder, comment, params:=params)
 
         builder.Indent().AppendLine("Friend Sub New(context As DbContext, tableSource As FormattableString)").PushIndent()
         builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), New QueryExecutor(context))")
         builder.Indent().AppendLine("Me.Builder.SetMainTableSource(tableSource)").PopIndent()
+        builder.Indent().AppendLine("End Sub")
+
+        builder.AppendLine()
+
+        comment = $"Creates new instance of <see cref=""{GetFullClassName(entityCount)}""/>."
+        params = {"context", "tableSourceFactory", "behavior"}
+        AddComment(builder, comment, params:=params)
+
+        builder.Indent().AppendLine("Friend Sub New(context As SubqueryContext, tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T)), behavior As NonModelEntityCreationBehavior)").PushIndent()
+        builder.Indent().AppendLine("MyBase.New(New SelectSqlExpressionBuilder(context), context.Executor)")
+        builder.Indent().AppendLine("Me.Builder.SetMainTableSource(Me.Executor, tableSourceFactory, behavior)").PopIndent()
         builder.Indent().AppendLine("End Sub")
 
         builder.AppendLine()
