@@ -7,15 +7,15 @@ Imports Yamo.Internal.Query.Metadata
 Namespace Expressions
 
   ''' <summary>
-  ''' Represents SELECT clause in SQL SELECT statement.
+  ''' Represents set operator in SQL SELECT statement.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
-  Public Class CustomSelectSqlExpression(Of T)
+  Public Class SetSelectSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
     Implements ISubqueryableSelectSqlExpression(Of T)
 
     ''' <summary>
-    ''' Creates new instance of <see cref="CustomSelectSqlExpression(Of T)"/>.
+    ''' Creates new instance of <see cref="SetSelectSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="builder"></param>
     ''' <param name="executor"></param>
@@ -24,20 +24,11 @@ Namespace Expressions
     End Sub
 
     ''' <summary>
-    ''' Adds DISTINCT clause.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function Distinct() As CustomDistinctSelectSqlExpression(Of T)
-      Me.Builder.AddDistinct()
-      Return New CustomDistinctSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
-    End Function
-
-    ''' <summary>
     ''' Adds UNION operator.
     ''' </summary>
     ''' <param name="queryExpressionFactory"></param>
     ''' <returns></returns>
-    Public Function Union(<DisallowNull> queryExpressionFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T))) As CustomSetSelectSqlExpression(Of T)
+    Public Function Union(<DisallowNull> queryExpressionFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T))) As SetSelectSqlExpression(Of T)
       Return InternalSet(SetOperator.Union, queryExpressionFactory)
     End Function
 
@@ -46,7 +37,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="queryExpression"></param>
     ''' <returns></returns>
-    Public Function Union(<DisallowNull> queryExpression As FormattableString) As CustomSetSelectSqlExpression(Of T)
+    Public Function Union(<DisallowNull> queryExpression As FormattableString) As SetSelectSqlExpression(Of T)
       Return InternalSet(SetOperator.Union, queryExpression)
     End Function
 
@@ -56,7 +47,7 @@ Namespace Expressions
     ''' <param name="queryExpression"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Union(<DisallowNull> queryExpression As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As CustomSetSelectSqlExpression(Of T)
+    Public Function Union(<DisallowNull> queryExpression As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As SetSelectSqlExpression(Of T)
       Return InternalSet(SetOperator.Union, queryExpression, parameters)
     End Function
 
@@ -65,7 +56,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="queryExpressionFactory"></param>
     ''' <returns></returns>
-    Public Function UnionAll(<DisallowNull> queryExpressionFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T))) As CustomSetSelectSqlExpression(Of T)
+    Public Function UnionAll(<DisallowNull> queryExpressionFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T))) As SetSelectSqlExpression(Of T)
       Return InternalSet(SetOperator.UnionAll, queryExpressionFactory)
     End Function
 
@@ -74,7 +65,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="queryExpression"></param>
     ''' <returns></returns>
-    Public Function UnionAll(<DisallowNull> queryExpression As FormattableString) As CustomSetSelectSqlExpression(Of T)
+    Public Function UnionAll(<DisallowNull> queryExpression As FormattableString) As SetSelectSqlExpression(Of T)
       Return InternalSet(SetOperator.UnionAll, queryExpression)
     End Function
 
@@ -84,7 +75,7 @@ Namespace Expressions
     ''' <param name="queryExpression"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function UnionAll(<DisallowNull> queryExpression As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As CustomSetSelectSqlExpression(Of T)
+    Public Function UnionAll(<DisallowNull> queryExpression As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As SetSelectSqlExpression(Of T)
       Return InternalSet(SetOperator.UnionAll, queryExpression, parameters)
     End Function
 
@@ -93,7 +84,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="queryExpressionFactory"></param>
     ''' <returns></returns>
-    Public Function Except(<DisallowNull> queryExpressionFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T))) As CustomSetSelectSqlExpression(Of T)
+    Public Function Except(<DisallowNull> queryExpressionFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T))) As SetSelectSqlExpression(Of T)
       Return InternalSet(SetOperator.Except, queryExpressionFactory)
     End Function
 
@@ -102,7 +93,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="queryExpression"></param>
     ''' <returns></returns>
-    Public Function Except(<DisallowNull> queryExpression As FormattableString) As CustomSetSelectSqlExpression(Of T)
+    Public Function Except(<DisallowNull> queryExpression As FormattableString) As SetSelectSqlExpression(Of T)
       Return InternalSet(SetOperator.Except, queryExpression)
     End Function
 
@@ -112,7 +103,7 @@ Namespace Expressions
     ''' <param name="queryExpression"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Except(<DisallowNull> queryExpression As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As CustomSetSelectSqlExpression(Of T)
+    Public Function Except(<DisallowNull> queryExpression As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As SetSelectSqlExpression(Of T)
       Return InternalSet(SetOperator.Except, queryExpression, parameters)
     End Function
 
@@ -121,7 +112,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="queryExpressionFactory"></param>
     ''' <returns></returns>
-    Public Function Intersect(<DisallowNull> queryExpressionFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T))) As CustomSetSelectSqlExpression(Of T)
+    Public Function Intersect(<DisallowNull> queryExpressionFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T))) As SetSelectSqlExpression(Of T)
       Return InternalSet(SetOperator.Intersect, queryExpressionFactory)
     End Function
 
@@ -130,7 +121,7 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="queryExpression"></param>
     ''' <returns></returns>
-    Public Function Intersect(<DisallowNull> queryExpression As FormattableString) As CustomSetSelectSqlExpression(Of T)
+    Public Function Intersect(<DisallowNull> queryExpression As FormattableString) As SetSelectSqlExpression(Of T)
       Return InternalSet(SetOperator.Intersect, queryExpression)
     End Function
 
@@ -140,7 +131,7 @@ Namespace Expressions
     ''' <param name="queryExpression"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Public Function Intersect(<DisallowNull> queryExpression As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As CustomSetSelectSqlExpression(Of T)
+    Public Function Intersect(<DisallowNull> queryExpression As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As SetSelectSqlExpression(Of T)
       Return InternalSet(SetOperator.Intersect, queryExpression, parameters)
     End Function
 
@@ -150,9 +141,9 @@ Namespace Expressions
     ''' <param name="setOperator"></param>
     ''' <param name="queryExpressionFactory"></param>
     ''' <returns></returns>
-    Private Function InternalSet(setOperator As SetOperator, queryExpressionFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T))) As CustomSetSelectSqlExpression(Of T)
+    Private Function InternalSet(setOperator As SetOperator, queryExpressionFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T))) As SetSelectSqlExpression(Of T)
       Me.Builder.AddSet(Of T)(Me.Executor, setOperator, queryExpressionFactory)
-      Return New CustomSetSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
+      Return New SetSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
     End Function
 
     ''' <summary>
@@ -161,9 +152,9 @@ Namespace Expressions
     ''' <param name="setOperator"></param>
     ''' <param name="queryExpression"></param>
     ''' <returns></returns>
-    Private Function InternalSet(setOperator As SetOperator, queryExpression As FormattableString) As CustomSetSelectSqlExpression(Of T)
+    Private Function InternalSet(setOperator As SetOperator, queryExpression As FormattableString) As SetSelectSqlExpression(Of T)
       Me.Builder.AddSet(Of T)(setOperator, queryExpression)
-      Return New CustomSetSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
+      Return New SetSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
     End Function
 
     ''' <summary>
@@ -173,9 +164,9 @@ Namespace Expressions
     ''' <param name="queryExpression"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
-    Private Function InternalSet(setOperator As SetOperator, queryExpression As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As CustomSetSelectSqlExpression(Of T)
+    Private Function InternalSet(setOperator As SetOperator, queryExpression As RawSqlString, <DisallowNull> ParamArray parameters() As Object) As SetSelectSqlExpression(Of T)
       Me.Builder.AddSet(Of T)(setOperator, queryExpression, parameters)
-      Return New CustomSetSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
+      Return New SetSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
     End Function
 
     ''' <summary>
@@ -186,7 +177,7 @@ Namespace Expressions
     ''' <param name="[then]"></param>
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
-    Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of CustomSelectSqlExpression(Of T), TResult), Optional otherwise As Func(Of CustomSelectSqlExpression(Of T), TResult) = Nothing) As TResult
+    Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of SetSelectSqlExpression(Of T), TResult), Optional otherwise As Func(Of SetSelectSqlExpression(Of T), TResult) = Nothing) As TResult
       If condition Then
         Return [then].Invoke(Me)
       ElseIf otherwise Is Nothing Then
@@ -232,8 +223,7 @@ Namespace Expressions
 
       Dim genericType = resultType.GetGenericTypeDefinition()
 
-      If genericType Is GetType(CustomDistinctSelectSqlExpression(Of )) Then Return True
-      If genericType Is GetType(CustomSetSelectSqlExpression(Of )) Then Return True
+      If genericType Is GetType(SetSelectSqlExpression(Of )) Then Return True
 
       Return False
     End Function
@@ -252,16 +242,17 @@ Namespace Expressions
     ''' <returns></returns>
     Public Function ToList() As List(Of T)
       Dim query = Me.Builder.CreateQuery()
-      Return Me.Executor.ReadCustomList(Of T)(query)
+      Return Me.Executor.ReadList(Of T)(query)
     End Function
 
     ''' <summary>
     ''' Executes SQL query and returns first record or a default value.
     ''' </summary>
+    ''' <param name="behavior">Defines how collection navigation properties are filled. This setting has no effect if no collection navigation properties are used.</param>
     ''' <returns></returns>
-    Public Function FirstOrDefault() As <MaybeNull> T
+    Public Function FirstOrDefault(Optional behavior As CollectionNavigationFillBehavior = CollectionNavigationFillBehavior.ProcessOnlyFirstRow) As <MaybeNull> T
       Dim query = Me.Builder.CreateQuery()
-      Return Me.Executor.ReadCustomFirstOrDefault(Of T)(query)
+      Return Me.Executor.ReadFirstOrDefault(Of T)(query, behavior)
     End Function
 
   End Class

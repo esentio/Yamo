@@ -1,6 +1,6 @@
 ﻿Namespace Generator
 
-  Public Class SelectedSelectSqlExpressionCodeGenerator
+  Public Class CustomSetSelectSqlExpressionCodeGenerator
     Inherits CodeGenerator
 
     Public Sub New(indentation As String, outputFolder As String, definition As GeneratedClassDefinition, definitions As List(Of GeneratedClassDefinition))
@@ -9,9 +9,7 @@
 
     Protected Overrides Function GetAllowedResultsForCondition() As GeneratedClass()
       Return {
-        GeneratedClass.SelectedSelectSqlExpression,
-        GeneratedClass.DistinctSelectSqlExpression,
-        GeneratedClass.SetSelectSqlExpression
+        GeneratedClass.CustomSetSelectSqlExpression
       }
     End Function
 
@@ -25,7 +23,7 @@
       builder.Indent().AppendLine("Namespace Expressions").PushIndent()
       builder.AppendLine()
 
-      Dim comment = "Represents SELECT clause in SQL SELECT statement."
+      Dim comment = "Represents set operator in SQL SELECT statement."
       Dim typeParams = GetGenericNames(entityCount)
       AddComment(builder, comment, typeParams:=typeParams)
 
@@ -38,16 +36,7 @@
       GenerateConstructor(builder, entityCount)
       builder.AppendLine()
 
-      GenerateExclude(builder, entityCount)
-      builder.AppendLine()
-
-      GenerateInclude(builder, entityCount)
-      builder.AppendLine()
-
-      GenerateDistinct(builder, entityCount)
-      builder.AppendLine()
-
-      GenerateSet(builder, entityCount)
+      GenerateCustomSet(builder, entityCount)
       builder.AppendLine()
 
       GenerateIf(builder, entityCount)
@@ -56,10 +45,10 @@
       GenerateToSubquery(builder, entityCount)
       builder.AppendLine()
 
-      GenerateToList(builder, entityCount)
+      GenerateCustomToList(builder, entityCount)
       builder.AppendLine()
 
-      GenerateFirstOrDefault(builder, entityCount)
+      GenerateCustomFirstOrDefault(builder, entityCount)
       builder.AppendLine()
 
       builder.PopIndent()

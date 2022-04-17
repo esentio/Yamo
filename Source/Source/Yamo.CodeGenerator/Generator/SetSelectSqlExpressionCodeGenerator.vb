@@ -1,6 +1,6 @@
 ﻿Namespace Generator
 
-  Public Class SelectedSelectSqlExpressionCodeGenerator
+  Public Class SetSelectSqlExpressionCodeGenerator
     Inherits CodeGenerator
 
     Public Sub New(indentation As String, outputFolder As String, definition As GeneratedClassDefinition, definitions As List(Of GeneratedClassDefinition))
@@ -9,8 +9,6 @@
 
     Protected Overrides Function GetAllowedResultsForCondition() As GeneratedClass()
       Return {
-        GeneratedClass.SelectedSelectSqlExpression,
-        GeneratedClass.DistinctSelectSqlExpression,
         GeneratedClass.SetSelectSqlExpression
       }
     End Function
@@ -25,7 +23,7 @@
       builder.Indent().AppendLine("Namespace Expressions").PushIndent()
       builder.AppendLine()
 
-      Dim comment = "Represents SELECT clause in SQL SELECT statement."
+      Dim comment = "Represents set operator in SQL SELECT statement."
       Dim typeParams = GetGenericNames(entityCount)
       AddComment(builder, comment, typeParams:=typeParams)
 
@@ -36,15 +34,6 @@
       builder.Indent().AppendLine($"Implements ISubqueryableSelectSqlExpression(Of {generic})")
       builder.AppendLine()
       GenerateConstructor(builder, entityCount)
-      builder.AppendLine()
-
-      GenerateExclude(builder, entityCount)
-      builder.AppendLine()
-
-      GenerateInclude(builder, entityCount)
-      builder.AppendLine()
-
-      GenerateDistinct(builder, entityCount)
       builder.AppendLine()
 
       GenerateSet(builder, entityCount)

@@ -140,6 +140,12 @@
           Case GeneratedClass.CustomDistinctSelectSqlExpression
             min = 1
             max = 1
+          Case GeneratedClass.SetSelectSqlExpression
+            min = 1
+            max = 1
+          Case GeneratedClass.CustomSetSelectSqlExpression
+            min = 1
+            max = 1
         End Select
 
         Dim className = GetClassName(generatedClass)

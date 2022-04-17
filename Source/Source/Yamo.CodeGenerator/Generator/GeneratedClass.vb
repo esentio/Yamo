@@ -15,6 +15,8 @@
     DistinctSelectSqlExpression
     CustomSelectSqlExpression
     CustomDistinctSelectSqlExpression
+    SetSelectSqlExpression
+    CustomSetSelectSqlExpression
     Join
   End Enum
 End Namespace

@@ -104,6 +104,11 @@ Namespace Expressions.Builders
     Private m_UseDistinct As Boolean
 
     ''' <summary>
+    ''' Stores set expressions.
+    ''' </summary>
+    Private m_SetExpressions As List(Of String)
+
+    ''' <summary>
     ''' Stores parameters.
     ''' </summary>
     Private m_Parameters As List(Of SqlParameter)
@@ -183,6 +188,7 @@ Namespace Expressions.Builders
       m_SelectExpression = Nothing
       m_IncludedExpressionsCount = 0
       m_UseDistinct = False
+      m_SetExpressions = Nothing
       m_Parameters = New List(Of SqlParameter)
       m_ParameterIndexOffset = 0
     End Sub
@@ -932,6 +938,86 @@ Namespace Expressions.Builders
     End Sub
 
     ''' <summary>
+    ''' Adds set operator.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="executor"></param>
+    ''' <param name="setOperator"></param>
+    ''' <param name="queryExpressionFactory"></param>
+    Public Sub AddSet(Of T)(<DisallowNull> executor As QueryExecutor, setOperator As SetOperator, <DisallowNull> queryExpressionFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T)))
+      If m_SetExpressions Is Nothing Then
+        m_SetExpressions = New List(Of String)
+      End If
+
+      Dim context = New SubqueryContext(Me.DbContext, executor, GetParameterIndex())
+      Dim subquery = queryExpressionFactory.Invoke(context).ToSubquery()
+      Dim query = subquery.Query
+
+      m_SetExpressions.Add(Environment.NewLine & GetSetOperatorString(setOperator) & Environment.NewLine & query.Sql)
+      m_Parameters.AddRange(query.Parameters)
+    End Sub
+
+    ''' <summary>
+    ''' Adds set operator.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="setOperator"></param>
+    ''' <param name="queryExpression"></param>
+    Public Sub AddSet(Of T)(setOperator As SetOperator, <DisallowNull> queryExpression As FormattableString)
+      If m_SetExpressions Is Nothing Then
+        m_SetExpressions = New List(Of String)
+      End If
+
+      Dim sql = ConvertToSqlString(queryExpression, GetParameterIndex())
+      m_SetExpressions.Add(Environment.NewLine & GetSetOperatorString(setOperator) & Environment.NewLine & sql.Sql)
+      m_Parameters.AddRange(sql.Parameters)
+    End Sub
+
+    ''' <summary>
+    ''' Adds set operator.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <param name="setOperator"></param>
+    ''' <param name="queryExpression"></param>
+    ''' <param name="parameters"></param>
+    Public Sub AddSet(Of T)(setOperator As SetOperator, <DisallowNull> queryExpression As RawSqlString, <DisallowNull> ParamArray parameters() As Object)
+      If m_SetExpressions Is Nothing Then
+        m_SetExpressions = New List(Of String)
+      End If
+
+      If parameters Is Nothing OrElse parameters.Length = 0 Then
+        m_SetExpressions.Add(Environment.NewLine & GetSetOperatorString(setOperator) & Environment.NewLine & queryExpression.Value)
+      Else
+        Dim sql = ConvertToSqlString(queryExpression.Value, parameters, GetParameterIndex())
+        m_SetExpressions.Add(Environment.NewLine & GetSetOperatorString(setOperator) & Environment.NewLine & sql.Sql)
+        m_Parameters.AddRange(sql.Parameters)
+      End If
+    End Sub
+
+    ''' <summary>
+    ''' Gets SQL set operator string.
+    ''' </summary>
+    ''' <param name="setOperator"></param>
+    ''' <returns></returns>
+    Private Shared Function GetSetOperatorString(setOperator As SetOperator) As String
+      Select Case setOperator
+        Case SetOperator.Union
+          Return "UNION"
+        Case SetOperator.UnionAll
+          Return "UNION ALL"
+        Case SetOperator.Except
+          Return "EXCEPT"
+        Case SetOperator.Intersect
+          Return "INTERSECT"
+        Case Else
+          Throw New NotSupportedException($"Unsupported set operator '{setOperator}'.")
+      End Select
+    End Function
+
+    ''' <summary>
     ''' Build and append select expression to <see cref="StringBuilder"/>.
     ''' </summary>
     ''' <param name="sql"></param>
@@ -1064,6 +1150,10 @@ Namespace Expressions.Builders
 
       If m_LimitExpression IsNot Nothing AndAlso Not m_UseTopForLimit Then
         sql.Append(m_LimitExpression)
+      End If
+
+      If m_SetExpressions IsNot Nothing Then
+        Helpers.Text.AppendJoin(sql, "", m_SetExpressions)
       End If
 
       Return New SelectQuery(sql.ToString(), m_Parameters, m_Model)

@@ -25,6 +25,8 @@ Module Program
     Dim distinctSelectSqlExpressionDefinition = New GeneratedClassDefinition(GeneratedClass.DistinctSelectSqlExpression, 1)
     Dim customSelectSqlExpressionDefinition = New GeneratedClassDefinition(GeneratedClass.CustomSelectSqlExpression, 1)
     Dim customDistinctSelectSqlExpressionDefinition = New GeneratedClassDefinition(GeneratedClass.CustomDistinctSelectSqlExpression, 1)
+    Dim setSelectSqlExpressionDefinition = New GeneratedClassDefinition(GeneratedClass.SetSelectSqlExpression, 1)
+    Dim customSetSelectSqlExpressionDefinition = New GeneratedClassDefinition(GeneratedClass.CustomSetSelectSqlExpression, 1)
     Dim joinDefinition = New GeneratedClassDefinition(GeneratedClass.Join, 2, maxEntityCount)
 
     Dim definitions = New List(Of GeneratedClassDefinition) From {
@@ -42,6 +44,8 @@ Module Program
       distinctSelectSqlExpressionDefinition,
       customSelectSqlExpressionDefinition,
       customDistinctSelectSqlExpressionDefinition,
+      setSelectSqlExpressionDefinition,
+      customSetSelectSqlExpressionDefinition,
       joinDefinition
     }
 
@@ -52,6 +56,9 @@ Module Program
 
     Dim customSelectSqlExpressionCodeGenerator = New CustomSelectSqlExpressionCodeGenerator(indentation, expressionsFolder, customSelectSqlExpressionDefinition, definitions)
     customSelectSqlExpressionCodeGenerator.Generate()
+
+    Dim customSetSelectSqlExpressionCodeGenerator = New CustomSetSelectSqlExpressionCodeGenerator(indentation, expressionsFolder, customSetSelectSqlExpressionDefinition, definitions)
+    customSetSelectSqlExpressionCodeGenerator.Generate()
 
     Dim distinctSelectSqlExpressionCodeGenerator = New DistinctSelectSqlExpressionCodeGenerator(indentation, expressionsFolder, distinctSelectSqlExpressionDefinition, definitions)
     distinctSelectSqlExpressionCodeGenerator.Generate()
@@ -85,6 +92,9 @@ Module Program
 
     Dim selectSqlExpressionCodeGenerator = New SelectSqlExpressionCodeGenerator(indentation, expressionsFolder, selectSqlExpressionDefinition, definitions)
     selectSqlExpressionCodeGenerator.Generate()
+
+    Dim setSelectSqlExpressionCodeGenerator = New SetSelectSqlExpressionCodeGenerator(indentation, expressionsFolder, setSelectSqlExpressionDefinition, definitions)
+    setSelectSqlExpressionCodeGenerator.Generate()
 
     Dim withHintsSelectSqlExpressionCodeGenerator = New WithHintsSelectSqlExpressionCodeGenerator(indentation, expressionsFolder, withHintsSqlExpressionDefinition, definitions)
     withHintsSelectSqlExpressionCodeGenerator.Generate()

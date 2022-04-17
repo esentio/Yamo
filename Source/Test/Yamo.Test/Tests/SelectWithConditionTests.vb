@@ -2788,6 +2788,109 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub SelectWithConditionalSet()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 1
+      items(1).IntColumn = 2
+      items(2).IntColumn = 3
+      items(3).IntColumn = 4
+      items(4).IntColumn = 5
+
+      InsertItems(items)
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) x.IntColumn <= 2).
+                        SelectAll().
+                        If(True,
+                        [then]:=Function(exp)
+                                  Return exp.Union(Function(c)
+                                                     Return c.From(Of ItemWithAllSupportedValues).
+                                                              Where(Function(x) 2 <= x.IntColumn AndAlso x.IntColumn <= 3).
+                                                              SelectAll()
+                                                   End Function)
+                                End Function
+                        ).
+                        ToList()
+
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2)}, result)
+      End Using
+
+      ' condition is false, apply nothing
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) x.IntColumn <= 2).
+                        SelectAll().
+                        If(False,
+                        [then]:=Function(exp)
+                                  Return exp.Union(Function(c)
+                                                     Return c.From(Of ItemWithAllSupportedValues).
+                                                              Where(Function(x) 2 <= x.IntColumn AndAlso x.IntColumn <= 3).
+                                                              SelectAll()
+                                                   End Function)
+                                End Function
+                        ).
+                        ToList()
+
+        CollectionAssert.AreEquivalent({items(0), items(1)}, result)
+      End Using
+
+      ' condition is true, apply true part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) x.IntColumn <= 2).
+                        SelectAll().
+                        If(True,
+                        [then]:=Function(exp)
+                                  Return exp.Union(Function(c)
+                                                     Return c.From(Of ItemWithAllSupportedValues).
+                                                              Where(Function(x) 2 <= x.IntColumn AndAlso x.IntColumn <= 3).
+                                                              SelectAll()
+                                                   End Function)
+                                End Function,
+                        otherwise:=Function(exp)
+                                     Return exp.Union(Function(c)
+                                                        Return c.From(Of ItemWithAllSupportedValues).
+                                                                 Where(Function(x) 4 <= x.IntColumn AndAlso x.IntColumn <= 5).
+                                                                 SelectAll()
+                                                      End Function)
+                                   End Function
+                        ).
+                        ToList()
+
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2)}, result)
+      End Using
+
+      ' condition is false, apply false part
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) x.IntColumn <= 2).
+                        SelectAll().
+                        If(False,
+                        [then]:=Function(exp)
+                                  Return exp.Union(Function(c)
+                                                     Return c.From(Of ItemWithAllSupportedValues).
+                                                              Where(Function(x) 2 <= x.IntColumn AndAlso x.IntColumn <= 3).
+                                                              SelectAll()
+                                                   End Function)
+                                End Function,
+                        otherwise:=Function(exp)
+                                     Return exp.Union(Function(c)
+                                                        Return c.From(Of ItemWithAllSupportedValues).
+                                                                 Where(Function(x) 4 <= x.IntColumn AndAlso x.IntColumn <= 5).
+                                                                 SelectAll()
+                                                      End Function)
+                                   End Function
+                        ).
+                        ToList()
+
+        CollectionAssert.AreEquivalent({items(0), items(1), items(3), items(4)}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub SelectWithConditionalToList()
       Dim items = CreateItems()
 
