@@ -83,7 +83,9 @@ namespace Yamo.Playground.CS
             //Test58();
             //Test59();
             //Test60();
-            Test61();
+            //Test61();
+            Test62();
+            Test63();
         }
 
         public static MyContext CreateContext()
@@ -1234,6 +1236,42 @@ namespace Yamo.Playground.CS
                                          .SelectAll();
                              })
                              .Where(x => 42 < x.Price)
+                             .SelectAll()
+                             .ToList();
+            }
+        }
+
+        public static void Test62()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From<Article>()
+                             .Where(x => x.Price < 42)
+                             .SelectAll()
+                             .UnionAll(c =>
+                             {
+                                 return c.From<Article>()
+                                         .Where(x => 420 < x.Price)
+                                         .SelectAll();
+                             })
+                             .ToList();
+            }
+        }
+
+        public static void Test63()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From(c =>
+                             {
+                                 return c.From<Article>()
+                                         .SelectAll()
+                                         .UnionAll(c2 =>
+                                         {
+                                             return c2.From<Article>("ArticleArchive")
+                                                      .SelectAll();
+                                         });
+                             })
                              .SelectAll()
                              .ToList();
             }

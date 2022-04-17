@@ -69,6 +69,10 @@ Namespace Generator
           Return "CustomSelectSqlExpression"
         Case GeneratedClass.CustomDistinctSelectSqlExpression
           Return "CustomDistinctSelectSqlExpression"
+        Case GeneratedClass.SetSelectSqlExpression
+          Return "SetSelectSqlExpression"
+        Case GeneratedClass.CustomSetSelectSqlExpression
+          Return "CustomSetSelectSqlExpression"
         Case GeneratedClass.Join
           Return "Join"
         Case Else

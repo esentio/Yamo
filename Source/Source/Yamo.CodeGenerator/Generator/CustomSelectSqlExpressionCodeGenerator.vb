@@ -9,7 +9,8 @@
 
     Protected Overrides Function GetAllowedResultsForCondition() As GeneratedClass()
       Return {
-        GeneratedClass.CustomDistinctSelectSqlExpression
+        GeneratedClass.CustomDistinctSelectSqlExpression,
+        GeneratedClass.CustomSetSelectSqlExpression
       }
     End Function
 
@@ -18,6 +19,7 @@
       builder.Indent().AppendLine("Imports System.Linq.Expressions")
       builder.Indent().AppendLine("Imports Yamo.Expressions.Builders")
       builder.Indent().AppendLine("Imports Yamo.Internal.Query")
+      builder.Indent().AppendLine("Imports Yamo.Internal.Query.Metadata")
       builder.AppendLine()
       builder.Indent().AppendLine("Namespace Expressions").PushIndent()
       builder.AppendLine()
@@ -36,6 +38,12 @@
       builder.AppendLine()
 
       GenerateCustomDistinct(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateCustomSet(builder, entityCount)
+      builder.AppendLine()
+
+      GenerateIf(builder, entityCount)
       builder.AppendLine()
 
       GenerateToSubquery(builder, entityCount)

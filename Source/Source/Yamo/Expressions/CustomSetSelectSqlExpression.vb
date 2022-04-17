@@ -7,30 +7,21 @@ Imports Yamo.Internal.Query.Metadata
 Namespace Expressions
 
   ''' <summary>
-  ''' Represents SELECT clause in SQL SELECT statement.
+  ''' Represents set operator in SQL SELECT statement.
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
-  Public Class CustomSelectSqlExpression(Of T)
+  Public Class CustomSetSelectSqlExpression(Of T)
     Inherits SelectSqlExpressionBase
     Implements ISubqueryableSelectSqlExpression(Of T)
 
     ''' <summary>
-    ''' Creates new instance of <see cref="CustomSelectSqlExpression(Of T)"/>.
+    ''' Creates new instance of <see cref="CustomSetSelectSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="builder"></param>
     ''' <param name="executor"></param>
     Friend Sub New(builder As SelectSqlExpressionBuilder, executor As QueryExecutor)
       MyBase.New(builder, executor)
     End Sub
-
-    ''' <summary>
-    ''' Adds DISTINCT clause.
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function Distinct() As CustomDistinctSelectSqlExpression(Of T)
-      Me.Builder.AddDistinct()
-      Return New CustomDistinctSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
-    End Function
 
     ''' <summary>
     ''' Adds UNION operator.
@@ -186,7 +177,7 @@ Namespace Expressions
     ''' <param name="[then]"></param>
     ''' <param name="otherwise"></param>
     ''' <returns></returns>
-    Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of CustomSelectSqlExpression(Of T), TResult), Optional otherwise As Func(Of CustomSelectSqlExpression(Of T), TResult) = Nothing) As TResult
+    Public Function [If](Of TResult)(condition As Boolean, <DisallowNull> [then] As Func(Of CustomSetSelectSqlExpression(Of T), TResult), Optional otherwise As Func(Of CustomSetSelectSqlExpression(Of T), TResult) = Nothing) As TResult
       If condition Then
         Return [then].Invoke(Me)
       ElseIf otherwise Is Nothing Then
@@ -232,7 +223,6 @@ Namespace Expressions
 
       Dim genericType = resultType.GetGenericTypeDefinition()
 
-      If genericType Is GetType(CustomDistinctSelectSqlExpression(Of )) Then Return True
       If genericType Is GetType(CustomSetSelectSqlExpression(Of )) Then Return True
 
       Return False
