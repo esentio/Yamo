@@ -14,7 +14,7 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property MainEntity As EntityBasedSqlEntity
+    Public ReadOnly Property MainEntity As <MaybeNull> SqlEntityBase
 
     ''' <summary>
     ''' Gets SQL entities.<br/>
@@ -27,27 +27,65 @@ Namespace Internal.Query.Metadata
     ''' Creates new instance of <see cref="SqlModelBase"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="mainEntity"></param>
-    Public Sub New(<DisallowNull> mainEntity As Entity)
+    Sub New()
+      Me.MainEntity = Nothing
       Me.Entities = New List(Of SqlEntityBase)
-
-      Dim tableAlias = "T0"
-
-      Me.MainEntity = New EntityBasedSqlEntity(mainEntity, tableAlias, 0)
-      Me.Entities.Add(Me.MainEntity)
     End Sub
 
     ''' <summary>
-    ''' Adds SQL entity used in the query.
+    ''' Sets main SQL entity.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="mainEntity"></param>
+    ''' <param name="tableSourceIsSubquery"></param>
+    ''' <returns></returns>
+    Public Function SetMainEntity(<DisallowNull> mainEntity As Entity, tableSourceIsSubquery As Boolean) As EntityBasedSqlEntity
+      If Me.MainEntity IsNot Nothing Then
+        Throw New InvalidOperationException("Main entity is already set.")
+      End If
+
+      Dim tableAlias = "T0"
+      Dim sqlEntity = New EntityBasedSqlEntity(mainEntity, tableSourceIsSubquery, tableAlias, 0)
+
+      _MainEntity = sqlEntity
+      Me.Entities.Add(Me.MainEntity)
+
+      Return sqlEntity
+    End Function
+
+    ''' <summary>
+    ''' Sets main SQL entity.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="mainEntity"></param>
+    ''' <returns></returns>
+    Public Function SetMainEntity(<DisallowNull> mainEntity As NonModelEntity) As NonModelEntityBasedSqlEntity
+      If Me.MainEntity IsNot Nothing Then
+        Throw New InvalidOperationException("Main entity is already set.")
+      End If
+
+      Dim tableAlias = "T0"
+      Dim sqlEntity = New NonModelEntityBasedSqlEntity(mainEntity, tableAlias, 0, Nothing, False)
+
+      _MainEntity = sqlEntity
+      Me.Entities.Add(Me.MainEntity)
+
+      Return sqlEntity
+    End Function
+
+    ''' <summary>
+    ''' Adds SQL entity used in the query.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="entity"></param>
+    ''' <param name="tableSourceIsSubquery"></param>
     ''' <param name="relationship"></param>
     ''' <param name="isIgnored"></param>
     ''' <returns></returns>
-    Protected Function AddEntity(<DisallowNull> entity As Entity, relationship As SqlEntityRelationship, isIgnored As Boolean) As EntityBasedSqlEntity
+    Protected Function AddEntity(<DisallowNull> entity As Entity, tableSourceIsSubquery As Boolean, relationship As SqlEntityRelationship, isIgnored As Boolean) As EntityBasedSqlEntity
       Dim index = Me.Entities.Count
       Dim tableAlias = "T" & index.ToString(Globalization.CultureInfo.InvariantCulture)
-      Dim sqlEntity = New EntityBasedSqlEntity(entity, tableAlias, index, relationship, isIgnored)
+      Dim sqlEntity = New EntityBasedSqlEntity(entity, tableSourceIsSubquery, tableAlias, index, relationship, isIgnored)
 
       Me.Entities.Add(sqlEntity)
 
@@ -55,17 +93,17 @@ Namespace Internal.Query.Metadata
     End Function
 
     ''' <summary>
-    ''' Adds SQL entity used in the query.
+    ''' Adds SQL entity used in the query.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="entity"></param>
     ''' <param name="relationship"></param>
     ''' <param name="isIgnored"></param>
-    ''' <param name="creationBehavior"></param>
     ''' <returns></returns>
-    Protected Function AddEntity(<DisallowNull> entity As NonModelEntity, relationship As SqlEntityRelationship, isIgnored As Boolean, creationBehavior As NonModelEntityCreationBehavior) As NonModelEntityBasedSqlEntity
+    Protected Function AddEntity(<DisallowNull> entity As NonModelEntity, relationship As SqlEntityRelationship, isIgnored As Boolean) As NonModelEntityBasedSqlEntity
       Dim index = Me.Entities.Count
       Dim tableAlias = "T" & index.ToString(Globalization.CultureInfo.InvariantCulture)
-      Dim sqlEntity = New NonModelEntityBasedSqlEntity(entity, tableAlias, index, relationship, isIgnored, creationBehavior)
+      Dim sqlEntity = New NonModelEntityBasedSqlEntity(entity, tableAlias, index, relationship, isIgnored)
 
       Me.Entities.Add(sqlEntity)
 

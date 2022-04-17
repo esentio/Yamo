@@ -30,7 +30,7 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="entity"></param>
     Sub New(<DisallowNull> entity As Entity)
-      Me.New(entity, "", -1)
+      Me.New(entity, False, "", -1)
     End Sub
 
     ''' <summary>
@@ -38,10 +38,11 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="entity"></param>
+    ''' <param name="tableSourceIsSubquery"></param>
     ''' <param name="tableAlias"></param>
     ''' <param name="index"></param>
-    Sub New(<DisallowNull> entity As Entity, <DisallowNull> tableAlias As String, index As Int32)
-      MyBase.New(entity.EntityType, tableAlias, index, entity.GetPropertiesCount())
+    Sub New(<DisallowNull> entity As Entity, tableSourceIsSubquery As Boolean, <DisallowNull> tableAlias As String, index As Int32)
+      MyBase.New(entity.EntityType, tableSourceIsSubquery, tableAlias, index, entity.GetPropertiesCount())
       Me.Entity = entity
     End Sub
 
@@ -50,12 +51,13 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="entity"></param>
+    ''' <param name="tableSourceIsSubquery"></param>
     ''' <param name="tableAlias"></param>
     ''' <param name="index"></param>
     ''' <param name="relationship"></param>
     ''' <param name="isIgnored"></param>
-    Sub New(<DisallowNull> entity As Entity, <DisallowNull> tableAlias As String, index As Int32, relationship As SqlEntityRelationship, isIgnored As Boolean)
-      MyBase.New(entity.EntityType, tableAlias, index, entity.GetPropertiesCount(), relationship, isIgnored)
+    Sub New(<DisallowNull> entity As Entity, tableSourceIsSubquery As Boolean, <DisallowNull> tableAlias As String, index As Int32, relationship As SqlEntityRelationship, isIgnored As Boolean)
+      MyBase.New(entity.EntityType, tableSourceIsSubquery, tableAlias, index, entity.GetPropertiesCount(), relationship, isIgnored)
       Me.Entity = entity
     End Sub
 

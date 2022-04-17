@@ -44,9 +44,8 @@ Namespace Internal.Query.Metadata
     ''' Creates new instance of <see cref="SelectSqlModel"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
-    ''' <param name="mainEntity"></param>
-    Public Sub New(<DisallowNull> mainEntity As Entity)
-      MyBase.New(mainEntity)
+    Public Sub New()
+      MyBase.New()
     End Sub
 
     ''' <summary>
@@ -54,10 +53,11 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="entity"></param>
+    ''' <param name="tableSourceIsSubquery"></param>
     ''' <param name="relationship"></param>
     ''' <returns></returns>
-    Public Function AddJoin(<DisallowNull> entity As Entity, relationship As SqlEntityRelationship) As EntityBasedSqlEntity
-      Return AddEntity(entity, relationship, False)
+    Public Function AddJoin(<DisallowNull> entity As Entity, tableSourceIsSubquery As Boolean, relationship As SqlEntityRelationship) As EntityBasedSqlEntity
+      Return AddEntity(entity, tableSourceIsSubquery, relationship, False)
     End Function
 
     ''' <summary>
@@ -66,10 +66,9 @@ Namespace Internal.Query.Metadata
     ''' </summary>
     ''' <param name="entity"></param>
     ''' <param name="relationship"></param>
-    ''' <param name="creationBehavior"></param>
     ''' <returns></returns>
-    Public Function AddJoin(<DisallowNull> entity As NonModelEntity, relationship As SqlEntityRelationship, creationBehavior As NonModelEntityCreationBehavior) As NonModelEntityBasedSqlEntity
-      Return AddEntity(entity, relationship, False, creationBehavior)
+    Public Function AddJoin(<DisallowNull> entity As NonModelEntity, relationship As SqlEntityRelationship) As NonModelEntityBasedSqlEntity
+      Return AddEntity(entity, relationship, False)
     End Function
 
     ''' <summary>
@@ -79,7 +78,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="entity"></param>
     ''' <returns></returns>
     Public Function AddIgnoredJoin(<DisallowNull> entity As Entity) As EntityBasedSqlEntity
-      Return AddEntity(entity, Nothing, True)
+      Return AddEntity(entity, False, Nothing, True)
     End Function
 
     ''' <summary>
@@ -89,7 +88,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="entity"></param>
     ''' <returns></returns>
     Public Function AddIgnoredJoin(<DisallowNull> entity As NonModelEntity) As NonModelEntityBasedSqlEntity
-      Return AddEntity(entity, Nothing, True, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+      Return AddEntity(entity, Nothing, True)
     End Function
 
     ''' <summary>

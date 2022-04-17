@@ -245,7 +245,47 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectModelEntityRecordWithPropertyModifiedTrackingFromJoinedSubquery()
+    Public Overridable Sub SelectModelEntityRecordWithPropertyModifiedTrackingFromFromSubquery()
+      Dim item1 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      Dim item2 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      Dim item3 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Function(c)
+                               Return c.From(Of ItemWithPropertyModifiedTracking).
+                                        SelectAll()
+                             End Function).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+        Assert.IsTrue(result.All(Function(x) Not x.IsAnyDbPropertyModified()))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectNonModelAdHocTypeRecordWithPropertyModifiedTrackingFromFromSubquery()
+      Dim item1 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      Dim item2 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      Dim item3 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+
+      InsertItems(item1, item2, item3)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Function(c)
+                               Return c.From(Of ItemWithPropertyModifiedTracking).
+                                        Select(Function(x) New NonModelObjectWithPropertyModifiedTracking With {.IntValue = x.Id, .StringValue = x.Description})
+                             End Function).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+        Assert.IsTrue(result.All(Function(x) Not x.IsAnyDbPropertyModified()))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectModelEntityRecordWithPropertyModifiedTrackingFromJoinSubquery()
       Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
       Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, Nothing)
       Dim linkedItem3 = Me.ModelFactory.CreateLinkedItem(3, Nothing)
@@ -273,13 +313,14 @@ Namespace Tests
                              End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).As(Function(x) x.RelatedItem).
                         SelectAll().ToList()
+
         Assert.AreEqual(3, result.Count)
         Assert.IsTrue(result.All(Function(x) Not DirectCast(x.RelatedItem, ItemWithPropertyModifiedTracking).IsAnyDbPropertyModified()))
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectNonModelAdHocTypeRecordWithPropertyModifiedTrackingFromJoinedSubquery()
+    Public Overridable Sub SelectNonModelAdHocTypeRecordWithPropertyModifiedTrackingFromJoinSubquery()
       Dim linkedItem1 = Me.ModelFactory.CreateLinkedItem(1, Nothing)
       Dim linkedItem2 = Me.ModelFactory.CreateLinkedItem(2, Nothing)
       Dim linkedItem3 = Me.ModelFactory.CreateLinkedItem(3, Nothing)
@@ -307,6 +348,7 @@ Namespace Tests
                              End Function).
                         On(Function(j) j.T1.Id = j.T2.IntValue).As(Function(x) x.RelatedItem).
                         SelectAll().ToList()
+
         Assert.AreEqual(3, result.Count)
         Assert.IsTrue(result.All(Function(x) Not DirectCast(x.RelatedItem, NonModelObjectWithPropertyModifiedTracking).IsAnyDbPropertyModified()))
       End Using

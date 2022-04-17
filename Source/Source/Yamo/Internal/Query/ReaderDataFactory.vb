@@ -143,8 +143,18 @@ Namespace Internal.Query
       Dim readerData As ReaderDataBase
 
       If TypeOf entity Is EntityBasedSqlEntity Then
+        Dim ebEntity = DirectCast(entity, EntityBasedSqlEntity)
+
         Dim entityReader = EntityReaderCache.GetReader(dataReaderType, dialectProvider, model, entityType)
-        readerData = New EntitySqlResultReaderData(DirectCast(sqlResult, EntitySqlResult), entityReaderIndex, entityReader)
+
+        If ebEntity.TableSourceIsSubquery Then
+          Dim containsPKReader = EntityReaderCache.GetContainsPKReader(dataReaderType, dialectProvider, model, entityType)
+          Dim pkOffsets = GetPKOffsets(ebEntity)
+          readerData = New EntitySqlResultReaderData(DirectCast(sqlResult, EntitySqlResult), entityReaderIndex, entityReader, containsPKReader, pkOffsets)
+        Else
+          readerData = New EntitySqlResultReaderData(DirectCast(sqlResult, EntitySqlResult), entityReaderIndex, entityReader)
+        End If
+
       Else
         Dim nmEntity = DirectCast(entity, NonModelEntityBasedSqlEntity)
         readerData = Create(dataReaderType, dialectProvider, model, nmEntity.Entity.SqlResult, entityReaderIndex)

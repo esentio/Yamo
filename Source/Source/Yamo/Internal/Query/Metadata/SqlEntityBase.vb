@@ -16,6 +16,13 @@ Namespace Internal.Query.Metadata
     Public ReadOnly Property EntityType As Type
 
     ''' <summary>
+    ''' Gets whether table source of this entity is a subquery.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property TableSourceIsSubquery As Boolean
+
+    ''' <summary>
     ''' Gets table alias.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -77,11 +84,13 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="entityType"></param>
+    ''' <param name="tableSourceIsSubquery"></param>
     ''' <param name="tableAlias"></param>
     ''' <param name="index"></param>
     ''' <param name="columnsCount"></param>
-    Sub New(<DisallowNull> entityType As Type, <DisallowNull> tableAlias As String, index As Int32, columnsCount As Int32)
+    Sub New(<DisallowNull> entityType As Type, tableSourceIsSubquery As Boolean, <DisallowNull> tableAlias As String, index As Int32, columnsCount As Int32)
       Me.EntityType = entityType
+      Me.TableSourceIsSubquery = tableSourceIsSubquery
       Me.TableAlias = tableAlias
       Me.Index = index
       Me.Relationship = Nothing
@@ -104,13 +113,14 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="entityType"></param>
+    ''' <param name="tableSourceIsSubquery"></param>
     ''' <param name="tableAlias"></param>
     ''' <param name="index"></param>
     ''' <param name="columnsCount"></param>
     ''' <param name="relationship"></param>
     ''' <param name="isIgnored"></param>
-    Sub New(<DisallowNull> entityType As Type, <DisallowNull> tableAlias As String, index As Int32, columnsCount As Int32, relationship As SqlEntityRelationship, isIgnored As Boolean)
-      Me.New(entityType, tableAlias, index, columnsCount)
+    Sub New(<DisallowNull> entityType As Type, tableSourceIsSubquery As Boolean, <DisallowNull> tableAlias As String, index As Int32, columnsCount As Int32, relationship As SqlEntityRelationship, isIgnored As Boolean)
+      Me.New(entityType, tableSourceIsSubquery, tableAlias, index, columnsCount)
       Me.Relationship = relationship
       Me.IsIgnored = isIgnored
     End Sub

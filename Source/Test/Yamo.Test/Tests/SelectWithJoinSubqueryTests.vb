@@ -58,6 +58,44 @@ Namespace Tests
         Assert.AreEqual(article1, result(1))
         Assert.AreEqual(label1En, result(1).Label)
       End Using
+
+      ' use custom select
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        Join(Of Label)(Function(c)
+                                         Return c.From(Of Label).
+                                                  Where(Function(x) x.Language = English).
+                                                  Select(Function(x) x)
+                                       End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T2.Description).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article3, result(0))
+        Assert.AreEqual(label3En, result(0).Label)
+        Assert.AreEqual(article1, result(1))
+        Assert.AreEqual(label1En, result(1).Label)
+      End Using
+
+      ' use custom select, but specify properties
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        Join(Of Label)(Function(c)
+                                         Return c.From(Of Label).
+                                                  Where(Function(x) x.Language = English).
+                                                  Select(Function(x) New Label With {.Id = x.Id, .Description = x.Description})
+                                       End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T2.Description).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article3, result(0))
+        Assert.AreEqual(New Label With {.Id = label3En.Id, .Description = label3En.Description}, result(0).Label)
+        Assert.AreEqual(article1, result(1))
+        Assert.AreEqual(New Label With {.Id = label1En.Id, .Description = label1En.Description}, result(1).Label)
+      End Using
     End Sub
 
     <TestMethod()>

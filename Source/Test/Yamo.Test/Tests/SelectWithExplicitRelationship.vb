@@ -774,5 +774,78 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub SelectWithExplicitReferenceRelationshipSettingValueToResultOfSubqueryOfTypeEntity()
+      Dim article1 = Me.ModelFactory.CreateArticle(1)
+      Dim article2 = Me.ModelFactory.CreateArticle(2)
+      Dim article3 = Me.ModelFactory.CreateArticle(3)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
+      Dim label2De = Me.ModelFactory.CreateLabel("", 2, German)
+      Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
+
+      InsertItems(article1, article2, article3, label1En, label2De, label3En, label3De)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Function(c)
+                               Return c.From(Of Article).
+                                        SelectAll()
+                             End Function).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id AndAlso j.T2.Language = English).
+                        As(Function(x) x.Tag).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+        Assert.AreEqual(article1, result(0))
+        Assert.IsNull(result(0).Label)
+        Assert.AreEqual(label1En, result(0).Tag)
+        Assert.AreEqual(article2, result(1))
+        Assert.IsNull(result(1).Label)
+        Assert.IsNull(result(1).Tag)
+        Assert.AreEqual(article3, result(2))
+        Assert.IsNull(result(2).Label)
+        Assert.AreEqual(label3En, result(2).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithExplicitReferenceRelationshipSettingValueToResultOfSubqueryOfTypeAdHocType()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+      Dim article3 = Me.ModelFactory.CreateArticle(3, 300D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English)
+      Dim label2De = Me.ModelFactory.CreateLabel("", 2, German)
+      Dim label3En = Me.ModelFactory.CreateLabel("", 3, English)
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German)
+
+      InsertItems(article1, article2, article3, label1En, label2De, label3En, label3De)
+
+      Dim item1 = New NonModelObject(article1.Id, article1.Price)
+      Dim item2 = New NonModelObject(article2.Id, article2.Price)
+      Dim item3 = New NonModelObject(article3.Id, article3.Price)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Function(c)
+                               Return c.From(Of Article).
+                                        Select(Function(x) New NonModelObject With {.IntValue = x.Id, .DecimalValue = x.Price})
+                             End Function).
+                        LeftJoin(Of Label)(Function(j) j.T1.IntValue = j.T2.Id AndAlso j.T2.Language = English).
+                        As(Function(x) x.Label).
+                        OrderBy(Function(j) j.T1.IntValue).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+        Assert.AreEqual(item1, result(0))
+        Assert.AreEqual(label1En, result(0).Label)
+        Assert.AreEqual(item2, result(1))
+        Assert.IsNull(result(1).Label)
+        Assert.AreEqual(item3, result(2))
+        Assert.AreEqual(label3En, result(2).Label)
+      End Using
+    End Sub
+
   End Class
 End Namespace

@@ -16,12 +16,22 @@ Namespace Internal.Query.Metadata
     Public ReadOnly Property ResultType As Type
 
     ''' <summary>
+    ''' Gets entity creation behavior.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property CreationBehavior As NonModelEntityCreationBehavior
+
+    ''' <summary>
     ''' Creates new instance of <see cref="SqlResultBase"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="resultType"></param>
     Public Sub New(<DisallowNull> resultType As Type)
       Me.ResultType = resultType
+      ' NOTE: probably better would be to set the default to NullIfAllColumnsAreNull.
+      ' It's like this for backward compatibility (to avoid breaking change in the behavior, since we won't be able to manage it for Include results at the moment).
+      Me.CreationBehavior = NonModelEntityCreationBehavior.AlwaysCreateInstance
     End Sub
 
     ''' <summary>

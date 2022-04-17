@@ -33,10 +33,32 @@ Namespace Expressions
     ''' Creates new instance of <see cref="SelectSqlExpression(Of T)"/>.
     ''' </summary>
     ''' <param name="context"></param>
+    ''' <param name="tableSourceFactory"></param>
+    ''' <param name="behavior"></param>
+    Friend Sub New(context As DbContext, tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T)), behavior As NonModelEntityCreationBehavior)
+      MyBase.New(New SelectSqlExpressionBuilder(context), New QueryExecutor(context))
+      Me.Builder.SetMainTableSource(Me.Executor, tableSourceFactory, behavior)
+    End Sub
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="SelectSqlExpression(Of T)"/>.
+    ''' </summary>
+    ''' <param name="context"></param>
     ''' <param name="tableSource"></param>
     Friend Sub New(context As DbContext, tableSource As FormattableString)
       MyBase.New(New SelectSqlExpressionBuilder(context, GetType(T)), New QueryExecutor(context))
       Me.Builder.SetMainTableSource(tableSource)
+    End Sub
+
+    ''' <summary>
+    ''' Creates new instance of <see cref="SelectSqlExpression(Of T)"/>.
+    ''' </summary>
+    ''' <param name="context"></param>
+    ''' <param name="tableSourceFactory"></param>
+    ''' <param name="behavior"></param>
+    Friend Sub New(context As SubqueryContext, tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T)), behavior As NonModelEntityCreationBehavior)
+      MyBase.New(New SelectSqlExpressionBuilder(context), context.Executor)
+      Me.Builder.SetMainTableSource(Me.Executor, tableSourceFactory, behavior)
     End Sub
 
     ''' <summary>

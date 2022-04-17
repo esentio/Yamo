@@ -1,4 +1,5 @@
 ﻿Imports Yamo.Metadata
+Imports Yamo.Test.Infrastructure
 Imports Yamo.Test.Model
 
 Namespace Tests
@@ -31,9 +32,7 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsArePresent(sql, labelEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + labelEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New EntityColumnData(labelEntity))
       End Using
     End Sub
 
@@ -62,9 +61,7 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsArePresent(sql, itemEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + itemEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New EntityColumnData(itemEntity))
       End Using
     End Sub
 
@@ -91,14 +88,12 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsArePresent(sql, itemEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + itemEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New EntityColumnData(itemEntity))
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectWithExplicitRelationshipUsingSubqueryAndSelectAllColumnsBehavior()
+    Public Overridable Sub SelectWithExplicitRelationshipUsingJoinSubqueryAndSelectAllColumnsBehavior()
       Dim article = Me.ModelFactory.CreateArticle(1)
       Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item.IntColumn = article.Id
@@ -124,14 +119,13 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + 2)
-        EnsureColumnsCountInSubquery(sql, 2)
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New NonModelEntityColumnData(2))
+        EnsureColumnsPresence(GetSubqueryColumnsPartFromQuery(sql), New NonModelEntityColumnData(2))
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectWithoutDefinedRelationshipUsingSubqueryAndSelectAllColumnsBehavior()
+    Public Overridable Sub SelectWithoutDefinedRelationshipUsingJoinSubqueryAndSelectAllColumnsBehavior()
       Dim article = Me.ModelFactory.CreateArticle(1)
       Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item.IntColumn = article.Id
@@ -155,14 +149,13 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + 2)
-        EnsureColumnsCountInSubquery(sql, 2)
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New NonModelEntityColumnData(2))
+        EnsureColumnsPresence(GetSubqueryColumnsPartFromQuery(sql), New NonModelEntityColumnData(2))
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSubqueryWithJoinsThatIsUsingSelectAllColumnsBehavior()
+    Public Overridable Sub SelectUsingJoinSubqueryWithJoinsThatIsUsingSelectAllColumnsBehavior()
       Dim article = Me.ModelFactory.CreateArticle(1)
       Dim articlePart1 = Me.ModelFactory.CreateArticlePart(1001, 1)
       Dim articlePart2 = Me.ModelFactory.CreateArticlePart(1002, 1)
@@ -196,12 +189,41 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsArePresent(sql, itemEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + articlePartEntity.GetPropertiesCount() + itemEntity.GetPropertiesCount())
-        EnsureColumnsArePresentInSubquery(sql, articlePartEntity)
-        EnsureColumnsArePresentInSubquery(sql, labelEntity)
-        EnsureColumnsCountInSubquery(sql, articlePartEntity.GetPropertiesCount() + labelEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New AliasedEntityColumnData(articlePartEntity), New EntityColumnData(itemEntity))
+        EnsureColumnsPresence(GetSubqueryColumnsPartFromQuery(sql), New EntityColumnData(articlePartEntity), New EntityColumnData(labelEntity))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectUsingFromSubqueryWithJoinsThatIsUsingSelectAllColumnsBehavior()
+      Dim article = Me.ModelFactory.CreateArticle(1)
+      Dim labelEn = Me.ModelFactory.CreateLabel("", 1, English)
+      Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item.IntColumn = article.Id
+
+      InsertItems(article, labelEn, item)
+
+      Using db = CreateDbContext()
+        Dim articleEntity = db.Model.GetEntity(article.GetType())
+        Dim labelEntity = db.Model.GetEntity(labelEn.GetType())
+        Dim itemEntity = db.Model.GetEntity(item.GetType())
+
+        Dim result = db.From(Function(c)
+                               Return c.From(Of Article).
+                                        Join(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                                        SelectAll(SelectColumnsBehavior.SelectAllColumns)
+                             End Function).
+                        Join(Of ItemWithAllSupportedValues)(Function(j) j.T1.Id = j.T2.IntColumn).As(Function(x) x.Tag).
+                        SelectAll().FirstOrDefault()
+
+        Assert.AreEqual(article, result)
+        Assert.IsNull(result.Label)
+        Assert.AreEqual(item, result.Tag)
+
+        Dim sql = db.GetLastCommandText()
+
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New AliasedEntityColumnData(articleEntity), New EntityColumnData(itemEntity))
+        EnsureColumnsPresence(GetSubqueryColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New EntityColumnData(labelEntity))
       End Using
     End Sub
 
@@ -228,9 +250,7 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsAreNotPresent(sql, labelEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity))
       End Using
     End Sub
 
@@ -257,9 +277,7 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsArePresent(sql, labelEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + labelEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New EntityColumnData(labelEntity))
       End Using
 
       ' same as above, but assume behavior is not explicitly set
@@ -279,9 +297,7 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsArePresent(sql, labelEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + labelEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New EntityColumnData(labelEntity))
       End Using
     End Sub
 
@@ -310,9 +326,7 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsArePresent(sql, itemEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + itemEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New EntityColumnData(itemEntity))
       End Using
 
       ' same as above, but assume behavior is not explicitly set
@@ -333,9 +347,7 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsArePresent(sql, itemEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + itemEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New EntityColumnData(itemEntity))
       End Using
     End Sub
 
@@ -362,9 +374,7 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsAreNotPresent(sql, itemEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity))
       End Using
 
       ' same as above, but assume behavior is not explicitly set
@@ -383,14 +393,12 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsAreNotPresent(sql, itemEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity))
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectWithExplicitRelationshipUsingSubqueryAndExcludeNonRequiredColumnsBehavior()
+    Public Overridable Sub SelectWithExplicitRelationshipUsingJoinSubqueryAndExcludeNonRequiredColumnsBehavior()
       Dim article = Me.ModelFactory.CreateArticle(1)
       Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item.IntColumn = article.Id
@@ -416,9 +424,8 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + 2)
-        EnsureColumnsCountInSubquery(sql, 2)
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New NonModelEntityColumnData(2))
+        EnsureColumnsPresence(GetSubqueryColumnsPartFromQuery(sql), New NonModelEntityColumnData(2))
       End Using
 
       ' same as above, but assume behavior is not explicitly set
@@ -440,14 +447,13 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + 2)
-        EnsureColumnsCountInSubquery(sql, 2)
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New NonModelEntityColumnData(2))
+        EnsureColumnsPresence(GetSubqueryColumnsPartFromQuery(sql), New NonModelEntityColumnData(2))
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectWithoutDefinedRelationshipUsingSubqueryAndExcludeNonRequiredColumnsBehavior()
+    Public Overridable Sub SelectWithoutDefinedRelationshipUsingJoinSubqueryAndExcludeNonRequiredColumnsBehavior()
       Dim article = Me.ModelFactory.CreateArticle(1)
       Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
       item.IntColumn = article.Id
@@ -471,9 +477,8 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount())
-        EnsureColumnsCountInSubquery(sql, 2)
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity))
+        EnsureColumnsPresence(GetSubqueryColumnsPartFromQuery(sql), New NonModelEntityColumnData(2))
       End Using
 
       ' same as above, but assume behavior is not explicitly set
@@ -493,14 +498,13 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount())
-        EnsureColumnsCountInSubquery(sql, 2)
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity))
+        EnsureColumnsPresence(GetSubqueryColumnsPartFromQuery(sql), New NonModelEntityColumnData(2))
       End Using
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectUsingSubqueryWithJoinsThatIsUsingExcludeNonRequiredColumnsBehavior()
+    Public Overridable Sub SelectUsingJoinSubqueryWithJoinsThatIsUsingExcludeNonRequiredColumnsBehavior()
       Dim article = Me.ModelFactory.CreateArticle(1)
       Dim articlePart1 = Me.ModelFactory.CreateArticlePart(1001, 1)
       Dim articlePart2 = Me.ModelFactory.CreateArticlePart(1002, 1)
@@ -534,12 +538,8 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsArePresent(sql, itemEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + articlePartEntity.GetPropertiesCount() + itemEntity.GetPropertiesCount())
-        EnsureColumnsArePresentInSubquery(sql, articlePartEntity)
-        EnsureColumnsAreNotPresentInSubquery(sql, labelEntity)
-        EnsureColumnsCountInSubquery(sql, articlePartEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New EntityColumnData(articlePartEntity), New EntityColumnData(itemEntity))
+        EnsureColumnsPresence(GetSubqueryColumnsPartFromQuery(sql), New EntityColumnData(articlePartEntity))
       End Using
 
       ' same as above, but assume behavior is not explicitly set
@@ -566,12 +566,65 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsArePresent(sql, itemEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount() + articlePartEntity.GetPropertiesCount() + itemEntity.GetPropertiesCount())
-        EnsureColumnsArePresentInSubquery(sql, articlePartEntity)
-        EnsureColumnsAreNotPresentInSubquery(sql, labelEntity)
-        EnsureColumnsCountInSubquery(sql, articlePartEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New EntityColumnData(articlePartEntity), New EntityColumnData(itemEntity))
+        EnsureColumnsPresence(GetSubqueryColumnsPartFromQuery(sql), New EntityColumnData(articlePartEntity))
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectUsingFromSubqueryWithJoinsThatIsUsingExcludeNonRequiredColumnsBehavior()
+      Dim article = Me.ModelFactory.CreateArticle(1)
+      Dim labelEn = Me.ModelFactory.CreateLabel("", 1, English)
+      Dim item = Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues()
+      item.IntColumn = article.Id
+
+      InsertItems(article, labelEn, item)
+
+      Using db = CreateDbContext()
+        Dim articleEntity = db.Model.GetEntity(article.GetType())
+        Dim labelEntity = db.Model.GetEntity(labelEn.GetType())
+        Dim itemEntity = db.Model.GetEntity(item.GetType())
+
+        Dim result = db.From(Function(c)
+                               Return c.From(Of Article).
+                                        Join(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                                        SelectAll(SelectColumnsBehavior.ExcludeNonRequiredColumns)
+                             End Function).
+                        Join(Of ItemWithAllSupportedValues)(Function(j) j.T1.Id = j.T2.IntColumn).As(Function(x) x.Tag).
+                        SelectAll().FirstOrDefault()
+
+        Assert.AreEqual(article, result)
+        Assert.IsNull(result.Label)
+        Assert.AreEqual(item, result.Tag)
+
+        Dim sql = db.GetLastCommandText()
+
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New EntityColumnData(itemEntity))
+        EnsureColumnsPresence(GetSubqueryColumnsPartFromQuery(sql), New EntityColumnData(articleEntity))
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
+      Using db = CreateDbContext()
+        Dim articleEntity = db.Model.GetEntity(article.GetType())
+        Dim labelEntity = db.Model.GetEntity(labelEn.GetType())
+        Dim itemEntity = db.Model.GetEntity(item.GetType())
+
+        Dim result = db.From(Function(c)
+                               Return c.From(Of Article).
+                                        Join(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                                        SelectAll()
+                             End Function).
+                        Join(Of ItemWithAllSupportedValues)(Function(j) j.T1.Id = j.T2.IntColumn).As(Function(x) x.Tag).
+                        SelectAll().FirstOrDefault()
+
+        Assert.AreEqual(article, result)
+        Assert.IsNull(result.Label)
+        Assert.AreEqual(item, result.Tag)
+
+        Dim sql = db.GetLastCommandText()
+
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity), New EntityColumnData(itemEntity))
+        EnsureColumnsPresence(GetSubqueryColumnsPartFromQuery(sql), New EntityColumnData(articleEntity))
       End Using
     End Sub
 
@@ -598,9 +651,7 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsAreNotPresent(sql, labelEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity))
       End Using
 
       ' same as above, but assume behavior is not explicitly set
@@ -620,72 +671,39 @@ Namespace Tests
 
         Dim sql = db.GetLastCommandText()
 
-        EnsureColumnsArePresent(sql, articleEntity)
-        EnsureColumnsAreNotPresent(sql, labelEntity)
-        EnsureColumnsCount(sql, articleEntity.GetPropertiesCount())
+        EnsureColumnsPresence(GetColumnsPartFromQuery(sql), New EntityColumnData(articleEntity))
       End Using
     End Sub
 
-    Private Sub EnsureColumnsArePresent(sql As String, entity As Entity)
-      sql = GetColumnsPartFromQuery(sql)
+    Private Sub EnsureColumnsPresence(sqlColumnsPart As String, ParamArray items As ColumnDataBase())
+      Dim columns = sqlColumnsPart.Split(",")
 
-      For Each prop In entity.GetProperties()
-        If prop.ColumnName = "Id" Then
-          ' skip id, because it's not unique (ugly workaround)
-          Continue For
+      Assert.AreEqual(items.Sum(Function(x) x.GetColumnCount()), columns.Length)
+
+      Dim i = 0
+
+      For Each item In items
+        Dim expected = item.GetExpectedColumnNames()
+        Dim notExpected = item.GetNotExpectedColumnNames()
+
+        If expected.Any() AndAlso notExpected.Any() Then
+          Throw New NotSupportedException()
         End If
 
-        Assert.IsTrue(sql.Contains(prop.ColumnName))
-      Next
-    End Sub
-
-    Private Sub EnsureColumnsArePresentInSubquery(sql As String, entity As Entity)
-      sql = GetSubqueryColumnsPartFromQuery(sql)
-
-      For Each prop In entity.GetProperties()
-        If prop.ColumnName = "Id" Then
-          ' skip id, because it's not unique (ugly workaround)
-          Continue For
+        If expected.Any() Then
+          For Each column In expected
+            Assert.IsTrue(columns(i).Contains(column))
+            i += 1
+          Next
+        ElseIf notExpected.Any() Then
+          For Each column In notExpected
+            Assert.IsFalse(columns(i).Contains(column))
+            i += 1
+          Next
+        Else
+          i += item.GetColumnCount()
         End If
-
-        Assert.IsTrue(sql.Contains(prop.ColumnName))
       Next
-    End Sub
-
-    Private Sub EnsureColumnsAreNotPresent(sql As String, entity As Entity)
-      sql = GetColumnsPartFromQuery(sql)
-
-      For Each prop In entity.GetProperties()
-        If prop.ColumnName = "Id" Then
-          ' skip id, because it's not unique (ugly workaround)
-          Continue For
-        End If
-
-        Assert.IsFalse(sql.Contains(prop.ColumnName))
-      Next
-    End Sub
-
-    Private Sub EnsureColumnsAreNotPresentInSubquery(sql As String, entity As Entity)
-      sql = GetSubqueryColumnsPartFromQuery(sql)
-
-      For Each prop In entity.GetProperties()
-        If prop.ColumnName = "Id" Then
-          ' skip id, because it's not unique (ugly workaround)
-          Continue For
-        End If
-
-        Assert.IsFalse(sql.Contains(prop.ColumnName))
-      Next
-    End Sub
-
-    Private Sub EnsureColumnsCount(sql As String, expectedColumnsCount As Int32)
-      sql = GetColumnsPartFromQuery(sql)
-      Assert.AreEqual(expectedColumnsCount, sql.Split(",").Length)
-    End Sub
-
-    Private Sub EnsureColumnsCountInSubquery(sql As String, expectedColumnsCount As Int32)
-      sql = GetSubqueryColumnsPartFromQuery(sql)
-      Assert.AreEqual(expectedColumnsCount, sql.Split(",").Length)
     End Sub
 
     Private Shared Function GetColumnsPartFromQuery(sql As String) As String

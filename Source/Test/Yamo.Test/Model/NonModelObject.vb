@@ -12,6 +12,8 @@
 
     Public Property IntValue As Int32
 
+    Public Property DecimalValue As Decimal
+
     Public Property NullableDecimalValue As Decimal?
 
     Public Property ItemWithAllSupportedValues As ItemWithAllSupportedValues
@@ -54,6 +56,16 @@
       Me.StringValue2 = stringValue2
     End Sub
 
+    Public Sub New(intValue As Int32, decimalValue As Decimal)
+      Me.IntValue = intValue
+      Me.DecimalValue = decimalValue
+    End Sub
+
+    Public Sub New(intValue As Int32, stringValue1 As String)
+      Me.IntValue = intValue
+      Me.StringValue1 = stringValue1
+    End Sub
+
     Public Overrides Function Equals(obj As Object) As Boolean
       If obj Is Nothing OrElse TypeOf obj IsNot NonModelObject Then
         Return False
@@ -65,6 +77,7 @@
         If Not Object.Equals(Me.StringValue1, o.StringValue1) Then Return False
         If Not Object.Equals(Me.StringValue2, o.StringValue2) Then Return False
         If Not Object.Equals(Me.IntValue, o.IntValue) Then Return False
+        If Not Object.Equals(Me.DecimalValue, o.DecimalValue) Then Return False
         If Not Object.Equals(Me.NullableDecimalValue, o.NullableDecimalValue) Then Return False
 
         Return True
@@ -72,7 +85,7 @@
     End Function
 
     Public Overrides Function GetHashCode() As Int32
-      Return HashCode.Combine(Me.GuidValue, Me.BooleanValue, Me.StringValue1, Me.StringValue2, Me.IntValue, Me.NullableDecimalValue)
+      Return HashCode.Combine(Me.GuidValue, Me.BooleanValue, Me.StringValue1, Me.StringValue2, Me.IntValue, Me.DecimalValue, Me.NullableDecimalValue)
     End Function
 
   End Class
