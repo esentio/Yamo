@@ -66,50 +66,50 @@
     Protected Sub GenerateSelectWithPredicateWithOneEntity(builder As CodeBuilder, index As Int32, entityCount As Int32)
       Dim comment = "Adds SELECT clause with custom columns selection."
       Dim typeParams = {"TResult"}
-      Dim params = {"selector"}
+      Dim params = {"selector", "behavior"}
       AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
 
       Dim generic = GetGenericName(index, index = entityCount)
 
-      builder.Indent().AppendLine($"Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of {generic}, TResult))) As CustomSelectSqlExpression(Of TResult)").PushIndent()
-      builder.Indent().AppendLine($"Return InternalSelect(Of TResult)(selector, {GetEntityIndexHintsForEntity(index - 1)})").PopIndent()
+      builder.Indent().AppendLine($"Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of {generic}, TResult)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As CustomSelectSqlExpression(Of TResult)").PushIndent()
+      builder.Indent().AppendLine($"Return InternalSelect(Of TResult)(selector, {GetEntityIndexHintsForEntity(index - 1)}, behavior)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
 
     Protected Sub GenerateSelectWithPredicateWithAllEntities(builder As CodeBuilder, entityCount As Int32)
       Dim comment = "Adds SELECT clause with custom columns selection."
       Dim typeParams = {"TResult"}
-      Dim params = {"selector"}
+      Dim params = {"selector", "behavior"}
       AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of {generics}, TResult))) As CustomSelectSqlExpression(Of TResult)").PushIndent()
-      builder.Indent().AppendLine($"Return InternalSelect(Of TResult)(selector, {GetEntityIndexHintsForAllEntities(entityCount)})").PopIndent()
+      builder.Indent().AppendLine($"Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of {generics}, TResult)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As CustomSelectSqlExpression(Of TResult)").PushIndent()
+      builder.Indent().AppendLine($"Return InternalSelect(Of TResult)(selector, {GetEntityIndexHintsForAllEntities(entityCount)}, behavior)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
 
     Protected Sub GenerateSelectWithPredicateWithIJoin(builder As CodeBuilder, entityCount As Int32)
       Dim comment = "Adds SELECT clause with custom columns selection."
       Dim typeParams = {"TResult"}
-      Dim params = {"selector"}
+      Dim params = {"selector", "behavior"}
       AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
 
       Dim generics = String.Join(", ", GetGenericNames(entityCount))
 
-      builder.Indent().AppendLine($"Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of Join(Of {generics}), TResult))) As CustomSelectSqlExpression(Of TResult)").PushIndent()
-      builder.Indent().AppendLine("Return InternalSelect(Of TResult)(selector, Nothing)").PopIndent()
+      builder.Indent().AppendLine($"Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of Join(Of {generics}), TResult)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As CustomSelectSqlExpression(Of TResult)").PushIndent()
+      builder.Indent().AppendLine("Return InternalSelect(Of TResult)(selector, Nothing, behavior)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub
 
     Protected Sub GenerateInternalSelect(builder As CodeBuilder, entityCount As Int32)
       Dim comment = "Adds SELECT clause with custom columns selection."
       Dim typeParams = {"TResult"}
-      Dim params = {"selector", "entityIndexHints"}
+      Dim params = {"selector", "entityIndexHints", "behavior"}
       AddComment(builder, comment, typeParams:=typeParams, params:=params, returns:="")
 
-      builder.Indent().AppendLine("Private Function InternalSelect(Of TResult)(selector As Expression, entityIndexHints As Int32()) As CustomSelectSqlExpression(Of TResult)").PushIndent()
-      builder.Indent().AppendLine("Me.Builder.AddSelect(selector, entityIndexHints)")
+      builder.Indent().AppendLine("Private Function InternalSelect(Of TResult)(selector As Expression, entityIndexHints As Int32(), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As CustomSelectSqlExpression(Of TResult)").PushIndent()
+      builder.Indent().AppendLine("Me.Builder.AddSelect(selector, entityIndexHints, behavior)")
       builder.Indent().AppendLine("Return New CustomSelectSqlExpression(Of TResult)(Me.Builder, Me.Executor)").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub

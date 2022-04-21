@@ -25,7 +25,12 @@ Namespace Internal.Query
     ''' <param name="readerIndex"></param>
     ''' <param name="items"></param>
     Public Sub New(<DisallowNull> sqlResult As ValueTupleSqlResult, readerIndex As Int32, <DisallowNull> items As ReaderDataBase())
-      MyBase.New(sqlResult, readerIndex)
+      ' NOTE: in some cases, honoring NullIfAllColumnsAreNull is not necessary and AlwaysCreateInstance could be used.
+      ' I.e. when ValueTuple is not nullable. Default is an empty value tuple and not null in that case.
+      ' However, we simply cannot only check nullability here. For example, if the result is an include call and we are
+      ' setting the value to a property of type Object, we still expect null to be set.
+      ' Also, it is questionable, if using AlwaysCreateInstance would be faster. It might even be slower (depending on the result).
+      MyBase.New(sqlResult, readerIndex, Not sqlResult.CreationBehavior = NonModelEntityCreationBehavior.AlwaysCreateInstance)
       Me.Items = items
     End Sub
 

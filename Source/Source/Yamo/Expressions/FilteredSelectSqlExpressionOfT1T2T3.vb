@@ -438,9 +438,10 @@ Namespace Expressions
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T1, TResult))) As CustomSelectSqlExpression(Of TResult)
-      Return InternalSelect(Of TResult)(selector, {0})
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T1, TResult)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -448,9 +449,10 @@ Namespace Expressions
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T2, TResult))) As CustomSelectSqlExpression(Of TResult)
-      Return InternalSelect(Of TResult)(selector, {1})
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T2, TResult)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -458,9 +460,10 @@ Namespace Expressions
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T3, TResult))) As CustomSelectSqlExpression(Of TResult)
-      Return InternalSelect(Of TResult)(selector, {2})
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T3, TResult)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -468,9 +471,10 @@ Namespace Expressions
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T1, T2, T3, TResult))) As CustomSelectSqlExpression(Of TResult)
-      Return InternalSelect(Of TResult)(selector, {0, 1, 2})
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of T1, T2, T3, TResult)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, {0, 1, 2}, behavior)
     End Function
 
     ''' <summary>
@@ -478,9 +482,10 @@ Namespace Expressions
     ''' </summary>
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of Join(Of T1, T2, T3), TResult))) As CustomSelectSqlExpression(Of TResult)
-      Return InternalSelect(Of TResult)(selector, Nothing)
+    Public Function [Select](Of TResult)(<DisallowNull> selector As Expression(Of Func(Of Join(Of T1, T2, T3), TResult)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As CustomSelectSqlExpression(Of TResult)
+      Return InternalSelect(Of TResult)(selector, Nothing, behavior)
     End Function
 
     ''' <summary>
@@ -489,9 +494,10 @@ Namespace Expressions
     ''' <typeparam name="TResult"></typeparam>
     ''' <param name="selector"></param>
     ''' <param name="entityIndexHints"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Private Function InternalSelect(Of TResult)(selector As Expression, entityIndexHints As Int32()) As CustomSelectSqlExpression(Of TResult)
-      Me.Builder.AddSelect(selector, entityIndexHints)
+    Private Function InternalSelect(Of TResult)(selector As Expression, entityIndexHints As Int32(), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As CustomSelectSqlExpression(Of TResult)
+      Me.Builder.AddSelect(selector, entityIndexHints, behavior)
       Return New CustomSelectSqlExpression(Of TResult)(Me.Builder, Me.Executor)
     End Function
 

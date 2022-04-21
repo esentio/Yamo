@@ -198,10 +198,9 @@ Public Class DbContext
   ''' </summary>
   ''' <typeparam name="T"></typeparam>
   ''' <param name="tableSourceFactory"></param>
-  ''' <param name="behavior"></param>
   ''' <returns></returns>
-  Public Function From(Of T)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull) As SelectSqlExpression(Of T)
-    Return New SelectSqlExpression(Of T)(Me, tableSourceFactory, behavior)
+  Public Function From(Of T)(<DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T))) As SelectSqlExpression(Of T)
+    Return New SelectSqlExpression(Of T)(Me, tableSourceFactory)
   End Function
 
   ''' <summary>

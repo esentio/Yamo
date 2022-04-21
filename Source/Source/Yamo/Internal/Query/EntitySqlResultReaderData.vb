@@ -55,7 +55,7 @@ Namespace Internal.Query
     ''' <param name="readerIndex"></param>
     ''' <param name="entityReader"></param>
     Public Sub New(<DisallowNull> sqlResult As EntitySqlResult, readerIndex As Int32, <DisallowNull> entityReader As Func(Of DbDataReader, Int32, Boolean(), Object))
-      MyBase.New(sqlResult, readerIndex)
+      MyBase.New(sqlResult, readerIndex, False)
       Me.Entity = sqlResult.Entity
       Me.Reader = entityReader
       Me.ContainsPKReader = Nothing
@@ -73,7 +73,7 @@ Namespace Internal.Query
     ''' <param name="containsPKReader"></param>
     ''' <param name="pkOffsets"></param>
     Public Sub New(<DisallowNull> sqlResult As EntitySqlResult, readerIndex As Int32, <DisallowNull> entityReader As Func(Of DbDataReader, Int32, Boolean(), Object), containsPKReader As Func(Of DbDataReader, Int32, Int32(), Boolean), pkOffsets As Int32())
-      MyBase.New(sqlResult, readerIndex)
+      MyBase.New(sqlResult, readerIndex, False)
       Me.Entity = sqlResult.Entity
       Me.Reader = entityReader
       Me.ContainsPKReader = containsPKReader
@@ -92,7 +92,7 @@ Namespace Internal.Query
     ''' <param name="pkOffsets"></param>
     ''' <param name="pkReader"></param>
     Public Sub New(<DisallowNull> sqlResult As EntitySqlResult, readerIndex As Int32, <DisallowNull> entityReader As Func(Of DbDataReader, Int32, Boolean(), Object), containsPKReader As Func(Of DbDataReader, Int32, Int32(), Boolean), pkOffsets As Int32(), pkReader As Func(Of DbDataReader, Int32, Int32(), Object))
-      MyBase.New(sqlResult, readerIndex)
+      MyBase.New(sqlResult, readerIndex, False)
       Me.Entity = sqlResult.Entity
       Me.Reader = entityReader
       Me.ContainsPKReader = containsPKReader

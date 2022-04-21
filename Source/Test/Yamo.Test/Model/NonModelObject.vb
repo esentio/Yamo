@@ -12,6 +12,8 @@
 
     Public Property IntValue As Int32
 
+    Public Property NullableIntValue As Int32?
+
     Public Property DecimalValue As Decimal
 
     Public Property NullableDecimalValue As Decimal?
@@ -77,6 +79,7 @@
         If Not Object.Equals(Me.StringValue1, o.StringValue1) Then Return False
         If Not Object.Equals(Me.StringValue2, o.StringValue2) Then Return False
         If Not Object.Equals(Me.IntValue, o.IntValue) Then Return False
+        If Not Object.Equals(Me.NullableIntValue, o.NullableIntValue) Then Return False
         If Not Object.Equals(Me.DecimalValue, o.DecimalValue) Then Return False
         If Not Object.Equals(Me.NullableDecimalValue, o.NullableDecimalValue) Then Return False
 
@@ -85,7 +88,7 @@
     End Function
 
     Public Overrides Function GetHashCode() As Int32
-      Return HashCode.Combine(Me.GuidValue, Me.BooleanValue, Me.StringValue1, Me.StringValue2, Me.IntValue, Me.DecimalValue, Me.NullableDecimalValue)
+      Return HashCode.Combine(Me.GuidValue, Me.BooleanValue, Me.StringValue1, Me.StringValue2, Me.IntValue, Me.NullableIntValue, Me.DecimalValue, Me.NullableDecimalValue)
     End Function
 
   End Class

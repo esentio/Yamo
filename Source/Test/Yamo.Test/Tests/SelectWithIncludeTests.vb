@@ -344,13 +344,12 @@ Namespace Tests
                         Join(Of Label)(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
-                        Include(Sub(j) j.T1.Tag = New With {.LabelId = j.T2.Id, .LabelDescription = j.T2.Description}).
+                        Include(Sub(j) j.T1.Tag = New With {Key .LabelId = j.T2.Id, Key .LabelDescription = j.T2.Description}).
                         ToList()
 
         CollectionAssert.AreEqual({article1, article2, article3}, result) ' this only checks "model" properties
         CollectionAssert.AreEqual({label1En, label2En, label3En}, result.Select(Function(x) x.Label).ToArray())
-        ' NOTE: ToString() is probably easiest way how to get values from anonymous type casted to an Object
-        CollectionAssert.AreEqual({New With {.LabelId = label1En.Id, .LabelDescription = label1En.Description}.ToString(), New With {.LabelId = label2En.Id, .LabelDescription = label2En.Description}.ToString(), New With {.LabelId = label3En.Id, .LabelDescription = label3En.Description}.ToString()}, result.Select(Function(x) x.Tag.ToString()).ToArray())
+        CollectionAssert.AreEqual({New With {Key .LabelId = label1En.Id, Key .LabelDescription = label1En.Description}, New With {Key .LabelId = label2En.Id, Key .LabelDescription = label2En.Description}, New With {Key .LabelId = label3En.Id, Key .LabelDescription = label3En.Description}}, result.Select(Function(x) x.Tag).ToArray())
       End Using
     End Sub
 
@@ -397,7 +396,7 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
-    Public Overridable Sub SelectWithIncludeMissingValues()
+    Public Overridable Sub SelectWithIncludeScalarValueUsingNullIfAllColumnsAreNullBehavior()
       Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
       Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
 
@@ -405,7 +404,52 @@ Namespace Tests
 
       InsertItems(article1, article2, label1En)
 
-      ' scalar and string values
+      ' NonModelEntityCreationBehavior should not have any effect here
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.PriceWithDiscount = j.T2.Id * 0.9D, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        Include(Sub(j) j.T1.NullablePriceWithDiscount = j.T2.Id * 0.9D, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.Description, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En.Id * 0.9D, result(0).PriceWithDiscount)
+        Assert.AreEqual(New Decimal?(label1En.Id * 0.9D), result(0).NullablePriceWithDiscount)
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual(0D, result(1).PriceWithDiscount)
+        Assert.AreEqual(New Decimal?, result(1).NullablePriceWithDiscount)
+        Assert.AreEqual(Nothing, result(1).LabelDescription)
+      End Using
+
+      ' same as above, but assume infer behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.PriceWithDiscount = j.T2.Id * 0.9D, NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull).
+                        Include(Sub(j) j.T1.NullablePriceWithDiscount = j.T2.Id * 0.9D, NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull).
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.Description, NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En.Id * 0.9D, result(0).PriceWithDiscount)
+        Assert.AreEqual(New Decimal?(label1En.Id * 0.9D), result(0).NullablePriceWithDiscount)
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual(0D, result(1).PriceWithDiscount)
+        Assert.AreEqual(New Decimal?, result(1).NullablePriceWithDiscount)
+        Assert.AreEqual(Nothing, result(1).LabelDescription)
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).
                         LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
@@ -426,8 +470,84 @@ Namespace Tests
         Assert.AreEqual(New Decimal?, result(1).NullablePriceWithDiscount)
         Assert.AreEqual(Nothing, result(1).LabelDescription)
       End Using
+    End Sub
 
-      ' entity
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeScalarValueUsingAlwaysCreateInstanceBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      ' NonModelEntityCreationBehavior should not have any effect here
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.PriceWithDiscount = j.T2.Id * 0.9D, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                        Include(Sub(j) j.T1.NullablePriceWithDiscount = j.T2.Id * 0.9D, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                        Include(Sub(j) j.T1.LabelDescription = j.T2.Description, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En.Id * 0.9D, result(0).PriceWithDiscount)
+        Assert.AreEqual(New Decimal?(label1En.Id * 0.9D), result(0).NullablePriceWithDiscount)
+        Assert.AreEqual(label1En.Description, result(0).LabelDescription)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual(0D, result(1).PriceWithDiscount)
+        Assert.AreEqual(New Decimal?, result(1).NullablePriceWithDiscount)
+        Assert.AreEqual(Nothing, result(1).LabelDescription)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeEntityValueUsingNullIfAllColumnsAreNullBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      ' NonModelEntityCreationBehavior should not have any effect here
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = j.T2, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual(Nothing, result(1).Tag)
+      End Using
+
+      ' same as above, but assume infer behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = j.T2, NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual(Nothing, result(1).Tag)
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).
                         LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
@@ -442,8 +562,158 @@ Namespace Tests
         Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
         Assert.AreEqual(Nothing, result(1).Tag)
       End Using
+    End Sub
 
-      ' value tuple elements
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeEntityValueUsingAlwaysCreateInstanceBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      ' NonModelEntityCreationBehavior should not have any effect here
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = j.T2, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(label1En, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual(Nothing, result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeAnonymousTypeValueUsingNullIfAllColumnsAreNullBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = New With {Key .LabelId = j.T2.Id, Key .NullableLabelId = CType(j.T2.Id, Int32?), Key .LabelDescription = j.T2.Description, Key .Label = j.T2}, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .LabelId = label1En.Id, Key .NullableLabelId = New Int32?(label1En.Id), Key .LabelDescription = label1En.Description, Key .Label = label1En}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' same as above, but assume infer behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = New With {Key .LabelId = j.T2.Id, Key .NullableLabelId = CType(j.T2.Id, Int32?), Key .LabelDescription = j.T2.Description, Key .Label = j.T2}, NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .LabelId = label1En.Id, Key .NullableLabelId = New Int32?(label1En.Id), Key .LabelDescription = label1En.Description, Key .Label = label1En}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = New With {Key .LabelId = j.T2.Id, Key .NullableLabelId = CType(j.T2.Id, Int32?), Key .LabelDescription = j.T2.Description, Key .Label = j.T2}).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .LabelId = label1En.Id, Key .NullableLabelId = New Int32?(label1En.Id), Key .LabelDescription = label1En.Description, Key .Label = label1En}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeAnonymousTypeValueUsingAlwaysCreateInstanceBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = New With {Key .LabelId = j.T2.Id, Key .NullableLabelId = CType(j.T2.Id, Int32?), Key .LabelDescription = j.T2.Description, Key .Label = j.T2}, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .LabelId = label1En.Id, Key .NullableLabelId = New Int32?(label1En.Id), Key .LabelDescription = label1En.Description, Key .Label = label1En}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .LabelId = 0, Key .NullableLabelId = New Int32?(), Key .LabelDescription = CType(Nothing, String), Key .Label = CType(Nothing, Label)}, result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeValueTupleValueUsingNullIfAllColumnsAreNullBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = (LabelId:=j.T2.Id, NullableLabelId:=CType(j.T2.Id, Int32?), LabelDescription:=j.T2.Description, Label:=j.T2), NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual((label1En.Id, New Int32?(label1En.Id), label1En.Description, label1En), result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' same as above, but assume infer behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = (LabelId:=j.T2.Id, NullableLabelId:=CType(j.T2.Id, Int32?), LabelDescription:=j.T2.Description, Label:=j.T2), NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual((label1En.Id, New Int32?(label1En.Id), label1En.Description, label1En), result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).
                         LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
@@ -456,25 +726,115 @@ Namespace Tests
         Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
         Assert.AreEqual((label1En.Id, New Int32?(label1En.Id), label1En.Description, label1En), result(0).Tag)
         Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
-        Assert.AreEqual((0, New Int32?(), CType(Nothing, String), CType(Nothing, Label)), result(1).Tag)
+        Assert.IsNull(result(1).Tag)
       End Using
+    End Sub
 
-      ' value tuple elements
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeValueTupleValueUsingAlwaysCreateInstanceBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
       Using db = CreateDbContext()
         Dim result = db.From(Of Article).
                         LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
                         ExcludeT2().
-                        Include(Sub(j) j.T1.Tag = New With {.LabelId = j.T2.Id, .NullableLabelId = CType(j.T2.Id, Int32?), .LabelDescription = j.T2.Description, .Label = j.T2}).
+                        Include(Sub(j) j.T1.Tag = (LabelId:=j.T2.Id, NullableLabelId:=CType(j.T2.Id, Int32?), LabelDescription:=j.T2.Description, Label:=j.T2), NonModelEntityCreationBehavior.AlwaysCreateInstance).
                         ToList()
 
         Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
-        ' NOTE: ToString() is probably easiest way how to get values from anonymous type casted to an Object
-        Assert.AreEqual(New With {.LabelId = label1En.Id, .NullableLabelId = New Int32?(label1En.Id), .LabelDescription = label1En.Description, .Label = label1En}.ToString(), result(0).Tag.ToString())
+        Assert.AreEqual((label1En.Id, New Int32?(label1En.Id), label1En.Description, label1En), result(0).Tag)
         Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
-        ' NOTE: ToString() is probably easiest way how to get values from anonymous type casted to an Object
-        Assert.AreEqual(New With {.LabelId = 0, .NullableLabelId = New Int32?(), .LabelDescription = CType(Nothing, String), .Label = CType(Nothing, Label)}.ToString(), result(1).Tag.ToString())
+        Assert.AreEqual((0, New Int32?(), CType(Nothing, String), CType(Nothing, Label)), result(1).Tag)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeAdHocTypeValueUsingNullIfAllColumnsAreNullBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = New NonModelObject With {.IntValue = j.T2.Id, .NullableIntValue = CType(j.T2.Id, Int32?), .StringValue1 = j.T2.Description, .Label = j.T2}, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject With {.IntValue = label1En.Id, .NullableIntValue = New Int32?(label1En.Id), .StringValue1 = label1En.Description, .Label = label1En}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' same as above, but assume infer behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = New NonModelObject With {.IntValue = j.T2.Id, .NullableIntValue = CType(j.T2.Id, Int32?), .StringValue1 = j.T2.Description, .Label = j.T2}, NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject With {.IntValue = label1En.Id, .NullableIntValue = New Int32?(label1En.Id), .StringValue1 = label1En.Description, .Label = label1En}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' same as above, but assume behavior is not explicitly set
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = New NonModelObject With {.IntValue = j.T2.Id, .NullableIntValue = CType(j.T2.Id, Int32?), .StringValue1 = j.T2.Description, .Label = j.T2}).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject With {.IntValue = label1En.Id, .NullableIntValue = New Int32?(label1En.Id), .StringValue1 = label1En.Description, .Label = label1En}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectWithIncludeAdHocTypeValueUsingAlwaysCreateInstanceBehavior()
+      Dim article1 = Me.ModelFactory.CreateArticle(1, 100D)
+      Dim article2 = Me.ModelFactory.CreateArticle(2, 200D)
+
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "Article 1")
+
+      InsertItems(article1, article2, label1En)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Of Label)(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = New NonModelObject With {.IntValue = j.T2.Id, .NullableIntValue = CType(j.T2.Id, Int32?), .StringValue1 = j.T2.Description, .Label = j.T2}, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                        ToList()
+
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject With {.IntValue = label1En.Id, .NullableIntValue = New Int32?(label1En.Id), .StringValue1 = label1En.Description, .Label = label1En}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject With {.IntValue = 0, .NullableIntValue = New Int32?(), .StringValue1 = Nothing, .Label = Nothing}, result(1).Tag)
       End Using
     End Sub
 
@@ -944,8 +1304,32 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            SelectAll()
-                                 End Function, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                                            Select(Function(x) x, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0))
+        Assert.AreEqual(label1En, result(0).Tag)
+        Assert.IsNull(result(0).Label)
+        Assert.AreEqual(article2, result(1))
+        Assert.IsNull(result(1).Tag)
+        Assert.IsNull(result(1).Label)
+      End Using
+
+      ' same as above, but assume infer behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) x, NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull)
+                                 End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
@@ -968,13 +1352,37 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            SelectAll()
-                                 End Function, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                                            Select(Function(x) x)
+                                 End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
                         ExcludeT2().
                         Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0))
+        Assert.AreEqual(label1En, result(0).Tag)
+        Assert.IsNull(result(0).Label)
+        Assert.AreEqual(article2, result(1))
+        Assert.IsNull(result(1).Tag)
+        Assert.IsNull(result(1).Label)
+      End Using
+
+      ' override behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) x, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = j.T2, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
                         ToList()
 
         Assert.AreEqual(2, result.Count)
@@ -1003,13 +1411,37 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            SelectAll()
-                                 End Function, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                                            Select(Function(x) x, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                                 End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
                         ExcludeT2().
                         Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0))
+        Assert.AreEqual(label1En, result(0).Tag)
+        Assert.IsNull(result(0).Label)
+        Assert.AreEqual(article2, result(1))
+        Assert.IsNull(result(1).Tag)
+        Assert.IsNull(result(1).Label)
+      End Using
+
+      ' override behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) x, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        ExcludeT2().
+                        Include(Sub(j) j.T1.Tag = j.T2, NonModelEntityCreationBehavior.AlwaysCreateInstance).
                         ToList()
 
         Assert.AreEqual(2, result.Count)
@@ -1036,8 +1468,29 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description})
-                                 End Function, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Description = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' same as above, but assume infer behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}, NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull)
+                                 End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
@@ -1071,6 +1524,27 @@ Namespace Tests
         Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
         Assert.IsNull(result(1).Tag)
       End Using
+
+      ' override behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Description = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
     End Sub
 
     <TestMethod()>
@@ -1087,12 +1561,33 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description})
-                                 End Function, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                                 End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
                         Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Description = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual(New With {Key .Id = 0, Key .Description = CType(Nothing, String)}, result(1).Tag)
+      End Using
+
+      ' override behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Description = x.Description}, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2, NonModelEntityCreationBehavior.AlwaysCreateInstance).
                         ToList()
 
         Assert.AreEqual(2, result.Count)
@@ -1117,8 +1612,29 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            Select(Function(x) (Id:=x.Id, Description:=x.Description))
-                                 End Function, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                                            Select(Function(x) (Id:=x.Id, Description:=x.Description), NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual((label1En.Id, label1En.Description), result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' same as above, but assume infer behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) (Id:=x.Id, Description:=x.Description), NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull)
+                                 End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
@@ -1144,6 +1660,27 @@ Namespace Tests
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
                         Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual((label1En.Id, label1En.Description), result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' override behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) (Id:=x.Id, Description:=x.Description), NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
                         ToList()
 
         Assert.AreEqual(2, result.Count)
@@ -1169,12 +1706,33 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            Select(Function(x) (Id:=x.Id, Description:=x.Description))
-                                 End Function, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                                            Select(Function(x) (Id:=x.Id, Description:=x.Description), NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                                 End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
                         Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual((label1En.Id, label1En.Description), result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual((0, CType(Nothing, String)), result(1).Tag)
+      End Using
+
+      ' override behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) (Id:=x.Id, Description:=x.Description), NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2, NonModelEntityCreationBehavior.AlwaysCreateInstance).
                         ToList()
 
         Assert.AreEqual(2, result.Count)
@@ -1199,8 +1757,29 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description})
-                                 End Function, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description}, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.IntValue).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject() With {.IntValue = label1En.Id, .StringValue1 = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
+
+      ' same as above, but assume infer behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description}, NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull)
+                                 End Function).
                         On(Function(j) j.T1.Id = j.T2.IntValue).
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
@@ -1234,6 +1813,27 @@ Namespace Tests
         Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
         Assert.IsNull(result(1).Tag)
       End Using
+
+      ' override behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description}, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.IntValue).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject() With {.IntValue = label1En.Id, .StringValue1 = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.IsNull(result(1).Tag)
+      End Using
     End Sub
 
     <TestMethod()>
@@ -1250,12 +1850,33 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description})
-                                 End Function, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description}, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                                 End Function).
                         On(Function(j) j.T1.Id = j.T2.IntValue).
                         OrderBy(Function(j) j.T1.Id).
                         SelectAll().
                         Include(Sub(j) j.T1.Tag = j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(article1, result(0)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject() With {.IntValue = label1En.Id, .StringValue1 = label1En.Description}, result(0).Tag)
+        Assert.AreEqual(article2, result(1)) ' this only checks "model" properties
+        Assert.AreEqual(New NonModelObject() With {.IntValue = 0, .StringValue1 = CType(Nothing, String)}, result(1).Tag)
+      End Using
+
+      ' override behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New NonModelObject() With {.IntValue = x.Id, .StringValue1 = x.Description}, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.IntValue).
+                        OrderBy(Function(j) j.T1.Id).
+                        SelectAll().
+                        Include(Sub(j) j.T1.Tag = j.T2, NonModelEntityCreationBehavior.AlwaysCreateInstance).
                         ToList()
 
         Assert.AreEqual(2, result.Count)

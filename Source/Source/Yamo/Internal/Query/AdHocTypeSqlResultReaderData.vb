@@ -33,7 +33,7 @@ Namespace Internal.Query
     ''' <param name="ctorArguments"></param>
     ''' <param name="memberInits"></param>
     Public Sub New(<DisallowNull> sqlResult As AdHocTypeSqlResult, readerIndex As Int32, <DisallowNull> ctorArguments As ReaderDataBase(), <DisallowNull> memberInits As ReaderDataBase())
-      MyBase.New(sqlResult, readerIndex)
+      MyBase.New(sqlResult, readerIndex, Not sqlResult.CreationBehavior = NonModelEntityCreationBehavior.AlwaysCreateInstance)
       Me.CtorArguments = ctorArguments
       Me.MemberInits = memberInits
     End Sub

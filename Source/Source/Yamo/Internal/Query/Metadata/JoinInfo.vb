@@ -30,13 +30,6 @@ Namespace Internal.Query.Metadata
     Public ReadOnly Property Subquery As <MaybeNull> SelectQuery
 
     ''' <summary>
-    ''' Gets non model entity creation behavior (if used).<br/>
-    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
-    ''' </summary>
-    ''' <returns></returns>
-    Public ReadOnly Property NonModelEntityCreationBehavior As NonModelEntityCreationBehavior
-
-    ''' <summary>
     ''' Creates new instance of <see cref="JoinInfo"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
@@ -52,7 +45,7 @@ Namespace Internal.Query.Metadata
     ''' <param name="joinType"></param>
     ''' <param name="tableSource"></param>
     Sub New(<DisallowNull> joinType As JoinType, tableSource As String)
-      Me.New(joinType, tableSource, Nothing, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+      Me.New(joinType, tableSource, Nothing)
     End Sub
 
     ''' <summary>
@@ -62,12 +55,10 @@ Namespace Internal.Query.Metadata
     ''' <param name="joinType"></param>
     ''' <param name="tableSource"></param>
     ''' <param name="subquery"></param>
-    ''' <param name="creationBehavior"></param>
-    Sub New(<DisallowNull> joinType As JoinType, tableSource As String, subquery As SelectQuery, creationBehavior As NonModelEntityCreationBehavior)
+    Sub New(<DisallowNull> joinType As JoinType, tableSource As String, subquery As SelectQuery)
       Me.JoinType = joinType
       Me.TableSource = tableSource
       Me.Subquery = subquery
-      Me.NonModelEntityCreationBehavior = creationBehavior
     End Sub
 
   End Structure

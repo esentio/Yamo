@@ -84,8 +84,9 @@ namespace Yamo.Playground.CS
             //Test59();
             //Test60();
             //Test61();
-            Test62();
-            Test63();
+            //Test62();
+            //Test63();
+            Test64();
         }
 
         public static MyContext CreateContext()
@@ -1216,8 +1217,8 @@ namespace Yamo.Playground.CS
                               {
                                   return c.From<ArticleCategory>()
                                           .GroupBy(x => x.ArticleId)
-                                          .Select(x => new Stats { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() });
-                              }, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                                          .Select(x => new Stats { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() }, NonModelEntityCreationBehavior.AlwaysCreateInstance);
+                              })
                               .On(j => j.T1.Id == j.T2.ArticleId)
                               .As(x => x.Stats)
                               .SelectAll()
@@ -1273,6 +1274,41 @@ namespace Yamo.Playground.CS
                                          });
                              })
                              .SelectAll()
+                             .ToList();
+            }
+        }
+
+        public static void Test64()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From<Article>()
+                             .LeftJoin<Label>(j => j.T1.Id == j.T2.Id && j.T2.Id < 2)
+                             .Select(j => new { j.T2.Id, j.T2.Description }, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                             .ToList();
+            }
+
+            using (var db = CreateContext())
+            {
+                var list = db.From<Article>()
+                             .LeftJoin<Label>(j => j.T1.Id == j.T2.Id && j.T2.Id < 2)
+                             .SelectAll()
+                             .Include(j => j.T1.Tag, j => new { j.T2.Id, j.T2.Description }, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                             .ToList();
+            }
+            
+            using (var db = CreateContext())
+            {
+                // NullIfAllColumnsAreNull overrides AlwaysCreateInstance behavior
+                var list = db.From<Article>()
+                             .LeftJoin(c =>
+                             {
+                                 return c.From<ArticleCategory>()
+                                         .GroupBy(x => x.ArticleId)
+                                         .Select(x => new Stats { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() }, NonModelEntityCreationBehavior.AlwaysCreateInstance);
+                             })
+                             .On(j => j.T1.Id == j.T2.ArticleId)
+                             .Select(j => j.T2, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
                              .ToList();
             }
         }

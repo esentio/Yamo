@@ -24,14 +24,23 @@ Namespace Internal.Query
     Public ReadOnly Property ReaderIndex As Int32
 
     ''' <summary>
+    ''' Gets whether contains non-null column check should be performed.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property ContainsNonNullColumnCheck As Boolean
+
+    ''' <summary>
     ''' Creates new instance of <see cref="ReaderDataBase"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="sqlResult"></param>
     ''' <param name="readerIndex"></param>
-    Protected Sub New(<DisallowNull> sqlResult As SqlResultBase, readerIndex As Int32)
+    ''' <param name="containsNonNullColumnCheck"></param>
+    Protected Sub New(<DisallowNull> sqlResult As SqlResultBase, readerIndex As Int32, containsNonNullColumnCheck As Boolean)
       Me.SqlResult = sqlResult
       Me.ReaderIndex = readerIndex
+      Me.ContainsNonNullColumnCheck = containsNonNullColumnCheck
     End Sub
 
     ''' <summary>
