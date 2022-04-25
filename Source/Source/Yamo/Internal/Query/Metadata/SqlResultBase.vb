@@ -20,7 +20,7 @@ Namespace Internal.Query.Metadata
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <returns></returns>
-    Public Property CreationBehavior As NonModelEntityCreationBehavior
+    Public ReadOnly Property CreationBehavior As NonModelEntityCreationBehavior
 
     ''' <summary>
     ''' Creates new instance of <see cref="SqlResultBase"/>.<br/>
@@ -29,9 +29,25 @@ Namespace Internal.Query.Metadata
     ''' <param name="resultType"></param>
     Public Sub New(<DisallowNull> resultType As Type)
       Me.ResultType = resultType
-      ' NOTE: probably better would be to set the default to NullIfAllColumnsAreNull.
-      ' It's like this for backward compatibility (to avoid breaking change in the behavior, since we won't be able to manage it for Include results at the moment).
-      Me.CreationBehavior = NonModelEntityCreationBehavior.AlwaysCreateInstance
+      Me.CreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull
+    End Sub
+
+    ''' <summary>
+    ''' Sets creation behavior unless <see cref="NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull"/> value is passed as a parameter.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="behavior"></param>
+    Public Sub UpdateCreationBehavior(behavior As NonModelEntityCreationBehavior)
+      ' NOTE: this method is called from custom select and include. Those two are mutually
+      ' exclusive, so it's not possible to call this method twice on the same result (i.e. this instance).
+      ' However, include can be called multiple times and theoretically on the same result, if
+      ' it originates from the subquery. This is a problem, because last call wins and all included
+      ' values will follow the same behavior.
+      ' Solution is to create new result instance (copy) if needed. However, this is an edge
+      ' case and we don't do it for now for the simplicity and allocation reasons.
+      If Not behavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull Then
+        _CreationBehavior = behavior
+      End If
     End Sub
 
     ''' <summary>

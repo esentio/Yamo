@@ -47,9 +47,10 @@ Namespace Expressions
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T))) As SelectedSelectSqlExpression(Of T)
-      Return InternalInclude(action, {0})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T)
+      Return InternalInclude(action, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -58,9 +59,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T, TProperty))) As SelectedSelectSqlExpression(Of T)
-      Return InternalInclude(keySelector, valueSelector, {0}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T)
+      Return InternalInclude(keySelector, valueSelector, {0}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -68,9 +70,10 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="action"></param>
     ''' <param name="entityIndexHints"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Private Function InternalInclude(action As Expression, entityIndexHints As Int32()) As SelectedSelectSqlExpression(Of T)
-      Me.Builder.IncludeToSelected(action, entityIndexHints)
+    Private Function InternalInclude(action As Expression, entityIndexHints As Int32(), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T)
+      Me.Builder.IncludeToSelected(action, entityIndexHints, behavior)
       Return Me
     End Function
 
@@ -81,9 +84,10 @@ Namespace Expressions
     ''' <param name="valueSelector"></param>
     ''' <param name="keySelectorEntityIndexHints"></param>
     ''' <param name="valueSelectorEntityIndexHints"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Private Function InternalInclude(keySelector As Expression, valueSelector As Expression, keySelectorEntityIndexHints As Int32(), valueSelectorEntityIndexHints As Int32()) As SelectedSelectSqlExpression(Of T)
-      Me.Builder.IncludeToSelected(keySelector, valueSelector, keySelectorEntityIndexHints, valueSelectorEntityIndexHints)
+    Private Function InternalInclude(keySelector As Expression, valueSelector As Expression, keySelectorEntityIndexHints As Int32(), valueSelectorEntityIndexHints As Int32(), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T)
+      Me.Builder.IncludeToSelected(keySelector, valueSelector, keySelectorEntityIndexHints, valueSelectorEntityIndexHints, behavior)
       Return Me
     End Function
 

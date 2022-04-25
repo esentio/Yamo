@@ -200,8 +200,7 @@ Namespace Expressions.Builders
     ''' <typeparam name="T"></typeparam>
     ''' <param name="executor"></param>
     ''' <param name="tableSourceFactory"></param>
-    ''' <param name="behavior"></param>
-    Public Sub SetMainTableSource(Of T)(<DisallowNull> executor As QueryExecutor, <DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T)), behavior As NonModelEntityCreationBehavior)
+    Public Sub SetMainTableSource(Of T)(<DisallowNull> executor As QueryExecutor, <DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of T)))
       Dim context = New SubqueryContext(Me.DbContext, executor, GetParameterIndex())
       Dim subquery = tableSourceFactory.Invoke(context).ToSubquery()
       Dim query = subquery.Query
@@ -209,8 +208,7 @@ Namespace Expressions.Builders
       Dim subqueryWithNonModelEntityResult = query.Model.NonModelEntity IsNot Nothing
 
       If subqueryWithNonModelEntityResult Then
-        Dim sqlEntity = m_Model.SetMainEntity(query.Model.NonModelEntity)
-        sqlEntity.Entity.SqlResult.CreationBehavior = behavior
+        m_Model.SetMainEntity(query.Model.NonModelEntity)
       Else
         Dim entity = Me.DbContext.Model.GetEntity(GetType(T))
         Dim sqlEntity = m_Model.SetMainEntity(entity, True)
@@ -297,13 +295,12 @@ Namespace Expressions.Builders
     ''' <param name="executor"></param>
     ''' <param name="joinType"></param>
     ''' <param name="tableSourceFactory"></param>
-    ''' <param name="behavior"></param>
-    Public Sub AddJoin(Of TJoined)(<DisallowNull> executor As QueryExecutor, joinType As JoinType, <DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)), behavior As NonModelEntityCreationBehavior)
+    Public Sub AddJoin(Of TJoined)(<DisallowNull> executor As QueryExecutor, joinType As JoinType, <DisallowNull> tableSourceFactory As Func(Of SubqueryContext, ISubqueryableSelectSqlExpression(Of TJoined)))
       Dim context = New SubqueryContext(Me.DbContext, executor, GetParameterIndex())
       Dim subquery = tableSourceFactory.Invoke(context).ToSubquery()
       Dim query = subquery.Query
 
-      m_CurrentJoinInfo = New JoinInfo(joinType, "(" & query.Sql & ")", query, behavior)
+      m_CurrentJoinInfo = New JoinInfo(joinType, "(" & query.Sql & ")", query)
       m_Parameters.AddRange(query.Parameters)
     End Sub
 
@@ -379,8 +376,6 @@ Namespace Expressions.Builders
 
       If subqueryWithNonModelEntityResult Then
         Dim sqlEntity = m_Model.AddJoin(subquery.Model.NonModelEntity, relationship)
-        sqlEntity.Entity.SqlResult.CreationBehavior = joinInfo.NonModelEntityCreationBehavior
-
         Dim tableAlias = sqlEntity.TableAlias
 
         If predicate Is Nothing Then
@@ -858,7 +853,8 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="action"></param>
     ''' <param name="entityIndexHints"></param>
-    Public Sub IncludeToSelected(<DisallowNull> action As Expression, entityIndexHints As Int32())
+    ''' <param name="behavior"></param>
+    Public Sub IncludeToSelected(<DisallowNull> action As Expression, entityIndexHints As Int32(), behavior As NonModelEntityCreationBehavior)
       If IsSubquery() Then
         Throw New NotSupportedException("Include is not supported in subqueries.")
       End If
@@ -868,7 +864,11 @@ Namespace Expressions.Builders
       m_IncludedExpressionsCount += 1
 
       Dim sqlEntity = m_Model.GetEntity(result.EntityIndex)
-      sqlEntity.AddIncludedSqlResult(New SqlEntityIncludedResult(result.SqlString.Sql, result.PropertyName, result.Result))
+
+      Dim sqlResult = result.Result
+      sqlResult.UpdateCreationBehavior(behavior)
+
+      sqlEntity.AddIncludedSqlResult(New SqlEntityIncludedResult(result.SqlString.Sql, result.PropertyName, sqlResult))
     End Sub
 
     ''' <summary>
@@ -879,7 +879,8 @@ Namespace Expressions.Builders
     ''' <param name="valueSelector"></param>
     ''' <param name="keySelectorEntityIndexHints"></param>
     ''' <param name="valueSelectorEntityIndexHints"></param>
-    Public Sub IncludeToSelected(<DisallowNull> keySelector As Expression, <DisallowNull> valueSelector As Expression, keySelectorEntityIndexHints As Int32(), valueSelectorEntityIndexHints As Int32())
+    ''' <param name="behavior"></param>
+    Public Sub IncludeToSelected(<DisallowNull> keySelector As Expression, <DisallowNull> valueSelector As Expression, keySelectorEntityIndexHints As Int32(), valueSelectorEntityIndexHints As Int32(), behavior As NonModelEntityCreationBehavior)
       If IsSubquery() Then
         Throw New NotSupportedException("Include is not supported in subqueries.")
       End If
@@ -903,7 +904,11 @@ Namespace Expressions.Builders
       m_IncludedExpressionsCount += 1
 
       Dim sqlEntity = keyResult.Entity
-      sqlEntity.AddIncludedSqlResult(New SqlEntityIncludedResult(valueResult.SqlString.Sql, keyResult.PropertyName, valueResult.Result))
+
+      Dim sqlResult = valueResult.Result
+      sqlResult.UpdateCreationBehavior(behavior)
+
+      sqlEntity.AddIncludedSqlResult(New SqlEntityIncludedResult(valueResult.SqlString.Sql, keyResult.PropertyName, sqlResult))
     End Sub
 
     ''' <summary>
@@ -920,12 +925,14 @@ Namespace Expressions.Builders
     ''' </summary>
     ''' <param name="selector"></param>
     ''' <param name="entityIndexHints"></param>
-    Public Sub AddSelect(<DisallowNull> selector As Expression, entityIndexHints As Int32())
+    ''' <param name="behavior"></param>
+    Public Sub AddSelect(<DisallowNull> selector As Expression, entityIndexHints As Int32(), behavior As NonModelEntityCreationBehavior)
       Dim isSubquery = Me.IsSubquery()
       Dim result = m_Visitor.TranslateCustomSelect(selector, entityIndexHints, GetParameterIndex(), isSubquery)
       m_SelectExpression = result.SqlString.Sql
       m_Parameters.AddRange(result.SqlString.Parameters)
       m_Model.SqlResult = result.SqlResult
+      m_Model.SqlResult.UpdateCreationBehavior(behavior)
       m_Model.NonModelEntity = result.NonModelEntity
     End Sub
 

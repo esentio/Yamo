@@ -223,7 +223,7 @@ Namespace Internal.Query
             Dim reader = SqlResultReaderCache.GetReader(Of T)(dataReaderType, m_DbContext.Model, sqlResult)
             Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, sqlResult)
 
-            If sqlResult.CreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull Then
+            If readerData.ContainsNonNullColumnCheck Then
               If SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderIndex, sqlResult.GetColumnCount()) Then
                 value = DirectCast(reader(dataReader, readerData), T)
                 ' NOTE - ResetDbPropertyModifiedTracking is called in the reader
@@ -280,7 +280,7 @@ Namespace Internal.Query
 
             Else
               ' custom SQL result
-              If sqlResult.CreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull Then
+              If readerData.ReaderData.ContainsNonNullColumnCheck Then
                 If Not SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderData.ReaderIndex, sqlResult.GetColumnCount()) Then
                   Return Nothing
                 End If
@@ -396,12 +396,14 @@ Namespace Internal.Query
           Dim reader = SqlResultReaderCache.GetReader(Of T)(dataReaderType, m_DbContext.Model, sqlResult)
           Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, sqlResult)
 
-          If sqlResult.CreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull Then
+          If readerData.ContainsNonNullColumnCheck Then
             While dataReader.Read()
               If SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderIndex, sqlResult.GetColumnCount()) Then
                 Dim value = DirectCast(reader(dataReader, readerData), T)
                 ' NOTE - ResetDbPropertyModifiedTracking is called in the reader
                 values.Add(value)
+              Else
+                values.Add(Nothing)
               End If
             End While
 
@@ -449,6 +451,8 @@ Namespace Internal.Query
                   FillIncluded(readerData, dataReaderType, dataReader, value)
                   ResetDbPropertyModifiedTracking(value)
                   values.Add(value)
+                Else
+                  values.Add(Nothing)
                 End If
               End While
 
@@ -466,13 +470,15 @@ Namespace Internal.Query
             ' custom SQL result
             Dim reader = SqlResultReaderCache.GetReader(dataReaderType, m_DbContext.Model, sqlResult)
 
-            If sqlResult.CreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull Then
+            If readerData.ReaderData.ContainsNonNullColumnCheck Then
               While dataReader.Read()
                 If SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderData.ReaderIndex, sqlResult.GetColumnCount()) Then
                   Dim value = DirectCast(reader(dataReader, readerData.ReaderData), T)
                   FillIncluded(readerData, dataReaderType, dataReader, value)
                   ResetDbPropertyModifiedTracking(value)
                   values.Add(value)
+                Else
+                  values.Add(Nothing)
                 End If
               End While
 
@@ -597,7 +603,7 @@ Namespace Internal.Query
         Dim sqlEntity = DirectCast(readerData.Entity, NonModelEntityBasedSqlEntity)
         Dim sqlResult = sqlEntity.Entity.SqlResult
 
-        If sqlResult.CreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull Then
+        If readerData.ReaderData.ContainsNonNullColumnCheck Then
           If Not SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderData.ReaderIndex, sqlResult.GetColumnCount()) Then
             Return Nothing
           End If
@@ -675,7 +681,7 @@ Namespace Internal.Query
         Dim sqlEntity = DirectCast(readerData.Entity, NonModelEntityBasedSqlEntity)
         Dim sqlResult = sqlEntity.Entity.SqlResult
 
-        If sqlResult.CreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull Then
+        If readerData.ReaderData.ContainsNonNullColumnCheck Then
           If Not SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderData.ReaderIndex, sqlResult.GetColumnCount()) Then
             Return Nothing
           End If
@@ -754,18 +760,7 @@ Namespace Internal.Query
 
           Dim value As Object = Nothing
 
-          ' NOTE: ignore CreationBehavior for entities. Also ignore it for scalars, since
-          ' in case of passing null, there might be an exception in the setter method.
-          ' We can create the default instead of reading it from the result, but this
-          ' is easier (compared to Activator.CreateInstance or similar solutions maybe even faster).
-
-          ' NOTE: maybe put the check to IncludedSqlResultReaderData to make it faster? Or better to ReaderData.
-          ' This might be beneficial also in all other places, where CreationBehavior is checked
-          ' and ContainsNonNullColumn check is probably unnecessarily performed (ReadCustomList, ...).
-
-          If TypeOf sqlResult Is EntitySqlResult OrElse TypeOf sqlResult Is ScalarValueSqlResult Then
-            value = reader(dataReader, includedReaderData)
-          ElseIf sqlResult.CreationBehavior = NonModelEntityCreationBehavior.NullIfAllColumnsAreNull Then
+          If includedReaderData.ContainsNonNullColumnCheck Then
             If SqlResultReader.ContainsNonNullColumn(dataReader, includedReaderData.ReaderIndex, sqlResult.GetColumnCount()) Then
               value = reader(dataReader, includedReaderData)
             End If

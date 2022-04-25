@@ -523,225 +523,250 @@ Namespace Expressions
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T1))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {0})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T1)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {0}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T2))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {1})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T2)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {1}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T3))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {2})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T3)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {2}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T4))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {3})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T4)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {3}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T5))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {4})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T5)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {4}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T6))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {5})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T6)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {5}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T7))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {6})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T7)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {6}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T8))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {7})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T8)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {7}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T9))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {8})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T9)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {8}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T10))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {9})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T10)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {9}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T11))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {10})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T11)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {10}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T12))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {11})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T12)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {11}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T13))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {12})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T13)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {12}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T14))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {13})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T14)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {13}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T15))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {14})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T15)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {14}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T16))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {15})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T16)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {15}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T17))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {16})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T17)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {16}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T18))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {17})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T18)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {17}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T19))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {18})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T19)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {18}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T20))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {19})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T20)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {19}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T21))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {20})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T21)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {20}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T22))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {21})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T22)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {21}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T23))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {22})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T23)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {22}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T24))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {23})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T24)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {23}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T25))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, {24})
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of T25)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -750,9 +775,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -761,9 +787,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -772,9 +799,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -783,9 +811,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -794,9 +823,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -805,9 +835,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -816,9 +847,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -827,9 +859,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -838,9 +871,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -849,9 +883,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -860,9 +895,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -871,9 +907,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -882,9 +919,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -893,9 +931,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -904,9 +943,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -915,9 +955,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -926,9 +967,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -937,9 +979,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -948,9 +991,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -959,9 +1003,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -970,9 +1015,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -981,9 +1027,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -992,9 +1039,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -1003,9 +1051,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -1014,9 +1063,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {0}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T1, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {0}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -1025,9 +1075,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -1036,9 +1087,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -1047,9 +1099,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -1058,9 +1111,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -1069,9 +1123,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -1080,9 +1135,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -1091,9 +1147,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -1102,9 +1159,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -1113,9 +1171,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -1124,9 +1183,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -1135,9 +1195,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -1146,9 +1207,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -1157,9 +1219,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -1168,9 +1231,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -1179,9 +1243,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -1190,9 +1255,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -1201,9 +1267,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -1212,9 +1279,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -1223,9 +1291,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -1234,9 +1303,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -1245,9 +1315,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -1256,9 +1327,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -1267,9 +1339,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -1278,9 +1351,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -1289,9 +1363,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {1}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T2, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {1}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -1300,9 +1375,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -1311,9 +1387,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -1322,9 +1399,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -1333,9 +1411,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -1344,9 +1423,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -1355,9 +1435,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -1366,9 +1447,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -1377,9 +1459,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -1388,9 +1471,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -1399,9 +1483,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -1410,9 +1495,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -1421,9 +1507,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -1432,9 +1519,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -1443,9 +1531,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -1454,9 +1543,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -1465,9 +1555,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -1476,9 +1567,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -1487,9 +1579,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -1498,9 +1591,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -1509,9 +1603,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -1520,9 +1615,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -1531,9 +1627,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -1542,9 +1639,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -1553,9 +1651,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -1564,9 +1663,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {2}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T3, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {2}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -1575,9 +1675,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -1586,9 +1687,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -1597,9 +1699,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -1608,9 +1711,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -1619,9 +1723,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -1630,9 +1735,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -1641,9 +1747,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -1652,9 +1759,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -1663,9 +1771,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -1674,9 +1783,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -1685,9 +1795,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -1696,9 +1807,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -1707,9 +1819,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -1718,9 +1831,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -1729,9 +1843,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -1740,9 +1855,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -1751,9 +1867,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -1762,9 +1879,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -1773,9 +1891,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -1784,9 +1903,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -1795,9 +1915,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -1806,9 +1927,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -1817,9 +1939,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -1828,9 +1951,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -1839,9 +1963,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {3}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T4, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {3}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -1850,9 +1975,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -1861,9 +1987,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -1872,9 +1999,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -1883,9 +2011,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -1894,9 +2023,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -1905,9 +2035,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -1916,9 +2047,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -1927,9 +2059,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -1938,9 +2071,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -1949,9 +2083,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -1960,9 +2095,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -1971,9 +2107,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -1982,9 +2119,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -1993,9 +2131,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -2004,9 +2143,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -2015,9 +2155,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -2026,9 +2167,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -2037,9 +2179,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -2048,9 +2191,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -2059,9 +2203,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -2070,9 +2215,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -2081,9 +2227,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -2092,9 +2239,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -2103,9 +2251,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -2114,9 +2263,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {4}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T5, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {4}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -2125,9 +2275,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -2136,9 +2287,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -2147,9 +2299,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -2158,9 +2311,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -2169,9 +2323,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -2180,9 +2335,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -2191,9 +2347,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -2202,9 +2359,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -2213,9 +2371,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -2224,9 +2383,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -2235,9 +2395,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -2246,9 +2407,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -2257,9 +2419,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -2268,9 +2431,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -2279,9 +2443,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -2290,9 +2455,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -2301,9 +2467,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -2312,9 +2479,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -2323,9 +2491,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -2334,9 +2503,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -2345,9 +2515,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -2356,9 +2527,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -2367,9 +2539,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -2378,9 +2551,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -2389,9 +2563,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {5}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T6, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {5}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -2400,9 +2575,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -2411,9 +2587,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -2422,9 +2599,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -2433,9 +2611,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -2444,9 +2623,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -2455,9 +2635,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -2466,9 +2647,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -2477,9 +2659,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -2488,9 +2671,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -2499,9 +2683,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -2510,9 +2695,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -2521,9 +2707,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -2532,9 +2719,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -2543,9 +2731,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -2554,9 +2743,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -2565,9 +2755,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -2576,9 +2767,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -2587,9 +2779,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -2598,9 +2791,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -2609,9 +2803,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -2620,9 +2815,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -2631,9 +2827,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -2642,9 +2839,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -2653,9 +2851,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -2664,9 +2863,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {6}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T7, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {6}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -2675,9 +2875,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -2686,9 +2887,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -2697,9 +2899,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -2708,9 +2911,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -2719,9 +2923,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -2730,9 +2935,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -2741,9 +2947,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -2752,9 +2959,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -2763,9 +2971,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -2774,9 +2983,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -2785,9 +2995,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -2796,9 +3007,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -2807,9 +3019,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -2818,9 +3031,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -2829,9 +3043,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -2840,9 +3055,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -2851,9 +3067,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -2862,9 +3079,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -2873,9 +3091,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -2884,9 +3103,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -2895,9 +3115,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -2906,9 +3127,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -2917,9 +3139,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -2928,9 +3151,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -2939,9 +3163,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {7}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T8, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {7}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -2950,9 +3175,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -2961,9 +3187,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -2972,9 +3199,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -2983,9 +3211,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -2994,9 +3223,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -3005,9 +3235,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -3016,9 +3247,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -3027,9 +3259,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -3038,9 +3271,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -3049,9 +3283,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -3060,9 +3295,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -3071,9 +3307,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -3082,9 +3319,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -3093,9 +3331,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -3104,9 +3343,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -3115,9 +3355,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -3126,9 +3367,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -3137,9 +3379,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -3148,9 +3391,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -3159,9 +3403,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -3170,9 +3415,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -3181,9 +3427,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -3192,9 +3439,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -3203,9 +3451,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -3214,9 +3463,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {8}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T9, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {8}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -3225,9 +3475,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -3236,9 +3487,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -3247,9 +3499,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -3258,9 +3511,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -3269,9 +3523,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -3280,9 +3535,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -3291,9 +3547,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -3302,9 +3559,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -3313,9 +3571,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -3324,9 +3583,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -3335,9 +3595,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -3346,9 +3607,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -3357,9 +3619,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -3368,9 +3631,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -3379,9 +3643,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -3390,9 +3655,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -3401,9 +3667,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -3412,9 +3679,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -3423,9 +3691,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -3434,9 +3703,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -3445,9 +3715,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -3456,9 +3727,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -3467,9 +3739,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -3478,9 +3751,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -3489,9 +3763,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {9}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T10, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {9}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -3500,9 +3775,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -3511,9 +3787,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -3522,9 +3799,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -3533,9 +3811,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -3544,9 +3823,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -3555,9 +3835,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -3566,9 +3847,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -3577,9 +3859,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -3588,9 +3871,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -3599,9 +3883,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -3610,9 +3895,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -3621,9 +3907,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -3632,9 +3919,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -3643,9 +3931,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -3654,9 +3943,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -3665,9 +3955,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -3676,9 +3967,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -3687,9 +3979,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -3698,9 +3991,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -3709,9 +4003,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -3720,9 +4015,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -3731,9 +4027,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -3742,9 +4039,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -3753,9 +4051,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -3764,9 +4063,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {10}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T11, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {10}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -3775,9 +4075,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -3786,9 +4087,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -3797,9 +4099,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -3808,9 +4111,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -3819,9 +4123,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -3830,9 +4135,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -3841,9 +4147,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -3852,9 +4159,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -3863,9 +4171,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -3874,9 +4183,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -3885,9 +4195,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -3896,9 +4207,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -3907,9 +4219,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -3918,9 +4231,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -3929,9 +4243,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -3940,9 +4255,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -3951,9 +4267,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -3962,9 +4279,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -3973,9 +4291,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -3984,9 +4303,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -3995,9 +4315,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -4006,9 +4327,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -4017,9 +4339,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -4028,9 +4351,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -4039,9 +4363,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {11}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T12, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {11}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -4050,9 +4375,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -4061,9 +4387,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -4072,9 +4399,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -4083,9 +4411,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -4094,9 +4423,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -4105,9 +4435,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -4116,9 +4447,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -4127,9 +4459,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -4138,9 +4471,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -4149,9 +4483,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -4160,9 +4495,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -4171,9 +4507,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -4182,9 +4519,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -4193,9 +4531,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -4204,9 +4543,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -4215,9 +4555,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -4226,9 +4567,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -4237,9 +4579,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -4248,9 +4591,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -4259,9 +4603,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -4270,9 +4615,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -4281,9 +4627,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -4292,9 +4639,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -4303,9 +4651,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -4314,9 +4663,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {12}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T13, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {12}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -4325,9 +4675,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -4336,9 +4687,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -4347,9 +4699,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -4358,9 +4711,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -4369,9 +4723,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -4380,9 +4735,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -4391,9 +4747,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -4402,9 +4759,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -4413,9 +4771,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -4424,9 +4783,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -4435,9 +4795,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -4446,9 +4807,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -4457,9 +4819,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -4468,9 +4831,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -4479,9 +4843,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -4490,9 +4855,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -4501,9 +4867,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -4512,9 +4879,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -4523,9 +4891,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -4534,9 +4903,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -4545,9 +4915,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -4556,9 +4927,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -4567,9 +4939,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -4578,9 +4951,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -4589,9 +4963,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {13}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T14, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {13}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -4600,9 +4975,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -4611,9 +4987,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -4622,9 +4999,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -4633,9 +5011,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -4644,9 +5023,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -4655,9 +5035,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -4666,9 +5047,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -4677,9 +5059,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -4688,9 +5071,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -4699,9 +5083,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -4710,9 +5095,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -4721,9 +5107,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -4732,9 +5119,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -4743,9 +5131,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -4754,9 +5143,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -4765,9 +5155,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -4776,9 +5167,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -4787,9 +5179,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -4798,9 +5191,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -4809,9 +5203,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -4820,9 +5215,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -4831,9 +5227,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -4842,9 +5239,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -4853,9 +5251,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -4864,9 +5263,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {14}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T15, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {14}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -4875,9 +5275,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -4886,9 +5287,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -4897,9 +5299,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -4908,9 +5311,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -4919,9 +5323,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -4930,9 +5335,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -4941,9 +5347,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -4952,9 +5359,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -4963,9 +5371,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -4974,9 +5383,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -4985,9 +5395,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -4996,9 +5407,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -5007,9 +5419,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -5018,9 +5431,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -5029,9 +5443,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -5040,9 +5455,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -5051,9 +5467,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -5062,9 +5479,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -5073,9 +5491,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -5084,9 +5503,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -5095,9 +5515,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -5106,9 +5527,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -5117,9 +5539,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -5128,9 +5551,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -5139,9 +5563,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {15}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T16, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {15}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -5150,9 +5575,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -5161,9 +5587,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -5172,9 +5599,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -5183,9 +5611,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -5194,9 +5623,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -5205,9 +5635,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -5216,9 +5647,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -5227,9 +5659,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -5238,9 +5671,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -5249,9 +5683,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -5260,9 +5695,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -5271,9 +5707,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -5282,9 +5719,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -5293,9 +5731,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -5304,9 +5743,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -5315,9 +5755,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -5326,9 +5767,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -5337,9 +5779,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -5348,9 +5791,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -5359,9 +5803,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -5370,9 +5815,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -5381,9 +5827,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -5392,9 +5839,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -5403,9 +5851,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -5414,9 +5863,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {16}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T17, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {16}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -5425,9 +5875,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -5436,9 +5887,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -5447,9 +5899,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -5458,9 +5911,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -5469,9 +5923,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -5480,9 +5935,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -5491,9 +5947,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -5502,9 +5959,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -5513,9 +5971,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -5524,9 +5983,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -5535,9 +5995,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -5546,9 +6007,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -5557,9 +6019,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -5568,9 +6031,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -5579,9 +6043,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -5590,9 +6055,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -5601,9 +6067,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -5612,9 +6079,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -5623,9 +6091,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -5634,9 +6103,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -5645,9 +6115,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -5656,9 +6127,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -5667,9 +6139,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -5678,9 +6151,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -5689,9 +6163,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {17}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T18, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {17}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -5700,9 +6175,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -5711,9 +6187,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -5722,9 +6199,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -5733,9 +6211,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -5744,9 +6223,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -5755,9 +6235,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -5766,9 +6247,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -5777,9 +6259,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -5788,9 +6271,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -5799,9 +6283,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -5810,9 +6295,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -5821,9 +6307,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -5832,9 +6319,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -5843,9 +6331,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -5854,9 +6343,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -5865,9 +6355,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -5876,9 +6367,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -5887,9 +6379,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -5898,9 +6391,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -5909,9 +6403,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -5920,9 +6415,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -5931,9 +6427,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -5942,9 +6439,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -5953,9 +6451,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -5964,9 +6463,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {18}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T19, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {18}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -5975,9 +6475,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -5986,9 +6487,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -5997,9 +6499,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -6008,9 +6511,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -6019,9 +6523,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -6030,9 +6535,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -6041,9 +6547,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -6052,9 +6559,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -6063,9 +6571,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -6074,9 +6583,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -6085,9 +6595,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -6096,9 +6607,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -6107,9 +6619,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -6118,9 +6631,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -6129,9 +6643,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -6140,9 +6655,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -6151,9 +6667,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -6162,9 +6679,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -6173,9 +6691,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -6184,9 +6703,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -6195,9 +6715,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -6206,9 +6727,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -6217,9 +6739,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -6228,9 +6751,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -6239,9 +6763,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {19}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T20, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {19}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -6250,9 +6775,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -6261,9 +6787,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -6272,9 +6799,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -6283,9 +6811,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -6294,9 +6823,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -6305,9 +6835,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -6316,9 +6847,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -6327,9 +6859,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -6338,9 +6871,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -6349,9 +6883,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -6360,9 +6895,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -6371,9 +6907,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -6382,9 +6919,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -6393,9 +6931,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -6404,9 +6943,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -6415,9 +6955,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -6426,9 +6967,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -6437,9 +6979,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -6448,9 +6991,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -6459,9 +7003,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -6470,9 +7015,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -6481,9 +7027,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -6492,9 +7039,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -6503,9 +7051,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -6514,9 +7063,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {20}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T21, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {20}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -6525,9 +7075,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -6536,9 +7087,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -6547,9 +7099,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -6558,9 +7111,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -6569,9 +7123,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -6580,9 +7135,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -6591,9 +7147,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -6602,9 +7159,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -6613,9 +7171,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -6624,9 +7183,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -6635,9 +7195,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -6646,9 +7207,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -6657,9 +7219,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -6668,9 +7231,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -6679,9 +7243,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -6690,9 +7255,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -6701,9 +7267,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -6712,9 +7279,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -6723,9 +7291,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -6734,9 +7303,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -6745,9 +7315,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -6756,9 +7327,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -6767,9 +7339,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -6778,9 +7351,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -6789,9 +7363,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {21}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T22, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {21}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -6800,9 +7375,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -6811,9 +7387,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -6822,9 +7399,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -6833,9 +7411,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -6844,9 +7423,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -6855,9 +7435,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -6866,9 +7447,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -6877,9 +7459,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -6888,9 +7471,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -6899,9 +7483,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -6910,9 +7495,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -6921,9 +7507,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -6932,9 +7519,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -6943,9 +7531,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -6954,9 +7543,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -6965,9 +7555,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -6976,9 +7567,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -6987,9 +7579,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -6998,9 +7591,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -7009,9 +7603,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -7020,9 +7615,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -7031,9 +7627,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -7042,9 +7639,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -7053,9 +7651,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -7064,9 +7663,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {22}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T23, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {22}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -7075,9 +7675,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -7086,9 +7687,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -7097,9 +7699,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -7108,9 +7711,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -7119,9 +7723,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -7130,9 +7735,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -7141,9 +7747,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -7152,9 +7759,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -7163,9 +7771,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -7174,9 +7783,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -7185,9 +7795,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -7196,9 +7807,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -7207,9 +7819,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -7218,9 +7831,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -7229,9 +7843,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -7240,9 +7855,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -7251,9 +7867,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -7262,9 +7879,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -7273,9 +7891,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -7284,9 +7903,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -7295,9 +7915,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -7306,9 +7927,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -7317,9 +7939,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -7328,9 +7951,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -7339,9 +7963,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {23}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T24, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {23}, {24}, behavior)
     End Function
 
     ''' <summary>
@@ -7350,9 +7975,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {0})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T1, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {0}, behavior)
     End Function
 
     ''' <summary>
@@ -7361,9 +7987,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {1})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T2, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {1}, behavior)
     End Function
 
     ''' <summary>
@@ -7372,9 +7999,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {2})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T3, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {2}, behavior)
     End Function
 
     ''' <summary>
@@ -7383,9 +8011,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {3})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T4, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {3}, behavior)
     End Function
 
     ''' <summary>
@@ -7394,9 +8023,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {4})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T5, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {4}, behavior)
     End Function
 
     ''' <summary>
@@ -7405,9 +8035,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {5})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T6, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {5}, behavior)
     End Function
 
     ''' <summary>
@@ -7416,9 +8047,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {6})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T7, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {6}, behavior)
     End Function
 
     ''' <summary>
@@ -7427,9 +8059,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {7})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T8, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {7}, behavior)
     End Function
 
     ''' <summary>
@@ -7438,9 +8071,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {8})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T9, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {8}, behavior)
     End Function
 
     ''' <summary>
@@ -7449,9 +8083,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {9})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T10, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {9}, behavior)
     End Function
 
     ''' <summary>
@@ -7460,9 +8095,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {10})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T11, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {10}, behavior)
     End Function
 
     ''' <summary>
@@ -7471,9 +8107,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {11})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T12, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {11}, behavior)
     End Function
 
     ''' <summary>
@@ -7482,9 +8119,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {12})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T13, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {12}, behavior)
     End Function
 
     ''' <summary>
@@ -7493,9 +8131,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {13})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T14, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {13}, behavior)
     End Function
 
     ''' <summary>
@@ -7504,9 +8143,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {14})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T15, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {14}, behavior)
     End Function
 
     ''' <summary>
@@ -7515,9 +8155,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {15})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T16, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {15}, behavior)
     End Function
 
     ''' <summary>
@@ -7526,9 +8167,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {16})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T17, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {16}, behavior)
     End Function
 
     ''' <summary>
@@ -7537,9 +8179,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {17})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T18, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {17}, behavior)
     End Function
 
     ''' <summary>
@@ -7548,9 +8191,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {18})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T19, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {18}, behavior)
     End Function
 
     ''' <summary>
@@ -7559,9 +8203,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {19})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T20, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {19}, behavior)
     End Function
 
     ''' <summary>
@@ -7570,9 +8215,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {20})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T21, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {20}, behavior)
     End Function
 
     ''' <summary>
@@ -7581,9 +8227,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {21})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T22, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {21}, behavior)
     End Function
 
     ''' <summary>
@@ -7592,9 +8239,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {22})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T23, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {22}, behavior)
     End Function
 
     ''' <summary>
@@ -7603,9 +8251,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {23})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T24, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {23}, behavior)
     End Function
 
     ''' <summary>
@@ -7614,18 +8263,20 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, {24}, {24})
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of T25, TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of T25, TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, {24}, {24}, behavior)
     End Function
 
     ''' <summary>
     ''' Includes &lt;column(s)&gt; to SELECT clause.
     ''' </summary>
     ''' <param name="action"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(<DisallowNull> action As Expression(Of Action(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(action, Nothing)
+    Public Function Include(<DisallowNull> action As Expression(Of Action(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25))), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(action, Nothing, behavior)
     End Function
 
     ''' <summary>
@@ -7634,9 +8285,10 @@ Namespace Expressions
     ''' <typeparam name="TProperty"></typeparam>
     ''' <param name="keySelector"></param>
     ''' <param name="valueSelector"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25), TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25), TProperty))) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Return InternalInclude(keySelector, valueSelector, Nothing, Nothing)
+    Public Function Include(Of TProperty)(<DisallowNull> keySelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25), TProperty)), <DisallowNull> valueSelector As Expression(Of Func(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25), TProperty)), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Return InternalInclude(keySelector, valueSelector, Nothing, Nothing, behavior)
     End Function
 
     ''' <summary>
@@ -7644,9 +8296,10 @@ Namespace Expressions
     ''' </summary>
     ''' <param name="action"></param>
     ''' <param name="entityIndexHints"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Private Function InternalInclude(action As Expression, entityIndexHints As Int32()) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Me.Builder.IncludeToSelected(action, entityIndexHints)
+    Private Function InternalInclude(action As Expression, entityIndexHints As Int32(), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Me.Builder.IncludeToSelected(action, entityIndexHints, behavior)
       Return Me
     End Function
 
@@ -7657,9 +8310,10 @@ Namespace Expressions
     ''' <param name="valueSelector"></param>
     ''' <param name="keySelectorEntityIndexHints"></param>
     ''' <param name="valueSelectorEntityIndexHints"></param>
+    ''' <param name="behavior"></param>
     ''' <returns></returns>
-    Private Function InternalInclude(keySelector As Expression, valueSelector As Expression, keySelectorEntityIndexHints As Int32(), valueSelectorEntityIndexHints As Int32()) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
-      Me.Builder.IncludeToSelected(keySelector, valueSelector, keySelectorEntityIndexHints, valueSelectorEntityIndexHints)
+    Private Function InternalInclude(keySelector As Expression, valueSelector As Expression, keySelectorEntityIndexHints As Int32(), valueSelectorEntityIndexHints As Int32(), Optional behavior As NonModelEntityCreationBehavior = NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull) As SelectedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25)
+      Me.Builder.IncludeToSelected(keySelector, valueSelector, keySelectorEntityIndexHints, valueSelectorEntityIndexHints, behavior)
       Return Me
     End Function
 

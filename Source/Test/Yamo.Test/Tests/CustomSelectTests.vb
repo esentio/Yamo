@@ -2400,15 +2400,34 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description})
-                                 End Function, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description}, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+                                 End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T1.Id).
                         Select(Function(j) j.T2).
                         ToList()
 
-        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(2, result.Count)
         Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Label = label1En, Key .Description = label1En.Description}, result(0))
+        Assert.IsNull(result(1))
+      End Using
+
+      ' same as above, but assume infer behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description}, NonModelEntityCreationBehavior.InferOrNullIfAllColumnsAreNull)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        Select(Function(j) j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Label = label1En, Key .Description = label1En.Description}, result(0))
+        Assert.IsNull(result(1))
       End Using
 
       ' same as above, but assume behavior is not explicitly set
@@ -2424,8 +2443,27 @@ Namespace Tests
                         Select(Function(j) j.T2).
                         ToList()
 
-        Assert.AreEqual(1, result.Count)
+        Assert.AreEqual(2, result.Count)
         Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Label = label1En, Key .Description = label1En.Description}, result(0))
+        Assert.IsNull(result(1))
+      End Using
+
+      ' override behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description}, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        Select(Function(j) j.T2, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Label = label1En, Key .Description = label1En.Description}, result(0))
+        Assert.IsNull(result(1))
       End Using
     End Sub
 
@@ -2443,11 +2481,29 @@ Namespace Tests
                         LeftJoin(Function(c)
                                    Return c.From(Of Label).
                                             Where(Function(x) x.Language = English).
-                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description})
-                                 End Function, NonModelEntityCreationBehavior.AlwaysCreateInstance).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description}, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                                 End Function).
                         On(Function(j) j.T1.Id = j.T2.Id).
                         OrderBy(Function(j) j.T1.Id).
                         Select(Function(j) j.T2).
+                        ToList()
+
+        Assert.AreEqual(2, result.Count)
+        Assert.AreEqual(New With {Key .Id = label1En.Id, Key .Label = label1En, Key .Description = label1En.Description}, result(0))
+        Assert.AreEqual(New With {Key .Id = 0, Key .Label = CType(Nothing, Label), Key .Description = CType(Nothing, String)}, result(1))
+      End Using
+
+      ' override behavior
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Article).
+                        LeftJoin(Function(c)
+                                   Return c.From(Of Label).
+                                            Where(Function(x) x.Language = English).
+                                            Select(Function(x) New With {Key .Id = x.Id, Key .Label = x, Key .Description = x.Description}, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+                                 End Function).
+                        On(Function(j) j.T1.Id = j.T2.Id).
+                        OrderBy(Function(j) j.T1.Id).
+                        Select(Function(j) j.T2, NonModelEntityCreationBehavior.AlwaysCreateInstance).
                         ToList()
 
         Assert.AreEqual(2, result.Count)
