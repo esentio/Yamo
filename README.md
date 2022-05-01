@@ -1151,7 +1151,7 @@ using (var db = CreateContext())
 
 Yamo has following modes for selecting and returning data: automatic mode, custom selects and select count.
 
-#####Automatic mode (`SelectAll` method)
+##### Automatic mode (`SelectAll` method)
 
 When `SelectAll` is called, Yamo automatically builds `SELECT` clause. Resultset is then processed in a way that has been described so far - entities are created, navigation properties are filled etc.
 
@@ -1397,7 +1397,7 @@ using (var db = CreateContext())
 
 **Important note:** when custom select is used, Yamo doesn't set any relationship properties. You can return multiple entities with anonymous type, value tuple or ad hoc types, but you have to build entity hierarchy by yourself in postprocessing (if you need that). Number of returned objects matches number of rows in the resultset. So be aware that any 1:N relationship join will result to copies of parent entity.
 
-#####Select count
+##### Select count
 
 To return number of rows in the resultset, use `SelectCount` method which translates to `SELECT COUNT(*)`. 
 
@@ -1578,7 +1578,7 @@ This will translate to appropriate `LIMIT`, `TOP` or `OFFSET FETCH` clauses depe
 
 **Important note:** `Limit` translates directly to SQL and affects the number of rows in the resultset. Keep that in mind when you use it together with 1:N joins. Not all joined entities which actually belong to last main entity from the output might be present in its relationship property list. Also, number or main entities might be lower that you specify in `count` parameter, because of join multiplications.
 
-####Subqueries
+#### Subqueries
 
 Currently, subqueries are supported in `FROM` and `JOIN` clauses. Corresponding methods accept table source factory functions of type `Func<SubqueryContext, ISubqueryableSelectSqlExpression<T>>`.
 
