@@ -1147,26 +1147,50 @@ using (var db = CreateContext())
 }
 ```
 
-###### Planned features:
-
-- [#27](https://github.com/esentio/Yamo/issues/27) Allow nested selects in joins.
-
 #### Select
 
-It is important to remark that calling `SelectAll` doesn't hit the database yet. You need to call `ToList` or `FirstOrDefault` methods.
+Yamo has following modes for selecting and returning data: automatic mode, custom selects and select count.
 
-To return number of rows in the resultset, use `SelectCount` method which translates to `SELECT COUNT(*)`. 
+#####Automatic mode (`SelectAll` method)
 
-```c#
+When `SelectAll` is called, Yamo automatically builds `SELECT` clause. Resultset is then processed in a way that has been described so far - entities are created, navigation properties are filled etc.
+
+How exactly is the `SELECT` clause built? By default, Yamo adds all columns of the main entity and all columns of joined tables that are necessary to fill relationship navigation properties (defined either in the `DbContext` or ad hoc in the query using `As` method). If there is a joined entity, which columns are not needed to be processed in the resultset, its columns will not be included in the `SELECT` clause for performance reasons.
+
+This behavior can be changed using optional parameter of type `SelectColumnsBehavior` and all columns will be included. This might be needed e.g. for queries with `DISTINCT` clause.
+
+Example:
+```cs
 using (var db = CreateContext())
 {
-    var articlesCount = db.From<Article>().SelectCount();
+    // there is no relationship between Blog and Person defined in the DbContext and no As() method is used either
+
+    // by default, SelectColumnsBehavior.ExcludeNonRequiredColumns is used
+    // only columns of blog table are selected
+    var list1 = db.From<Blog>()
+                  .Join<Person>((b, p) => b.CreatedUserId == p.Id)
+                  .Where(p => p.FirstName == "Joe")
+                  .SelectAll()
+                  .ToList();
+
+    // Generated SQL:
+    // SELECT [T0].[Id], [T0].[Title], [T0].[Content], [T0].[Created], [T0].[CreatedUserId], [T0].[Modified], [T0].[ModifiedUserId], [T0].[Deleted], [T0].[DeletedUserId] FROM [Blog] [T0] INNER JOIN [Person] [T1] ON [T0].[CreatedUserId] = [T1].[Id] WHERE [T1].[FirstName] = @p0
+
+    // columns of all tables in the query are selected
+    var list2 = db.From<Blog>()
+                  .Join<Person>((b, p) => b.CreatedUserId == p.Id)
+                  .Where(p => p.FirstName == "Joe")
+                  .SelectAll(SelectColumnsBehavior.SelectAllColumns)
+                  .ToList();
+
+    // Generated SQL:
+    // SELECT [T0].[Id], [T0].[Title], [T0].[Content], [T0].[Created], [T0].[CreatedUserId], [T0].[Modified], [T0].[ModifiedUserId], [T0].[Deleted], [T0].[DeletedUserId], [T1].[Id], [T1].[FirstName], [T1].[LastName], [T1].[BirthDate] FROM [Blog] [T0] INNER JOIN [Person] [T1] ON [T0].[CreatedUserId] = [T1].[Id] WHERE [T1].[FirstName] = @p0
 }
 ```
 
-##### Excluding columns
+###### Excluding columns
 
-So far we only showed limited selecting possibilities using `SelectAll`, which translates to `SELECT <all_column_from_all_queried_tables>`. However, it is possible to exclude certain columns or tables with `Exclude` and `ExcludeTX` methods.
+It is also possible to explicitly exclude certain columns with `Exclude` and `ExcludeTX` methods.
 
 In one the examples above, it is actually not necessary to select columns from `ArticleCategory` junction table. Here is a simplified query, where columns of this junction table are excluded from the select statement:
 
@@ -1177,13 +1201,16 @@ using (var db = CreateContext())
                  .LeftJoin<ArticleCategory>(j => j.T1.Id == j.T2.ArticleId)
                  .LeftJoin<Category>(j => j.T2.CategoryId == j.T3.Id)
                  .As(j => j.T1.Categories)
-                 .SelectAll().Exclude(j => j.T1.Price).ExcludeT2().ToList();
+                 .SelectAll()
+                 .Exclude(j => j.T1.Price)
+                 .ExcludeT2()
+                 .ToList();
 }
 ```
 
-Column with price is excluded as well, so every returned `Article` record will have price set to `default(decimal)`. Useful when you need to exclude large BLOB values, etc.
+Column with price is excluded as well, so every returned `Article` record will have price set to `default(decimal)`. This is useful when you need to exclude large BLOB values, etc.
 
-##### Including columns
+###### Including columns
 
 You can also include columns and fill properties of the entities not defined in the model using `Include` method.
 
@@ -1213,6 +1240,7 @@ End Using
 Every expression used in `Include` method will be added as an additional column (or multiple columns) to the `SELECT` statement. If you don't need columns automatically added by `SelectAll` method, you need to exclude them, like in the following examples:
 
 ```cs
+// Assuming: modelBuilder.Entity<Category>().HasMany(x => x.ArticleCategories);
 // Exclude ArticleCategory columns to make GROUP BY work:
 using (var db = CreateContext())
 {
@@ -1251,7 +1279,7 @@ using (var db = CreateContext())
                  .ToList();
 }
 ```
-You can include simple scalar values like, whole entity, `ValueTuple` (although only VB.NET [supports this](https://github.com/dotnet/roslyn/issues/12897)) and anonymous object (probably useful only in limited number of use cases due to casting issues).
+You can include simple scalar values like, whole entity, `ValueTuple` (although only VB.NET [supports this](https://github.com/dotnet/roslyn/issues/12897)), anonymous type (probably useful only in limited number of use cases due to casting issues) or ad hoc (non-model) types/POCOs.
 
 **Important note:** if whole entity is included, it's always a "detached copy" unrelated to what would normally work using `SelectAll` method. This means:
 
@@ -1261,13 +1289,21 @@ You can include simple scalar values like, whole entity, `ValueTuple` (although 
 
 If you don't need a "detached copy", it's probably just better to use `As` method to define an ad hoc relationship.
 
-**Important note:** `Include` is only available when `SelectAll()` is used. It's not supported in custom selects, i.e. when `Select(<expression>)` is used!
+**Important note:** `Include` is only available in automatic mode. It's not supported in custom selects.
 
-##### Custom selects
+##### Custom selects (`Select` method)
 
-Returning just entity POCOs or simple count would be very limiting. But you can use custom selects.
+Returning just entity POCOs would be very limiting. To return a different type or to specify `SELECT` clause, you can use custom selects, i.e. `Select(<expression>)` method.
 
-You can return simple value(s):
+You can return:
+
+- scalar value
+- entity POCO
+- anonymous type
+- value tuple
+- ad hoc (non-model) POCO
+
+Here is an example of returning simple scalar value(s):
 
 ```c#
 using (var db = CreateContext())
@@ -1295,7 +1331,7 @@ using (var db = CreateContext())
 }
 ````
 
-Or anonymous types when you need complex result:
+Anonymous type can be used when you need a complex result. Notice that you can include the whole POCO entity to a property:
 
 ````c#
 using (var db = CreateContext())
@@ -1325,7 +1361,113 @@ Using db = CreateDbContext()
 End Using
 ````
 
-**Important note:** when custom select is used, Yamo doesn't set any relationship properties. You can return multiple entities with anonymous type (or `ValueTuple`), but you have to build entity hierarchy by yourself in postprocessing (if you need that). Number of returned objects matches number of rows in resultset. So be aware that any 1:N relationship join will result to copies of parent entity.
+Or simply return any class or structure (or nullable structure). It doesn't have to be defined in the model. Only requirement is initialization with constructor and/or member initializers. Constructor nesting is not allowed (with exception of nullable types). However, as with anonymous types and value tuples, it is possible to pass whole model entities as constructor arguments or set to member fields/properties.
+
+For example:
+```cs
+using (var db = CreateContext())
+{
+    var list1 = db.From<Blog>()
+                  .Select(x => new NonModelObject(x.Id) { Description = x.Title, Item = x })
+                  .ToList();
+
+    var list2 = db.From<Blog>()
+                  .Select(x => new NonModelStruct(x.Id) { Description = x.Title, Item = x })
+                  .ToList();
+
+    // only case where nested constructors are allowed - to get nullable value types like structs and value tuples
+    var value1 = db.From<Blog>()
+                   .Where(x => x.Id == 42)
+                   .Select(x => new NonModelStruct?(new NonModelStruct(x.Id) { Description = x.Title, Item = x }))
+                   .FirstOrDefault();
+
+    // same as above, but different approach to get nullable struct
+    var value2 = db.From<Blog>()
+                   .Where(x => x.Id == 42)
+                   .Select(x => (NonModelStruct?)new NonModelStruct(x.Id) { Description = x.Title, Item = x })
+                   .FirstOrDefault();
+
+    // same as above, but different approach to get nullable struct
+    var value3 = db.From<Blog>()
+                  .Where(x => x.Id == 42)
+                  .Select<NonModelStruct?>(x => new NonModelStruct(x.Id) { Description = x.Title, Item = x })
+                  .FirstOrDefault();
+}
+```
+
+**Important note:** when custom select is used, Yamo doesn't set any relationship properties. You can return multiple entities with anonymous type, value tuple or ad hoc types, but you have to build entity hierarchy by yourself in postprocessing (if you need that). Number of returned objects matches number of rows in the resultset. So be aware that any 1:N relationship join will result to copies of parent entity.
+
+#####Select count
+
+To return number of rows in the resultset, use `SelectCount` method which translates to `SELECT COUNT(*)`. 
+
+```c#
+using (var db = CreateContext())
+{
+    var articlesCount = db.From<Article>().SelectCount();
+}
+```
+
+##### Non-model entity creation behavior
+
+When processing the resultset, Yamo detects the presence of the model entity by the presence of the values in its primary key fields. If primary key fields don't contain `DBNull`, entity instance is created. Otherwise, the entity value will be `null`. However, for anonymous types, non-model ad hoc types or value tuples, there is no primary key definition in the model. Yamo doesn't know if `NULL` values in the resultset are caused by missing row in joined table or if `NULL`s are completely valid values.
+
+This is solved in the following way: by default, if all related columns have `NULL` value, `null` will be returned for the whole record. Otherwise, an instance will be created. This behavior can be changed to always enforce instance creation, even if all columns contain `NULL` value. To do so, just override the behavior of `Select` or `Include` methods with an optional `NonModelEntityCreationBehavior` parameter.
+
+There are 3 possible values available:
+
+- `InferOrNullIfAllColumnsAreNull` - infer the behavior (from the subquery) or use value `NullIfAllColumnsAreNull` if it cannot be inferred. This is the default value.
+- `NullIfAllColumnsAreNull` - do not create an instance unless there is at least one related column value in the resultset that doesn't equal to `DBNull`.
+- `AlwaysCreateInstance` - always create an instance, even if all related columns in the resultset contain `DBNull` value.
+
+Examples:
+
+```c#
+using (var db = CreateContext())
+{
+    // Result might contain null values (for Articles which don't have a Label).
+    var list1 = db.From<Article>()
+                 .LeftJoin<Label>(j => j.T1.Id == j.T2.Id)
+                 .Select(j => new { j.T2.Id, j.T2.Description })
+                 .ToList();
+
+    // Result will never contain nulls. For Articles which don't have a Label, the value will be:
+    // new { Id = (int)null, Description = (string)null }
+    var list2 = db.From<Article>()
+                 .LeftJoin<Label>(j => j.T1.Id == j.T2.Id)
+                 .Select(j => new { j.T2.Id, j.T2.Description }, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                 .ToList();
+}
+```
+``` c#
+using (var db = CreateContext())
+{
+    var list = db.From<Article>()
+                 .LeftJoin<Label>(j => j.T1.Id == j.T2.Id)
+                 .SelectAll()
+                 .Include(j => j.T1.Tag, j => new { j.T2.Id, j.T2.Description }, NonModelEntityCreationBehavior.AlwaysCreateInstance)
+                 .ToList();
+}
+```
+
+By default, the behavior is inferred from the subquery - if there is one (more on subqueries later). If necessary, behavior can be overridden. Although, this will be probably needed only in some special edge cases.
+
+```c#
+using (var db = CreateContext())
+{
+    // NullIfAllColumnsAreNull overrides AlwaysCreateInstance behavior
+    var list = db.From<Article>()
+                 .LeftJoin(c =>
+                 {
+                     return c.From<ArticleCategory>()
+                             .GroupBy(x => x.ArticleId)
+                             .Select(x => new Stats { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() }, NonModelEntityCreationBehavior.AlwaysCreateInstance);
+                 })
+                 .On(j => j.T1.Id == j.T2.ArticleId)
+                 .Select(j => j.T2, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
+                 .ToList();
+}
+```
 
 #### Distinct
 
@@ -1435,6 +1577,169 @@ This will translate to appropriate `LIMIT`, `TOP` or `OFFSET FETCH` clauses depe
 **Important note:** it is generally recommended to use `ORDER BY` together with `LIMIT` or `TOP` clauses. But databases allow to use them without ordering and so does Yamo. In MS SQL Server, `Limit(count)` is translated to `TOP`. But `Limit(offset, count)` is translated to `OFFSET FETCH`, which forces you to use `ORDER BY` clause. Expect an exception, when you forget to use it.
 
 **Important note:** `Limit` translates directly to SQL and affects the number of rows in the resultset. Keep that in mind when you use it together with 1:N joins. Not all joined entities which actually belong to last main entity from the output might be present in its relationship property list. Also, number or main entities might be lower that you specify in `count` parameter, because of join multiplications.
+
+####Subqueries
+
+Currently, subqueries are supported in `FROM` and `JOIN` clauses. Corresponding methods accept table source factory functions of type `Func<SubqueryContext, ISubqueryableSelectSqlExpression<T>>`.
+
+`SubqueryContext` parameter enables you to build the subquery. Return value is an expression (result of `SelectAll`, `Select`, `Distinct`, ... methods).
+
+Subquery cannot be materialized. That means `ToList` or `FirstOrDefault` methods should never be called on the subquery.
+
+For example, here we join `Label` entity from a subquery:
+
+```c#
+using (var db = CreateContext())
+{
+    var list = db.From<Article>()
+                 .Join(c =>
+                 {
+                     return c.From<Label>()
+                             .Where(x => x.Language == "en")
+                             .SelectAll();
+                 })
+                 .On(j => j.T1.Id == j.T2.Id)
+                 .SelectAll().ToList();
+
+    foreach (var article in list)
+    {
+        Console.WriteLine($"{article.Id}: {article.Label.Description}");
+    }
+}
+```
+
+If the subquery returns an entity from the model and there are defined relationships in the model, navigation properties will be filled just like with "simple" joins. However, **only main entity is materialized in the subquery**! If subquery contains joins, they are translated to the SQL, but no related objects are materialized and set to the navigation properties of the main subquery entity!
+
+Although, the result of the subquery doesn't have to be an entity from the model. Also anonymous types, non-model ad hoc types and value tuples (only in VB.NET) are supported. Simple scalar values are not supported in this scenario.
+
+For example:
+
+```c#
+using (var db = CreateContext())
+{
+    // get all articles which have at least 2 categories
+
+    // using anonymous type
+    var list1 = db.From<Article>()
+                  .Join(c =>
+                  {
+                      return c.From<ArticleCategory>()
+                              .GroupBy(x => x.ArticleId)
+                              .Select(x => new { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() });
+                  })
+                  .On(j => j.T1.Id == j.T2.ArticleId)
+                  .Where(j => 2 < j.T2.CategoriesCount)
+                  .SelectAll()
+                  .ToList();
+
+    // using non model entity (same result as above)
+    var list2 = db.From<Article>()
+                  .Join(c =>
+                  {
+                      return c.From<ArticleCategory>()
+                              .GroupBy(x => x.ArticleId)
+                              .Select(x => new Stats { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() });
+                  })
+                  .On(j => j.T1.Id == j.T2.ArticleId)
+                  .Where(j => 2 < j.T2.CategoriesCount)
+                  .SelectAll()
+                  .ToList();
+}
+```
+
+You can use properties/fields of the subquery types in the subsequent methods like `On`, `Where`,  etc. to build the SQL expression. For non-model ad hoc types, there is a(n obvious) limitation though. Only properties/fields explicitly used in member initializer syntax (in `Select` method of the subquery) are allowed. If you pass the value to the constructor and later access the same value with a property, it will fail. That's because there is no way for Yamo to know which constructor argument belongs to which property. Yamo could try to match arguments and properties if they have the same name, but this is not implemented currently.
+
+In the previous examples, subquery results were purely used to filter `Article`  records. No subquery values were returned, because no relationships exist for them in the model. If you need to return subquery values of non model types, you still can of course. Just use `As` or `Include` methods, depending on your use case.
+
+For example (assume `Stats` is a non-model ad hoc type):
+
+```c#
+using (var db = CreateContext())
+{
+    // get all articles with Stats property filled
+    var list1 = db.From<Article>()
+                  .LeftJoin(c =>
+                  {
+                      return c.From<ArticleCategory>()
+                              .GroupBy(x => x.ArticleId)
+                              .Select(x => new Stats { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() });
+                  })
+                  .On(j => j.T1.Id == j.T2.ArticleId)
+                  .As(x => x.Stats)
+                  .SelectAll()
+                  .ToList();
+
+    // get all articles with CategoriesCount property filled
+    var list2 = db.From<Article>()
+                  .LeftJoin(c =>
+                  {
+                      return c.From<ArticleCategory>()
+                              .GroupBy(x => x.ArticleId)
+                              .Select(x => new Stats { ArticleId = x.ArticleId, CategoriesCount = Yamo.Sql.Aggregate.Count() });
+                  })
+                  .On(j => j.T1.Id == j.T2.ArticleId)
+                  .SelectAll()
+                  .Include(j => j.T1.CategoriesCount, j => j.T2.CategoriesCount)
+                  .ToList();
+}
+```
+
+Limitations:
+
+- Calling `Exclude` and `Include` methods directly in the subquery is not supported at the moment.
+- If value tuple is returned from the subquery, you can reference only its first 7 fields in the subsequent `On`, `Where`, etc. methods. This limitation is due to value tuple nesting.
+- Custom selects (`Select` method) of nested complex types from the subquery are not supported. E.g. if the result of the subquery is `ValueTuple<string, SomeEntityValue>`, you can get the whole value tuple (`Select(x => x)`), its string value (`Select(x => x.Item1)`), but not the `SomeEntityValue` value (`Select(x => x.Item2)`).
+- Subquery could return a model entity not only with `SelectAll` method, but also using custom select (`Select`  method) with constructor and/or member initializer syntax. In this case, the result is processed as a non-model ad hoc type. Therefore, relationship navigation properties (if defined) won't be filled automatically and you have to explicitly use the `As` method.
+
+###### Planned features:
+
+- [#27](https://github.com/esentio/Yamo/issues/27) Subqueries support.
+
+#### Set operators
+
+Yamo supports `UNION`, `UNION ALL`, `EXCEPT` and `INTERSECT` set operators with corresponding `Union`, `UnionAll`, `Except` and `Intersect` methods. They accept query expression factory as their parameter. Similarly to the rest of the API, there are also overloads that allow you to use raw SQL in the form of `FormattableString` or `RawSqlString` (with optional parameters).
+
+Here are the examples with query expression factory:
+
+```c#
+using (var db = CreateContext())
+{
+    var list = db.From<Article>()
+                 .Where(x => x.Price < 42)
+                 .SelectAll()
+                 .UnionAll(c =>
+                 {
+                     return c.From<Article>()
+                             .Where(x => 420 < x.Price)
+                             .SelectAll();
+                 })
+                 .ToList();
+}
+```
+
+```c#
+using (var db = CreateContext())
+{
+    var list = db.From(c =>
+                 {
+                     return c.From<Article>()
+                             .SelectAll()
+                             .UnionAll(c2 =>
+                             {
+                                 return c2.From<Article>("ArticleArchive")
+                                          .SelectAll();
+                             });
+                 })
+                 .SelectAll()
+                 .ToList();
+}
+```
+
+It is expected that each query expression will produce the same/compatible set of columns. To allow more use cases, it is not enforced to use the same join entities in each query expression. Only the result type must be the same. Therefore, be careful how you use `SelectAll` and `Select` methods.
+
+The definition of the result (how the columns from the resultset are processed) is always taken from the main query expression.
+
+In case you want to limit the rows in the resultset (`LIMIT` or `OFFSET`) or use the `ORDER BY` clause, do so the the last query expression. Just like you would write it in the normal SQL query.
 
 ### Conditionally built queries
 
@@ -1651,7 +1956,7 @@ using (var db = CreateContext())
 }
 ```
 
-Select statements even allow you to use table source (in both `FROM` and `JOIN` clauses), so you can write nested selects:
+Select statements even allow you to use table source (in both `FROM` and `JOIN` clauses), so you can write nested selects in the form of raw SQL string.
 
 ```cs
 using (var db = CreateContext())
@@ -1664,7 +1969,7 @@ using (var db = CreateContext())
 }
 ```
 
-In the future it should be possible to write nested selects also with managed API.
+Although, managed API is the preferred way to define table source subquery.
 
 ### Table hints
 
@@ -1717,57 +2022,57 @@ Current benchmarks are promising. But still, there is a place for improvements :
 Below is comparison between Yamo, Dapper and EF Core (full reports [here](../../tree/master/Benchmarks)):
 
 ``` ini
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.18363.959 (1909/November2018Update/19H2)
+BenchmarkDotNet=v0.13.1, OS=Windows 10.0.19044.1645 (21H2)
 Intel Core i7 CPU 950 3.07GHz (Nehalem), 1 CPU, 8 logical and 4 physical cores
-.NET Core SDK=3.1.200
-  [Host]     : .NET Core 3.1.2 (CoreCLR 4.700.20.6602, CoreFX 4.700.20.6702), X64 RyuJIT
-  DefaultJob : .NET Core 3.1.2 (CoreCLR 4.700.20.6602, CoreFX 4.700.20.6702), X64 RyuJIT
+.NET SDK=6.0.202
+  [Host]     : .NET 6.0.4 (6.0.422.16404), X64 RyuJIT
+  DefaultJob : .NET 6.0.4 (6.0.422.16404), X64 RyuJIT
 ```
 #### Select 1 record
 
-| Method                          |     Mean | Ratio | Allocated |
-| ------------------------------- | -------: | ----: | --------: |
-| Dapper                          | 112.9 μs |  0.89 |   5.39 KB |
-| Yamo                            | 126.6 μs |  1.00 |    7.1 KB |
-| Yamo (using query)              | 136.5 μs |  1.09 |   6.98 KB |
-| EF Core (no tracking)           | 551.8 μs |  4.43 |  36.45 KB |
-| EF Core                         | 644.1 μs |  5.31 |  38.23 KB |
+| Method                |       Mean | Ratio | Allocated |
+| --------------------- | ---------: | ----: | --------: |
+| Yamo                  |   121.5 μs |  1.00 |      7 KB |
+| Yamo (using query)    |   134.5 μs |  1.11 |      7 KB |
+| Dapper                |   161.8 μs |  1.52 |      8 KB |
+| EF Core               | 1,185.2 μs | 10.20 |    111 KB |
+| EF Core (no tracking) | 2,271.1 μs |  9.08 |    108 KB |
 
 #### Select 500 records one by one
 
 | Method                |      Mean | Ratio | Allocated |
 | --------------------- | --------: | ----: | --------: |
-| Dapper                |  56.70 ms |  0.68 |   2.64 MB |
-| Yamo (using query)    |  65.93 ms |  0.79 |   3.31 MB |
-| Yamo                  |  84.15 ms |  1.00 |    4.2 MB |
-| EF Core               | 147.72 ms |  1.77 |   7.25 MB |
-| EF Core (no tracking) | 154.32 ms |  1.69 |   6.78 MB |
+| Dapper                |  58.22 ms |  0.67 |      3 MB |
+| Yamo (using query     |  67.72 ms |  0.77 |      3 MB |
+| Yamo                  |  87.51 ms |  1.00 |      4 MB |
+| EF Core               | 140.61 ms |  1.61 |      6 MB |
+| EF Core (no tracking) | 141.10 ms |  1.66 |      5 MB |
 
 #### Select list of 1000 records
 
-| Method                |      Mean | Ratio |  Allocated |
-| --------------------- | --------: | ----: | ---------: |
-| Yamo                  |  4.009 ms |  1.00 |  193.88 KB |
-| Yamo (using query)    |  4.080 ms |  1.01 |  193.72 KB |
-| Dapper                |  4.107 ms |  1.02 |   317.5 KB |
-| EF Core (no tracking) |  4.944 ms |  1.34 |   434.3 KB |
-| EF Core               | 12.951 ms |  4.85 | 1416.51 KB |
+| Method                |      Mean | Rank | Allocated |
+| --------------------- | --------: | ---: | --------: |
+| Yamo (using query)    |  3.620 ms |    1 |    194 KB |
+| Yamo                  |  3.621 ms |    1 |    194 KB |
+| Dapper                |  3.663 ms |    2 |    317 KB |
+| EF Core (no tracking) |  4.725 ms |    3 |    484 KB |
+| EF Core               | 10.803 ms |    4 |  1,584 KB |
 
 #### Select list of 1000 records with 1:1 join
 
-| Method                |      Mean | Ratio |  Allocated |
-| --------------------- | --------: | ----: | ---------: |
-| Yamo                  |  6.572 ms |  1.00 |  464.71 KB |
-| Dapper                |  6.614 ms |  1.00 |   607.5 KB |
-| EF Core (no tracking) |  7.917 ms |  1.16 |  832.96 KB |
-| EF Core               | 31.282 ms |  5.70 | 3141.84 KB |
+| Method                |      Mean | Ratio | Allocated |
+| --------------------- | --------: | ----: | --------: |
+| Yamo                  |  6.113 ms |  1.00 |    465 KB |
+| Dapper                |  6.215 ms |  1.02 |    607 KB |
+| EF Core (no tracking) |  7.623 ms |  1.26 |  1,155 KB |
+| EF Core               | 19.965 ms |  3.58 |  3,378 KB |
 
 #### Select list of 1000 records with 1:N join
 
-| Method                |      Mean | Ratio | Allocated |
-| --------------------- | --------: | ----: | --------: |
-| EF Core (no tracking) |  49.69 ms |  0.86 |   2.75 MB |
-| Dapper                |  56.50 ms |  0.98 |   2.96 MB |
-| Yamo                  |  57.47 ms |  1.00 |   2.45 MB |
-| EF Core               | 103.01 ms |  1.80 |   8.17 MB |
+| Method                |     Mean | Ratio | Allocated |
+| --------------------- | -------: | ----: | --------: |
+| EF Core (no tracking) | 37.28 ms |  0.72 |      3 MB |
+| Yamo                  | 52.17 ms |  1.00 |      2 MB |
+| Dapper                | 52.22 ms |  1.00 |      3 MB |
+| EF Core               | 77.36 ms |  1.48 |      9 MB |
 
