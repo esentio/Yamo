@@ -240,13 +240,23 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY DESC clause.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
     Public Function OrderBy(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2, T3, T4)
       Me.Builder.AddOrderBy(predicate, True, parameters)
+      Return New OrderedSelectSqlExpression(Of T1, T2, T3, T4)(Me.Builder, Me.Executor)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY clause.
+    ''' </summary>
+    ''' <param name="provider"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(<DisallowNull> provider As ISelectSortProvider) As OrderedSelectSqlExpression(Of T1, T2, T3, T4)
+      provider.AddOrderBy(Of Join(Of T1, T2, T3, T4))(Me.Builder)
       Return New OrderedSelectSqlExpression(Of T1, T2, T3, T4)(Me.Builder, Me.Executor)
     End Function
 

@@ -271,6 +271,16 @@ Namespace Expressions
     End Function
 
     ''' <summary>
+    ''' Adds column(s) to ORDER BY clause.
+    ''' </summary>
+    ''' <param name="provider"></param>
+    ''' <returns></returns>
+    Public Function ThenBy(<DisallowNull> provider As ISelectSortProvider) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)
+      provider.AddOrderBy(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11))(Me.Builder)
+      Return Me
+    End Function
+
+    ''' <summary>
     ''' Adds &lt;column&gt; DESC to ORDER BY clause.
     ''' </summary>
     ''' <typeparam name="TKey"></typeparam>

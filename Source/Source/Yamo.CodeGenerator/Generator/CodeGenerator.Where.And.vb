@@ -30,6 +30,14 @@
       GenerateWhereAndWithString(builder, entityCount)
       builder.AppendLine()
 
+      If entityCount = 1 Then
+        GenerateWhereAndWithProviderWithOneEntity(builder, entityCount)
+        builder.AppendLine()
+      Else
+        GenerateWhereAndWithProviderWithIJoin(builder, entityCount)
+        builder.AppendLine()
+      End If
+
       GenerateInternalWhereForWhereAnd(builder, entityCount)
     End Sub
 
@@ -116,6 +124,32 @@
 
       builder.Indent().AppendLine($"Public Function [And](<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine("Me.Builder.AddWhere(predicate, parameters)")
+      builder.Indent().AppendLine("Return Me").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateWhereAndWithProviderWithOneEntity(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds AND condition(s) to WHERE clause."
+      Dim params = {"provider"}
+      AddComment(builder, comment, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function [And](<DisallowNull> provider As ISelectFilterProvider) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"provider.AddWhere(Of {generics})(Me.Builder)")
+      builder.Indent().AppendLine("Return Me").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateWhereAndWithProviderWithIJoin(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds AND condition(s) to WHERE clause."
+      Dim params = {"provider"}
+      AddComment(builder, comment, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function [And](<DisallowNull> provider As ISelectFilterProvider) As FilteredSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"provider.AddWhere(Of Join(Of {generics}))(Me.Builder)")
       builder.Indent().AppendLine("Return Me").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub

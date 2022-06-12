@@ -645,6 +645,16 @@ Namespace Expressions
     ''' <summary>
     ''' Adds WHERE clause.
     ''' </summary>
+    ''' <param name="provider"></param>
+    ''' <returns></returns>
+    Public Function Where(<DisallowNull> provider As ISelectFilterProvider) As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)
+      provider.AddWhere(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15))(Me.Builder)
+      Return New FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)(Me.Builder, Me.Executor)
+    End Function
+
+    ''' <summary>
+    ''' Adds WHERE clause.
+    ''' </summary>
     ''' <returns></returns>
     Public Function Where() As FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)
       Return New FilteredSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)(Me.Builder, Me.Executor)
@@ -1138,13 +1148,23 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY DESC clause.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
     Public Function OrderBy(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)
       Me.Builder.AddOrderBy(predicate, True, parameters)
+      Return New OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)(Me.Builder, Me.Executor)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY clause.
+    ''' </summary>
+    ''' <param name="provider"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(<DisallowNull> provider As ISelectSortProvider) As OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)
+      provider.AddOrderBy(Of Join(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15))(Me.Builder)
       Return New OrderedSelectSqlExpression(Of T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)(Me.Builder, Me.Executor)
     End Function
 

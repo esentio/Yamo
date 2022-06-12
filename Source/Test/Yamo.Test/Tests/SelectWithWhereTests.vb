@@ -1337,6 +1337,38 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub SelectRecordByFilterProvider()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 1
+      items(1).IntColumn = 2
+      items(2).IntColumn = 3
+      items(3).IntColumn = 4
+      items(4).IntColumn = 5
+
+      InsertItems(items)
+
+      Dim provider = New TestSelectFilterProvider()
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(provider).
+                        SelectAll().ToList()
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1), items(2)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) 1 < x.IntColumn).
+                        And(provider).
+                        SelectAll().ToList()
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(1), items(2)}, result)
+      End Using
+    End Sub
+
     Protected Overridable Function CreateItems() As List(Of ItemWithAllSupportedValues)
       Return New List(Of ItemWithAllSupportedValues) From {
         Me.ModelFactory.CreateItemWithAllSupportedValuesWithEmptyValues(),

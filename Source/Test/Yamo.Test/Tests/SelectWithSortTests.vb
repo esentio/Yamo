@@ -326,5 +326,52 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Overridable Sub SelectWithOrderBySortProvider()
+      Dim label1En = Me.ModelFactory.CreateLabel("", 1, English, "a")
+      Dim label1De = Me.ModelFactory.CreateLabel("", 1, German, "b")
+      Dim label2En = Me.ModelFactory.CreateLabel("", 2, English, "c")
+      Dim label2De = Me.ModelFactory.CreateLabel("", 2, German, "d")
+      Dim label3En = Me.ModelFactory.CreateLabel("", 3, English, "e")
+      Dim label3De = Me.ModelFactory.CreateLabel("", 3, German, "f")
+
+      InsertItems(label1En, label1De, label2En, label2De, label3En, label3De)
+
+      Dim provider = New TestSelectSortProvider()
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Label).
+                        Where(Function(l) l.Language = English).
+                        OrderBy(provider).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+        Assert.AreEqual("a", result(0).Description)
+        Assert.AreEqual("c", result(1).Description)
+        Assert.AreEqual("e", result(2).Description)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of Label).
+                        OrderBy(Function(l) l.Language).
+                        ThenBy(provider).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(6, result.Count)
+        Assert.AreEqual(German, result(0).Language)
+        Assert.AreEqual("b", result(0).Description)
+        Assert.AreEqual(German, result(1).Language)
+        Assert.AreEqual("d", result(1).Description)
+        Assert.AreEqual(German, result(2).Language)
+        Assert.AreEqual("f", result(2).Description)
+        Assert.AreEqual(English, result(3).Language)
+        Assert.AreEqual("a", result(3).Description)
+        Assert.AreEqual(English, result(4).Language)
+        Assert.AreEqual("c", result(4).Description)
+        Assert.AreEqual(English, result(5).Language)
+        Assert.AreEqual("e", result(5).Description)
+      End Using
+    End Sub
+
   End Class
 End Namespace
