@@ -22,6 +22,14 @@
       GenerateThenByWithString(builder, entityCount)
       builder.AppendLine()
 
+      If entityCount = 1 Then
+        GenerateThenByWithProviderWithOneEntity(builder, entityCount)
+        builder.AppendLine()
+      Else
+        GenerateThenByWithProviderWithIJoin(builder, entityCount)
+        builder.AppendLine()
+      End If
+
       For i = 1 To entityCount
         GenerateThenByDescendingWithPredicateWithOneEntity(builder, i, entityCount)
         builder.AppendLine()
@@ -105,6 +113,32 @@
 
       builder.Indent().AppendLine($"Public Function ThenBy(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of {generics})").PushIndent()
       builder.Indent().AppendLine("Me.Builder.AddOrderBy(predicate, True, parameters)")
+      builder.Indent().AppendLine("Return Me").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateThenByWithProviderWithOneEntity(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds column(s) to ORDER BY clause."
+      Dim params = {"provider"}
+      AddComment(builder, comment, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function ThenBy(<DisallowNull> provider As ISelectSortProvider) As OrderedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"provider.AddOrderBy(Of {generics})(Me.Builder)")
+      builder.Indent().AppendLine("Return Me").PopIndent()
+      builder.Indent().AppendLine("End Function")
+    End Sub
+
+    Protected Sub GenerateThenByWithProviderWithIJoin(builder As CodeBuilder, entityCount As Int32)
+      Dim comment = "Adds column(s) to ORDER BY clause."
+      Dim params = {"provider"}
+      AddComment(builder, comment, params:=params, returns:="")
+
+      Dim generics = String.Join(", ", GetGenericNames(entityCount))
+
+      builder.Indent().AppendLine($"Public Function ThenBy(<DisallowNull> provider As ISelectSortProvider) As OrderedSelectSqlExpression(Of {generics})").PushIndent()
+      builder.Indent().AppendLine($"provider.AddOrderBy(Of Join(Of {generics}))(Me.Builder)")
       builder.Indent().AppendLine("Return Me").PopIndent()
       builder.Indent().AppendLine("End Function")
     End Sub

@@ -1088,6 +1088,15 @@ Namespace Expressions.Builders
     End Sub
 
     ''' <summary>
+    ''' Gets SQL model.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetModel() As SelectSqlModel
+      Return m_Model
+    End Function
+
+    ''' <summary>
     ''' Creates query.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>

@@ -401,6 +401,16 @@ Namespace Expressions
     ''' <summary>
     ''' Adds WHERE clause.
     ''' </summary>
+    ''' <param name="provider"></param>
+    ''' <returns></returns>
+    Public Function Where(<DisallowNull> provider As ISelectFilterProvider) As FilteredSelectSqlExpression(Of T)
+      provider.AddWhere(Of T)(Me.Builder)
+      Return New FilteredSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
+    End Function
+
+    ''' <summary>
+    ''' Adds WHERE clause.
+    ''' </summary>
     ''' <returns></returns>
     Public Function Where() As FilteredSelectSqlExpression(Of T)
       Return New FilteredSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
@@ -459,13 +469,23 @@ Namespace Expressions
     End Function
 
     ''' <summary>
-    ''' Adds ORDER BY DESC clause.
+    ''' Adds ORDER BY clause.
     ''' </summary>
     ''' <param name="predicate"></param>
     ''' <param name="parameters"></param>
     ''' <returns></returns>
     Public Function OrderBy(<DisallowNull> predicate As String, <DisallowNull> ParamArray parameters() As Object) As OrderedSelectSqlExpression(Of T)
       Me.Builder.AddOrderBy(predicate, True, parameters)
+      Return New OrderedSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
+    End Function
+
+    ''' <summary>
+    ''' Adds ORDER BY clause.
+    ''' </summary>
+    ''' <param name="provider"></param>
+    ''' <returns></returns>
+    Public Function OrderBy(<DisallowNull> provider As ISelectSortProvider) As OrderedSelectSqlExpression(Of T)
+      provider.AddOrderBy(Of T)(Me.Builder)
       Return New OrderedSelectSqlExpression(Of T)(Me.Builder, Me.Executor)
     End Function
 
