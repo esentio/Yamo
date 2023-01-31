@@ -22,7 +22,7 @@ Module Program
   Private Sub CreateData()
     ' TODO: refactor to do proper initialization
 
-    Dim connection = New SqlConnection("Server=localhost;Database=YamoTest;User Id=dbuser;Password=dbpassword;")
+    Dim connection = New SqlConnection("Server=WIN10DEV01;Database=YamoTest;User Id=dbuser;Password=dbpassword;")
     connection.Open()
 
     Using db = New YamoDbContext(connection)

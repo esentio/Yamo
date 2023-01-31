@@ -17,7 +17,7 @@ namespace Yamo.Playground.CS
 
         static void Main(string[] args)
         {
-            m_Connection = new SqlConnection("Server=localhost;Database=YamoTest;User Id=dbuser;Password=dbpassword;TrustServerCertificate=True;");
+            m_Connection = new SqlConnection("Server=WIN10DEV01;Database=YamoTest;User Id=dbuser;Password=dbpassword;TrustServerCertificate=True;");
             m_Connection.Open();
 
             //Test1();

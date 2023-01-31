@@ -14,7 +14,7 @@ Public MustInherit Class BenchmarkBase
 
   <GlobalSetup>
   Public Sub Setup()
-    Me.Connection = New SqlConnection("Server=localhost;Database=YamoTest;User Id=dbuser;Password=dbpassword;")
+    Me.Connection = New SqlConnection("Server=WIN10DEV01;Database=YamoTest;User Id=dbuser;Password=dbpassword;")
     Me.Connection.Open()
   End Sub
 
