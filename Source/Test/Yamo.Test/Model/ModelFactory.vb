@@ -225,6 +225,12 @@
       }
     End Function
 
+    Public Overridable Function CreateItemWithInitialization() As ItemWithInitialization
+      Return New ItemWithInitialization With {
+        .Description = Helpers.Data.CreateRandomString(50)
+      }
+    End Function
+
     Public Overridable Function CreateItemWithPropertyModifiedTracking() As ItemWithPropertyModifiedTracking
       Return New ItemWithPropertyModifiedTracking With {
         .Description = Helpers.Data.CreateRandomString(50),

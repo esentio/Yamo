@@ -23,6 +23,20 @@ CREATE TABLE [LabelArchive] (
 
 
 
+CREATE TABLE [ItemWithInitialization] (
+  [Id] INTEGER  NOT NULL
+, [Description] nvarchar(50)  NOT NULL
+, CONSTRAINT [PK_ItemWithInitialization] PRIMARY KEY ([Id])
+);
+
+CREATE TABLE [ItemWithInitializationArchive] (
+  [Id] INTEGER  NOT NULL
+, [Description] nvarchar(50)  NOT NULL
+, CONSTRAINT [PK_ItemWithInitializationArchive] PRIMARY KEY ([Id])
+);
+
+
+
 CREATE TABLE [ItemWithPropertyModifiedTracking] (
   [Id] INTEGER  NOT NULL
 , [Description] nvarchar(50)  NOT NULL

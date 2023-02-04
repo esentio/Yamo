@@ -208,9 +208,12 @@ Namespace Tests
       End Using
 
       Using db = CreateDbContext()
-        Dim result = db.From(Of ItemWithPropertyModifiedTracking).SelectAll().ToList()
-        Assert.AreEqual(3, result.Count)
-        Assert.IsTrue(result.All(Function(x) Not x.IsAnyDbPropertyModified()))
+        Dim result1 = db.From(Of ItemWithPropertyModifiedTracking).SelectAll().ToList()
+        Assert.AreEqual(3, result1.Count)
+        Assert.IsTrue(result1.All(Function(x) Not x.IsAnyDbPropertyModified()))
+
+        Dim result2 = db.From(Of ItemWithPropertyModifiedTracking).SelectAll().FirstOrDefault()
+        Assert.IsTrue(Not result2.IsAnyDbPropertyModified())
       End Using
     End Sub
 
@@ -236,11 +239,16 @@ Namespace Tests
       End Using
 
       Using db = CreateDbContext()
-        Dim result = db.From(Of LinkedItem).
-                        Join(Of ItemWithPropertyModifiedTracking)(Function(j) j.T1.Id = j.T2.Id).As(Function(x) x.RelatedItem).
-                        SelectAll().ToList()
-        Assert.AreEqual(3, result.Count)
-        Assert.IsTrue(result.All(Function(x) Not DirectCast(x.RelatedItem, ItemWithPropertyModifiedTracking).IsAnyDbPropertyModified()))
+        Dim result1 = db.From(Of LinkedItem).
+                         Join(Of ItemWithPropertyModifiedTracking)(Function(j) j.T1.Id = j.T2.Id).As(Function(x) x.RelatedItem).
+                         SelectAll().ToList()
+        Assert.AreEqual(3, result1.Count)
+        Assert.IsTrue(result1.All(Function(x) Not DirectCast(x.RelatedItem, ItemWithPropertyModifiedTracking).IsAnyDbPropertyModified()))
+
+        Dim result2 = db.From(Of LinkedItem).
+                         Join(Of ItemWithPropertyModifiedTracking)(Function(j) j.T1.Id = j.T2.Id).As(Function(x) x.RelatedItem).
+                         SelectAll().FirstOrDefault()
+        Assert.IsTrue(Not DirectCast(result2.RelatedItem, ItemWithPropertyModifiedTracking).IsAnyDbPropertyModified())
       End Using
     End Sub
 
@@ -253,14 +261,22 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result = db.From(Function(c)
-                               Return c.From(Of ItemWithPropertyModifiedTracking).
+        Dim result1 = db.From(Function(c)
+                                Return c.From(Of ItemWithPropertyModifiedTracking).
                                         SelectAll()
-                             End Function).
-                        SelectAll().ToList()
+                              End Function).
+                         SelectAll().ToList()
 
-        Assert.AreEqual(3, result.Count)
-        Assert.IsTrue(result.All(Function(x) Not x.IsAnyDbPropertyModified()))
+        Assert.AreEqual(3, result1.Count)
+        Assert.IsTrue(result1.All(Function(x) Not x.IsAnyDbPropertyModified()))
+
+        Dim result2 = db.From(Function(c)
+                                Return c.From(Of ItemWithPropertyModifiedTracking).
+                                        SelectAll()
+                              End Function).
+                         SelectAll().FirstOrDefault()
+
+        Assert.IsTrue(Not result2.IsAnyDbPropertyModified())
       End Using
     End Sub
 
@@ -273,14 +289,22 @@ Namespace Tests
       InsertItems(item1, item2, item3)
 
       Using db = CreateDbContext()
-        Dim result = db.From(Function(c)
-                               Return c.From(Of ItemWithPropertyModifiedTracking).
+        Dim result1 = db.From(Function(c)
+                                Return c.From(Of ItemWithPropertyModifiedTracking).
                                         Select(Function(x) New NonModelObjectWithPropertyModifiedTracking With {.IntValue = x.Id, .StringValue = x.Description})
-                             End Function).
-                        SelectAll().ToList()
+                              End Function).
+                         SelectAll().ToList()
 
-        Assert.AreEqual(3, result.Count)
-        Assert.IsTrue(result.All(Function(x) Not x.IsAnyDbPropertyModified()))
+        Assert.AreEqual(3, result1.Count)
+        Assert.IsTrue(result1.All(Function(x) Not x.IsAnyDbPropertyModified()))
+
+        Dim result2 = db.From(Function(c)
+                                Return c.From(Of ItemWithPropertyModifiedTracking).
+                                        Select(Function(x) New NonModelObjectWithPropertyModifiedTracking With {.IntValue = x.Id, .StringValue = x.Description})
+                              End Function).
+                         SelectAll().FirstOrDefault()
+
+        Assert.IsTrue(Not result2.IsAnyDbPropertyModified())
       End Using
     End Sub
 
@@ -306,16 +330,26 @@ Namespace Tests
       End Using
 
       Using db = CreateDbContext()
-        Dim result = db.From(Of LinkedItem).
-                        Join(Function(c)
-                               Return c.From(Of ItemWithPropertyModifiedTracking).
-                                        SelectAll()
-                             End Function).
-                        On(Function(j) j.T1.Id = j.T2.Id).As(Function(x) x.RelatedItem).
-                        SelectAll().ToList()
+        Dim result1 = db.From(Of LinkedItem).
+                         Join(Function(c)
+                                Return c.From(Of ItemWithPropertyModifiedTracking).
+                                         SelectAll()
+                              End Function).
+                         On(Function(j) j.T1.Id = j.T2.Id).As(Function(x) x.RelatedItem).
+                         SelectAll().ToList()
 
-        Assert.AreEqual(3, result.Count)
-        Assert.IsTrue(result.All(Function(x) Not DirectCast(x.RelatedItem, ItemWithPropertyModifiedTracking).IsAnyDbPropertyModified()))
+        Assert.AreEqual(3, result1.Count)
+        Assert.IsTrue(result1.All(Function(x) Not DirectCast(x.RelatedItem, ItemWithPropertyModifiedTracking).IsAnyDbPropertyModified()))
+
+        Dim result2 = db.From(Of LinkedItem).
+                         Join(Function(c)
+                                Return c.From(Of ItemWithPropertyModifiedTracking).
+                                         SelectAll()
+                              End Function).
+                         On(Function(j) j.T1.Id = j.T2.Id).As(Function(x) x.RelatedItem).
+                         SelectAll().FirstOrDefault()
+
+        Assert.IsTrue(Not DirectCast(result2.RelatedItem, ItemWithPropertyModifiedTracking).IsAnyDbPropertyModified())
       End Using
     End Sub
 
@@ -341,16 +375,26 @@ Namespace Tests
       End Using
 
       Using db = CreateDbContext()
-        Dim result = db.From(Of LinkedItem).
-                        Join(Function(c)
-                               Return c.From(Of ItemWithPropertyModifiedTracking).
-                                        Select(Function(x) New NonModelObjectWithPropertyModifiedTracking With {.IntValue = x.Id, .StringValue = x.Description})
-                             End Function).
-                        On(Function(j) j.T1.Id = j.T2.IntValue).As(Function(x) x.RelatedItem).
-                        SelectAll().ToList()
+        Dim result1 = db.From(Of LinkedItem).
+                         Join(Function(c)
+                                Return c.From(Of ItemWithPropertyModifiedTracking).
+                                         Select(Function(x) New NonModelObjectWithPropertyModifiedTracking With {.IntValue = x.Id, .StringValue = x.Description})
+                              End Function).
+                         On(Function(j) j.T1.Id = j.T2.IntValue).As(Function(x) x.RelatedItem).
+                         SelectAll().ToList()
 
-        Assert.AreEqual(3, result.Count)
-        Assert.IsTrue(result.All(Function(x) Not DirectCast(x.RelatedItem, NonModelObjectWithPropertyModifiedTracking).IsAnyDbPropertyModified()))
+        Assert.AreEqual(3, result1.Count)
+        Assert.IsTrue(result1.All(Function(x) Not DirectCast(x.RelatedItem, NonModelObjectWithPropertyModifiedTracking).IsAnyDbPropertyModified()))
+
+        Dim result2 = db.From(Of LinkedItem).
+                         Join(Function(c)
+                                Return c.From(Of ItemWithPropertyModifiedTracking).
+                                         Select(Function(x) New NonModelObjectWithPropertyModifiedTracking With {.IntValue = x.Id, .StringValue = x.Description})
+                              End Function).
+                         On(Function(j) j.T1.Id = j.T2.IntValue).As(Function(x) x.RelatedItem).
+                         SelectAll().FirstOrDefault()
+
+        Assert.IsTrue(Not DirectCast(result2.RelatedItem, NonModelObjectWithPropertyModifiedTracking).IsAnyDbPropertyModified())
       End Using
     End Sub
 
@@ -368,22 +412,59 @@ Namespace Tests
 
       Using db = CreateDbContext()
         Dim result1 = db.From(Of ItemWithPropertyModifiedTracking).
-                        Select(Function(x) x).
-                        ToList()
+                         Select(Function(x) x).
+                         ToList()
         Assert.AreEqual(3, result1.Count)
         Assert.IsTrue(result1.All(Function(x) Not x.IsAnyDbPropertyModified()))
 
         Dim result2 = db.From(Of ItemWithPropertyModifiedTracking).
-                        Select(Function(x) (x.Id, Entity:=x)).
-                        ToList()
-        Assert.AreEqual(3, result2.Count)
-        Assert.IsTrue(result2.All(Function(x) Not x.Entity.IsAnyDbPropertyModified()))
+                         Select(Function(x) x).
+                         FirstOrDefault()
+        Assert.IsTrue(Not result2.IsAnyDbPropertyModified())
 
         Dim result3 = db.From(Of ItemWithPropertyModifiedTracking).
-                         Select(Function(x) New With {x.Id, .Entity = x}).
+                         Select(Function(x) (x.Id, Entity:=x)).
                          ToList()
         Assert.AreEqual(3, result3.Count)
         Assert.IsTrue(result3.All(Function(x) Not x.Entity.IsAnyDbPropertyModified()))
+
+        Dim result4 = db.From(Of ItemWithPropertyModifiedTracking).
+                         Select(Function(x) (x.Id, Entity:=x)).
+                         FirstOrDefault()
+        Assert.IsTrue(Not result4.Entity.IsAnyDbPropertyModified())
+
+        Dim result5 = db.From(Of ItemWithPropertyModifiedTracking).
+                         Select(Function(x) New With {x.Id, .Entity = x}).
+                         ToList()
+        Assert.AreEqual(3, result5.Count)
+        Assert.IsTrue(result5.All(Function(x) Not x.Entity.IsAnyDbPropertyModified()))
+
+        Dim result6 = db.From(Of ItemWithPropertyModifiedTracking).
+                         Select(Function(x) New With {x.Id, .Entity = x}).
+                         FirstOrDefault()
+        Assert.IsTrue(Not result6.Entity.IsAnyDbPropertyModified())
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub QueryModelEntityRecordWithPropertyModifiedTracking()
+      Dim item1 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      Dim item2 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+      Dim item3 = Me.ModelFactory.CreateItemWithPropertyModifiedTracking()
+
+      Using db = CreateDbContext()
+        db.Insert(item1)
+        db.Insert(item2)
+        db.Insert(item3)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result1 = db.Query(Of ItemWithPropertyModifiedTracking)($"SELECT {Sql.Model.Columns(Of ItemWithPropertyModifiedTracking)} FROM ItemWithPropertyModifiedTracking ORDER BY Id")
+        Assert.AreEqual(3, result1.Count)
+        Assert.IsTrue(result1.All(Function(x) Not x.IsAnyDbPropertyModified()))
+
+        Dim result2 = db.QueryFirstOrDefault(Of ItemWithPropertyModifiedTracking)($"SELECT {Sql.Model.Columns(Of ItemWithPropertyModifiedTracking)} FROM ItemWithPropertyModifiedTracking ORDER BY Id")
+        Assert.IsTrue(Not result2.IsAnyDbPropertyModified())
       End Using
     End Sub
 

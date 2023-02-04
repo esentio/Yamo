@@ -226,11 +226,13 @@ Namespace Internal.Query
             If readerData.ContainsNonNullColumnCheck Then
               If SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderIndex, sqlResult.GetColumnCount()) Then
                 value = DirectCast(reader(dataReader, readerData), T)
+                ' NOTE - Initialize is called in the reader
                 ' NOTE - ResetDbPropertyModifiedTracking is called in the reader
               End If
 
             Else
               value = DirectCast(reader(dataReader, readerData), T)
+              ' NOTE - Initialize is called in the reader
               ' NOTE - ResetDbPropertyModifiedTracking is called in the reader
             End If
 
@@ -290,6 +292,7 @@ Namespace Internal.Query
               value = DirectCast(reader(dataReader, readerData.ReaderData), T)
             End If
 
+            Initialize(value)
             FillIncluded(readerData, dataReaderType, dataReader, value)
             ResetDbPropertyModifiedTracking(value)
           End If
@@ -400,6 +403,7 @@ Namespace Internal.Query
             While dataReader.Read()
               If SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderIndex, sqlResult.GetColumnCount()) Then
                 Dim value = DirectCast(reader(dataReader, readerData), T)
+                ' NOTE - Initialize is called in the reader
                 ' NOTE - ResetDbPropertyModifiedTracking is called in the reader
                 values.Add(value)
               Else
@@ -410,6 +414,7 @@ Namespace Internal.Query
           Else
             While dataReader.Read()
               Dim value = DirectCast(reader(dataReader, readerData), T)
+              ' NOTE - Initialize is called in the reader
               ' NOTE - ResetDbPropertyModifiedTracking is called in the reader
               values.Add(value)
             End While
@@ -448,6 +453,7 @@ Namespace Internal.Query
               While dataReader.Read()
                 If containsPKReader(dataReader, entitySqlResultReaderData.ReaderIndex, entitySqlResultReaderData.PKOffsets) Then
                   Dim value = DirectCast(reader(dataReader, 0, includedColumns), T)
+                  Initialize(value)
                   FillIncluded(readerData, dataReaderType, dataReader, value)
                   ResetDbPropertyModifiedTracking(value)
                   values.Add(value)
@@ -460,6 +466,7 @@ Namespace Internal.Query
               ' record should always be present, so we can skip PK check
               While dataReader.Read()
                 Dim value = DirectCast(reader(dataReader, 0, includedColumns), T)
+                Initialize(value)
                 FillIncluded(readerData, dataReaderType, dataReader, value)
                 ResetDbPropertyModifiedTracking(value)
                 values.Add(value)
@@ -474,6 +481,7 @@ Namespace Internal.Query
               While dataReader.Read()
                 If SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderData.ReaderIndex, sqlResult.GetColumnCount()) Then
                   Dim value = DirectCast(reader(dataReader, readerData.ReaderData), T)
+                  Initialize(value)
                   FillIncluded(readerData, dataReaderType, dataReader, value)
                   ResetDbPropertyModifiedTracking(value)
                   values.Add(value)
@@ -485,6 +493,7 @@ Namespace Internal.Query
             Else
               While dataReader.Read()
                 Dim value = DirectCast(reader(dataReader, readerData.ReaderData), T)
+                Initialize(value)
                 FillIncluded(readerData, dataReaderType, dataReader, value)
                 ResetDbPropertyModifiedTracking(value)
                 values.Add(value)
@@ -617,6 +626,8 @@ Namespace Internal.Query
         End If
       End If
 
+      Initialize(value)
+
       FillRelationships(readerData, declaringEntity, value)
       FillIncluded(readerData, dataReaderType, dataReader, value)
 
@@ -671,7 +682,10 @@ Namespace Internal.Query
 
           value = entitySqlResultReaderData.Reader(dataReader, entitySqlResultReaderData.ReaderIndex, entitySqlResultReaderData.Entity.IncludedColumns)
 
+          Initialize(value)
+
           cache.AddValue(entityIndex, key, value)
+
           FillRelationships(readerData, declaringEntity, value)
           FillIncluded(readerData, dataReaderType, dataReader, value)
         End If
@@ -694,6 +708,8 @@ Namespace Internal.Query
           Return Nothing
         End If
 
+        Initialize(value)
+
         FillRelationships(readerData, declaringEntity, value)
         FillIncluded(readerData, dataReaderType, dataReader, value)
       End If
@@ -713,6 +729,16 @@ Namespace Internal.Query
         Return value
       End If
     End Function
+
+    ''' <summary>
+    ''' Initialize entity if it implements <see cref="IInitializable"/>.
+    ''' </summary>
+    ''' <param name="obj"></param>
+    Private Sub Initialize(obj As Object)
+      If TypeOf obj Is IInitializable Then
+        DirectCast(obj, IInitializable).Initialize()
+      End If
+    End Sub
 
     ''' <summary>
     ''' Resets database property modified tracking on an entity if it implements <see cref="IHasDbPropertyModifiedTracking"/>.

@@ -20,6 +20,8 @@ DROP TABLE IF EXISTS ItemWithIdentityIdAndDefaultValues;
 DROP TABLE IF EXISTS ItemWithIdentityIdAndDefaultValuesArchive;
 DROP TABLE IF EXISTS ItemWithOnlySQLiteSupportedFields;
 DROP TABLE IF EXISTS ItemWithOnlySQLiteSupportedFieldsArchive;
+DROP TABLE IF EXISTS ItemWithInitialization;
+DROP TABLE IF EXISTS ItemWithInitializationArchive;
 DROP TABLE IF EXISTS ItemWithPropertyModifiedTracking;
 DROP TABLE IF EXISTS ItemWithPropertyModifiedTrackingArchive;
 DROP TABLE IF EXISTS Label;
