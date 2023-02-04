@@ -372,18 +372,25 @@ Namespace Infrastructure
         Dim valueAssign = Expression.Assign(valueVar, entityReaderCallCast)
         Dim valueAssignNull = Expression.Assign(valueVar, Expression.Default(type))
 
-        Dim valueAssignBlock As Expression
+        Dim valueAssignBlockExpressions = New List(Of Expression)(3) From {valueAssign}
 
-        Dim ihpmtType = GetType(IHasDbPropertyModifiedTracking)
-        If ihpmtType.IsAssignableFrom(type) Then
-          Dim rpmtMethodInfo = ihpmtType.GetMethod(NameOf(IHasDbPropertyModifiedTracking.ResetDbPropertyModifiedTracking))
-          Dim rpmtCast = Expression.Convert(valueVar, ihpmtType)
-          Dim rpmtCall = Expression.Call(rpmtCast, rpmtMethodInfo)
-
-          valueAssignBlock = Expression.Block(valueAssign, rpmtCall)
-        Else
-          valueAssignBlock = valueAssign
+        Dim iInitType = GetType(IInitializable)
+        If iInitType.IsAssignableFrom(type) Then
+          Dim initMethodInfo = iInitType.GetMethod(NameOf(IInitializable.Initialize))
+          Dim initCast = Expression.Convert(valueVar, iInitType)
+          Dim initCall = Expression.Call(initCast, initMethodInfo)
+          valueAssignBlockExpressions.Add(initCall)
         End If
+
+        Dim ihdpmtType = GetType(IHasDbPropertyModifiedTracking)
+        If ihdpmtType.IsAssignableFrom(type) Then
+          Dim rdpmtMethodInfo = ihdpmtType.GetMethod(NameOf(IHasDbPropertyModifiedTracking.ResetDbPropertyModifiedTracking))
+          Dim rdpmtCast = Expression.Convert(valueVar, ihdpmtType)
+          Dim rdpmtCall = Expression.Call(rdpmtCast, rdpmtMethodInfo)
+          valueAssignBlockExpressions.Add(rdpmtCall)
+        End If
+
+        Dim valueAssignBlock = Expression.Block(valueAssignBlockExpressions)
 
         expressions.Add(Expression.IfThenElse(containsPKReaderCall, valueAssignBlock, valueAssignNull))
       ElseIf TypeOf sqlResult Is ScalarValueSqlResult Then

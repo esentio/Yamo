@@ -30,6 +30,8 @@ Public Class BaseTestDbContext
     CreateItemWithIdentityIdArchiveModel(modelBuilder)
     CreateItemWithIdentityIdAndDefaultValuesModel(modelBuilder)
     CreateItemWithIdentityIdAndDefaultValuesArchiveModel(modelBuilder)
+    CreateItemWithInitializationModel(modelBuilder)
+    CreateItemWithInitializationArchiveModel(modelBuilder)
     CreateItemWithPropertyModifiedTrackingModel(modelBuilder)
     CreateItemWithPropertyModifiedTrackingArchiveModel(modelBuilder)
     CreateLabelModel(modelBuilder)
@@ -252,6 +254,20 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of ItemWithIdentityIdAndDefaultValuesArchive).Property(Function(x) x.Description).IsRequired()
     modelBuilder.Entity(Of ItemWithIdentityIdAndDefaultValuesArchive).Property(Function(x) x.UniqueidentifierValue).HasDefaultValue()
     modelBuilder.Entity(Of ItemWithIdentityIdAndDefaultValuesArchive).Property(Function(x) x.IntValue).HasDefaultValue()
+  End Sub
+
+  Private Sub CreateItemWithInitializationModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithInitialization)()
+
+    modelBuilder.Entity(Of ItemWithInitialization).Property(Function(x) x.Id).IsKey().IsIdentity()
+    modelBuilder.Entity(Of ItemWithInitialization).Property(Function(x) x.Description).IsRequired()
+  End Sub
+
+  Private Sub CreateItemWithInitializationArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithInitializationArchive)()
+
+    modelBuilder.Entity(Of ItemWithInitializationArchive).Property(Function(x) x.Id).IsKey().IsIdentity()
+    modelBuilder.Entity(Of ItemWithInitializationArchive).Property(Function(x) x.Description).IsRequired()
   End Sub
 
   Private Sub CreateItemWithPropertyModifiedTrackingModel(modelBuilder As ModelBuilder)
