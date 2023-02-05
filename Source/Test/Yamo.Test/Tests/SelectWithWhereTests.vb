@@ -1258,6 +1258,106 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub SelectRecordUsingTernaryOperator()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 1
+      items(0).IntColumnNull = 42
+      items(0).BitColumn = False
+      items(0).BitColumnNull = True
+
+      items(1).IntColumn = 42
+      items(1).IntColumnNull = 20
+      items(1).BitColumn = True
+      items(1).BitColumnNull = False
+
+      items(2).IntColumn = 42
+      items(2).IntColumnNull = Nothing
+      items(2).BitColumn = True
+      items(2).BitColumnNull = Nothing
+
+      items(3).IntColumn = 4
+      items(3).IntColumnNull = 40
+      items(3).BitColumn = False
+      items(3).BitColumnNull = False
+
+      items(4).IntColumn = 42
+      items(4).IntColumnNull = Nothing
+      items(4).BitColumn = True
+      items(4).BitColumnNull = Nothing
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) If(x.IntColumnNull.HasValue, x.IntColumnNull.Value, x.IntColumn) = 42).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(2), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) If(x.BitColumnNull.HasValue, x.BitColumnNull.Value, x.BitColumn)).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(2), items(4)}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectRecordUsingCoalesceOperator()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 1
+      items(0).IntColumnNull = 42
+      items(0).BitColumn = False
+      items(0).BitColumnNull = True
+
+      items(1).IntColumn = 42
+      items(1).IntColumnNull = 20
+      items(1).BitColumn = True
+      items(1).BitColumnNull = False
+
+      items(2).IntColumn = 42
+      items(2).IntColumnNull = Nothing
+      items(2).BitColumn = True
+      items(2).BitColumnNull = Nothing
+
+      items(3).IntColumn = 4
+      items(3).IntColumnNull = 40
+      items(3).BitColumn = False
+      items(3).BitColumnNull = False
+
+      items(4).IntColumn = 42
+      items(4).IntColumnNull = Nothing
+      items(4).BitColumn = True
+      items(4).BitColumnNull = Nothing
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) If(x.IntColumnNull, x.IntColumn) = 42).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(2), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) If(x.BitColumnNull, x.BitColumn)).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(3, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(2), items(4)}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub SelectRecordByMultipleWhereConditions()
       Dim items = CreateItems()
 

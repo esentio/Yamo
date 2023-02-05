@@ -21,8 +21,8 @@ namespace Yamo.Playground.CS
             m_Connection.Open();
 
             //Test1();
-            Test2();
-            Test2b();
+            //Test2();
+            //Test2b();
             //Test3();
             //Test4();
             //Test5();
@@ -86,7 +86,8 @@ namespace Yamo.Playground.CS
             //Test61();
             //Test62();
             //Test63();
-            Test64();
+            //Test64();
+            Test65();
         }
 
         public static MyContext CreateContext()
@@ -1310,6 +1311,25 @@ namespace Yamo.Playground.CS
                              .On(j => j.T1.Id == j.T2.ArticleId)
                              .Select(j => j.T2, NonModelEntityCreationBehavior.NullIfAllColumnsAreNull)
                              .ToList();
+            }
+        }
+
+        public static void Test65()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From<Blog>()
+                             .Select(x => x.ModifiedUserId.HasValue ? x.ModifiedUserId.Value : x.CreatedUserId)
+                             .ToList();
+
+            }
+
+            using (var db = CreateContext())
+            {
+                var list = db.From<Blog>()
+                             .Select(x => x.ModifiedUserId ?? x.CreatedUserId)
+                             .ToList();
+
             }
         }
 

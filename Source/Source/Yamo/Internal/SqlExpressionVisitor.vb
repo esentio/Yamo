@@ -727,6 +727,7 @@ Namespace Internal
 
       Dim useBrackets = False
       Dim expOperator As String
+      Dim expand = False
 
       Select Case nodeType
         Case ExpressionType.[And], ExpressionType.[AndAlso]
@@ -787,6 +788,13 @@ Namespace Internal
           useBrackets = True
           expOperator = " % "
 
+        Case ExpressionType.Coalesce
+          expand = node.Type Is GetType(Boolean) OrElse (node.Type Is GetType(Boolean?) AndAlso IsInNullableValueAccess())
+          m_Stack.Peek().IsCoalesce = True
+          m_Sql.Append("COALESCE")
+          useBrackets = True
+          expOperator = ", "
+
         Case Else
           Throw New NotSupportedException($"The binary operator '{nodeType}' is not supported.")
       End Select
@@ -801,6 +809,34 @@ Namespace Internal
 
       If useBrackets Then
         m_Sql.Append(")")
+      End If
+
+      If expand Then
+        ExpandToBooleanComparisonIfNeeded(node)
+      End If
+
+      Return node
+    End Function
+
+    ''' <summary>
+    ''' Visits conditional.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Protected Overrides Function VisitConditional(node As ConditionalExpression) As Expression
+      m_Stack.Peek().IsConditional = True
+
+      m_Sql.Append("CASE WHEN ")
+      Visit(node.Test)
+      m_Sql.Append(" THEN ")
+      Visit(node.IfTrue)
+      m_Sql.Append(" ELSE ")
+      Visit(node.IfFalse)
+      m_Sql.Append(" END")
+
+      If node.Type Is GetType(Boolean) OrElse (node.Type Is GetType(Boolean?) AndAlso IsInNullableValueAccess()) Then
+        ExpandToBooleanComparisonIfNeeded(node)
       End If
 
       Return node
@@ -1634,7 +1670,22 @@ Namespace Internal
         parentIndex += 1
       End If
 
-      If depth <= parentIndex OrElse (Not m_Stack(parentIndex).IsCompare AndAlso Not m_Stack(parentIndex).IsNullableHasValueAccess) Then
+      Dim expand As Boolean
+
+      If depth <= parentIndex Then
+        expand = True
+      Else
+        Dim nodeInfo = m_Stack(parentIndex)
+
+        If nodeInfo.IsConditional Then
+          ' expand only Test expression and not IfTrue and IfFalse expressions
+          expand = DirectCast(nodeInfo.Node, ConditionalExpression).Test Is m_Stack(parentIndex - 1).Node
+        Else
+          expand = Not nodeInfo.IsCompare AndAlso Not nodeInfo.IsCoalesce AndAlso Not nodeInfo.IsNullableHasValueAccess
+        End If
+      End If
+
+      If expand Then
         m_Sql.Append(" = ")
         m_Sql.Append(m_Builder.DialectProvider.Formatter.GetConstantValue(value))
       End If
