@@ -1005,11 +1005,7 @@ Namespace Internal
       If nodeIsEntityMemberAccess Then
         AppendEntityMemberAccess(entityIndex, memberName)
       Else
-        If IsInNullableValueAccess() Then
-          AppendNewParameter(Evaluate(m_Stack(1).Node))
-        Else
-          AppendNewParameter(Evaluate(node))
-        End If
+        AppendNewParameter(Evaluate(node))
       End If
 
       ExpandToBooleanComparisonIfNeeded(node)

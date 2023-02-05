@@ -88,7 +88,8 @@ namespace Yamo.Playground.CS
             //Test63();
             //Test64();
             //Test65();
-            Test66();
+            //Test66();
+            Test67();
         }
 
         public static MyContext CreateContext()
@@ -1348,6 +1349,29 @@ namespace Yamo.Playground.CS
                                  ShiftLeft = x.Id << 1,
                                  ShiftRight = x.Id >> 1
                              })
+                             .ToList();
+            }
+        }
+
+        public static void Test67()
+        {
+            using (var db = CreateContext())
+            {
+                int userId = 42;
+
+                var list = db.From<Blog>()
+                             .Where(x => x.ModifiedUserId.Value == userId)
+                             .SelectAll()
+                             .ToList();
+            }
+
+            using (var db = CreateContext())
+            {
+                int? userId = null;
+
+                var list = db.From<Blog>()
+                             .Where(x => x.ModifiedUserId.Value == userId.Value)
+                             .SelectAll()
                              .ToList();
             }
         }
