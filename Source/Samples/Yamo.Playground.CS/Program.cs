@@ -87,7 +87,8 @@ namespace Yamo.Playground.CS
             //Test62();
             //Test63();
             //Test64();
-            Test65();
+            //Test65();
+            Test66();
         }
 
         public static MyContext CreateContext()
@@ -1297,7 +1298,7 @@ namespace Yamo.Playground.CS
                              .Include(j => j.T1.Tag, j => new { j.T2.Id, j.T2.Description }, NonModelEntityCreationBehavior.AlwaysCreateInstance)
                              .ToList();
             }
-            
+
             using (var db = CreateContext())
             {
                 // NullIfAllColumnsAreNull overrides AlwaysCreateInstance behavior
@@ -1330,6 +1331,24 @@ namespace Yamo.Playground.CS
                              .Select(x => x.ModifiedUserId ?? x.CreatedUserId)
                              .ToList();
 
+            }
+        }
+
+        public static void Test66()
+        {
+            using (var db = CreateContext())
+            {
+                var list = db.From<Blog>()
+                             .Select(x => new
+                             {
+                                 BitwiseAnd = x.Id & 1,
+                                 BitwiseOr = x.Id | 1,
+                                 BitwiseXor = x.Id ^ 1,
+                                 BitwiseNot = ~x.Id,
+                                 ShiftLeft = x.Id << 1,
+                                 ShiftRight = x.Id >> 1
+                             })
+                             .ToList();
             }
         }
 

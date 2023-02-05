@@ -1358,6 +1358,91 @@ Namespace Tests
     End Sub
 
     <TestMethod()>
+    Public Overridable Sub SelectRecordUsingBitwiseOperators()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 1
+      items(1).IntColumn = 2
+      items(2).IntColumn = 3
+      items(3).IntColumn = 4
+      items(4).IntColumn = 5
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) (x.IntColumn And 3) = 1).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(4)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) (x.IntColumn Or 3) = 7).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(3), items(4)}, result)
+      End Using
+
+      SelectRecordUsingXorOperator({items(1), items(2)})
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) -4 < (Not x.IntColumn)).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1)}, result)
+      End Using
+    End Sub
+
+    Protected Overridable Sub SelectRecordUsingXorOperator(expected As ICollection)
+      ' NOTE: SQLite doesn't support XOR
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) (x.IntColumn Xor 3) < 2).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent(expected, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Overridable Sub SelectRecordUsingShiftOperators()
+      Dim items = CreateItems()
+
+      items(0).IntColumn = 1
+      items(1).IntColumn = 2
+      items(2).IntColumn = 3
+      items(3).IntColumn = 4
+      items(4).IntColumn = 5
+
+      InsertItems(items)
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) (x.IntColumn << 3) < 24).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(0), items(1)}, result)
+      End Using
+
+      Using db = CreateDbContext()
+        Dim result = db.From(Of ItemWithAllSupportedValues).
+                        Where(Function(x) (x.IntColumn >> 1) = 2).
+                        SelectAll().ToList()
+
+        Assert.AreEqual(2, result.Count)
+        CollectionAssert.AreEquivalent({items(3), items(4)}, result)
+      End Using
+    End Sub
+
+    <TestMethod()>
     Public Overridable Sub SelectRecordByMultipleWhereConditions()
       Dim items = CreateItems()
 
