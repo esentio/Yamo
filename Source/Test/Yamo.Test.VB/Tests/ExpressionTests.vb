@@ -1035,6 +1035,8 @@ Namespace Tests
         Assert.AreEqual(localValue, result.Parameters(0).Value)
         Assert.AreEqual(c.GetNullableTrueValue(), result.Parameters(1).Value)
 
+        ' TODO: SIP - fix: "nullable.HasValue = True"
+
       End Using
     End Sub
 
@@ -1104,6 +1106,129 @@ Namespace Tests
         Assert.AreEqual(localValue, result.Parameters(0).Value)
         Assert.AreEqual(c.GetNullableTrueValue(), result.Parameters(1).Value)
 
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Sub TranslateTernary()
+      Using db = CreateDbContext()
+        Dim visitor = CreateSqlExpressionVisitor(db)
+        Dim result As SqlString
+
+        Dim value1 = True
+        Dim value2 = 42
+        Dim value3 = 6
+
+        result = TranslateCondition(visitor, Function(x) x.IntColumn = If(value1, value2, value3))
+        Assert.AreEqual("[T0].[IntColumn] = CASE WHEN @p0 = 1 THEN @p1 ELSE @p2 END", result.Sql)
+        Assert.AreEqual(3, result.Parameters.Count)
+        Assert.AreEqual(value1, result.Parameters(0).Value)
+        Assert.AreEqual(value2, result.Parameters(1).Value)
+        Assert.AreEqual(value3, result.Parameters(2).Value)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumn = True, x.IntColumnNull.Value, x.IntColumn) = value2)
+        Assert.AreEqual("CASE WHEN [T0].[BitColumn] = 1 THEN [T0].[IntColumnNull] ELSE [T0].[IntColumn] END = @p0", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual(value2, result.Parameters(0).Value)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumn, x.IntColumnNull.Value, x.IntColumn) = value2)
+        Assert.AreEqual("CASE WHEN [T0].[BitColumn] = 1 THEN [T0].[IntColumnNull] ELSE [T0].[IntColumn] END = @p0", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual(value2, result.Parameters(0).Value)
+
+        result = TranslateCondition(visitor, Function(x) If(x.IntColumnNull.HasValue, x.IntColumnNull.Value, x.IntColumn) = value2)
+        Assert.AreEqual("CASE WHEN [T0].[IntColumnNull] IS NOT NULL THEN [T0].[IntColumnNull] ELSE [T0].[IntColumn] END = @p0", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual(value2, result.Parameters(0).Value)
+
+        ' boolen and nullable boolean have special handling
+
+        ' boolean
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull.HasValue, x.BitColumnNull.Value, x.BitColumn) = value1)
+        Assert.AreEqual("CASE WHEN [T0].[BitColumnNull] IS NOT NULL THEN [T0].[BitColumnNull] ELSE [T0].[BitColumn] END = @p0", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual(value1, result.Parameters(0).Value)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull.HasValue, x.BitColumnNull.Value, x.BitColumn) = True)
+        Assert.AreEqual("CASE WHEN [T0].[BitColumnNull] IS NOT NULL THEN [T0].[BitColumnNull] ELSE [T0].[BitColumn] END = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull.HasValue, x.BitColumnNull.Value, x.BitColumn))
+        Assert.AreEqual("CASE WHEN [T0].[BitColumnNull] IS NOT NULL THEN [T0].[BitColumnNull] ELSE [T0].[BitColumn] END = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        ' nullable boolean (following examples maybe don't make sence, but they work fine as a test)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull.HasValue, x.BitColumnNull, x.BitColumnNull).Value = value1)
+        Assert.AreEqual("CASE WHEN [T0].[BitColumnNull] IS NOT NULL THEN [T0].[BitColumnNull] ELSE [T0].[BitColumnNull] END = @p0", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual(value1, result.Parameters(0).Value)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull.HasValue, x.BitColumnNull, x.BitColumnNull).Value = True)
+        Assert.AreEqual("CASE WHEN [T0].[BitColumnNull] IS NOT NULL THEN [T0].[BitColumnNull] ELSE [T0].[BitColumnNull] END = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull.HasValue, x.BitColumnNull, x.BitColumnNull).Value)
+        Assert.AreEqual("CASE WHEN [T0].[BitColumnNull] IS NOT NULL THEN [T0].[BitColumnNull] ELSE [T0].[BitColumnNull] END = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull.HasValue, x.BitColumnNull, x.BitColumnNull).HasValue)
+        Assert.AreEqual("CASE WHEN [T0].[BitColumnNull] IS NOT NULL THEN [T0].[BitColumnNull] ELSE [T0].[BitColumnNull] END IS NOT NULL", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Sub TranslateCoalesce()
+      Using db = CreateDbContext()
+        Dim visitor = CreateSqlExpressionVisitor(db)
+        Dim result As SqlString
+
+        Dim value1 = True
+        Dim value2 = 42
+        Dim value3 = 6
+
+        result = TranslateCondition(visitor, Function(x) If(x.IntColumnNull, x.IntColumn) = value2)
+        Assert.AreEqual("COALESCE([T0].[IntColumnNull], [T0].[IntColumn]) = @p0", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual(value2, result.Parameters(0).Value)
+
+        ' boolen and nullable boolean have special handling
+
+        ' boolean
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull, x.BitColumn) = value1)
+        Assert.AreEqual("COALESCE([T0].[BitColumnNull], [T0].[BitColumn]) = @p0", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual(value1, result.Parameters(0).Value)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull, x.BitColumn) = True)
+        Assert.AreEqual("COALESCE([T0].[BitColumnNull], [T0].[BitColumn]) = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull, x.BitColumn))
+        Assert.AreEqual("COALESCE([T0].[BitColumnNull], [T0].[BitColumn]) = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        ' nullable boolean (following examples maybe don't make sence, but they work fine as a test)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull, x.BitColumnNull).Value = value1)
+        Assert.AreEqual("COALESCE([T0].[BitColumnNull], [T0].[BitColumnNull]) = @p0", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual(value1, result.Parameters(0).Value)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull, x.BitColumnNull).Value = True)
+        Assert.AreEqual("COALESCE([T0].[BitColumnNull], [T0].[BitColumnNull]) = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull, x.BitColumnNull).Value)
+        Assert.AreEqual("COALESCE([T0].[BitColumnNull], [T0].[BitColumnNull]) = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = TranslateCondition(visitor, Function(x) If(x.BitColumnNull, x.BitColumnNull).HasValue)
+        Assert.AreEqual("COALESCE([T0].[BitColumnNull], [T0].[BitColumnNull]) IS NOT NULL", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
       End Using
     End Sub
 

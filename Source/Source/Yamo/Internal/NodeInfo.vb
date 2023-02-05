@@ -9,6 +9,8 @@ Namespace Internal
   ''' </summary>
   Public Class NodeInfo
 
+    ' TODO: SIP - is really IsCompare, IsCoalesce, IsConditional, ... necessary? Would't it be better to check it when needed (during boolean expansion)?.
+
     ''' <summary>
     ''' Gets node.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
@@ -36,6 +38,20 @@ Namespace Internal
     ''' </summary>
     ''' <returns></returns>
     Public Property IsCompare As Boolean
+
+    ''' <summary>
+    ''' Gets whether node represents coalesce operation (<see cref="ExpressionType.Coalesce"/>).<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property IsCoalesce As Boolean
+
+    ''' <summary>
+    ''' Gets whether node represents conditional operation (<see cref="ExpressionType.Conditional"/>).<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property IsConditional As Boolean
 
     ''' <summary>
     ''' Gets whether node represents <see cref="Nullable(Of T).Value"/> access.<br/>
@@ -82,6 +98,8 @@ Namespace Internal
       Me.IsNegation = False
       Me.IsIgnoredNegation = False
       Me.IsCompare = False
+      Me.IsCoalesce = False
+      Me.IsConditional = False
       Me.IsNullableValueAccess = False
       Me.IsNullableHasValueAccess = False
       Me.IsConvert = False
