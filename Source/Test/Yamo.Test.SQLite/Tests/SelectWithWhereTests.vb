@@ -1,4 +1,6 @@
-﻿Imports Yamo.Test
+﻿Imports Microsoft.Data.Sqlite
+Imports Yamo.Test
+Imports Yamo.Test.Model
 Imports Yamo.Test.SQLite.Model
 
 Namespace Tests
@@ -228,6 +230,28 @@ Namespace Tests
         Assert.AreEqual(4, result.Count)
         CollectionAssert.AreEquivalent({items(0), items(1), items(2), items(4)}, result)
       End Using
+    End Sub
+
+    Protected Overrides Sub SelectRecordUsingXorOperator(expected As ICollection)
+      Try
+        Using db = CreateDbContext()
+          Dim result = db.From(Of ItemWithAllSupportedValues).
+                          Where(Function(x) (x.IntColumn Xor 3) < 2).
+                          SelectAll().ToList()
+
+          Assert.AreEqual(2, result.Count)
+          CollectionAssert.AreEquivalent(expected, result)
+        End Using
+
+        Assert.Fail()
+      Catch ex As SqliteException
+        ' error: 'unrecognized token: "^"'
+        If Not ex.Message.Contains("^") Then
+          Assert.Fail(ex.Message)
+        End If
+      Catch ex As Exception
+        Assert.Fail(ex.Message)
+      End Try
     End Sub
 
     Protected Overloads Function CreateItems() As List(Of ItemWithOnlySQLiteSupportedFields)

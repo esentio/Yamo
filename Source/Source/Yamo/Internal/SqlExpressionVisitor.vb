@@ -683,12 +683,16 @@ Namespace Internal
     Protected Overrides Function VisitUnary(node As UnaryExpression) As Expression
       Select Case node.NodeType
         Case ExpressionType.[Not]
-          m_Stack.Peek().IsNegation = True
+          If node.Type Is GetType(Boolean) OrElse node.Type Is GetType(Boolean?) Then
+            m_Stack.Peek().IsNegation = True
 
-          If ShouldIgnoreNegation(node) Then
-            m_Stack.Peek().IsIgnoredNegation = True
+            If ShouldIgnoreNegation(node) Then
+              m_Stack.Peek().IsIgnoredNegation = True
+            Else
+              m_Sql.Append("NOT ")
+            End If
           Else
-            m_Sql.Append("NOT ")
+            m_Sql.Append("~ ")
           End If
 
         Case ExpressionType.Convert, ExpressionType.ConvertChecked
@@ -730,11 +734,29 @@ Namespace Internal
       Dim expand = False
 
       Select Case nodeType
-        Case ExpressionType.[And], ExpressionType.[AndAlso]
+        Case ExpressionType.[And]
+          useBrackets = True
+
+          If node.Type Is GetType(Boolean) OrElse node.Type Is GetType(Boolean?) Then
+            expOperator = " AND "
+          Else
+            expOperator = " & "
+          End If
+
+        Case ExpressionType.[AndAlso]
           useBrackets = True
           expOperator = " AND "
 
-        Case ExpressionType.[Or], ExpressionType.[OrElse]
+        Case ExpressionType.[Or]
+          useBrackets = True
+
+          If node.Type Is GetType(Boolean) OrElse node.Type Is GetType(Boolean?) Then
+            expOperator = " OR "
+          Else
+            expOperator = " | "
+          End If
+
+        Case ExpressionType.[OrElse]
           useBrackets = True
           expOperator = " OR "
 
@@ -794,6 +816,18 @@ Namespace Internal
           m_Sql.Append("COALESCE")
           useBrackets = True
           expOperator = ", "
+
+        Case ExpressionType.ExclusiveOr
+          useBrackets = True
+          expOperator = " ^ "
+
+        Case ExpressionType.LeftShift
+          useBrackets = True
+          expOperator = " << "
+
+        Case ExpressionType.RightShift
+          useBrackets = True
+          expOperator = " >> "
 
         Case Else
           Throw New NotSupportedException($"The binary operator '{nodeType}' is not supported.")

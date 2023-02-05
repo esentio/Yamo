@@ -1232,6 +1232,49 @@ Namespace Tests
       End Using
     End Sub
 
+    <TestMethod()>
+    Public Sub TranslateBitwiseOperators()
+      Using db = CreateDbContext()
+        Dim visitor = CreateSqlExpressionVisitor(db)
+        Dim result As SqlString
+
+        result = TranslateCondition(visitor, Function(x) (x.IntColumn And 3) = 1)
+        Assert.AreEqual("([T0].[IntColumn] & 3) = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = TranslateCondition(visitor, Function(x) (x.IntColumn Or 3) = 1)
+        Assert.AreEqual("([T0].[IntColumn] | 3) = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = TranslateCondition(visitor, Function(x) (x.IntColumn Xor 3) = 1)
+        Assert.AreEqual("([T0].[IntColumn] ^ 3) = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = TranslateCondition(visitor, Function(x) (Not x.IntColumn) = 1)
+        Assert.AreEqual("~ [T0].[IntColumn] = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Sub TranslateShiftOperators()
+      Using db = CreateDbContext()
+        Dim visitor = CreateSqlExpressionVisitor(db)
+        Dim result As SqlString
+
+        ' NOTE: "& 31" is added by compiler(?)
+
+        result = TranslateCondition(visitor, Function(x) (x.IntColumn << 3) = 1)
+        Assert.AreEqual("([T0].[IntColumn] << (3 & 31)) = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        result = TranslateCondition(visitor, Function(x) (x.IntColumn >> 3) = 1)
+        Assert.AreEqual("([T0].[IntColumn] >> (3 & 31)) = 1", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+      End Using
+    End Sub
+
     Private Function CreateSqlExpressionVisitor(db As DbContext) As SqlExpressionVisitor
       Dim builder = New SelectSqlExpressionBuilder(db, GetType(ItemWithAllSupportedValues))
 
