@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>Yamo.CodeGenerator</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <OptionStrict>On</OptionStrict>
     <Version>0.9.1</Version>
     <Authors>Peter Šimno</Authors>
