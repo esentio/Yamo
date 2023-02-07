@@ -6,7 +6,7 @@ Module Program
   Public Connection As DbConnection
 
   Sub Main(args As String())
-    Connection = New SqlConnection("Server=WIN10DEV01;Database=YamoTest;User Id=dbuser;Password=dbpassword;")
+    Connection = New SqlConnection("Server=WIN10DEV01;Database=YamoTest;User Id=dbuser;Password=dbpassword;TrustServerCertificate=True;")
     Connection.Open()
 
     Dim test = New Test

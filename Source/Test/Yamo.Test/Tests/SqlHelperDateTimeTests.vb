@@ -170,13 +170,12 @@ Namespace Tests
         Assert.AreEqual(2, result2.Count)
         CollectionAssert.AreEquivalent({items(0), items(3)}, result2)
 
-        ' TODO: SIP - this will fail. Consider it a bug or a feature?
-        'Dim result3 = db.From(Of ItemWithAllSupportedValues).
-        '                 Where(Function(x) Sql.DateTime.GetDate(today) <= Sql.DateTime.GetDate(x.DatetimeColumnNull).Value).
-        '                 SelectAll().ToList()
+        Dim result3 = db.From(Of ItemWithAllSupportedValues).
+                         Where(Function(x) Sql.DateTime.GetDate(today) <= Sql.DateTime.GetDate(x.DatetimeColumnNull).Value).
+                         SelectAll().ToList()
 
-        'Assert.AreEqual(2, result3.Count)
-        'CollectionAssert.AreEquivalent({items(0), items(3)}, result3)
+        Assert.AreEqual(2, result3.Count)
+        CollectionAssert.AreEquivalent({items(0), items(3)}, result3)
       End Using
     End Sub
 
