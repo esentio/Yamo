@@ -104,7 +104,7 @@ Namespace Infrastructure
         Dim valueVar = Expression.Variable(sqlResultItem.ResultType, $"ctorValue{i.ToString(Globalization.CultureInfo.InvariantCulture)}")
         variables.Add(valueVar)
 
-        AddSqlResultReads(readerParam, readerDataItemVar, valueVar, sqlResultItem, expressions, ctorArguments)
+        AddSqlResultReads(readerParam, readerDataItemVar, valueVar, sqlResultItem, True, expressions, ctorArguments)
       Next
 
       If sqlResult.HasMemberInits Then
@@ -122,7 +122,7 @@ Namespace Infrastructure
           Dim valueVar = Expression.Variable(sqlResultItem.ResultType, $"memberInitValue{i.ToString(Globalization.CultureInfo.InvariantCulture)}")
           variables.Add(valueVar)
 
-          AddSqlResultReads(readerParam, readerDataItemVar, valueVar, sqlResultItem, expressions, memberInits)
+          AddSqlResultReads(readerParam, readerDataItemVar, valueVar, sqlResultItem, True, expressions, memberInits)
 
           memberBinds.Add(Expression.Bind(sqlResult.Members(i), memberInits(i)))
         Next
@@ -141,15 +141,29 @@ Namespace Infrastructure
       Dim resultConstructorInfo = sqlResult.Constructor
       Dim constructor = If(resultConstructorInfo Is Nothing, Expression.[New](constructorType), Expression.[New](resultConstructorInfo, ctorArguments))
 
-      Dim result As Expression = constructor
+      Dim value As Expression
 
       If sqlResult.HasMemberInits Then
-        result = Expression.MemberInit(constructor, memberBinds)
+        value = Expression.MemberInit(constructor, memberBinds)
+      Else
+        value = constructor
       End If
+
+      Dim valueVariable = Expression.Variable(constructorType, "value")
+      variables.Add(valueVariable)
+
+      expressions.Add(Expression.Assign(valueVariable, value))
+
+      AddBeginLoadCall(valueVariable, constructorType, expressions)
+      AddInitializeCall(valueVariable, constructorType, expressions)
+
+      Dim result As Expression
 
       If isNullable Then
         Dim nullableConstructorInfo = resultType.GetConstructor(BindingFlags.Instance Or BindingFlags.Public, Nothing, CallingConventions.HasThis, {underlyingNullableType}, Array.Empty(Of ParameterModifier)())
-        result = Expression.[New](nullableConstructorInfo, result)
+        result = Expression.[New](nullableConstructorInfo, valueVariable)
+      Else
+        result = valueVariable
       End If
 
       expressions.Add(result)
@@ -187,7 +201,7 @@ Namespace Infrastructure
         Dim valueVar = Expression.Variable(sqlResultItem.ResultType, $"value{i.ToString(Globalization.CultureInfo.InvariantCulture)}")
         variables.Add(valueVar)
 
-        AddSqlResultReads(readerParam, readerDataItemVar, valueVar, sqlResultItem, expressions, ctorArguments)
+        AddSqlResultReads(readerParam, readerDataItemVar, valueVar, sqlResultItem, True, expressions, ctorArguments)
       Next
 
       Dim resultConstructorInfo = sqlResult.ResultType.GetConstructors()(0)
@@ -226,7 +240,7 @@ Namespace Infrastructure
         Dim valueVar = Expression.Variable(sqlResultItem.ResultType, $"value{i.ToString(Globalization.CultureInfo.InvariantCulture)}")
         variables.Add(valueVar)
 
-        AddSqlResultReads(readerParam, readerDataItemVar, valueVar, sqlResultItem, expressions, ctorArguments)
+        AddSqlResultReads(readerParam, readerDataItemVar, valueVar, sqlResultItem, True, expressions, ctorArguments)
       Next
 
       Dim valueTupleTypeInfo = Helpers.Types.GetValueTupleTypeInfo(sqlResult.ResultType)
@@ -251,14 +265,14 @@ Namespace Infrastructure
 
       Dim variables = New List(Of ParameterExpression)
       Dim expressions = New List(Of Expression)
-      Dim ctorArguments = New List(Of Expression)
+      Dim items = New List(Of Expression)
 
       Dim readerDataVar = AddReaderDataVar(GetType(EntitySqlResultReaderData), "readerDataVar", readerDataParam, variables, expressions)
 
       Dim valueVar = Expression.Variable(sqlResult.ResultType, "value")
       variables.Add(valueVar)
 
-      AddSqlResultReads(readerParam, readerDataVar, valueVar, sqlResult, expressions, ctorArguments)
+      AddSqlResultReads(readerParam, readerDataVar, valueVar, sqlResult, False, expressions, items)
 
       expressions.Add(valueVar)
 
@@ -280,14 +294,14 @@ Namespace Infrastructure
 
       Dim variables = New List(Of ParameterExpression)
       Dim expressions = New List(Of Expression)
-      Dim ctorArguments = New List(Of Expression)
+      Dim items = New List(Of Expression)
 
       Dim readerDataVar = AddReaderDataVar(GetType(ScalarValueSqlResultReaderData), "readerDataVar", readerDataParam, variables, expressions)
 
       Dim valueVar = Expression.Variable(sqlResult.ResultType, "value")
       variables.Add(valueVar)
 
-      AddSqlResultReads(readerParam, readerDataVar, valueVar, sqlResult, expressions, ctorArguments)
+      AddSqlResultReads(readerParam, readerDataVar, valueVar, sqlResult, False, expressions, items)
 
       expressions.Add(valueVar)
 
@@ -346,9 +360,10 @@ Namespace Infrastructure
     ''' <param name="readerDataVar"></param>
     ''' <param name="valueVar"></param>
     ''' <param name="sqlResult"></param>
+    ''' <param name="callPostProcessor"></param>
     ''' <param name="expressions"></param>
     ''' <param name="items"></param>
-    Private Shared Sub AddSqlResultReads(readerParam As ParameterExpression, readerDataVar As ParameterExpression, valueVar As ParameterExpression, sqlResult As SqlResultBase, expressions As List(Of Expression), items As List(Of Expression))
+    Private Shared Sub AddSqlResultReads(readerParam As ParameterExpression, readerDataVar As ParameterExpression, valueVar As ParameterExpression, sqlResult As SqlResultBase, callPostProcessor As Boolean, expressions As List(Of Expression), items As List(Of Expression))
       Dim type = sqlResult.ResultType
 
       Dim readerIndexProp = Expression.Property(readerDataVar, NameOf(ReaderDataBase.ReaderIndex))
@@ -372,27 +387,24 @@ Namespace Infrastructure
         Dim valueAssign = Expression.Assign(valueVar, entityReaderCallCast)
         Dim valueAssignNull = Expression.Assign(valueVar, Expression.Default(type))
 
-        Dim valueAssignBlockExpressions = New List(Of Expression)(3) From {valueAssign}
+        Dim valueAssignExp As Expression
 
-        Dim iInitType = GetType(IInitializable)
-        If iInitType.IsAssignableFrom(type) Then
-          Dim initMethodInfo = iInitType.GetMethod(NameOf(IInitializable.Initialize))
-          Dim initCast = Expression.Convert(valueVar, iInitType)
-          Dim initCall = Expression.Call(initCast, initMethodInfo)
-          valueAssignBlockExpressions.Add(initCall)
+        If callPostProcessor Then
+          Dim postProcessorType = GetType(Action(Of Object))
+          Dim postProcessorVar = Expression.Variable(postProcessorType, "postProcessor")
+          Dim postProcessorValueAssign = Expression.Assign(postProcessorVar, Expression.Property(readerDataVar, NameOf(ReaderDataBase.PostProcessor)))
+          Dim ifPostProcessorVarNullTest = Expression.NotEqual(postProcessorVar, Expression.Constant(Nothing))
+          Dim postProcessorInvokeMethodInfo = postProcessorType.GetMethod("Invoke", BindingFlags.Public Or BindingFlags.Instance)
+          Dim postProcessorInvokeCall = Expression.Call(postProcessorVar, postProcessorInvokeMethodInfo, valueVar)
+          Dim postProcessorNullCheck = Expression.IfThen(ifPostProcessorVarNullTest, postProcessorInvokeCall)
+
+          valueAssignExp = Expression.Block({postProcessorVar}, {valueAssign, postProcessorValueAssign, postProcessorNullCheck})
+        Else
+          valueAssignExp = valueAssign
         End If
 
-        Dim ihdpmtType = GetType(IHasDbPropertyModifiedTracking)
-        If ihdpmtType.IsAssignableFrom(type) Then
-          Dim rdpmtMethodInfo = ihdpmtType.GetMethod(NameOf(IHasDbPropertyModifiedTracking.ResetDbPropertyModifiedTracking))
-          Dim rdpmtCast = Expression.Convert(valueVar, ihdpmtType)
-          Dim rdpmtCall = Expression.Call(rdpmtCast, rdpmtMethodInfo)
-          valueAssignBlockExpressions.Add(rdpmtCall)
-        End If
+        expressions.Add(Expression.IfThenElse(containsPKReaderCall, valueAssignExp, valueAssignNull))
 
-        Dim valueAssignBlock = Expression.Block(valueAssignBlockExpressions)
-
-        expressions.Add(Expression.IfThenElse(containsPKReaderCall, valueAssignBlock, valueAssignNull))
       ElseIf TypeOf sqlResult Is ScalarValueSqlResult Then
         Dim scalarValueReaderProp = Expression.Property(readerDataVar, NameOf(ScalarValueSqlResultReaderData.Reader))
         Dim scalarValueReaderType = GetType(Func(Of, , )).MakeGenericType(GetType(DbDataReader), GetType(Int32), type)
@@ -431,6 +443,38 @@ Namespace Infrastructure
         Return Expression.[New](ctorInfo.ConstructorInfo, args)
       End If
     End Function
+
+    ''' <summary>
+    ''' Adds <see cref="ISupportDbLoad.BeginLoad"/> call if value implements <see cref="ISupportDbLoad"/>.
+    ''' </summary>
+    ''' <param name="value"></param>
+    ''' <param name="type"></param>
+    ''' <param name="expressions"></param>
+    Protected Shared Sub AddBeginLoadCall(value As ParameterExpression, type As Type, expressions As List(Of Expression))
+      Dim interfaceType = GetType(ISupportDbLoad)
+      If interfaceType.IsAssignableFrom(type) Then
+        Dim mi = interfaceType.GetMethod(NameOf(ISupportDbLoad.BeginLoad))
+        Dim interfaceCast = Expression.Convert(value, interfaceType)
+        Dim methodCall = Expression.Call(interfaceCast, mi)
+        expressions.Add(methodCall)
+      End If
+    End Sub
+
+    ''' <summary>
+    ''' Adds <see cref="IInitializable.Initialize"/> call if value implements <see cref="IInitializable"/>.
+    ''' </summary>
+    ''' <param name="value"></param>
+    ''' <param name="type"></param>
+    ''' <param name="expressions"></param>
+    Protected Shared Sub AddInitializeCall(value As ParameterExpression, type As Type, expressions As List(Of Expression))
+      Dim interfaceType = GetType(IInitializable)
+      If interfaceType.IsAssignableFrom(type) Then
+        Dim mi = interfaceType.GetMethod(NameOf(IInitializable.Initialize))
+        Dim interfaceCast = Expression.Convert(value, interfaceType)
+        Dim methodCall = Expression.Call(interfaceCast, mi)
+        expressions.Add(methodCall)
+      End If
+    End Sub
 
   End Class
 End Namespace

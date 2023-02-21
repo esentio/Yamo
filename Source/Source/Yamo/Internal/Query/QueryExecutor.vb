@@ -96,16 +96,29 @@ Namespace Internal.Query
       Dim resultType = GetType(T)
       Dim isObjectArray = resultType Is GetType(Object())
       Dim sqlResult = TryCreateSqlResult(m_DbContext.Model, resultType)
-      Dim isValueTupleOrEntity = TypeOf sqlResult Is ValueTupleSqlResult OrElse TypeOf sqlResult Is EntitySqlResult
+      Dim isValueTuple = TypeOf sqlResult Is ValueTupleSqlResult
+      Dim isEntity = TypeOf sqlResult Is EntitySqlResult
 
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
           If dataReader.Read() Then
-            If isValueTupleOrEntity Then
+            If isValueTuple Then
               Dim dataReaderType = dataReader.GetType()
               Dim reader = SqlResultReaderCache.GetReader(Of T)(dataReaderType, m_DbContext.Model, sqlResult)
               Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, sqlResult)
+
               value = DirectCast(reader(dataReader, readerData), T)
+
+              ' NOTE: no post processing is done for value tuples
+
+            ElseIf isEntity Then
+              Dim dataReaderType = dataReader.GetType()
+              Dim reader = SqlResultReaderCache.GetReader(Of T)(dataReaderType, m_DbContext.Model, sqlResult)
+              Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, sqlResult)
+              Dim postProcessor = readerData.PostProcessor
+
+              value = DirectCast(reader(dataReader, readerData), T)
+              postProcessor?.Invoke(value)
 
             ElseIf isObjectArray Then
               Dim data = New Object(dataReader.FieldCount - 1) {}
@@ -137,17 +150,32 @@ Namespace Internal.Query
       Dim resultType = GetType(T)
       Dim isObjectArray = resultType Is GetType(Object())
       Dim sqlResult = TryCreateSqlResult(m_DbContext.Model, resultType)
-      Dim isValueTupleOrEntity = TypeOf sqlResult Is ValueTupleSqlResult OrElse TypeOf sqlResult Is EntitySqlResult
+      Dim isValueTuple = TypeOf sqlResult Is ValueTupleSqlResult
+      Dim isEntity = TypeOf sqlResult Is EntitySqlResult
 
       Using command = CreateCommand(query)
         Using dataReader = command.ExecuteReader()
-          If isValueTupleOrEntity Then
+          If isValueTuple Then
             Dim dataReaderType = dataReader.GetType()
             Dim reader = SqlResultReaderCache.GetReader(Of T)(dataReaderType, m_DbContext.Model, sqlResult)
             Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, sqlResult)
 
+            ' NOTE: no post processing is done for value tuples
+
             While dataReader.Read()
               Dim value = DirectCast(reader(dataReader, readerData), T)
+              values.Add(value)
+            End While
+
+          ElseIf isEntity Then
+            Dim dataReaderType = dataReader.GetType()
+            Dim reader = SqlResultReaderCache.GetReader(Of T)(dataReaderType, m_DbContext.Model, sqlResult)
+            Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, sqlResult)
+            Dim postProcessor = readerData.PostProcessor
+
+            While dataReader.Read()
+              Dim value = DirectCast(reader(dataReader, readerData), T)
+              postProcessor?.Invoke(value)
               values.Add(value)
             End While
 
@@ -222,18 +250,17 @@ Namespace Internal.Query
             Dim sqlResult = query.Model.SqlResult
             Dim reader = SqlResultReaderCache.GetReader(Of T)(dataReaderType, m_DbContext.Model, sqlResult)
             Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, sqlResult)
+            Dim postProcessor = readerData.PostProcessor
 
             If readerData.ContainsNonNullColumnCheck Then
               If SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderIndex, sqlResult.GetColumnCount()) Then
                 value = DirectCast(reader(dataReader, readerData), T)
-                ' NOTE - Initialize is called in the reader
-                ' NOTE - ResetDbPropertyModifiedTracking is called in the reader
+                postProcessor?.Invoke(value)
               End If
 
             Else
               value = DirectCast(reader(dataReader, readerData), T)
-              ' NOTE - Initialize is called in the reader
-              ' NOTE - ResetDbPropertyModifiedTracking is called in the reader
+              postProcessor?.Invoke(value)
             End If
 
           End If
@@ -265,6 +292,7 @@ Namespace Internal.Query
               ' entity
               Dim entitySqlResultReaderData = DirectCast(readerData.ReaderData, EntitySqlResultReaderData)
               Dim reader = entitySqlResultReaderData.Reader
+              Dim postProcessor = entitySqlResultReaderData.PostProcessor
 
               If entity.TableSourceIsSubquery Then
                 Dim containsPKReader = entitySqlResultReaderData.ContainsPKReader
@@ -280,6 +308,9 @@ Namespace Internal.Query
                 value = DirectCast(reader(dataReader, 0, includedColumns), T)
               End If
 
+              FillIncluded(readerData, dataReaderType, dataReader, value)
+              postProcessor?.Invoke(value)
+
             Else
               ' custom SQL result
               If readerData.ReaderData.ContainsNonNullColumnCheck Then
@@ -289,12 +320,13 @@ Namespace Internal.Query
               End If
 
               Dim reader = SqlResultReaderCache.GetReader(dataReaderType, m_DbContext.Model, sqlResult)
-              value = DirectCast(reader(dataReader, readerData.ReaderData), T)
-            End If
+              Dim postProcessor = readerData.ReaderData.PostProcessor
 
-            Initialize(value)
-            FillIncluded(readerData, dataReaderType, dataReader, value)
-            ResetDbPropertyModifiedTracking(value)
+              value = DirectCast(reader(dataReader, readerData.ReaderData), T)
+
+              FillIncluded(readerData, dataReaderType, dataReader, value)
+              postProcessor?.Invoke(value)
+            End If
           End If
         End Using
       End Using
@@ -398,13 +430,13 @@ Namespace Internal.Query
           Dim sqlResult = query.Model.SqlResult
           Dim reader = SqlResultReaderCache.GetReader(Of T)(dataReaderType, m_DbContext.Model, sqlResult)
           Dim readerData = ReaderDataFactory.Create(dataReaderType, m_DialectProvider, m_DbContext.Model, sqlResult)
+          Dim postProcessor = readerData.PostProcessor
 
           If readerData.ContainsNonNullColumnCheck Then
             While dataReader.Read()
               If SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderIndex, sqlResult.GetColumnCount()) Then
                 Dim value = DirectCast(reader(dataReader, readerData), T)
-                ' NOTE - Initialize is called in the reader
-                ' NOTE - ResetDbPropertyModifiedTracking is called in the reader
+                postProcessor?.Invoke(value)
                 values.Add(value)
               Else
                 values.Add(Nothing)
@@ -414,8 +446,7 @@ Namespace Internal.Query
           Else
             While dataReader.Read()
               Dim value = DirectCast(reader(dataReader, readerData), T)
-              ' NOTE - Initialize is called in the reader
-              ' NOTE - ResetDbPropertyModifiedTracking is called in the reader
+              postProcessor?.Invoke(value)
               values.Add(value)
             End While
           End If
@@ -446,6 +477,7 @@ Namespace Internal.Query
             ' entity
             Dim entitySqlResultReaderData = DirectCast(readerData.ReaderData, EntitySqlResultReaderData)
             Dim reader = entitySqlResultReaderData.Reader
+            Dim postProcessor = entitySqlResultReaderData.PostProcessor
 
             If entity.TableSourceIsSubquery Then
               Dim containsPKReader = entitySqlResultReaderData.ContainsPKReader
@@ -453,9 +485,8 @@ Namespace Internal.Query
               While dataReader.Read()
                 If containsPKReader(dataReader, entitySqlResultReaderData.ReaderIndex, entitySqlResultReaderData.PKOffsets) Then
                   Dim value = DirectCast(reader(dataReader, 0, includedColumns), T)
-                  Initialize(value)
                   FillIncluded(readerData, dataReaderType, dataReader, value)
-                  ResetDbPropertyModifiedTracking(value)
+                  postProcessor?.Invoke(value)
                   values.Add(value)
                 Else
                   values.Add(Nothing)
@@ -466,9 +497,8 @@ Namespace Internal.Query
               ' record should always be present, so we can skip PK check
               While dataReader.Read()
                 Dim value = DirectCast(reader(dataReader, 0, includedColumns), T)
-                Initialize(value)
                 FillIncluded(readerData, dataReaderType, dataReader, value)
-                ResetDbPropertyModifiedTracking(value)
+                postProcessor?.Invoke(value)
                 values.Add(value)
               End While
             End If
@@ -476,14 +506,14 @@ Namespace Internal.Query
           Else
             ' custom SQL result
             Dim reader = SqlResultReaderCache.GetReader(dataReaderType, m_DbContext.Model, sqlResult)
+            Dim postProcessor = readerData.ReaderData.PostProcessor
 
             If readerData.ReaderData.ContainsNonNullColumnCheck Then
               While dataReader.Read()
                 If SqlResultReader.ContainsNonNullColumn(dataReader, readerData.ReaderData.ReaderIndex, sqlResult.GetColumnCount()) Then
                   Dim value = DirectCast(reader(dataReader, readerData.ReaderData), T)
-                  Initialize(value)
                   FillIncluded(readerData, dataReaderType, dataReader, value)
-                  ResetDbPropertyModifiedTracking(value)
+                  postProcessor?.Invoke(value)
                   values.Add(value)
                 Else
                   values.Add(Nothing)
@@ -493,9 +523,8 @@ Namespace Internal.Query
             Else
               While dataReader.Read()
                 Dim value = DirectCast(reader(dataReader, readerData.ReaderData), T)
-                Initialize(value)
                 FillIncluded(readerData, dataReaderType, dataReader, value)
-                ResetDbPropertyModifiedTracking(value)
+                postProcessor?.Invoke(value)
                 values.Add(value)
               End While
             End If
@@ -626,10 +655,8 @@ Namespace Internal.Query
         End If
       End If
 
-      Initialize(value)
-
-      FillRelationships(readerData, declaringEntity, value)
       FillIncluded(readerData, dataReaderType, dataReader, value)
+      FillRelationships(readerData, declaringEntity, value)
 
       If readerData.HasRelatedEntities Then
         For i = 0 To readerData.RelatedEntities.Count - 1
@@ -639,7 +666,8 @@ Namespace Internal.Query
         Next
       End If
 
-      ResetDbPropertyModifiedTracking(value)
+      Dim postProcessor = readerData.ReaderData.PostProcessor
+      postProcessor?.Invoke(value)
 
       Return value
     End Function
@@ -682,12 +710,10 @@ Namespace Internal.Query
 
           value = entitySqlResultReaderData.Reader(dataReader, entitySqlResultReaderData.ReaderIndex, entitySqlResultReaderData.Entity.IncludedColumns)
 
-          Initialize(value)
-
           cache.AddValue(entityIndex, key, value)
 
-          FillRelationships(readerData, declaringEntity, value)
           FillIncluded(readerData, dataReaderType, dataReader, value)
+          FillRelationships(readerData, declaringEntity, value)
         End If
 
       Else
@@ -708,10 +734,8 @@ Namespace Internal.Query
           Return Nothing
         End If
 
-        Initialize(value)
-
-        FillRelationships(readerData, declaringEntity, value)
         FillIncluded(readerData, dataReaderType, dataReader, value)
+        FillRelationships(readerData, declaringEntity, value)
       End If
 
       If readerData.HasRelatedEntities Then
@@ -724,31 +748,13 @@ Namespace Internal.Query
 
       If valueFromCache Then
         Return Nothing
-      Else
-        ResetDbPropertyModifiedTracking(value)
-        Return value
       End If
+
+      Dim postProcessor = readerData.ReaderData.PostProcessor
+      postProcessor?.Invoke(value)
+
+      Return value
     End Function
-
-    ''' <summary>
-    ''' Initialize entity if it implements <see cref="IInitializable"/>.
-    ''' </summary>
-    ''' <param name="obj"></param>
-    Private Sub Initialize(obj As Object)
-      If TypeOf obj Is IInitializable Then
-        DirectCast(obj, IInitializable).Initialize()
-      End If
-    End Sub
-
-    ''' <summary>
-    ''' Resets database property modified tracking on an entity if it implements <see cref="IHasDbPropertyModifiedTracking"/>.
-    ''' </summary>
-    ''' <param name="obj"></param>
-    Private Sub ResetDbPropertyModifiedTracking(obj As Object)
-      If TypeOf obj Is IHasDbPropertyModifiedTracking Then
-        DirectCast(obj, IHasDbPropertyModifiedTracking).ResetDbPropertyModifiedTracking()
-      End If
-    End Sub
 
     ''' <summary>
     ''' Fills relationhip properties with instances of related entities.
@@ -783,15 +789,18 @@ Namespace Internal.Query
           Dim sqlResult = includedSqlResultsReaderData.ReaderData.SqlResult
           Dim reader = SqlResultReaderCache.GetReader(dataReaderType, m_DbContext.Model, sqlResult)
           Dim includedReaderData = includedSqlResultsReaderData.ReaderData
+          Dim postProcessor = includedReaderData.PostProcessor
 
           Dim value As Object = Nothing
 
           If includedReaderData.ContainsNonNullColumnCheck Then
             If SqlResultReader.ContainsNonNullColumn(dataReader, includedReaderData.ReaderIndex, sqlResult.GetColumnCount()) Then
               value = reader(dataReader, includedReaderData)
+              postProcessor?.Invoke(value)
             End If
           Else
             value = reader(dataReader, includedReaderData)
+            postProcessor?.Invoke(value)
           End If
 
           includedSqlResultsReaderData.Setter.Invoke(declaringEntity, value)

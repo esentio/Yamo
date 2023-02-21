@@ -34,10 +34,12 @@ Namespace Infrastructure
       Dim entity = model.GetEntity(entityType)
       Dim properties = entity.GetProperties()
 
-      Dim expressions = New List(Of Expression)(properties.Count + 3)
+      Dim expressions = New List(Of Expression)(properties.Count + 5)
 
       expressions.Add(Expression.Assign(readerVariable, Expression.Convert(readerParam, dataReaderType)))
       expressions.Add(Expression.Assign(entityVariable, Expression.[New](entityType)))
+
+      AddBeginLoadCall(entityVariable, entityType, expressions)
 
       For i = 0 To properties.Count - 1
         Dim prop = properties(i)
@@ -90,6 +92,8 @@ Namespace Infrastructure
         Dim includedCond = Expression.IfThenElse(includedCheck, Expression.Block(includeExpressions), propAssignNull)
         expressions.Add(includedCond)
       Next
+
+      AddInitializeCall(entityVariable, entityType, expressions)
 
       expressions.Add(entityVariable)
 
@@ -356,6 +360,38 @@ Namespace Infrastructure
 
       Return Expression.Default(prop.PropertyType)
     End Function
+
+    ''' <summary>
+    ''' Adds <see cref="ISupportDbLoad.BeginLoad"/> call if value implements <see cref="ISupportDbLoad"/>.
+    ''' </summary>
+    ''' <param name="value"></param>
+    ''' <param name="type"></param>
+    ''' <param name="expressions"></param>
+    Protected Shared Sub AddBeginLoadCall(value As ParameterExpression, type As Type, expressions As List(Of Expression))
+      Dim interfaceType = GetType(ISupportDbLoad)
+      If interfaceType.IsAssignableFrom(type) Then
+        Dim mi = interfaceType.GetMethod(NameOf(ISupportDbLoad.BeginLoad))
+        Dim interfaceCast = Expression.Convert(value, interfaceType)
+        Dim methodCall = Expression.Call(interfaceCast, mi)
+        expressions.Add(methodCall)
+      End If
+    End Sub
+
+    ''' <summary>
+    ''' Adds <see cref="IInitializable.Initialize"/> call if value implements <see cref="IInitializable"/>.
+    ''' </summary>
+    ''' <param name="value"></param>
+    ''' <param name="type"></param>
+    ''' <param name="expressions"></param>
+    Protected Shared Sub AddInitializeCall(value As ParameterExpression, type As Type, expressions As List(Of Expression))
+      Dim interfaceType = GetType(IInitializable)
+      If interfaceType.IsAssignableFrom(type) Then
+        Dim mi = interfaceType.GetMethod(NameOf(IInitializable.Initialize))
+        Dim interfaceCast = Expression.Convert(value, interfaceType)
+        Dim methodCall = Expression.Call(interfaceCast, mi)
+        expressions.Add(methodCall)
+      End If
+    End Sub
 
     ''' <summary>
     ''' Gets DbDataReader GetX method for reading specified type from the database.<br/>

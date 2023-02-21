@@ -17,7 +17,7 @@ Namespace Internal.Query
     ''' <param name="sqlResult"></param>
     ''' <param name="readerIndex"></param>
     Public Sub New(<DisallowNull> sqlResult As ExcludedUnknownSqlResult, readerIndex As Int32)
-      MyBase.New(sqlResult, readerIndex, False)
+      MyBase.New(sqlResult, readerIndex, False, Nothing)
     End Sub
 
   End Class

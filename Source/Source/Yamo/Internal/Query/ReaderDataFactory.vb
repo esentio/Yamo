@@ -68,12 +68,14 @@ Namespace Internal.Query
         If TypeOf entity Is EntityBasedSqlEntity Then
           Dim ebEntity = DirectCast(entity, EntityBasedSqlEntity)
 
+          Dim sqlResult = New EntitySqlResult(ebEntity)
           Dim entityReader = EntityReaderCache.GetReader(dataReaderType, dialectProvider, model, entityType)
           Dim containsPKReader = EntityReaderCache.GetContainsPKReader(dataReaderType, dialectProvider, model, entityType)
           Dim pkOffsets = GetPKOffsets(ebEntity)
           Dim pkReader = EntityReaderCache.GetPKReader(dataReaderType, dialectProvider, model, entityType)
+          Dim postProcessor = PostProcessorCache.GetPostProcessor(model, sqlResult)
 
-          readerData = New EntitySqlResultReaderData(New EntitySqlResult(ebEntity), entityReaderIndex, entityReader, containsPKReader, pkOffsets, pkReader)
+          readerData = New EntitySqlResultReaderData(sqlResult, entityReaderIndex, entityReader, containsPKReader, pkOffsets, pkReader, postProcessor)
         Else
           Dim nmEntity = DirectCast(entity, NonModelEntityBasedSqlEntity)
 
@@ -146,13 +148,14 @@ Namespace Internal.Query
         Dim ebEntity = DirectCast(entity, EntityBasedSqlEntity)
 
         Dim entityReader = EntityReaderCache.GetReader(dataReaderType, dialectProvider, model, entityType)
+        Dim postProcessor = PostProcessorCache.GetPostProcessor(model, sqlResult)
 
         If ebEntity.TableSourceIsSubquery Then
           Dim containsPKReader = EntityReaderCache.GetContainsPKReader(dataReaderType, dialectProvider, model, entityType)
           Dim pkOffsets = GetPKOffsets(ebEntity)
-          readerData = New EntitySqlResultReaderData(DirectCast(sqlResult, EntitySqlResult), entityReaderIndex, entityReader, containsPKReader, pkOffsets)
+          readerData = New EntitySqlResultReaderData(DirectCast(sqlResult, EntitySqlResult), entityReaderIndex, entityReader, containsPKReader, pkOffsets, postProcessor)
         Else
-          readerData = New EntitySqlResultReaderData(DirectCast(sqlResult, EntitySqlResult), entityReaderIndex, entityReader)
+          readerData = New EntitySqlResultReaderData(DirectCast(sqlResult, EntitySqlResult), entityReaderIndex, entityReader, postProcessor)
         End If
 
       Else
@@ -233,7 +236,8 @@ Namespace Internal.Query
     ''' <returns></returns>
     Private Shared Function Create(dataReaderType As Type, dialectProvider As SqlDialectProvider, model As Model, sqlResult As AdHocTypeSqlResult, readerIndex As Int32) As AdHocTypeSqlResultReaderData
       Dim value = Create(dataReaderType, dialectProvider, model, sqlResult.CtorArguments, sqlResult.HasMemberInits, sqlResult.MemberInits, readerIndex)
-      Return New AdHocTypeSqlResultReaderData(sqlResult, readerIndex, value.CtorArguments, value.MemberInits)
+      Dim postProcessor = PostProcessorCache.GetPostProcessor(model, sqlResult)
+      Return New AdHocTypeSqlResultReaderData(sqlResult, readerIndex, value.CtorArguments, value.MemberInits, postProcessor)
     End Function
 
     ''' <summary>
@@ -278,8 +282,9 @@ Namespace Internal.Query
       Dim entityReader = EntityReaderCache.GetReader(dataReaderType, dialectProvider, model, entity.Entity.EntityType)
       Dim containsPKReader = EntityReaderCache.GetContainsPKReader(dataReaderType, dialectProvider, model, entity.Entity.EntityType)
       Dim pkOffsets = GetPKOffsets(entity)
+      Dim postProcessor = PostProcessorCache.GetPostProcessor(model, sqlResult)
 
-      Return New EntitySqlResultReaderData(sqlResult, readerIndex, entityReader, containsPKReader, pkOffsets)
+      Return New EntitySqlResultReaderData(sqlResult, readerIndex, entityReader, containsPKReader, pkOffsets, postProcessor)
     End Function
 
     ''' <summary>

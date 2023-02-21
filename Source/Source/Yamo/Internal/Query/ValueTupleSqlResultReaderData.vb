@@ -30,7 +30,7 @@ Namespace Internal.Query
       ' However, we simply cannot only check nullability here. For example, if the result is an include call and we are
       ' setting the value to a property of type Object, we still expect null to be set.
       ' Also, it is questionable, if using AlwaysCreateInstance would be faster. It might even be slower (depending on the result).
-      MyBase.New(sqlResult, readerIndex, Not sqlResult.CreationBehavior = NonModelEntityCreationBehavior.AlwaysCreateInstance)
+      MyBase.New(sqlResult, readerIndex, Not sqlResult.CreationBehavior = NonModelEntityCreationBehavior.AlwaysCreateInstance, Nothing)
       Me.Items = items
     End Sub
 

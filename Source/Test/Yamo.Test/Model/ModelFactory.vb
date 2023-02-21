@@ -52,6 +52,13 @@
       }
     End Function
 
+    Public Overridable Function CreateItemWithActionHistory() As ItemWithActionHistory
+      Return New ItemWithActionHistory With {
+        .Description = Helpers.Data.CreateRandomString(50),
+        .IntValue = Helpers.Data.CreateRandomInt32()
+      }
+    End Function
+
     Public Overridable Function CreateItemWithAllSupportedValuesWithEmptyValues() As ItemWithAllSupportedValues
       Return New ItemWithAllSupportedValues With {
         .Id = Guid.NewGuid(),
@@ -233,6 +240,13 @@
 
     Public Overridable Function CreateItemWithPropertyModifiedTracking() As ItemWithPropertyModifiedTracking
       Return New ItemWithPropertyModifiedTracking With {
+        .Description = Helpers.Data.CreateRandomString(50),
+        .IntValue = Helpers.Data.CreateRandomInt32()
+      }
+    End Function
+
+    Public Overridable Function CreateItemWithSupportDbLoad() As ItemWithSupportDbLoad
+      Return New ItemWithSupportDbLoad With {
         .Description = Helpers.Data.CreateRandomString(50),
         .IntValue = Helpers.Data.CreateRandomInt32()
       }
