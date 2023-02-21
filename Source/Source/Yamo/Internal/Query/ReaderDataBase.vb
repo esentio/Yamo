@@ -31,16 +31,25 @@ Namespace Internal.Query
     Public ReadOnly Property ContainsNonNullColumnCheck As Boolean
 
     ''' <summary>
+    ''' Gets post processor action.<br/>
+    ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
+    ''' </summary>
+    ''' <returns>Returns <see langword="Nothing"/> if post processing is not necessary.</returns>
+    Public ReadOnly Property PostProcessor As <MaybeNull> Action(Of Object)
+
+    ''' <summary>
     ''' Creates new instance of <see cref="ReaderDataBase"/>.<br/>
     ''' This API supports Yamo infrastructure and is not intended to be used directly from your code.
     ''' </summary>
     ''' <param name="sqlResult"></param>
     ''' <param name="readerIndex"></param>
     ''' <param name="containsNonNullColumnCheck"></param>
-    Protected Sub New(<DisallowNull> sqlResult As SqlResultBase, readerIndex As Int32, containsNonNullColumnCheck As Boolean)
+    ''' <param name="postProcessor"></param>
+    Protected Sub New(<DisallowNull> sqlResult As SqlResultBase, readerIndex As Int32, containsNonNullColumnCheck As Boolean, postProcessor As Action(Of Object))
       Me.SqlResult = sqlResult
       Me.ReaderIndex = readerIndex
       Me.ContainsNonNullColumnCheck = containsNonNullColumnCheck
+      Me.PostProcessor = postProcessor
     End Sub
 
     ''' <summary>

@@ -25,7 +25,7 @@ Namespace Internal.Query
     ''' <param name="readerIndex"></param>
     ''' <param name="items"></param>
     Public Sub New(<DisallowNull> sqlResult As AnonymousTypeSqlResult, readerIndex As Int32, <DisallowNull> items As ReaderDataBase())
-      MyBase.New(sqlResult, readerIndex, Not sqlResult.CreationBehavior = NonModelEntityCreationBehavior.AlwaysCreateInstance)
+      MyBase.New(sqlResult, readerIndex, Not sqlResult.CreationBehavior = NonModelEntityCreationBehavior.AlwaysCreateInstance, Nothing)
       Me.Items = items
     End Sub
 

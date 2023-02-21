@@ -23,6 +23,22 @@ CREATE TABLE [LabelArchive] (
 
 
 
+CREATE TABLE [ItemWithActionHistory] (
+  [Id] INTEGER  NOT NULL
+, [Description] nvarchar(50)  NOT NULL
+, [IntValue] int  NOT NULL
+, CONSTRAINT [PK_ItemWithActionHistory] PRIMARY KEY ([Id])
+);
+
+CREATE TABLE [ItemWithActionHistoryArchive] (
+  [Id] INTEGER  NOT NULL
+, [Description] nvarchar(50)  NOT NULL
+, [IntValue] int  NOT NULL
+, CONSTRAINT [PK_ItemWithActionHistoryArchive] PRIMARY KEY ([Id])
+);
+
+
+
 CREATE TABLE [ItemWithInitialization] (
   [Id] INTEGER  NOT NULL
 , [Description] nvarchar(50)  NOT NULL
@@ -49,6 +65,22 @@ CREATE TABLE [ItemWithPropertyModifiedTrackingArchive] (
 , [Description] nvarchar(50)  NOT NULL
 , [IntValue] int  NOT NULL
 , CONSTRAINT [PK_ItemWithPropertyModifiedTrackingArchive] PRIMARY KEY ([Id])
+);
+
+
+
+CREATE TABLE [ItemWithSupportDbLoad] (
+  [Id] INTEGER  NOT NULL
+, [Description] nvarchar(50)  NOT NULL
+, [IntValue] int  NOT NULL
+, CONSTRAINT [PK_ItemWithSupportDbLoad] PRIMARY KEY ([Id])
+);
+
+CREATE TABLE [ItemWithSupportDbLoadArchive] (
+  [Id] INTEGER  NOT NULL
+, [Description] nvarchar(50)  NOT NULL
+, [IntValue] int  NOT NULL
+, CONSTRAINT [PK_ItemWithSupportDbLoadArchive] PRIMARY KEY ([Id])
 );
 
 

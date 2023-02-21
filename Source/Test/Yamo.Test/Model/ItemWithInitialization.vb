@@ -14,6 +14,13 @@
       End Get
     End Property
 
+    Sub New()
+    End Sub
+
+    Sub New(id As Int32)
+      Me.Id = id
+    End Sub
+
     Public Overrides Function Equals(obj As Object) As Boolean
       If obj Is Nothing OrElse TypeOf obj IsNot ItemWithInitialization Then
         Return False

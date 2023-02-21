@@ -25,7 +25,7 @@ Namespace Internal.Query
     ''' <param name="readerIndex"></param>
     ''' <param name="reader"></param>
     Public Sub New(<DisallowNull> sqlResult As ScalarValueSqlResult, readerIndex As Int32, <DisallowNull> reader As Object)
-      MyBase.New(sqlResult, readerIndex, False)
+      MyBase.New(sqlResult, readerIndex, False, Nothing)
       Me.Reader = reader
     End Sub
 

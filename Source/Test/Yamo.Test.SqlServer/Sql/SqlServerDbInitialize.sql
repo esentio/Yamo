@@ -112,6 +112,28 @@ CREATE TABLE [dbo].[CategoryArchive](
 
 
 
+CREATE TABLE [dbo].[ItemWithActionHistory](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Description] [nvarchar](50) NOT NULL,
+	[IntValue] [int] NOT NULL,
+ CONSTRAINT [PK_ItemWithActionHistory] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+CREATE TABLE [dbo].[ItemWithActionHistoryArchive](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Description] [nvarchar](50) NOT NULL,
+	[IntValue] [int] NOT NULL,
+ CONSTRAINT [PK_ItemWithActionHistoryArchive] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+
 CREATE TABLE [dbo].[ItemWithAllSupportedValues](
 	[Id] [uniqueidentifier] NOT NULL,
 	[UniqueidentifierColumn] [uniqueidentifier] NOT NULL,
@@ -333,6 +355,28 @@ CREATE TABLE [dbo].[ItemWithPropertyModifiedTrackingArchive](
 	[Description] [nvarchar](50) NOT NULL,
 	[IntValue] [int] NOT NULL,
  CONSTRAINT [PK_ItemWithPropertyModifiedTrackingArchive] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+
+CREATE TABLE [dbo].[ItemWithSupportDbLoad](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Description] [nvarchar](50) NOT NULL,
+	[IntValue] [int] NOT NULL,
+ CONSTRAINT [PK_ItemWithSupportDbLoad] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+CREATE TABLE [dbo].[ItemWithSupportDbLoadArchive](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Description] [nvarchar](50) NOT NULL,
+	[IntValue] [int] NOT NULL,
+ CONSTRAINT [PK_ItemWithSupportDbLoadArchive] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]

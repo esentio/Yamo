@@ -20,6 +20,8 @@ Public Class BaseTestDbContext
     CreateArticlePartModel(modelBuilder)
     CreateArticleSubstitutionModel(modelBuilder)
     CreateCategoryModel(modelBuilder)
+    CreateItemWithActionHistoryModel(modelBuilder)
+    CreateItemWithActionHistoryArchiveModel(modelBuilder)
     CreateItemWithAllSupportedValuesModel(modelBuilder)
     CreateItemWithAllSupportedValuesArchiveModel(modelBuilder)
     CreateItemWithAuditFieldsModel(modelBuilder)
@@ -34,6 +36,8 @@ Public Class BaseTestDbContext
     CreateItemWithInitializationArchiveModel(modelBuilder)
     CreateItemWithPropertyModifiedTrackingModel(modelBuilder)
     CreateItemWithPropertyModifiedTrackingArchiveModel(modelBuilder)
+    CreateItemWithSupportDbLoadModel(modelBuilder)
+    CreateItemWithSupportDbLoadArchiveModel(modelBuilder)
     CreateLabelModel(modelBuilder)
     CreateLabelArchiveModel(modelBuilder)
     CreateLinkedItemModel(modelBuilder)
@@ -98,6 +102,22 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of Category).Property(Function(x) x.Id).IsKey()
 
     modelBuilder.Entity(Of Category).HasOne(Function(x) x.Label)
+  End Sub
+
+  Private Sub CreateItemWithActionHistoryModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithActionHistory)()
+
+    modelBuilder.Entity(Of ItemWithActionHistory).Property(Function(x) x.Id).IsKey().IsIdentity()
+    modelBuilder.Entity(Of ItemWithActionHistory).Property(Function(x) x.Description).IsRequired()
+    modelBuilder.Entity(Of ItemWithActionHistory).Property(Function(x) x.IntValue)
+  End Sub
+
+  Private Sub CreateItemWithActionHistoryArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithActionHistoryArchive)()
+
+    modelBuilder.Entity(Of ItemWithActionHistoryArchive).Property(Function(x) x.Id).IsKey().IsIdentity()
+    modelBuilder.Entity(Of ItemWithActionHistoryArchive).Property(Function(x) x.Description).IsRequired()
+    modelBuilder.Entity(Of ItemWithActionHistoryArchive).Property(Function(x) x.IntValue)
   End Sub
 
   Private Sub CreateItemWithAllSupportedValuesModel(modelBuilder As ModelBuilder)
@@ -284,6 +304,22 @@ Public Class BaseTestDbContext
     modelBuilder.Entity(Of ItemWithPropertyModifiedTrackingArchive).Property(Function(x) x.Id).IsKey().IsIdentity()
     modelBuilder.Entity(Of ItemWithPropertyModifiedTrackingArchive).Property(Function(x) x.Description).IsRequired()
     modelBuilder.Entity(Of ItemWithPropertyModifiedTrackingArchive).Property(Function(x) x.IntValue)
+  End Sub
+
+  Private Sub CreateItemWithSupportDbLoadModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithSupportDbLoad)()
+
+    modelBuilder.Entity(Of ItemWithSupportDbLoad).Property(Function(x) x.Id).IsKey().IsIdentity()
+    modelBuilder.Entity(Of ItemWithSupportDbLoad).Property(Function(x) x.Description).IsRequired()
+    modelBuilder.Entity(Of ItemWithSupportDbLoad).Property(Function(x) x.IntValue)
+  End Sub
+
+  Private Sub CreateItemWithSupportDbLoadArchiveModel(modelBuilder As ModelBuilder)
+    modelBuilder.Entity(Of ItemWithSupportDbLoadArchive)()
+
+    modelBuilder.Entity(Of ItemWithSupportDbLoadArchive).Property(Function(x) x.Id).IsKey().IsIdentity()
+    modelBuilder.Entity(Of ItemWithSupportDbLoadArchive).Property(Function(x) x.Description).IsRequired()
+    modelBuilder.Entity(Of ItemWithSupportDbLoadArchive).Property(Function(x) x.IntValue)
   End Sub
 
   Private Sub CreateLabelModel(modelBuilder As ModelBuilder)
