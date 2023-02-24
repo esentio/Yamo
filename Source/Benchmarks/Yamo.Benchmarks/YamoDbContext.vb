@@ -1,12 +1,16 @@
-﻿Imports Microsoft.Data.SqlClient
+﻿Imports System.Data.Common
+Imports Microsoft.Data.SqlClient
 Imports Yamo.Benchmarks.Model
 
 Public Class YamoDbContext
   Inherits DbContext
 
-  Private m_Connection As SqlConnection
+  Private m_Mode As Mode
 
-  Sub New(connection As SqlConnection)
+  Private m_Connection As DbConnection
+
+  Sub New(mode As Mode, connection As DbConnection)
+    m_Mode = mode
     m_Connection = connection
   End Sub
 
@@ -54,7 +58,13 @@ Public Class YamoDbContext
   End Sub
 
   Protected Overrides Sub OnConfiguring(optionsBuilder As DbContextOptionsBuilder)
-    optionsBuilder.UseSqlServer(m_Connection)
+    If m_Mode = Mode.SqlServer Then
+      optionsBuilder.UseSqlServer(m_Connection)
+    ElseIf m_Mode = Mode.SQLite Then
+      optionsBuilder.UseSQLite(m_Connection)
+    Else
+      Throw New NotSupportedException()
+    End If
   End Sub
 
 End Class
