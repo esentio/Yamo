@@ -1,16 +1,19 @@
 ﻿Imports Yamo.Benchmarks.Model
 Imports Microsoft.EntityFrameworkCore
 Imports EF = Microsoft.EntityFrameworkCore
-Imports Microsoft.Data.SqlClient
+Imports System.Data.Common
 
 Public Class EFCoreDbContext
   Inherits EF.DbContext
 
-  Private m_Connection As SqlConnection
+  Private m_Mode As Mode
+
+  Private m_Connection As DbConnection
 
   Public Property Blogs As DbSet(Of Blog)
 
-  Sub New(connection As SqlConnection)
+  Sub New(mode As Mode, connection As DbConnection)
+    m_Mode = mode
     m_Connection = connection
   End Sub
 
@@ -63,7 +66,13 @@ Public Class EFCoreDbContext
   End Sub
 
   Protected Overrides Sub OnConfiguring(optionsBuilder As EF.DbContextOptionsBuilder)
-    optionsBuilder.UseSqlServer(m_Connection)
+    If m_Mode = Mode.SqlServer Then
+      optionsBuilder.UseSqlServer(m_Connection)
+    ElseIf m_Mode = Mode.SQLite Then
+      optionsBuilder.UseSQLite(m_Connection)
+    Else
+      Throw New NotSupportedException()
+    End If
   End Sub
 
 End Class

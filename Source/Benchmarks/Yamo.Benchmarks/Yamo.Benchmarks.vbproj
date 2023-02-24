@@ -26,6 +26,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Sql\SQLiteDbInitialize.sql" />
+    <None Remove="Sql\SqlServerDbInitialize.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Sql\SQLiteDbInitialize.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sql\SqlServerDbInitialize.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
@@ -36,10 +50,13 @@
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.4" />
     <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.2" />
+    <PackageReference Include="Microsoft.Data.SQLite" Version="7.0.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Source\Yamo.SQLite\Yamo.SQLite.vbproj" />
     <ProjectReference Include="..\..\Source\Yamo.SqlServer\Yamo.SqlServer.vbproj" />
     <ProjectReference Include="..\..\Source\Yamo\Yamo.vbproj" />
   </ItemGroup>
