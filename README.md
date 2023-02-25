@@ -74,7 +74,7 @@ On the contrary, you might want to look elsewhere when you need:
 
 All database access in Yamo is done via `DbContext`. It's similar to context in Entity Framework, but there are some conceptual differences. You can define your context like this:
 
-```c#
+```cs
 using Yamo;
 
 class MyContext : DbContext
@@ -101,7 +101,7 @@ For brevity, in all following samples assume that `CreateContext` is a factory m
 
 We can now run simple SQL queries:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     int count = db.QueryFirstOrDefault<int>("SELECT COUNT(*) FROM [User]");
@@ -112,7 +112,7 @@ using (var db = CreateContext())
 
 For parametrized query we can use string interpolation and pass `FormattableString` or pass string format with parameters:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var login = "foo";
@@ -131,7 +131,7 @@ DELETE FROM [User] WHERE Login = @p0
 
 Every argument is converted to `DbParameter`, so we are safe from SQL injections. However, if string interpolation is used, make sure you really pass `FormattableString` and not `String`:
 
-````cs
+```cs
 using (var db = CreateContext())
 {
     var login = "foo";
@@ -143,13 +143,13 @@ using (var db = CreateContext())
     FormattableString sql = $"DELETE FROM [User] WHERE Login = {login}";
     var affectedRows = db.Execute(sql);
 }
-````
+```
 
 #### Transactions
 
 If we for some reason need to access underlying connection, we can achieve that by accessing `Database` property of `DbContext`:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var underlyingConnection = db.Database.Connection;
@@ -158,7 +158,7 @@ using (var db = CreateContext())
 
 More importantly, `Database` facade contains methods for begin, commit or rollback of transaction. 
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     try
@@ -190,15 +190,15 @@ For example, let's consider following table and class:
 
 ```sql
 CREATE TABLE [dbo].[User] (
-	[Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY CLUSTERED, 
-	[Login] nvarchar(50) NOT NULL, 
-	[FirstName] nvarchar(50) NOT NULL, 
-	[LastName] nvarchar(50) NOT NULL, 
-	[Email] nvarchar(50) NOT NULL
+    [Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY CLUSTERED, 
+    [Login] nvarchar(50) NOT NULL, 
+    [FirstName] nvarchar(50) NOT NULL, 
+    [LastName] nvarchar(50) NOT NULL, 
+    [Email] nvarchar(50) NOT NULL
 )
 ```
 
-```c#
+```cs
 class User
 {
     public int Id { get; set; }
@@ -211,7 +211,7 @@ class User
 
 We map table `User` to entity `User` like this:
 
-```c#
+```cs
 protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
     modelBuilder.Entity<User>();
@@ -225,7 +225,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 If table name equals class name and if column name equals property name, all you need to do is to call `Entity` and `Property` methods respectively. If the names differ, you must specify corresponding database names:
 
-```c#
+```cs
 modelBuilder.Entity<User>().ToTable("UserTable", "MySchema"); // schema is optional
 modelBuilder.Entity<User>().Property(u => u.Login).HasColumnName("UserLogin");
 ```
@@ -240,7 +240,7 @@ Database nullability is infered by property type. However, it is not possible to
 
 You can specify data type used for a property with `UseDbType` method. For example property of type `DateTime` will use `DbType.DateTime` by default , but you can change it, in case your database field only stores the date part:
 
-```c#
+```cs
 modelBuilder.Entity<Person>().Property(x => x.BirthDate).UseDbType(DbType.Date);
 ```
 
@@ -250,7 +250,7 @@ Besides properties that maps directly to database columns, you can also define n
 
 For example following class `Article` has reference navigation property `Label` and collection navigation property `Categories`:
 
-```c#
+```cs
 class Article
 {
     public int Id { get; set; }
@@ -262,7 +262,7 @@ class Article
 
 We can define the relationship in model using `HasOne` and `HasMany` builder methods:
 
-```c#
+```cs
 modelBuilder.Entity<Article>().HasOne((x) => x.Label);
 modelBuilder.Entity<Article>().HasMany((x) => x.Categories);
 ```
@@ -279,11 +279,11 @@ Unlike in EF Core, there is currently no support for inverse navigation properti
 - [#12](https://github.com/esentio/Yamo/issues/12) Create/detele table for model entity.
 - [#13](https://github.com/esentio/Yamo/issues/13) Support for inverse relationship navigation.
 
-### Insert 
+### Insert
 
 To insert a record to the database, call `Insert` method on `DbContext`.
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var user = new User()
@@ -305,7 +305,7 @@ However, latter only works in MS SQL Server database. In SQLite, value of (singl
 
 If you wish to insert a value defined in code instead, set `useDbIdentityAndDefaults` parameter to `false`.
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var user = new User()
@@ -328,7 +328,7 @@ using (var db = CreateContext())
 
 Update of record can be done by calling `Update` method:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var user = GetUser();
@@ -353,9 +353,9 @@ WHERE
 
 Note that values of all columns are updated, even if only value of single column has been changed. Unlike some "big" ORM frameworks, Yamo doesn't track objects and their inner state. That's not its job. After you call select, insert or update, Yamo doesn't hold the reference to your POCOs.
 
-Sometimes updating of all database fields is exactly what you want. Sometimes it's not necessary and might even lead to performance issues. Yamo solves this dilemma in a way that object itself could track its state. All you need to do is implement `IHasDbPropertyModifiedTracking` interface in your model objects.
+Sometimes updating all database fields is exactly what you want. Sometimes it's not necessary and might even lead to performance issues. Yamo solves this dilemma in a way that object itself could track its state. All you need to do is implement `IHasDbPropertyModifiedTracking` interface in your model objects.
 
-```c#
+```cs
 public interface IHasDbPropertyModifiedTracking {
     bool IsAnyDbPropertyModified();
     bool IsDbPropertyModified(string propertyName);
@@ -380,7 +380,7 @@ Note that if `IsAnyDbPropertyModified` call returns `false`, no SQL `UPDATE` sta
 
 Parameterless `Update` method returns an instance of `UpdateSqlExpression`, which allows you to build `UPDATE` command and update more than one record at once. Just don't forget to call `Execute` method at the end.
 
-````c#
+```cs
 using (var db = CreateContext())
 {
     // in VB.NET, you can also write:
@@ -390,14 +390,14 @@ using (var db = CreateContext())
     // in VB.NET, you can also write:
     // db.Update(Of User).Set(Function(u) u.Login = u.Login & "_invalid")
     db.Update<User>().Set(u => u.Login, u => u.Login + "_invalid").Execute();
-    
+
     db.Update<User>()
       .Set(u => u.FirstName, "John")
       .Set(u => u.LastName, "Smith")
       .Where(u => u.Id == 42)
       .Execute();
 }
-````
+```
 
 You can use complex expressions in `Set` or `Where` clauses. Details are discussed in chapter about selecting data.
 
@@ -410,7 +410,7 @@ You can use complex expressions in `Set` or `Where` clauses. Details are discuss
 
 Unsurprisingly, delete of record is achieved by calling `Delete` method:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var user = GetUser();
@@ -421,7 +421,7 @@ using (var db = CreateContext())
 
 Similar to updates, parameterless `Delete` allows you to build delete query and delete more than one record at once.
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var user = GetUser();
@@ -448,21 +448,21 @@ Imagine following table:
 
 ```sql
 CREATE TABLE [dbo].[Blog] (
-	[Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY CLUSTERED, 
-	[Title] nvarchar(50) NOT NULL, 
-	[Content] ntext NOT NULL, 
-	[Created] datetime NOT NULL, 
-	[CreatedUserId] int NOT NULL, 
-	[Modified] datetime NULL, 
-	[ModifiedUserId] int NULL, 
-	[Deleted] datetime NULL, 
-	[DeletedUserId] int NULL
+    [Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY CLUSTERED, 
+    [Title] nvarchar(50) NOT NULL, 
+    [Content] ntext NOT NULL, 
+    [Created] datetime NOT NULL, 
+    [CreatedUserId] int NOT NULL, 
+    [Modified] datetime NULL, 
+    [ModifiedUserId] int NULL, 
+    [Deleted] datetime NULL, 
+    [DeletedUserId] int NULL
 )
 ```
 
 And corresponding entity:
 
-```c#
+```cs
 class Blog
 {
     public int Id { get; set; }
@@ -481,7 +481,7 @@ We have 6 audit fields in `Blog` table. For sure we can manage their values manu
 
 Yamo can do it automatically for us. All we need to do is adjust the model:
 
-```c#
+```cs
 class MyContext : DbContext
 {
     private SqlConnection m_Connection;
@@ -527,7 +527,7 @@ But be carefull with your factory methods! After first use, model is cached and 
 
 We can now do operations with `Blog` without worrying about audit fields:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var blog = new Blog()
@@ -572,7 +572,7 @@ Note that when `IHasDbPropertyModifiedTracking` record is being updated, Yamo fi
 
 To query entities from the database, you need to call `From` method on `DbContext`. Then you have to specify what you want to select. Here is simplest example of acquiring POCOs from database:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     // get number of all records in Blog table
@@ -592,7 +592,7 @@ Querying all or just first record wouldn't be very usefull. Just like many other
 
 Here are some examples of using `Where` method:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var result1 = db.From<Blog>()
@@ -610,7 +610,7 @@ using (var db = CreateContext())
     var result4 = db.From<Blog>()
                     .Where(b => b.Deleted.HasValue && b.Title.StartsWith("Lorem"))
                     .SelectAll().ToList();
-    
+
     // same as above
     var result5 = db.From<Blog>()
                     .Where(b => b.Deleted.HasValue)
@@ -635,34 +635,38 @@ SELECT [T0].[Id], [T0].[Title], [T0].[Content], [T0].[Created], [T0].[CreatedUse
 
 `Where` accepts lambda `Expression` that are parsed and translated to SQL `WHERE` clause. Of course not every .NET operation could be translated to SQL. Here is a more or less complete list of things you can use:
 
-| C#                                                           | VB.NET                                                       | SQL                                                          |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `&&`                                                         | `And`, `AndAlso`                                             | `AND`                                                        |
-| `||`                                                         | `Or`, `OrElse`                                               | `OR`                                                         |
-| `==`, `is`                                                   | `=`, `Is`                                                    | `=`                                                          |
-| `!=`                                                         | `<>`, `IsNot`                                                | `<>`                                                         |
-| `!`                                                          | `Not`                                                        | `NOT`                                                        |
-| `<`, `<=`, `>`, `>=`                                         | `<`, `<=`, `>`, `>=`                                         | `<`, `<=`, `>`, `>=`                                         |
-| `+`, `-`, `*`, `/`, `%`                                      | `+`, `-`, `*`, `/`, `Mod`, `&`                               | `+`, `-`, `*`, `/`, `%`, `+`                                 |
-| `null`                                                       | `Nothing`                                                    | `NULL`                                                       |
-| `nullableVar.Value`                                          | `nullableVar.Value`                                          | `.Value` part is ignored                                     |
-| `nullableVar.HasValue`                                       | `nullableVar.HasValue`                                       | `nullableVar IS NOT NULL`                                    |
-| `!nullableVar.HasValue`                                      | `Not nullableVar.HasValue`                                   | `nullableVar IS NULL`                                        |
-| `(Type)var`                                                  | `CType`, `DirectCast`                                        | cast is ignored                                              |
-| `stringValue.StartsWith("a")`                                | `stringValue.StartsWith("a")`                                | `LIKE @p + '%'` (`LIKE @p` in SQLite)                        |
-| `stringValue.EndsWith("a")`                                  | `stringValue.EndsWith("a")`                                  | `LIKE '%' + @p` (`LIKE @p` in SQLite)                        |
-| `stringValue.Contains("a")`                                  | `stringValue.Contains("a")`                                  | `LIKE '%' + @p + '%'` (`LIKE @p` in SQLite)                  |
-| `(new int[] { 1, 2 }).Contains(x)`                           | `{ 1, 2 }.Contains(x)`                                       | `@p IN (1, 2)`                                               |
-| `(new int[] { }).Contains(x)`                                | `(new Int32() {}).Contains(x)`                               | `0 = 1`                                                      |
-| `listVar.Contains(x)`                                        | `listVar.Contains(x)`                                        | `@p0 IN (@p1, @p2, ...)`                                     |
-| `emptyListVar.Contains(x)`                                   | `emptyListVar.Contains(x)`                                   | `0 = 1`                                                      |
-| `true`, `false`                                              | `True`, `False`                                              | `1`, `0`                                                     |
-| Number constants: `42`, `42.6`, ...                          | `42`, `42.6`, ...                                            | `42`, `42.6`, ...                                            |
-| String values: `"foo"`                                       | `"foo"`                                                      | `@p` (always SQL parameter)                                  |
-| Empty string: `""`                                           | `""`                                                         | `''`                                                         |
+| C#                                                                                | VB.NET                                                                | SQL                                                                                           |
+| --------------------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `&&`                                                                              | `And`, `AndAlso`                                                      | `AND`                                                                                         |
+| `||`                                                                              | `Or`, `OrElse`                                                        | `OR`                                                                                          |
+| `==`, `is`                                                                        | `=`, `Is`                                                             | `=`                                                                                           |
+| `!=`                                                                              | `<>`, `IsNot`                                                         | `<>`                                                                                          |
+| `!`                                                                               | `Not`                                                                 | `NOT`                                                                                         |
+| `<`, `<=`, `>`, `>=`                                                              | `<`, `<=`, `>`, `>=`                                                  | `<`, `<=`, `>`, `>=`                                                                          |
+| `+`, `-`, `*`, `/`, `%`                                                           | `+`, `-`, `*`, `/`, `Mod`, `&`                                        | `+`, `-`, `*`, `/`, `%`, `+`                                                                  |
+| `&`, `|`, `^`, `\~`                                                               | `And`, `Or`, `Xor`, `Not`                                             | `&`, `|`, `^`, `\~`                                                                           |
+| `<<`, `>>`                                                                        | `<<`, `>>`                                                            | `<<`, `>>`                                                                                    |
+| `x == 42 ? y : z`                                                                 | `If(x = 42, y, z)`                                                    | `CASE WHEN @p0 = 42 THEN @p1 ELSE @p2 END`                                                    |
+| `x ?? y`                                                                          | `If(x, y)`                                                            | `COALESCE(@p0, @p1)`                                                                          |
+| `null`                                                                            | `Nothing`                                                             | `NULL`                                                                                        |
+| `nullableVar.Value`                                                               | `nullableVar.Value`                                                   | `.Value` part is ignored                                                                      |
+| `nullableVar.HasValue`                                                            | `nullableVar.HasValue`                                                | `nullableVar IS NOT NULL`                                                                     |
+| `!nullableVar.HasValue`                                                           | `Not nullableVar.HasValue`                                            | `nullableVar IS NULL`                                                                         |
+| `(Type)var`                                                                       | `CType`, `DirectCast`                                                 | cast is ignored                                                                               |
+| `stringValue.StartsWith("a")`                                                     | `stringValue.StartsWith("a")`                                         | `LIKE @p + '%'` (`LIKE @p` in SQLite)                                                         |
+| `stringValue.EndsWith("a")`                                                       | `stringValue.EndsWith("a")`                                           | `LIKE '%' + @p` (`LIKE @p` in SQLite)                                                         |
+| `stringValue.Contains("a")`                                                       | `stringValue.Contains("a")`                                           | `LIKE '%' + @p + '%'` (`LIKE @p` in SQLite)                                                   |
+| `(new int[] { 1, 2 }).Contains(x)`                                                | `{ 1, 2 }.Contains(x)`                                                | `@p IN (1, 2)`                                                                                |
+| `(new int[] { }).Contains(x)`                                                     | `(new Int32() {}).Contains(x)`                                        | `0 = 1`                                                                                       |
+| `listVar.Contains(x)`                                                             | `listVar.Contains(x)`                                                 | `@p0 IN (@p1, @p2, ...)`                                                                      |
+| `emptyListVar.Contains(x)`                                                        | `emptyListVar.Contains(x)`                                            | `0 = 1`                                                                                       |
+| `true`, `false`                                                                   | `True`, `False`                                                       | `1`, `0`                                                                                      |
+| Number constants: `42`, `42.6`, ...                                               | `42`, `42.6`, ...                                                     | `42`, `42.6`, ...                                                                             |
+| String values: `"foo"`                                                            | `"foo"`                                                               | `@p` (always SQL parameter)                                                                   |
+| Empty string: `""`                                                                | `""`                                                                  | `''`                                                                                          |
 | Calls like: `x.SomeProperty`, `x.Foo.GetValue()`, `Foo.GetStaticValue(x, y)`, ... | `x.SomeProperty`, `x.Foo.GetValue()`, `Foo.GetStaticValue(x, y)`, ... | `@p` (always evaluated and value is passed via SQL parameter - might fail for certain types!) |
-| Access to entity property: `x => x.Title == "foo"`           | `Function(x) x.Title = "foo"`                                | `[TableAlias].[Title] = @p`                                  |
-| Access to joined entity property: `join => join.T1.Title == "foo"` | `Function(join) join.T1.Title = "foo"`                       | `[TableAlias].[Title] = @p`                                  |
+| Access to entity property: `x => x.Title == "foo"`                                | `Function(x) x.Title = "foo"`                                         | `[TableAlias].[Title] = @p`                                                                   |
+| Access to joined entity property: `join => join.T1.Title == "foo"`                | `Function(join) join.T1.Title = "foo"`                                | `[TableAlias].[Title] = @p`                                                                   |
 
 Long story short: everything that has direct equivalent in SQL is translated; values, function calls etc. are evaluated and passed as parameters; strings are always passed as parameters to avoid SQL injection and access to entity properties is converted to `tablealias.column` construct.
 
@@ -676,7 +680,7 @@ However, it's still not enough when we need to use specific SQL functions in our
 
 Yamo's attempt to solve this problem are SQL helpers. Let's start with an example:
 
-```c#
+```cs
 using Sql = Yamo.Sql;
 ...
 
@@ -700,12 +704,12 @@ In this case `b.Created` will become `[T0].[Created]`, `DateTime.Now` will be `@
 
 Below is the list of currently available and built-in SQL helpers:
 
-| Class       | Available methods                                            |
-| ----------- | ------------------------------------------------------------ |
+| Class       | Available methods                                                                                                                                               |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DateTime`  | `GetCurrentDateTime`, `GetCurrentDate`, `GetDate`, `SameYear`, `SameQuarter`, `SameMonth`, `SameDay`, `SameHour`, `SameMinute`, `SameSecond`, `SameMillisecond` |
-| `Aggregate` | `Count`, `CountDistinct`, `Sum`, `SumDistinct`, `Avg`, `AvgDistinct`, `Stdev`, `StdevDistinct`, `Min`, `Max` |
-| `Exp`       | `As`, `Raw`, `Coalesce`, `IsNull`, `IfNull`, `NullIf`, `IIf` |
-| `Model`     | `Columns`, `Column`, `Table`                                 |
+| `Aggregate` | `Count`, `CountDistinct`, `Sum`, `SumDistinct`, `Avg`, `AvgDistinct`, `Stdev`, `StdevDistinct`, `Min`, `Max`                                                    |
+| `Exp`       | `As`, `Raw`, `Coalesce`, `IsNull`, `IfNull`, `NullIf`, `IIf`                                                                                                    |
+| `Model`     | `Columns`, `Column`, `Table`                                                                                                                                    |
 
 You also can implement your own SQL helpers. All you need to do is inherit from `SqlHelper`, write you own (static) helper methods and overload `GetSqlFormat` static method.
 
@@ -713,7 +717,7 @@ When call to any static method of `SqlHelper` descendant is detected, Yamo trans
 
 As an example, here is the implementation of our `DateTime` helper:
 
-```c#
+```cs
 public class DateTime : SqlHelper
 {
 
@@ -757,7 +761,7 @@ You don't need to implement a helper for each call of native SQL. Goal is not to
 
 If .NET expressions and SQL helpers are still not enough, you can always write your condition using raw SQL string:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var value = "My awesome blog post";
@@ -770,7 +774,7 @@ using (var db = CreateContext())
 
 Or `FormattableString`, which gives you even more power:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var value = "My awesome blog post";
@@ -791,7 +795,7 @@ SELECT [T0].[Id], [T0].[Title], [T0].[Content], [T0].[Created], [T0].[CreatedUse
 
 To sort the data, use `OrderBy`, `OrderByDescending`, `ThenBy` and `ThenByDescending` methods:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var result = db.From<Blog>()
@@ -807,42 +811,42 @@ Let's first introduce the database and entities that will be used to explain SQL
 
 ```sql
 CREATE TABLE [dbo].[Article] (
-	[Id] int NOT NULL PRIMARY KEY CLUSTERED, 
-	[Price] decimal(10, 2) NOT NULL
+    [Id] int NOT NULL PRIMARY KEY CLUSTERED, 
+    [Price] decimal(10, 2) NOT NULL
 )
 
 CREATE TABLE [dbo].[ArticleCategory] (
-	[ArticleId] int NOT NULL, 
-	[CategoryId] int NOT NULL,
-	CONSTRAINT [PK_ArticleCategory] PRIMARY KEY CLUSTERED ([ArticleId], [CategoryId])
+    [ArticleId] int NOT NULL, 
+    [CategoryId] int NOT NULL,
+    CONSTRAINT [PK_ArticleCategory] PRIMARY KEY CLUSTERED ([ArticleId], [CategoryId])
 )
 
 CREATE TABLE [dbo].[ArticlePart] (
-	[Id] int NOT NULL PRIMARY KEY CLUSTERED, 
-	[ArticleId] int NOT NULL, 
-	[Price] decimal(10, 2) NOT NULL
+    [Id] int NOT NULL PRIMARY KEY CLUSTERED, 
+    [ArticleId] int NOT NULL, 
+    [Price] decimal(10, 2) NOT NULL
 )
 
 CREATE TABLE [dbo].[ArticleSubstitution] (
-	[OriginalArticleId] int NOT NULL, 
-	[SubstitutionArticleId] int NOT NULL,
-	CONSTRAINT [PK_ArticleSubstitution] PRIMARY KEY CLUSTERED ([OriginalArticleId], [SubstitutionArticleId])
+    [OriginalArticleId] int NOT NULL, 
+    [SubstitutionArticleId] int NOT NULL,
+    CONSTRAINT [PK_ArticleSubstitution] PRIMARY KEY CLUSTERED ([OriginalArticleId], [SubstitutionArticleId])
 )
 
 CREATE TABLE [dbo].[Category] (
-	[Id] int NOT NULL PRIMARY KEY CLUSTERED
+    [Id] int NOT NULL PRIMARY KEY CLUSTERED
 )
 
 CREATE TABLE [dbo].[Label] (
-	[TableId] nvarchar(50) NOT NULL, 
-	[Id] int NOT NULL, 
-	[Language] nvarchar(3) NOT NULL, 
-	[Description] nvarchar(100) NOT NULL,
-	CONSTRAINT [PK_Label] PRIMARY KEY CLUSTERED ([TableId], [Id], [Language])
+    [TableId] nvarchar(50) NOT NULL, 
+    [Id] int NOT NULL, 
+    [Language] nvarchar(3) NOT NULL, 
+    [Description] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Label] PRIMARY KEY CLUSTERED ([TableId], [Id], [Language])
 )
 ```
 
-```c#
+```cs
 class Article
 {
     public int Id { get; set; }
@@ -896,7 +900,7 @@ So we have an article which can be in multiple categories (M:N relationship). Ea
 
 Let's say we want to get all articles with their english descriptions:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var list = db.From<Article>()
@@ -930,7 +934,7 @@ We also have to provide an expression that is translated to SQL `ON` clause. The
 
 That is not enough if you need to join one entity (table) multiple times (ambiguous match) or you want to use condition based on multiple entities. In that case, you can pass lambda that accepts only one parameter: `Join<...>`. In our example only 2 tables are joined, so it would be `Join<TTable1, TTable2>`. Join object contains properties `T1`, `T2`, ... which correspond to all entities in query in order they were introduced. Here is the same example rewritten using join object:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var list = db.From<Article>()
@@ -950,7 +954,7 @@ You can use `Join<...>` in filtering and sorting methods as well.
 
 As you can see, all `Article` objects now contain their description in `Label` property. Why when we didn't explicitly requested that? Actually, we did. Calling `SelectAll` means that all columns of all tables are returned. But that's only one part of the puzzle. Additionally, we have defined navigation property in the model:
 
-```c#
+```cs
 modelBuilder.Entity<Article>();
 modelBuilder.Entity<Article>().Property((x) => x.Id).IsKey();
 modelBuilder.Entity<Article>().Property((x) => x.Price);
@@ -964,7 +968,7 @@ Yamo detects that we are joining table `Label` and tries to determine where that
 
 In case the relationship is not defined in the model or if the match is unambigous, we can still instruct Yamo to fill the correct property using `As` method. Here is an updated example:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var list = db.From<Article>()
@@ -985,7 +989,7 @@ We explicitly instructed Yamo to fill `Article.Label` property with joined `Labe
 
 Here is an example where using `As` hint is necessary, because we are joining the same table twice:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var list = db.From<ArticleSubstitution>()
@@ -1004,7 +1008,7 @@ using (var db = CreateContext())
 
 Let's try something different now. What about 1:N relationships?
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var list = db.From<Article>()
@@ -1027,7 +1031,7 @@ Because `Article.Parts` is marked as a collection navigation property, it is fil
 
 Ok, how about something more complex?
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var lang = "en";
@@ -1087,14 +1091,14 @@ You can pass an optional `CollectionNavigationFillBehavior` parameter to `FirstO
 
 For example, let's imagine joining our `Article` and `ArticlePart` tables and getting following resultset:
 
-| Article.Id | ...  | ArticlePart.Price |
-| ---------- | ---- | ----------------- |
-| 1          | ...  | 10                |
-| 1          | ...  | 11                |
-| 2          | ...  | 12                |
-| 2          | ...  | 13                |
-| 3          | ...  | 14                |
-| 1          | ...  | 15                |
+| Article.Id | ... | ArticlePart.Price |
+| ---------- | --- | ----------------- |
+| 1          | ... | 10                |
+| 1          | ... | 11                |
+| 2          | ... | 12                |
+| 2          | ... | 13                |
+| 3          | ... | 14                |
+| 1          | ... | 15                |
 
 This is how the processing will behave using different `CollectionNavigationFillBehavior` values:
 
@@ -1160,6 +1164,7 @@ How exactly is the `SELECT` clause built? By default, Yamo adds all columns of t
 This behavior can be changed using optional parameter of type `SelectColumnsBehavior` and all columns will be included. This might be needed e.g. for queries with `DISTINCT` clause.
 
 Example:
+
 ```cs
 using (var db = CreateContext())
 {
@@ -1194,7 +1199,7 @@ It is also possible to explicitly exclude certain columns with `Exclude` and `Ex
 
 In one the examples above, it is actually not necessary to select columns from `ArticleCategory` junction table. Here is a simplified query, where columns of this junction table are excluded from the select statement:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var list = db.From<Article>()
@@ -1253,6 +1258,7 @@ using (var db = CreateContext())
                  .ToList();
 }
 ```
+
 ```cs
 // Assuming: modelBuilder.Entity<Article>().HasOne(x => x.Label);
 // Exclude Label columns to not create Label object and to not assign it to Article.Label property.
@@ -1267,6 +1273,7 @@ using (var db = CreateContext())
                  .ToList();
 }
 ```
+
 ```cs
 // If ExcludeT2() were not called, Label columns would be included twice (and Article.Label property would be filled).
 using (var db = CreateContext())
@@ -1279,6 +1286,7 @@ using (var db = CreateContext())
                  .ToList();
 }
 ```
+
 You can include simple scalar values like, whole entity, `ValueTuple` (although only VB.NET [supports this](https://github.com/dotnet/roslyn/issues/12897)), anonymous type (probably useful only in limited number of use cases due to casting issues) or ad hoc (non-model) types/POCOs.
 
 **Important note:** if whole entity is included, it's always a "detached copy" unrelated to what would normally work using `SelectAll` method. This means:
@@ -1305,7 +1313,7 @@ You can return:
 
 Here is an example of returning simple scalar value(s):
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     // get prices of all articles
@@ -1317,7 +1325,7 @@ using (var db = CreateContext())
 
 Entity POCOs:
 
-````c#
+```cs
 using (var db = CreateContext())
 {
     // get all categories of single article
@@ -1329,11 +1337,11 @@ using (var db = CreateContext())
                        .Select(j => j.T3)
                        .ToList();
 }
-````
+```
 
 Anonymous type can be used when you need a complex result. Notice that you can include the whole POCO entity to a property:
 
-````c#
+```cs
 using (var db = CreateContext())
 {
     // get ids of original articles plus articles and their substitutions
@@ -1347,11 +1355,11 @@ using (var db = CreateContext())
                  })
                  .ToList();
 }
-````
+```
 
 In VB.NET you can even return `ValueTuple`. C# [doesn't allow that](https://github.com/dotnet/roslyn/issues/12897) currently.
 
-````vbnet
+```vbnet
 Using db = CreateDbContext()
   Dim list = db.From(Of ArticleSubstitution).
                 Join(Of Article)(Function(j) j.T1.OriginalArticleId = j.T2.Id).
@@ -1359,11 +1367,12 @@ Using db = CreateDbContext()
                 Select(Function(x) (OriginalId:=j.T2.Id, Original:=j.T2, Substitution:=j.T3)).
                 ToList()
 End Using
-````
+```
 
 Or simply return any class or structure (or nullable structure). It doesn't have to be defined in the model. Only requirement is initialization with constructor and/or member initializers. Constructor nesting is not allowed (with exception of nullable types). However, as with anonymous types and value tuples, it is possible to pass whole model entities as constructor arguments or set to member fields/properties.
 
 For example:
+
 ```cs
 using (var db = CreateContext())
 {
@@ -1401,7 +1410,7 @@ using (var db = CreateContext())
 
 To return number of rows in the resultset, use `SelectCount` method which translates to `SELECT COUNT(*)`. 
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var articlesCount = db.From<Article>().SelectCount();
@@ -1422,7 +1431,7 @@ There are 3 possible values available:
 
 Examples:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     // Result might contain null values (for Articles which don't have a Label).
@@ -1439,7 +1448,8 @@ using (var db = CreateContext())
                  .ToList();
 }
 ```
-``` c#
+
+```cs
 using (var db = CreateContext())
 {
     var list = db.From<Article>()
@@ -1452,7 +1462,7 @@ using (var db = CreateContext())
 
 By default, the behavior is inferred from the subquery - if there is one (more on subqueries later). If necessary, behavior can be overridden. Although, this will be probably needed only in some special edge cases.
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     // NullIfAllColumnsAreNull overrides AlwaysCreateInstance behavior
@@ -1473,7 +1483,7 @@ using (var db = CreateContext())
 
 To retrieve the only distinct records, use `Distinct` method:
 
-````c#
+```cs
 using (var db = CreateContext())
 {
     // get all unique languages
@@ -1482,13 +1492,13 @@ using (var db = CreateContext())
                       .Distinct()
                       .ToList();
 }
-````
+```
 
 #### Group by and having
 
 To define `GROUP BY` clause, use `GroupBy` method. You can group by single column:
 
-````c#
+```cs
 using (var db = CreateContext())
 {
     // get how many articles have the same price
@@ -1501,11 +1511,11 @@ using (var db = CreateContext())
                       })
                       .ToList();
 }
-````
+```
 
 Or by multiple columns using anonymous type (or even `ValueTuple` in VB.NET).
 
-````c#
+```cs
 using (var db = CreateContext())
 {
     // get article, article description and number of substitutions
@@ -1523,21 +1533,21 @@ using (var db = CreateContext())
                  })
                  .ToList();
 }
-````
+```
 
 Notice that when you need to group by all columns of an entity, you don't need to explicitly enumerate them. Just use that entity in the grouping. For illustration, here is generated SQL from our example:
 
-````sql
+```sql
 SELECT [T1].[Id] [C0_0], [T1].[Price] [C0_1], [T2].[Description] [C1], COUNT([T0].[SubstitutionArticleId]) [C2]
 FROM [ArticleSubstitution] [T0]
 INNER JOIN [Article] [T1] ON ([T0].[OriginalArticleId] = [T1].[Id])
 INNER JOIN [Label] [T2] ON ((([T2].[TableId] = @p0) AND ([T2].[Id] = [T1].[Id])) AND ([T2].[Language] = @p1))
 GROUP BY [T1].[Id], [T1].[Price], [T2].[Description]
-````
+```
 
 And finally, you can use `Having` method to define ` HAVING` clause.
 
-````c#
+```cs
 using (var db = CreateContext())
 {
     // get tables which have at least 10 translations
@@ -1547,13 +1557,13 @@ using (var db = CreateContext())
                    .Select(l => l.TableId)
                    .ToList();
 }
-````
+```
 
 #### Limiting number of returned rows
 
 You can constrain the number of rows returned by the query with a `Limit` method. You can specify number of returned rows as well as offset.
 
-````c#
+```cs
 using (var db = CreateContext())
 {
     // get 3 most expensive articles
@@ -1570,7 +1580,7 @@ using (var db = CreateContext())
                       .SelectAll()
                       .ToList();
 }
-````
+```
 
 This will translate to appropriate `LIMIT`, `TOP` or `OFFSET FETCH` clauses depending on the database.
 
@@ -1588,7 +1598,7 @@ Subquery cannot be materialized. That means `ToList` or `FirstOrDefault` methods
 
 For example, here we join `Label` entity from a subquery:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var list = db.From<Article>()
@@ -1614,7 +1624,7 @@ Although, the result of the subquery doesn't have to be an entity from the model
 
 For example:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     // get all articles which have at least 2 categories
@@ -1653,7 +1663,7 @@ In the previous examples, subquery results were purely used to filter `Article` 
 
 For example (assume `Stats` is a non-model ad hoc type):
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     // get all articles with Stats property filled
@@ -1701,7 +1711,7 @@ Yamo supports `UNION`, `UNION ALL`, `EXCEPT` and `INTERSECT` set operators with 
 
 Here are the examples with query expression factory:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var list = db.From<Article>()
@@ -1717,7 +1727,7 @@ using (var db = CreateContext())
 }
 ```
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var list = db.From(c =>
@@ -1798,6 +1808,7 @@ using (var db = CreateContext())
 ```
 
 Keep in mind that conditional joins have consequences. Affected entity and its properties will be `null` if you use them later:
+
 ```cs
 using (var db = CreateContext())
 {
@@ -1812,6 +1823,7 @@ using (var db = CreateContext())
 ```
 
 Behavior is following:
+
 - If condition is not met, we don't append affected clauses to SQL string at all.
 - Conditions could be nested (`If` inside `If`).
 - Expressions inside `If` could be chained, for example `Where(...).OrderBy(...)`.
@@ -1838,7 +1850,7 @@ For this purpose, Yamo provides `PredicateBuilder` helper class that simplifies 
 
 You can use it to build the `Where` condition like this:
 
-```c#
+```cs
 public static void Test()
 {
     var bornBefore = DateTime.Now;
@@ -1872,7 +1884,7 @@ Sometimes, you really need to write your query manually. How to get simple value
 
 You can return multiple values as a `ValueTuple` or nullable `ValueTuple`:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var login = "foo";
@@ -1883,7 +1895,7 @@ using (var db = CreateContext())
 
 You can even get whole model entity object! To simplify writing all columns to the query (they need to be stated in correct order) just use `Yamo.Sql.Model.Columns` helper:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var articles = db.Query<Article>($"SELECT {Sql.Model.Columns<Article>()} FROM Article");
@@ -1903,7 +1915,7 @@ using (var db = CreateContext())
 
 If you ever need just "raw" values of the resultset row(s), simply use `Object[]` as a type parameter of `Query` and `QueryFirstOrDefault` methods. Basically, it just returns values from `DbDataReader.GetValues(Object[])` call. Don't forget that returned array will contain now `DBNull.Value` instead on `null` values. No conversion is made in this case.
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var login = "foo";
@@ -1914,7 +1926,7 @@ using (var db = CreateContext())
 
 Besides common types (`String`, `Int32`, ...) also objects of type `DbParameter` can be used as parameters in raw SQL string queries. This is especially handy if you need to specify parameter data type:
 
-```c#
+```cs
 using (var db = CreateContext())
 {
     var name = new SqlParameter()
@@ -1951,7 +1963,7 @@ using (var db = CreateContext())
     db.Update<Article>(tableName).Execute(article);
 
     db.SoftDelete<Article>(tableName).Execute(article);
-    
+
     db.Delete<Article>(tableName).Execute(article);
 }
 ```
@@ -2002,16 +2014,84 @@ using (var db = CreateContext())
 }
 ```
 
+### Entity creation and supported interfaces
+
+There are 3 interfaces that entities can implement and which bring additional functionality. You can use them not only in your model entities, but also in arbitrary queried non-model ad hoc types.
+
+#### IHasDbPropertyModifiedTracking
+
+```cs
+public interface IHasDbPropertyModifiedTracking {
+    bool IsAnyDbPropertyModified();
+    bool IsDbPropertyModified(string propertyName);
+    void ResetDbPropertyModifiedTracking();
+}
+```
+
+For details, see the [Update](#update) chapter above.
+
+#### IInitializable
+
+```cs
+public interface IInitializable
+{
+    void Initialize();
+}
+```
+
+If an entity implements this interface, `Initialize` method is called after the object instance is created and its database-mapped properties are filled. If your entity needs to perform some kind of initialization, this is the place.
+
+#### ISupportDbLoad
+
+```cs
+public interface ISupportDbLoad
+{
+    void BeginLoad();
+    void EndLoad();
+}
+```
+
+`BeginLoad` method is called right after the object instance is created. Then, entity properties are filled with values from the database. At the end, `EndLoad` method is called.
+
+You can for example use it together with `IHasDbPropertyModifiedTracking` in your entity base class to implement efficient property modification tracking.
+
+#### Entity materialization
+
+The sequence of how results are created and how interface methods are called is following:
+
+1. call constructor (and object initializers in case of a custom select)
+2. call `ISupportDbLoad.BeginLoad` (if object implements `ISupportDbLoad`)
+3. set database-mapped properties
+4. call `IInitializable.Initialize` method (if object implements `IInitializable`)
+5. set include properties (if it applies)
+6. set relationship properties (if it applies)
+7. call `IHasDbPropertyModifiedTracking.ResetDbPropertyModifiedTracking` method (if object implements `IHasDbPropertyModifiedTracking`).
+8. call `ISupportDbLoad.EndLoad` (if object implements `ISupportDbLoad`)
+
+These actions are executed for all results (model entities or non-model ad hoc types), regardless of how they are constructed (automatic mode result via `SelectAll`, custom select result via `Select`, include property values, relationship property values, `Query` results, ...). Even if an ad hoc type result is a structure or a nullable structure (if it implements particular interfaces).
+
+**Note:** be aware that if you use object initializer syntax (e.g. in custom select), object instance is really constructed using object initializer. Therefore, `BeginLoad` method will be called after corresponding properties are set, not before!
+
+```cs
+using (var db = CreateContext())
+{
+    // BeginLoad is called after Description and Item properties are set
+    var list = db.From<Blog>()
+                 .Select(x => new NonModelObject(x.Id) { Description = x.Title, Item = x })
+                 .ToList();
+}
+```
+
 ### Logging
 
 There is no build-in support for logging, but you can override `OnCommandExecuting` method in `DbContext` to intercept all queries and use whatever logging framework you like.
 
-````c#
+```cs
 protected override void OnCommandExecuting(DbCommand command)
 {
     // log command.CommandText
 }
-````
+```
 
 ### Performance
 
@@ -2019,60 +2099,65 @@ General goal is to make Yamo as fast as possible. For that purpose - like in oth
 
 Current benchmarks are promising. But still, there is a place for improvements :-)
 
-Below is comparison between Yamo, Dapper and EF Core (full reports [here](../../tree/master/Benchmarks)):
+Below is comparison between hand coded (optimized) methods, Yamo, Dapper and EF Core (full reports [here](../../tree/master/Benchmarks)). Tests were executed against in-memory SQLite database.
 
-``` ini
-BenchmarkDotNet=v0.13.1, OS=Windows 10.0.19044.1645 (21H2)
-Intel Core i7 CPU 950 3.07GHz (Nehalem), 1 CPU, 8 logical and 4 physical cores
-.NET SDK=6.0.202
-  [Host]     : .NET 6.0.4 (6.0.422.16404), X64 RyuJIT
-  DefaultJob : .NET 6.0.4 (6.0.422.16404), X64 RyuJIT
+```ini
+BenchmarkDotNet=v0.13.4, OS=Windows 11 (10.0.22000.1574/21H2)
+12th Gen Intel Core i7-12700K, 1 CPU, 20 logical and 12 physical cores
+.NET SDK=7.0.200
+  [Host]     : .NET 7.0.3 (7.0.323.6910), X64 RyuJIT AVX2
+  DefaultJob : .NET 7.0.3 (7.0.323.6910), X64 RyuJIT AVX2
 ```
+
 #### Select 1 record
 
-| Method                |       Mean | Ratio | Allocated |
-| --------------------- | ---------: | ----: | --------: |
-| Yamo                  |   121.5 μs |  1.00 |      7 KB |
-| Yamo (using query)    |   134.5 μs |  1.11 |      7 KB |
-| Dapper                |   161.8 μs |  1.52 |      8 KB |
-| EF Core               | 1,185.2 μs | 10.20 |    111 KB |
-| EF Core (no tracking) | 2,271.1 μs |  9.08 |    108 KB |
+| Method                | Mean      | Ratio | Allocated |
+| --------------------- | ---------:| -----:| ---------:|
+| Handcoded             | 5.263 μs  | 0.72  | 1.35 KB   |
+| Yamo (using query)    | 6.556 μs  | 0.90  | 3.69 KB   |
+| Dapper                | 6.636 μs  | 0.91  | 2.75 KB   |
+| Yamo                  | 7.320 μs  | 1.00  | 5 KB      |
+| EF Core (no tracking) | 49.027 μs | 6.70  | 52.69 KB  |
+| EF Core               | 54.623 μs | 7.46  | 54.44 KB  |
 
 #### Select 500 records one by one
 
-| Method                |      Mean | Ratio | Allocated |
-| --------------------- | --------: | ----: | --------: |
-| Dapper                |  58.22 ms |  0.67 |      3 MB |
-| Yamo (using query     |  67.72 ms |  0.77 |      3 MB |
-| Yamo                  |  87.51 ms |  1.00 |      4 MB |
-| EF Core               | 140.61 ms |  1.61 |      6 MB |
-| EF Core (no tracking) | 141.10 ms |  1.66 |      5 MB |
+| Method                | Mean     | Ratio | Allocated  |
+| --------------------- | --------:| -----:| ----------:|
+| Handcoded             | 2.635 ms | 0.68  | 679.57 KB  |
+| Yamo (using query)    | 3.289 ms | 0.85  | 1742.28 KB |
+| Dapper                | 3.375 ms | 0.87  | 1378.79 KB |
+| Yamo                  | 3.858 ms | 1.00  | 2695.44 KB |
+| EF Core (no tracking) | 6.115 ms | 1.59  | 3145.42 KB |
+| EF Core               | 7.055 ms | 1.83  | 3720.34 KB |
 
 #### Select list of 1000 records
 
-| Method                |      Mean | Rank | Allocated |
-| --------------------- | --------: | ---: | --------: |
-| Yamo (using query)    |  3.620 ms |    1 |    194 KB |
-| Yamo                  |  3.621 ms |    1 |    194 KB |
-| Dapper                |  3.663 ms |    2 |    317 KB |
-| EF Core (no tracking) |  4.725 ms |    3 |    484 KB |
-| EF Core               | 10.803 ms |    4 |  1,584 KB |
+| Method                | Mean     | Ratio | Allocated  |
+| --------------------- | --------:| -----:| ----------:|
+| Handcoded             | 1.369 ms | 0.94  | 399.56 KB  |
+| Yamo                  | 1.453 ms | 1.00  | 402.2 KB   |
+| Yamo (using query)    | 1.508 ms | 1.04  | 401.81 KB  |
+| EF Core (no tracking) | 1.569 ms | 1.08  | 636.43 KB  |
+| Dapper                | 1.591 ms | 1.09  | 525.87 KB  |
+| EF Core               | 2.736 ms | 1.88  | 1797.64 KB |
 
 #### Select list of 1000 records with 1:1 join
 
-| Method                |      Mean | Ratio | Allocated |
-| --------------------- | --------: | ----: | --------: |
-| Yamo                  |  6.113 ms |  1.00 |    465 KB |
-| Dapper                |  6.215 ms |  1.02 |    607 KB |
-| EF Core (no tracking) |  7.623 ms |  1.26 |  1,155 KB |
-| EF Core               | 19.965 ms |  3.58 |  3,378 KB |
+| Method                | Mean     | Ratio | Allocated  |
+| --------------------- | --------:| -----:| ----------:|
+| Handcoded             | 2.067 ms | 0.82  | 649.61 KB  |
+| Yamo                  | 2.508 ms | 1.00  | 656.53 KB  |
+| Dapper                | 2.555 ms | 1.02  | 799.69 KB  |
+| EF Core (no tracking) | 2.658 ms | 1.06  | 1278.79 KB |
+| EF Core               | 7.649 ms | 3.05  | 3735.88 KB |
 
 #### Select list of 1000 records with 1:N join
 
-| Method                |     Mean | Ratio | Allocated |
-| --------------------- | -------: | ----: | --------: |
-| EF Core (no tracking) | 37.28 ms |  0.72 |      3 MB |
-| Yamo                  | 52.17 ms |  1.00 |      2 MB |
-| Dapper                | 52.22 ms |  1.00 |      3 MB |
-| EF Core               | 77.36 ms |  1.48 |      9 MB |
-
+| Method                | Mean      | Ratio | Allocated |
+| --------------------- | ---------:| -----:| ---------:|
+| Handcoded             | 6.234 ms  | 0.61  | 1.61 MB   |
+| Yamo                  | 10.154 ms | 1.00  | 2.71 MB   |
+| EF Core (no tracking) | 12.153 ms | 1.20  | 3.26 MB   |
+| Dapper                | 15.064 ms | 1.48  | 4.39 MB   |
+| EF Core               | 25.143 ms | 2.47  | 8.94 MB   |
