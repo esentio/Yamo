@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>Yamo.Benchmarks</RootNamespace>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <OptionStrict>On</OptionStrict>
     <Version>0.10.0</Version>
     <Authors>Peter Šimno</Authors>
@@ -48,11 +48,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.4" />
-    <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.2" />
-    <PackageReference Include="Microsoft.Data.SQLite" Version="7.0.2" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Data.SQLite" Version="10.0.2" />
   </ItemGroup>
 
   <ItemGroup>

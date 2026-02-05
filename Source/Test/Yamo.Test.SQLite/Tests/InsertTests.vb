@@ -12,22 +12,22 @@ Namespace Tests
 
     <TestMethod()>
     Public Overrides Sub InsertRecordWithDefaultValueIdAndUseDbIdentityAndDefaults()
-      Assert.ThrowsException(Of NotSupportedException)(AddressOf MyBase.InsertRecordWithDefaultValueIdAndUseDbIdentityAndDefaults)
+      Assert.Throws(Of NotSupportedException)(AddressOf MyBase.InsertRecordWithDefaultValueIdAndUseDbIdentityAndDefaults)
     End Sub
 
     <TestMethod()>
     Public Overrides Sub InsertRecordWithDefaultValueIdAndUseDbIdentityAndDefaultsWithSpecifiedTableName()
-      Assert.ThrowsException(Of NotSupportedException)(AddressOf MyBase.InsertRecordWithDefaultValueIdAndUseDbIdentityAndDefaultsWithSpecifiedTableName)
+      Assert.Throws(Of NotSupportedException)(AddressOf MyBase.InsertRecordWithDefaultValueIdAndUseDbIdentityAndDefaultsWithSpecifiedTableName)
     End Sub
 
     <TestMethod()>
     Public Overrides Sub InsertRecordWithIdentityIdAndDefaultValuesAndUseDbIdentityAndDefaults()
-      Assert.ThrowsException(Of NotSupportedException)(AddressOf MyBase.InsertRecordWithIdentityIdAndDefaultValuesAndUseDbIdentityAndDefaults)
+      Assert.Throws(Of NotSupportedException)(AddressOf MyBase.InsertRecordWithIdentityIdAndDefaultValuesAndUseDbIdentityAndDefaults)
     End Sub
 
     <TestMethod()>
     Public Overrides Sub InsertRecordWithIdentityIdAndDefaultValuesAndUseDbIdentityAndDefaultsWithSpecifiedTableName()
-      Assert.ThrowsException(Of NotSupportedException)(AddressOf MyBase.InsertRecordWithIdentityIdAndDefaultValuesAndUseDbIdentityAndDefaultsWithSpecifiedTableName)
+      Assert.Throws(Of NotSupportedException)(AddressOf MyBase.InsertRecordWithIdentityIdAndDefaultValuesAndUseDbIdentityAndDefaultsWithSpecifiedTableName)
     End Sub
 
   End Class
