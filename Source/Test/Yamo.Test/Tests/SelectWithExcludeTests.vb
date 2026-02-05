@@ -70,7 +70,7 @@ Namespace Tests
 
       InsertItems(item)
 
-      Assert.ThrowsException(Of ArgumentException)(
+      Assert.Throws(Of ArgumentException)(
         Sub()
           Using db = CreateDbContext()
             Dim result = db.From(Of Label).
