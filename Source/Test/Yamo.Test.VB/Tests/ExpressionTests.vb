@@ -77,7 +77,7 @@ Namespace Tests
 
   <TestClass()>
   Public Class ExpressionTests
-    Inherits BaseUnitTests
+    Inherits BaseExpressionTests
 
     Private Const ConstantValue As Int32 = 200
 
@@ -1744,28 +1744,135 @@ Namespace Tests
       End Using
     End Sub
 
-    Private Function CreateSqlExpressionVisitor(db As DbContext) As SqlExpressionVisitor
-      Dim builder = New SelectSqlExpressionBuilder(db, GetType(ItemWithAllSupportedValues))
+    <TestMethod()>
+    Public Sub TranslateEnumerableContains()
+      Using db = CreateDbContext()
+        Dim visitor = CreateSqlExpressionVisitor(db)
+        Dim result As SqlString
 
-      Dim fi = builder.GetType().GetField("m_Visitor", Reflection.BindingFlags.Instance Or Reflection.BindingFlags.NonPublic)
-      Return DirectCast(fi.GetValue(builder), SqlExpressionVisitor)
-    End Function
+        ' Enumerable
 
-    Private Function TranslateCondition(visitor As SqlExpressionVisitor, predicate As Expression(Of Func(Of ItemWithAllSupportedValues, Boolean))) As SqlString
-      Return Translate(visitor, predicate, ExpressionTranslateMode.Condition)
-    End Function
+        result = TranslateCondition(visitor, Function(x) New Int32() {}.Contains(x.IntColumn))
+        Assert.AreEqual("(0 = 1)", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
 
-    Private Function TranslateConditionWithJoin(visitor As SqlExpressionVisitor, predicate As Expression(Of Func(Of Join(Of ItemWithAllSupportedValues, Article), Boolean))) As SqlString
-      Return TranslateWithJoin(visitor, predicate, ExpressionTranslateMode.Condition)
-    End Function
+        Dim emptyArray = New Int32() {}
+        result = TranslateCondition(visitor, Function(x) emptyArray.Contains(x.IntColumn))
+        Assert.AreEqual("(0 = 1)", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
 
-    Private Function Translate(visitor As SqlExpressionVisitor, predicate As Expression(Of Func(Of ItemWithAllSupportedValues, Boolean)), mode As ExpressionTranslateMode) As SqlString
-      Return visitor.Translate(predicate, mode, {0}, 0, True, True)
-    End Function
+        Dim value1 = 1
+        Dim value2 = 2
+        result = TranslateCondition(visitor, Function(x) New Int32() {value1, value2}.Contains(x.IntColumn))
+        Assert.AreEqual("([T0].[IntColumn] IN (@p0, @p1))", result.Sql)
+        Assert.AreEqual(2, result.Parameters.Count)
+        Assert.AreEqual(value1, result.Parameters(0).Value)
+        Assert.AreEqual(value2, result.Parameters(1).Value)
 
-    Private Function TranslateWithJoin(visitor As SqlExpressionVisitor, predicate As Expression(Of Func(Of Join(Of ItemWithAllSupportedValues, Article), Boolean)), mode As ExpressionTranslateMode) As SqlString
-      Return visitor.Translate(predicate, mode, Nothing, 0, True, True)
-    End Function
+        Dim array = New Int32() {3, 4}
+        result = TranslateCondition(visitor, Function(x) array.Contains(x.IntColumn))
+        Assert.AreEqual("([T0].[IntColumn] IN (@p0, @p1))", result.Sql)
+        Assert.AreEqual(2, result.Parameters.Count)
+        Assert.AreEqual(array(0), result.Parameters(0).Value)
+        Assert.AreEqual(array(1), result.Parameters(1).Value)
+
+        ' IEnumerable
+
+        Dim emptyList = New List(Of Int32)
+        result = TranslateCondition(visitor, Function(x) emptyList.Contains(x.IntColumn))
+        Assert.AreEqual("(0 = 1)", result.Sql)
+        Assert.AreEqual(0, result.Parameters.Count)
+
+        Dim list = New List(Of Int32) From {5, 6}
+        result = TranslateCondition(visitor, Function(x) list.Contains(x.IntColumn))
+        Assert.AreEqual("([T0].[IntColumn] IN (@p0, @p1))", result.Sql)
+        Assert.AreEqual(2, result.Parameters.Count)
+        Assert.AreEqual(list(0), result.Parameters(0).Value)
+        Assert.AreEqual(list(1), result.Parameters(1).Value)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Sub TranslateStringStartsWith()
+      Using db = CreateDbContext()
+        Dim visitor = CreateSqlExpressionVisitor(db)
+        Dim result As SqlString
+
+        result = TranslateCondition(visitor, Function(x) x.Nvarchar50Column.StartsWith("lorem"))
+        Assert.AreEqual("[T0].[Nvarchar50Column] LIKE @p0 + '%'", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual("lorem", result.Parameters(0).Value)
+
+        Dim value = "ipsum"
+        result = TranslateCondition(visitor, Function(x) x.Nvarchar50Column.StartsWith(value))
+        Assert.AreEqual("[T0].[Nvarchar50Column] LIKE @p0 + '%'", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual(value, result.Parameters(0).Value)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Sub TranslateStringEndsWith()
+      Using db = CreateDbContext()
+        Dim visitor = CreateSqlExpressionVisitor(db)
+        Dim result As SqlString
+
+        result = TranslateCondition(visitor, Function(x) x.Nvarchar50Column.EndsWith("lorem"))
+        Assert.AreEqual("[T0].[Nvarchar50Column] LIKE '%' + @p0", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual("lorem", result.Parameters(0).Value)
+
+        Dim value = "ipsum"
+        result = TranslateCondition(visitor, Function(x) x.Nvarchar50Column.EndsWith(value))
+        Assert.AreEqual("[T0].[Nvarchar50Column] LIKE '%' + @p0", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual(value, result.Parameters(0).Value)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Sub TranslateStringContains()
+      Using db = CreateDbContext()
+        Dim visitor = CreateSqlExpressionVisitor(db)
+        Dim result As SqlString
+
+        result = TranslateCondition(visitor, Function(x) x.Nvarchar50Column.Contains("lorem"))
+        Assert.AreEqual("[T0].[Nvarchar50Column] LIKE '%' + @p0 + '%'", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual("lorem", result.Parameters(0).Value)
+
+        Dim value = "ipsum"
+        result = TranslateCondition(visitor, Function(x) x.Nvarchar50Column.Contains(value))
+        Assert.AreEqual("[T0].[Nvarchar50Column] LIKE '%' + @p0 + '%'", result.Sql)
+        Assert.AreEqual(1, result.Parameters.Count)
+        Assert.AreEqual(value, result.Parameters(0).Value)
+      End Using
+    End Sub
+
+    <TestMethod()>
+    Public Sub TranslateStringConcat()
+      Using db = CreateDbContext()
+        Dim visitor = CreateSqlExpressionVisitor(db)
+        Dim result As SqlString
+
+        result = TranslateCondition(visitor, Function(x) x.Nvarchar50Column = String.Concat("lorem", "ipsum"))
+        Assert.AreEqual("[T0].[Nvarchar50Column] = @p0 + @p1", result.Sql)
+        Assert.AreEqual(2, result.Parameters.Count)
+        Assert.AreEqual("lorem", result.Parameters(0).Value)
+        Assert.AreEqual("ipsum", result.Parameters(1).Value)
+
+        Dim value1 = "dolor"
+        Dim value2 = "sit"
+        result = TranslateCondition(visitor, Function(x) x.Nvarchar50Column = String.Concat("lorem", "ipsum", value1, value2, "amet"))
+        Assert.AreEqual("[T0].[Nvarchar50Column] = @p0 + @p1 + @p2 + @p3 + @p4", result.Sql)
+        Assert.AreEqual(5, result.Parameters.Count)
+        Assert.AreEqual("lorem", result.Parameters(0).Value)
+        Assert.AreEqual("ipsum", result.Parameters(1).Value)
+        Assert.AreEqual(value1, result.Parameters(2).Value)
+        Assert.AreEqual(value2, result.Parameters(3).Value)
+        Assert.AreEqual("amet", result.Parameters(4).Value)
+      End Using
+    End Sub
 
   End Class
 End Namespace
