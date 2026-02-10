@@ -373,6 +373,19 @@ Namespace Internal
         End If
       End If
 
+#If NET10_0_OR_GREATER Then
+      If node.Method.DeclaringType Is GetType(MemoryExtensions) Then
+        ' arrays
+        If node.Method.Name = NameOf(MemoryExtensions.Contains) AndAlso (node.Arguments.Count = 2 OrElse (node.Arguments.Count = 3 AndAlso IsNullConstant(node.Arguments(2)))) Then
+          Dim unwrapped As Expression = Nothing
+
+          If TryUnwrapSpanImplicitCast(node.Arguments(0), unwrapped) Then
+            Return VisitEnumerableContainsMethodCall(node, unwrapped, node.Arguments(1))
+          End If
+        End If
+      End If
+#End If
+
       ' node.Object is null when static indexer is called
       If node.Method.IsSpecialName AndAlso node.Object IsNot Nothing AndAlso node.Object.NodeType = ExpressionType.Parameter AndAlso node.Method.Name.StartsWith("set_") Then
         ' this is needed when we pass Action (in UPDATE SET... expressions)
@@ -568,10 +581,26 @@ Namespace Internal
     ''' <param name="node"></param>
     ''' <returns></returns>
     Private Function VisitEnumerableContainsMethodCall(node As MethodCallExpression) As Expression
-      Dim valueExpression = node.Arguments(1)
+      Return VisitEnumerableContainsMethodCall(node, node.Arguments(0), node.Arguments(1))
+    End Function
 
-      Dim enumerableExpression = node.Arguments(0)
+    ''' <summary>
+    ''' Visits <see cref="Enumerable.Contains"/> method call on <see cref="IEnumerable"/>.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <returns></returns>
+    Private Function VisitIEnumerableContainsMethodCall(node As MethodCallExpression) As Expression
+      Return VisitEnumerableContainsMethodCall(node, node.Object, node.Arguments(0))
+    End Function
 
+    ''' <summary>
+    ''' Visits <see cref="Enumerable.Contains"/> method call.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <param name="enumerableExpression"></param>
+    ''' <param name="valueExpression"></param>
+    ''' <returns></returns>
+    Private Function VisitEnumerableContainsMethodCall(node As Expression, enumerableExpression As Expression, valueExpression As Expression) As Expression
       If enumerableExpression.NodeType = ExpressionType.Convert OrElse enumerableExpression.NodeType = ExpressionType.ConvertChecked Then
         enumerableExpression = DirectCast(enumerableExpression, UnaryExpression).Operand
       End If
@@ -620,37 +649,6 @@ Namespace Internal
 
           m_Sql.Append("))")
         End If
-      End If
-
-      Return node
-    End Function
-
-    ''' <summary>
-    ''' Visits <see cref="Enumerable.Contains"/> method call on <see cref="IEnumerable"/>.
-    ''' </summary>
-    ''' <param name="node"></param>
-    ''' <returns></returns>
-    Private Function VisitIEnumerableContainsMethodCall(node As MethodCallExpression) As Expression
-      Dim valueExpression = node.Arguments(0)
-
-      Dim enumerableValues = DirectCast(Evaluate(node.Object), IEnumerable).Cast(Of Object).ToArray()
-      Dim count = enumerableValues.Length
-
-      If count = 0 Then
-        m_Sql.Append("(0 = 1)")
-
-      Else
-        m_Sql.Append("(")
-        Visit(valueExpression)
-        m_Sql.Append(" IN (")
-
-        For i = 0 To count - 2
-          AppendNewParameter(enumerableValues(i))
-          m_Sql.Append(", ")
-        Next
-        AppendNewParameter(enumerableValues(count - 1))
-
-        m_Sql.Append("))")
       End If
 
       Return node
@@ -1147,6 +1145,34 @@ Namespace Internal
     Private Function VisitAndEvaluate(node As Expression) As Expression
       AppendNewParameter(Evaluate(node))
       Return node
+    End Function
+
+    ''' <summary>
+    ''' Tries to unwrap <see cref="Span(Of T)"/> implicit cast.
+    ''' </summary>
+    ''' <param name="node"></param>
+    ''' <param name="result"></param>
+    ''' <returns></returns>
+    Private Function TryUnwrapSpanImplicitCast(node As Expression, ByRef result As Expression) As Boolean
+      If TypeOf node Is MethodCallExpression Then
+        Dim methodCallExpression = DirectCast(node, MethodCallExpression)
+        Dim declaringType = methodCallExpression.Method.DeclaringType
+
+        If methodCallExpression.Method.Name = "op_Implicit" AndAlso declaringType.IsGenericType Then
+          Dim genericTypeDefinition = declaringType.GetGenericTypeDefinition()
+
+          ' NOTE: this is not supported in VB.NET:
+          ' If genericTypeDefinition Is GetType(Span(Of )) OrElse genericTypeDefinition Is GetType(ReadOnlySpan(Of )) Then
+
+          If genericTypeDefinition.FullName = "System.Span`1" OrElse genericTypeDefinition.FullName = "System.ReadOnlySpan`1" Then
+            result = methodCallExpression.Arguments(0)
+            Return True
+          End If
+        End If
+      End If
+
+      result = Nothing
+      Return False
     End Function
 
     ''' <summary>
