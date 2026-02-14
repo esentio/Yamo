@@ -5,7 +5,7 @@
     <RootNamespace>Yamo.CodeGenerator</RootNamespace>
     <TargetFramework>net10.0</TargetFramework>
     <OptionStrict>On</OptionStrict>
-    <Version>0.10.0</Version>
+    <Version>0.10.1</Version>
     <Authors>Peter Šimno</Authors>
     <Company>Peter Šimno</Company>
     <Description>Code generator for Yamo sources</Description>
