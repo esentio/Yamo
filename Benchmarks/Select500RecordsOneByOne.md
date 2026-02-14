@@ -1,18 +1,18 @@
-``` ini
+```
 
-BenchmarkDotNet=v0.13.4, OS=Windows 11 (10.0.22000.1574/21H2)
-12th Gen Intel Core i7-12700K, 1 CPU, 20 logical and 12 physical cores
-.NET SDK=7.0.200
-  [Host]     : .NET 7.0.3 (7.0.323.6910), X64 RyuJIT AVX2
-  DefaultJob : .NET 7.0.3 (7.0.323.6910), X64 RyuJIT AVX2
+BenchmarkDotNet v0.15.8, Windows 11 (10.0.26100.7623/24H2/2024Update/HudsonValley)
+12th Gen Intel Core i7-12700K 3.61GHz, 1 CPU, 20 logical and 12 physical cores
+.NET SDK 10.0.102
+  [Host]     : .NET 10.0.2 (10.0.2, 10.0.225.61305), X64 RyuJIT x86-64-v3
+  DefaultJob : .NET 10.0.2 (10.0.2, 10.0.225.61305), X64 RyuJIT x86-64-v3
 
 
 ```
-|                  Method |     Mean |     Error |    StdDev | Ratio | RatioSD | Rank |     Gen0 |     Gen1 |  Allocated | Alloc Ratio |
+| Method                  | Mean     | Error     | StdDev    | Ratio | RatioSD | Rank | Gen0     | Gen1     | Allocated  | Alloc Ratio |
 |------------------------ |---------:|----------:|----------:|------:|--------:|-----:|---------:|---------:|-----------:|------------:|
-|               Handcoded | 2.635 ms | 0.0065 ms | 0.0061 ms |  0.68 |    0.00 |    1 |  50.7813 |  23.4375 |  679.57 KB |        0.25 |
-|    &#39;Yamo (using query)&#39; | 3.289 ms | 0.0074 ms | 0.0069 ms |  0.85 |    0.00 |    2 | 132.8125 |  70.3125 | 1742.28 KB |        0.65 |
-|                  Dapper | 3.375 ms | 0.0255 ms | 0.0238 ms |  0.87 |    0.01 |    3 | 105.4688 |  50.7813 | 1378.79 KB |        0.51 |
-|                    Yamo | 3.858 ms | 0.0069 ms | 0.0061 ms |  1.00 |    0.00 |    4 | 210.9375 | 109.3750 | 2695.44 KB |        1.00 |
-| &#39;EF Core (no tracking)&#39; | 6.115 ms | 0.0123 ms | 0.0115 ms |  1.59 |    0.00 |    5 | 242.1875 |  78.1250 | 3145.42 KB |        1.17 |
-|               &#39;EF Core&#39; | 7.055 ms | 0.0934 ms | 0.0874 ms |  1.83 |    0.02 |    6 | 289.0625 | 125.0000 | 3720.34 KB |        1.38 |
+| Handcoded               | 2.471 ms | 0.0077 ms | 0.0064 ms |  0.72 |    0.01 |    1 |  54.6875 |  15.6250 |  726.45 KB |        0.26 |
+| &#39;Yamo (using query)&#39;    | 2.927 ms | 0.0091 ms | 0.0081 ms |  0.85 |    0.01 |    2 | 136.7188 |  42.9688 | 1757.91 KB |        0.64 |
+| Dapper                  | 3.090 ms | 0.0117 ms | 0.0110 ms |  0.90 |    0.01 |    3 | 105.4688 |  35.1563 | 1390.51 KB |        0.51 |
+| Yamo                    | 3.428 ms | 0.0461 ms | 0.0409 ms |  1.00 |    0.02 |    4 | 214.8438 |  70.3125 | 2742.32 KB |        1.00 |
+| &#39;EF Core (no tracking)&#39; | 5.780 ms | 0.0361 ms | 0.0338 ms |  1.69 |    0.02 |    5 | 281.2500 |  62.5000 | 3637.26 KB |        1.33 |
+| &#39;EF Core&#39;               | 5.889 ms | 0.0400 ms | 0.0374 ms |  1.72 |    0.02 |    5 | 312.5000 | 125.0000 | 4106.61 KB |        1.50 |

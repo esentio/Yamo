@@ -2102,62 +2102,62 @@ Current benchmarks are promising. But still, there is a place for improvements :
 Below is comparison between hand coded (optimized) methods, Yamo, Dapper and EF Core (full reports [here](../../tree/master/Benchmarks)). Tests were executed against in-memory SQLite database.
 
 ```ini
-BenchmarkDotNet=v0.13.4, OS=Windows 11 (10.0.22000.1574/21H2)
-12th Gen Intel Core i7-12700K, 1 CPU, 20 logical and 12 physical cores
-.NET SDK=7.0.200
-  [Host]     : .NET 7.0.3 (7.0.323.6910), X64 RyuJIT AVX2
-  DefaultJob : .NET 7.0.3 (7.0.323.6910), X64 RyuJIT AVX2
+BenchmarkDotNet v0.15.8, Windows 11 (10.0.26100.7623/24H2/2024Update/HudsonValley)
+12th Gen Intel Core i7-12700K 3.61GHz, 1 CPU, 20 logical and 12 physical cores
+.NET SDK 10.0.102
+  [Host]     : .NET 10.0.2 (10.0.2, 10.0.225.61305), X64 RyuJIT x86-64-v3
+  DefaultJob : .NET 10.0.2 (10.0.2, 10.0.225.61305), X64 RyuJIT x86-64-v3
 ```
 
 #### Select 1 record
 
 | Method                | Mean      | Ratio | Allocated |
 | --------------------- | ---------:| -----:| ---------:|
-| Handcoded             | 5.263 μs  | 0.72  | 1.35 KB   |
-| Yamo (using query)    | 6.556 μs  | 0.90  | 3.69 KB   |
-| Dapper                | 6.636 μs  | 0.91  | 2.75 KB   |
-| Yamo                  | 7.320 μs  | 1.00  | 5 KB      |
-| EF Core (no tracking) | 49.027 μs | 6.70  | 52.69 KB  |
-| EF Core               | 54.623 μs | 7.46  | 54.44 KB  |
+| Handcoded             | 4.872 μs  | 0.75  | 1.45 KB   |
+| Yamo (using query)    | 5.924 μs  | 0.91  | 3.66 KB   |
+| Dapper                | 6.087 μs  | 0.94  | 2.77 KB   |
+| Yamo                  | 6.489 μs  | 1.00  | 4.95 KB   |
+| EF Core (no tracking) | 37.396 μs | 5.76  | 56.52 KB  |
+| EF Core               | 39.894 μs | 6.15  | 57.99 KB  |
 
 #### Select 500 records one by one
 
 | Method                | Mean     | Ratio | Allocated  |
 | --------------------- | --------:| -----:| ----------:|
-| Handcoded             | 2.635 ms | 0.68  | 679.57 KB  |
-| Yamo (using query)    | 3.289 ms | 0.85  | 1742.28 KB |
-| Dapper                | 3.375 ms | 0.87  | 1378.79 KB |
-| Yamo                  | 3.858 ms | 1.00  | 2695.44 KB |
-| EF Core (no tracking) | 6.115 ms | 1.59  | 3145.42 KB |
-| EF Core               | 7.055 ms | 1.83  | 3720.34 KB |
+| Handcoded             | 2.471 ms | 0.72  | 726.45 KB  |
+| Yamo (using query)    | 2.927 ms | 0.85  | 1757.91 KB |
+| Dapper                | 3.090 ms | 0.90  | 1390.51 KB |
+| Yamo                  | 3.428 ms | 1.00  | 2742.32 KB |
+| EF Core (no tracking) | 5.780 ms | 1.69  | 3637.26 KB |
+| EF Core               | 5.889 ms | 1.72  | 4106.61 KB |
 
 #### Select list of 1000 records
 
 | Method                | Mean     | Ratio | Allocated  |
 | --------------------- | --------:| -----:| ----------:|
-| Handcoded             | 1.369 ms | 0.94  | 399.56 KB  |
-| Yamo                  | 1.453 ms | 1.00  | 402.2 KB   |
-| Yamo (using query)    | 1.508 ms | 1.04  | 401.81 KB  |
-| EF Core (no tracking) | 1.569 ms | 1.08  | 636.43 KB  |
-| Dapper                | 1.591 ms | 1.09  | 525.87 KB  |
-| EF Core               | 2.736 ms | 1.88  | 1797.64 KB |
+| Handcoded             | 1.180 ms | 0.92  | 399.64 KB  |
+| Yamo                  | 1.285 ms | 1.00  | 402.22 KB  |
+| Yamo (using query)    | 1.333 ms | 1.04  | 401.77 KB  |
+| EF Core (no tracking) | 1.380 ms | 1.07  | 639.99 KB  |
+| Dapper                | 1.413 ms | 1.10  | 525.94 KB  |
+| EF Core               | 1.963 ms | 1.53  | 1590.19 KB |
 
 #### Select list of 1000 records with 1:1 join
 
 | Method                | Mean     | Ratio | Allocated  |
 | --------------------- | --------:| -----:| ----------:|
-| Handcoded             | 2.067 ms | 0.82  | 649.61 KB  |
-| Yamo                  | 2.508 ms | 1.00  | 656.53 KB  |
-| Dapper                | 2.555 ms | 1.02  | 799.69 KB  |
-| EF Core (no tracking) | 2.658 ms | 1.06  | 1278.79 KB |
-| EF Core               | 7.649 ms | 3.05  | 3735.88 KB |
+| Handcoded             | 1.863 ms | 0.83  | 649.7 KB   |
+| Yamo                  | 2.237 ms | 1.00  | 656.28 KB  |
+| Dapper                | 2.312 ms | 1.03  | 799.76 KB  |
+| EF Core (no tracking) | 2.652 ms | 1.19  | 1314.22 KB |
+| EF Core               | 5.594 ms | 2.50  | 3153.88 KB |
 
 #### Select list of 1000 records with 1:N join
 
 | Method                | Mean      | Ratio | Allocated |
 | --------------------- | ---------:| -----:| ---------:|
-| Handcoded             | 6.234 ms  | 0.61  | 1.61 MB   |
-| Yamo                  | 10.154 ms | 1.00  | 2.71 MB   |
-| EF Core (no tracking) | 12.153 ms | 1.20  | 3.26 MB   |
-| Dapper                | 15.064 ms | 1.48  | 4.39 MB   |
-| EF Core               | 25.143 ms | 2.47  | 8.94 MB   |
+| Handcoded             | 5.577 ms  | 0.63  | 1.61 MB   |
+| Yamo                  | 8.846 ms  | 1.00  | 2.71 MB   |
+| Dapper                | 13.267 ms | 1.50  | 4.39 MB   |
+| EF Core (no tracking) | 16.838 ms | 1.90  | 4.06 MB   |
+| EF Core               | 26.891 ms | 3.04  | 8.57 MB   |

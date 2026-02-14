@@ -1,17 +1,17 @@
-``` ini
+```
 
-BenchmarkDotNet=v0.13.4, OS=Windows 11 (10.0.22000.1574/21H2)
-12th Gen Intel Core i7-12700K, 1 CPU, 20 logical and 12 physical cores
-.NET SDK=7.0.200
-  [Host]     : .NET 7.0.3 (7.0.323.6910), X64 RyuJIT AVX2
-  DefaultJob : .NET 7.0.3 (7.0.323.6910), X64 RyuJIT AVX2
+BenchmarkDotNet v0.15.8, Windows 11 (10.0.26100.7623/24H2/2024Update/HudsonValley)
+12th Gen Intel Core i7-12700K 3.61GHz, 1 CPU, 20 logical and 12 physical cores
+.NET SDK 10.0.102
+  [Host]     : .NET 10.0.2 (10.0.2, 10.0.225.61305), X64 RyuJIT x86-64-v3
+  DefaultJob : .NET 10.0.2 (10.0.2, 10.0.225.61305), X64 RyuJIT x86-64-v3
 
 
 ```
-|                  Method |      Mean |     Error |    StdDev | Ratio | RatioSD | Rank |     Gen0 |     Gen1 |     Gen2 | Allocated | Alloc Ratio |
+| Method                  | Mean      | Error     | StdDev    | Ratio | RatioSD | Rank | Gen0     | Gen1     | Gen2     | Allocated | Alloc Ratio |
 |------------------------ |----------:|----------:|----------:|------:|--------:|-----:|---------:|---------:|---------:|----------:|------------:|
-|               Handcoded |  6.234 ms | 0.0206 ms | 0.0193 ms |  0.61 |    0.00 |    1 | 125.0000 | 117.1875 |        - |   1.61 MB |        0.59 |
-|                    Yamo | 10.154 ms | 0.0741 ms | 0.0657 ms |  1.00 |    0.00 |    2 | 234.3750 | 218.7500 |  78.1250 |   2.71 MB |        1.00 |
-| &#39;EF Core (no tracking)&#39; | 12.153 ms | 0.0643 ms | 0.0602 ms |  1.20 |    0.01 |    3 | 250.0000 | 234.3750 |        - |   3.26 MB |        1.20 |
-|                  Dapper | 15.064 ms | 0.0818 ms | 0.0766 ms |  1.48 |    0.01 |    4 | 375.0000 | 250.0000 |  93.7500 |   4.39 MB |        1.62 |
-|               &#39;EF Core&#39; | 25.143 ms | 0.2803 ms | 0.2622 ms |  2.47 |    0.03 |    5 | 812.5000 | 562.5000 | 187.5000 |   8.94 MB |        3.30 |
+| Handcoded               |  5.577 ms | 0.0160 ms | 0.0150 ms |  0.63 |    0.00 |    1 | 125.0000 |  93.7500 |        - |   1.61 MB |        0.59 |
+| Yamo                    |  8.846 ms | 0.0648 ms | 0.0606 ms |  1.00 |    0.01 |    2 | 234.3750 | 203.1250 |  78.1250 |   2.71 MB |        1.00 |
+| Dapper                  | 13.267 ms | 0.1460 ms | 0.1366 ms |  1.50 |    0.02 |    3 | 343.7500 | 203.1250 |  93.7500 |   4.39 MB |        1.62 |
+| &#39;EF Core (no tracking)&#39; | 16.838 ms | 0.1136 ms | 0.1007 ms |  1.90 |    0.02 |    4 | 312.5000 | 125.0000 |        - |   4.06 MB |        1.50 |
+| &#39;EF Core&#39;               | 26.891 ms | 0.5329 ms | 0.5234 ms |  3.04 |    0.06 |    5 | 781.2500 | 562.5000 | 187.5000 |   8.57 MB |        3.16 |
